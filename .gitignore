@@ -1,0 +1,20 @@
+# Dependency directories
+node_modules/
+package-lock.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Coverage directory used by Istanbul
+coverage
+.nyc_output/
+
+# IDE related
+.idea/
+.vscode/
+
+# MAC OS
+.DS_Store
+
