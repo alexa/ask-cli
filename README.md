@@ -1,8 +1,10 @@
-About the project
+# Alexa Skills Kit Command Line Interface (ASK CLI)
 
-This project provides the ask-cli tool for managing Alexa Skills.
+## About the project
 
-In addition, you will find documentation for the following:
+This repository hosts the Alexa Skills Kit Command Line Interface, a tool that integrates with the Alexa Skill Management API to enable developers to manage their Alexa skills from the command line. The [Wiki section](https://github.com/amznlabs/ask-cli/wiki) of this project contains documentation on the CLI as well as the underlying Alexa Skill Management API.
+
+Here are links to specific topics in the documentation.
 
 * [Understanding the Alexa Skill Management API](https://github.com/amznlabs/ask-cli/wiki)
 * [Command Line Interface (CLI) Installation and Usage Instructions](https://github.com/amznlabs/ask-cli/wiki/Command-Line-Interface-%28CLI%29-Usage-Instructions)
@@ -13,3 +15,11 @@ In addition, you will find documentation for the following:
 * [Skill Schemas](https://github.com/amznlabs/ask-cli/wiki/Skill-Schemas)
 * [Skill Operations](https://github.com/amznlabs/ask-cli/wiki/Skill-Operations)
 * [Vendor Operations](https://github.com/amznlabs/ask-cli/wiki/Vendor-Operations)
+
+## Project status: private beta
+
+The CLI and the API are currently in **private beta**, and some of their features may change during the beta period. Significant changes will be communicated in advance, via emails and [Issues](https://github.com/amznlabs/ask-cli/issues). We will share future milestone dates in the coming weeks as we finalize our plans for the public launch.
+
+## Have feedback?
+
+We encourage you to share your feedback, bug reports, and feature requests related to the CLI and the API in the [Issues](https://github.com/amznlabs/ask-cli/issues) section. You are also welcome to email us at ask-smapi-feedback@amazon.com.
