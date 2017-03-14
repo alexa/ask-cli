@@ -1,0 +1,29 @@
+{
+  "skillDefinition": {
+    "customInteractionModelInfo": {
+      "invocationNameByLocale": {
+        "en-US": "hello world"
+      },
+      "endpointsByRegion": {
+        "NA": {
+          "isDefaultRegion": true,
+          "url": "lambda ARN"
+        }
+      }
+    },
+    "multinationalPublishingInfo": {
+      "publishingInfoByLocale": {
+        "en-US": {
+          "name": "custom skill",
+          "summary": "Sample Short Description",
+          "description": "Sample Full Description.",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "Alexa tell hello world I am Jeff",
+            "Alexa tell hello world my name is Peter"
+          ]
+        }
+      }
+    }
+  }
+}

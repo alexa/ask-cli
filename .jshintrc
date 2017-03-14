@@ -1,0 +1,33 @@
+{
+    "maxerr"        : 50,
+    "esversion"     : 6,
+    "devel"         : true,
+    "mocha"         : true,
+    "node"          : true,
+    "strict"        : true,
+
+    "camelcase"     : false,
+    "curly"         : true,
+    "eqeqeq"        : true,
+    "forin"         : true,
+    "freeze"        : true,
+    "latedef"       : false,
+    "newcap"        : true,
+    "noarg"         : true,
+    "noempty"       : true,
+    "nonbsp"        : true,
+    "nonew"         : false,
+    "plusplus"      : false,
+    "quotmark"      : false,
+    "undef"         : true,
+    "unused"        : true,
+    "maxlen"        : false,
+    "varstmt"       : true,
+    "asi"           : false,
+
+    "lastsemic"     : false,
+    "laxbreak"      : false,
+    "laxcomma"      : false,
+    "loopfunc"      : false,
+    "multistr"      : false
+}

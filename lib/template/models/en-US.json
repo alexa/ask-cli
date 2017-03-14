@@ -1,0 +1,30 @@
+{
+  "modelDefinition": {
+    "types": [],
+    "intents": [
+      {
+        "name": "HelloWorldIntent",
+        "slots": [],
+        "samples": [
+          "hello",
+          "say hello",
+          "say hello world"
+        ]
+      },
+      {
+        "name": "MyNameIsIntent",
+        "slots": [
+          {
+            "name": "name",
+            "type": "AMAZON.US_FIRST_NAME"
+          }
+        ],
+        "samples": [
+          "my name is {name}",
+          "i am {name}",
+          "you can call me {name}"
+        ]
+      }
+    ]
+  }
+}

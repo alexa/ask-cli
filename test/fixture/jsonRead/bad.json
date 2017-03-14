@@ -1,0 +1,23 @@
+{
+  "skillDefinition": {
+    "customInteractionModelInfo": {
+      "invocationNameByLocale": {
+        "en-US": "hello world"
+      },
+      "endpointsByRegion": {
+        "NA": {
+          "isDefaultRegion": true,
+          "url": ""
+        }
+      }
+    },
+    "multinationalPublishingInfo": {
+      "publishingInfoByLocale": {
+        "en-US": {
+          "name": "",
+          ]
+        }
+      },
+    }
+  }
+}

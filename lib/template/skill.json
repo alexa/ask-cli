@@ -1,0 +1,37 @@
+{
+  "skillDefinition": {
+    "customInteractionModelInfo": {
+      "invocationNameByLocale": {
+        "en-US": "hello world"
+      },
+      "endpointsByRegion": {
+        "NA": {
+          "isDefaultRegion": true,
+          "url": ""
+        }
+      }
+    },
+    "multinationalPublishingInfo": {
+      "publishingInfoByLocale": {
+        "en-US": {
+          "name": "",
+          "summary": "Sample Short Description",
+          "description": "Sample Full Description.",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "Alexa tell hello world I am Jeff",
+            "Alexa tell hello world my name is Peter"
+          ]
+        }
+      },
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "EDUCATION_AND_REFERENCE",
+      "allowPurchases": false,
+      "usePersonalInfo": false,
+      "isChildDirected": false,
+      "exportCompliance": true,
+      "availableWorldwide": true,
+      "distributionCountries": []
+    }
+  }
+}
