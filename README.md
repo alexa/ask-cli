@@ -5,6 +5,15 @@
 This 3-minute video shows how to get started with the ASK CLI.
 [Demo Video](https://askcli.s3.amazonaws.com/demo.html)
 
+## Quick start
+
+```
+$ npm install -g git+https://github.com/amznlabs/ask-cli.git
+$ ask init
+
+(May need to do '$ sudo npm install ...')
+```
+
 ## About the project
 
 This repository hosts the Alexa Skills Kit Command Line Interface, a tool that integrates with the Alexa Skill Management API to enable developers to manage their Alexa skills from the command line. The [Wiki section](https://github.com/amznlabs/ask-cli/wiki) of this project contains documentation on the CLI as well as the underlying Alexa Skill Management API.
