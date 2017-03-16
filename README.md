@@ -14,6 +14,18 @@ $ ask init
 (May need to do '$ sudo npm install ...')
 ```
 
+The `(sudo) npm install` step above will fail if you have not set up your GitHub login with `git`. If this happens, you'll need to set it up by first creating a [personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) and following the instructions below.
+
+```
+$ git clone https://github.com/amznlabs/ask-cli.git
+Username: your_GitHub_username
+Password: your_token (2-factor auth accounts use token instead of password)
+$ cd ask-cli
+$ npm install -g
+
+(May need to do '$ sudo npm install -g')
+```
+
 ## About the project
 
 This repository hosts the Alexa Skills Kit Command Line Interface, a tool that integrates with the Alexa Skill Management API to enable developers to manage their Alexa skills from the command line. The [Wiki section](https://github.com/amznlabs/ask-cli/wiki) of this project contains documentation on the CLI as well as the underlying Alexa Skill Management API.
