@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 'use strict';
 
-const commander = require('commander');
+if (!require('semver').gte(process.version, '4.0.0')) {
+    console.log("Version of node.js doesn't meet minimum requirement.");
+    console.log('Please ensure system has node.js version 4.0.0 or higher.');
+    return;
+}
+
+var commander = require('commander');
 
 commander.version(require('../package.json').version);
 commander.usage('-> Command line tools for Alexa Skill Management API Service');
@@ -19,9 +25,8 @@ commander
 if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
-    let input = process.argv[2];
     if (['lambda', 'api', 'init', 'deploy', 'new', 'clone', 'help', 'version']
-        .indexOf(input) === -1) {
+        .indexOf(process.argv[2]) === -1) {
         console.log('Command not recognized. Please run "ask" for help.');
     }
 }
