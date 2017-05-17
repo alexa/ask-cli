@@ -1,6 +1,6 @@
 {
   "name": "ask",
-  "version": "0.6.7",
+  "version": "0.6.10",
   "description": "Alexa Skill Kits (ASK) command line tools.",
   "bin": {
     "ask": "bin/ask.js"

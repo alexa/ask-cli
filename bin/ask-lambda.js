@@ -15,8 +15,13 @@ commander.parse(process.argv);
 if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
-    let input = process.argv[2];
-    if (['download', 'upload', 'log', 'help', 'version'].indexOf(input) === -1) {
+    const LAMBDA_COMMAND_LIST = [
+        'download',
+        'upload',
+        'log',
+        'help'
+    ];
+    if (LAMBDA_COMMAND_LIST.indexOf(process.argv[2]) === -1) {
         console.log('Command not recognized. Please run "ask lambda" for help.');
     }
 }
