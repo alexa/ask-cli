@@ -40,6 +40,7 @@ Here are links to specific topics in the documentation.
 * [Interaction Model Operations](https://github.com/amznlabs/ask-cli/wiki/Interaction-Model-Operations)
 * [Skill Schemas](https://github.com/amznlabs/ask-cli/wiki/Skill-Schemas)
 * [Skill Operations](https://github.com/amznlabs/ask-cli/wiki/Skill-Operations)
+* [Skill Certification Operations](https://github.com/amznlabs/ask-cli/wiki/Skill-Certification-Operations)
 * [Vendor Operations](https://github.com/amznlabs/ask-cli/wiki/Vendor-Operations)
 
 ## Project status: private beta
