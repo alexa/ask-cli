@@ -1,5 +1,7 @@
 # Alexa Skills Kit Command Line Interface (ASK CLI)
 
+Changes for ASK CLI are tracked at [Change log](https://github.com/amznlabs/ask-cli/wiki/change-log)
+
 ## Demo video
 
 This 3-minute video shows how to get started with the ASK CLI.
