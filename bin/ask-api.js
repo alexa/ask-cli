@@ -11,12 +11,16 @@ require('../lib/api/skill').createCommand(commander);
 require('../lib/api/vendor').createCommand(commander);
 require('../lib/api/account-linking').createCommand(commander);
 require('../lib/api/submission').createCommand(commander);
+require('../lib/api/skill-testing').createCommand(commander);
 commander.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
     const API_COMMAND_LIST = [
+        'simulate-skill',
+        'get-simulation',
+        'invoke-skill',
         'create-skill',
         'get-skill',
         'update-skill',

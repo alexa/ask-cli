@@ -54,4 +54,28 @@ describe('utils json-read testing', () => {
             expect(jsonRead.getProperty(testObject, track)).equal(true);
         });
     });
+
+    describe('# read json from string', () => {
+         beforeEach(() => {
+             sinon.stub(console, 'error');
+         });
+ 
+         afterEach(() => {
+             console.error.restore();
+         });
+ 
+         it ('| try to read an invalid json string', () => {
+             let invalidJsonString = '{"number": 10';
+             jsonRead.readString(invalidJsonString);
+             expect(console.error.getCall(0).args[0]).equal(
+                 'Invalid json string: ' + invalidJsonString
+             );
+         });
+ 
+         it ('| try to read a valid json string', () => {
+             let validJsonString = '{"number": 10}';
+             let jsonObj = jsonRead.readString(validJsonString);
+             expect(jsonObj.number).equal(10);
+         });
+     });
 });

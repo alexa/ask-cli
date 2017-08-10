@@ -16,6 +16,7 @@ require('../lib/init/init').createCommand(commander);
 require('../lib/deploy/deploy').createCommand(commander);
 require('../lib/new/new').createCommand(commander);
 require('../lib/clone/clone').createCommand(commander);
+require('../lib/simulate/simulate').createCommand(commander);
 
 commander
     .command('lambda', 'ASK Lambda commands')
@@ -25,7 +26,7 @@ commander
 if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
-    if (['lambda', 'api', 'init', 'deploy', 'new', 'clone', 'help', 'version']
+    if (['simulate', 'lambda', 'api', 'init', 'deploy', 'new', 'clone', 'help', 'version']
         .indexOf(process.argv[2]) === -1) {
         console.log('Command not recognized. Please run "ask" for help.');
     }
