@@ -30,15 +30,6 @@ describe('Lambda log testing', () => {
             cloudWatch.filterLogEvents.restore();
         });
 
-        it('| display correct message when function name not provided', () => {
-            sinon.stub(console, 'warn');
-            command.runWith('log');
-            expect(console.warn.getCall(0).args[0]).equal(
-                'Please input required option: function.'
-            );
-            console.warn.restore();
-        });
-
         it('| pass correct function name with function name provided', () => {
             let expectFuncName = '/aws/lambda/testFunc';
             sinon.stub(console, 'log');

@@ -2,8 +2,11 @@
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const proxyquire = require('proxyquire');
+const aws = require('aws-sdk');
 const fs = require('fs');
+const clui = require('clui');
+const tmp = require('tmp');
+const initAWS = require('../../lib/utils/init-aws');
 
 const MockCommand = require('../mocks/command');
 const upload = require('../../lib/lambda/upload');
@@ -28,12 +31,12 @@ describe('Lambda upload testing', () => {
             upload.uploadByName.restore();
         });
 
-        it('| warn correctly if function name not provided', () => {
-            command.runWith('upload');
-            expect(console.warn.getCall(0).args[0]).equal(
-                'Please input required option: function.'
-            );
-        });
+        // it('| warn correctly if function name not provided', () => {
+        //     command.runWith('upload');
+        //     expect(console.warn.getCall(0).args[0]).equal(
+        //         'Please input required option: function.'
+        //     );
+        // });
 
         it('| make sure upload by name called once', () => {
             command.runWith('upload -f test');
@@ -52,82 +55,110 @@ describe('Lambda upload testing', () => {
     });
 
     describe('uploadLambda function by name', () => {
-        let fakeUpload;
+        let sandbox;
+        let lambda, mockSpinner;
 
         before(() => {
-            let initAWSStub = {
-                initAWS: () => {
-                    return null;
-                }
-            };
-            fakeUpload = proxyquire('../../lib/lambda/upload', {
-                '../utils/init-aws': initAWSStub
-            });
+            lambda = new aws.Lambda();
+            mockSpinner = new clui.Spinner();
         });
 
         beforeEach(() => {
-            sinon.stub(fakeUpload, 'createZip');
+            sandbox = sinon.sandbox.create();
+
+            sandbox.stub(upload, 'createZip');
+            sandbox.stub(initAWS, 'initAWS', () => {
+                return aws;
+            });
+            sandbox.stub(initAWS, 'isLambdaArn');
+            sandbox.stub(initAWS, 'setRegionWithLambda');
+            sandbox.stub(aws, 'Lambda', () => {
+                return lambda;
+            });
+            sandbox.stub(lambda, 'updateFunctionCode');
+            sandbox.stub(fs, 'readFileSync');
+            sandbox.stub(clui, 'Spinner', () => {
+                return mockSpinner;
+            });
+            sandbox.stub(mockSpinner, 'start');
+            sandbox.stub(fs, 'unlinkSync');
         });
 
         afterEach(() => {
-            fakeUpload.createZip.restore();
-        });
-
-        it('| call create zip once', () => {
-            fakeUpload.uploadByName('test', 'test');
-            expect(fakeUpload.createZip.calledOnce).equal(true);
+            sandbox.restore();
         });
 
         it('| call create zip with correct source', () => {
-            fakeUpload.uploadByName('test', 'test');
-            expect(fakeUpload.createZip.getCall(0).args[0]).equal('test');
+            upload.uploadByName('test', 'test');
+            expect(upload.createZip.getCall(0).args[0]).equal('test');
+        });
+
+        it('| set region from Lambda if function name is in arn format', () => {
+            upload.createZip.callsArgWith(1, 'zipFile');
+            fs.readFileSync.returns('file');
+            initAWS.isLambdaArn.returns(true);
+            upload.uploadByName('test', 'test');
+            expect(initAWS.setRegionWithLambda.calledOnce).equal(true);
+        });
+
+        it('| triger update function code from Lambda client', () => {
+            upload.createZip.callsArgWith(1, 'zipFile');
+            fs.readFileSync.returns('file');
+            upload.uploadByName('test', 'test');
+            expect(lambda.updateFunctionCode.calledOnce).equal(true);
+        });
+
+        it('| error occurs when uploading function code', () => {
+            sandbox.stub(console, 'error');
+            upload.createZip.callsArgWith(1, 'zipFile');
+            fs.readFileSync.returns('file');
+            lambda.updateFunctionCode.callsArgWith(1, 'error');
+            upload.uploadByName('test', 'test');
+            expect(fs.unlinkSync.getCall(0).args[0]).equal('zipFile');
+            expect(console.error.getCall(0).args[0]).equal(
+                'Upload Lambda function error.\nerror'
+            );
         });
     });
 
     describe('create zip for uploading', () => {
-        let fakeUpload;
+        let sandbox;
+        let mockSpinner;
 
         before(() => {
-            fakeUpload = proxyquire('../../lib/lambda/upload', {
-                'clui': {
-                    Spinner: function() {
-                        return {
-                            start: () => {},
-                            stop: () => {}
-                        };
-                    }
-                }
-            });
+            mockSpinner = new clui.Spinner();
         });
 
         beforeEach(() => {
-            sinon.stub(fs, 'access');
+            sandbox = sinon.sandbox.create();
+
+            sandbox.stub(fs, 'access');
+            sandbox.stub(clui, 'Spinner', () => {
+                return mockSpinner;
+            });
+            sandbox.stub(mockSpinner, 'start');
+            sandbox.stub(tmp, 'tmpNameSync');
         });
 
         afterEach(() => {
-            fs.access.restore();
-        });
-
-        it('| display error message if the path not authorized to access', (done) => {
-            sinon.stub(console, 'error');
-            fs.access.callsArgWith(2, 'error');
-            fakeUpload.createZip('test');
-            expect(console.error.getCall(0).args[0]).equal(
-                'File access error. error'
-            );
-            console.error.restore();
-            done();
+            sandbox.restore();
         });
 
         it('| use zip file as a source file', (done) => {
-            let callback = () => {};
-            sinon.stub(console, 'log');
+            sandbox.stub(console, 'log');
             fs.access.callsArgWith(2, null);
-            fakeUpload.createZip('test.zip', callback);
+            upload.createZip('test.zip', () => {});
             expect(console.log.getCall(0).args[0]).equal(
                 'The source file has already been compressed. Skip the zipping.'
             );
-            console.log.restore();
+            done();
+        });
+
+        it('| create tmp file with non-zip file as a source file', (done) => {
+            fs.access.callsArgWith(2, null);
+            tmp.tmpNameSync.returns('test/fixture/tmpPath.zip');
+            upload.createZip('test', () => {});
+            expect(tmp.tmpNameSync.calledOnce).equal(true);
             done();
         });
     });

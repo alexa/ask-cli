@@ -3,14 +3,50 @@
 const expect = require('chai').expect;
 const aws = require('aws-sdk');
 const initAWS = require('../../lib/utils/init-aws');
+const sinon = require('sinon');
+
 
 describe('utils init-aws testing', () => {
+    const TEST_PROFILE = 'test';
+
     describe('# init AWS', () => {
-        it('| has region of us-east-1 as default', () => {
-            if (!aws.config.region) {
-                expect(initAWS.initAWS().config.region).equal('us-east-1');
-            }
+        let sandbox;
+
+        beforeEach(() => {
+            sandbox = sinon.sandbox.create();
+            sandbox.stub(console, 'error');
+            sandbox.stub(process, 'exit');
         });
+        afterEach(() => {
+            sandbox.restore();
+        });
+        it('| no aws_profile, no region. error message creates and process stops', () => {
+            initAWS.initAWS();
+            expect(console.error.getCall(0).args[0]).equal(
+                '[Error]: AWS credentials are not found in current profile.'
+            );
+            expect(process.exit.getCall(0).args[0]).equal(1);
+        });
+
+        it('| no aws_profile, but have region. error message creates and process stops', () => {
+            initAWS.initAWS(null, 'CN');
+            expect(console.error.getCall(0).args[0]).equal(
+                '[Error]: AWS credentials are not found in current profile.'
+            );
+            expect(process.exit.getCall(0).args[0]).equal(1);
+        });
+
+        it('| init aws with default us-east-1 region', () => {
+            let aws = initAWS.initAWS(TEST_PROFILE);
+            expect(aws.config.region).equal('us-east-1');
+        });
+
+        it('| init aws with input region', () => {
+            expect(initAWS.initAWS(TEST_PROFILE, 'EU').config.region).equal('eu-west-1');
+            expect(initAWS.initAWS(TEST_PROFILE, 'NA').config.region).equal('us-east-1');
+
+        });
+
     });
 
     describe('# judge if is Lambda ARN', () => {

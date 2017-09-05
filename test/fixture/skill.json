@@ -1,5 +1,5 @@
 {
-  "skillDefinition": {
+  "skillManifest": {
     "customInteractionModelInfo": {
       "invocationNameByLocale": {
         "en-US": "hello world"
@@ -7,7 +7,7 @@
       "endpointsByRegion": {
         "NA": {
           "isDefaultRegion": true,
-          "url": "lambda ARN"
+          "url": "custom"
         }
       }
     },

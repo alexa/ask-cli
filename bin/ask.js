@@ -9,9 +9,6 @@ if (!require('semver').gte(process.version, '4.0.0')) {
 
 var commander = require('commander');
 
-commander.version(require('../package.json').version);
-commander.usage('-> Command line tools for Alexa Skill Management API Service');
-
 require('../lib/init/init').createCommand(commander);
 require('../lib/deploy/deploy').createCommand(commander);
 require('../lib/new/new').createCommand(commander);
@@ -19,14 +16,19 @@ require('../lib/clone/clone').createCommand(commander);
 require('../lib/simulate/simulate').createCommand(commander);
 
 commander
-    .command('lambda', 'ASK Lambda commands')
-    .command('api', 'ASK Skill Management API commands')
+    .description('Command Line Interface for Alexa Skill Management API')
+    .command('lambda', 'list of AWS Lambda commands')
+    .command('api', 'list of Alexa Skill Management API commands')
+    .option('-v, --version', 'output the version number of ask-cli', function() {
+        console.log(require('../package.json').version);
+        process.exit(0);
+    })
     .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
-    if (['simulate', 'lambda', 'api', 'init', 'deploy', 'new', 'clone', 'help', 'version']
+    if (['simulate', 'lambda', 'api', 'init', 'deploy', 'new', 'clone', 'help']
         .indexOf(process.argv[2]) === -1) {
         console.log('Command not recognized. Please run "ask" for help.');
     }
