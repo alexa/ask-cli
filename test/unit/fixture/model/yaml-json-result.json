@@ -1,0 +1,36 @@
+{
+  "Parameters": {
+    "DeployEngineArn": {
+      "Type": "String",
+      "Description": "Deployment Lambda ARN"
+    },
+    "SkillId": {
+      "Type": "String",
+      "Description": "Skill ID"
+    }
+  },
+  "Mappings": {
+    "AlexaAwsRegionMap": {
+      "NA": {
+        "AwsRegion": "us-east-1"
+      },
+      "EU": {
+        "AwsRegion": "eu-west-1"
+      },
+      "FE": {
+        "AwsRegion": "us-west-2"
+      }
+    }
+  },
+  "Resources": {
+    "HelloWorldSkillInfrastructure": {
+      "Type": "Custom::AlexaSkillInfrastructure",
+      "Properties": {
+        "InfrastructureIAMRole": "!GetAtt SkillIAMRole.Arn",
+        "SkillId": "!Ref SkillId",
+        "ServiceToken": "!Ref DeployEngineArn"
+      }
+    }
+  },
+  "AWSTemplateFormatVersion": "2010-09-09"
+}

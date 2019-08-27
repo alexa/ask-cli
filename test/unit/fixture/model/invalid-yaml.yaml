@@ -1,0 +1,8 @@
+simpleKey: simpleValue
+objectField:
+  internalKey: internalValue
+arrayField:
+nested:
+  innerArray:
+    - innerKey: treasure
+.

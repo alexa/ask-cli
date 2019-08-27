@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  AlexaSkillIAMRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Path: /
+        Policies:
+          - PolicyName: alexaSkillExectionPolicy
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:*
+                  Resource: arn:aws:logs:*:*:*
+  AlexaSkillFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !Ref AlexaSkillIAMRoleARN
+      Code:
+        S3Bucket: endpoint.s3.bucket
+        S3Key: endpoint.s3.key
+        S3ObjectVersion: endpoint.s3.version
+      Runtime: nodejs8.10
+      MemorySize: 512
+      Timeout: 60
+  AlexaSkillFunctionEventPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName: !GetAtt AlexaSkillFunction.Arn
+      Principal: alexa-appkit.amazon.com
+Outputs:
+  SkillLambdaARN:
+    Description: LambdaARN for the regional endpoint
+    Value: !GetAtt AlexaSkillFunction.Arn

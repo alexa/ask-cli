@@ -1,0 +1,19 @@
+profiles:
+  testProfile:
+    aws_profile: awsProfile
+    token:
+      access_token: accessToken
+      refresh_token: refreshToken
+      token_type: bearer
+      expires_in: 3600
+      expires_at: expiresAt
+    vendor_id: vendorId
+  default:
+    aws_profile: default
+    token:
+      access_token: Atza|w
+      refresh_token: Atzr|n
+      token_type: bearer
+      expires_in: 3600
+      expires_at: '2018-09-11T18:12:18.843Z'
+    vendor_id: wn

@@ -1,0 +1,11 @@
+{
+    "key": "value",
+    "objectField": {
+        "internalKey": "internalValue"
+    },
+    "arrayField": [
+        "1"
+        "2"
+        "3"
+    ]
+}

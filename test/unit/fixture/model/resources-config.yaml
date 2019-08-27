@@ -1,0 +1,49 @@
+askcliResourcesobjectVersion: '1.0'
+profiles:
+  default:
+    skillId: amzn1.ask.skill.5555555-4444-3333-2222-1111111111
+    skillMetadata:
+      src: "./skillPackage"
+      lastDeployHash: ''
+    code:
+      default:
+        src: "./awsStack/lambda-NA/src"
+        lastDeployHash: ''
+      NA:
+        src: "./awsStack/lambda-NA/src"
+        lastDeployHash: ''
+      EU:
+        src: "./awsStack/lambda-EU/src"
+        lastDeployHash: ''
+    skillInfrastructure:
+      type: "@ask-cli/cfn-deployer"
+      userConfig:
+        runtime: nodejs8.10
+        handler: index.handler
+        template: "./awsStacks/skill-infra.yaml"
+        regionOverrides:
+          NA:
+            awsRegion: us-east-1
+            template: "./awsStacks/skill-infra.yaml"
+          EU:
+            awsRegion: eu-west-1
+            template: "./awsStacks/skill-infra.yaml"
+      deployState:
+        default:
+          stackId: ''
+          s3:
+            bucket: ''
+            key: endpoint/code
+            objectVersion: ''
+        NA:
+          stackId: ''
+          s3:
+            bucket: ''
+            key: endpoint/code
+            objectVersion: ''
+        EU:
+          stackId: ''
+          s3:
+            bucket: ''
+            key: endpoint/code
+            objectVersion: ''

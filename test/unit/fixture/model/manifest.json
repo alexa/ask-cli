@@ -1,0 +1,65 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "de-DE": {
+          "summary": "one sentence description",
+          "examplePhrases": [
+            "This is good",
+            "no icon"
+          ],
+          "name": "skillName de",
+          "description": "skill description"
+        },
+        "en-US": {
+          "summary": "Sample Short Description",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "Alexa tell hello world hello",
+            "Alexa ask hello world say hello"
+          ],
+          "name": "skillName us",
+          "description": "Sample Full Description"
+        },
+        "ja-JP": {
+          "summary": "coniqiwa",
+          "examplePhrases": [
+            "More to come",
+            "coniqiwa"
+          ],
+          "name": "skillName jp",
+          "description": "coniqiwa"
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "WINE_AND_BEVERAGE",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "sourceDir": "./lambda/us-east-1_arn1"
+        },
+        "interfaces": [
+          {
+            "type": "VIDEO_APP"
+          }
+        ],
+        "regions": {
+          "EU": {
+            "endpoint": {
+              "sourceDir": "./lambda/eu-west-1_arn2"
+            }
+          },
+          "FE": {
+            "endpoint": {
+              "sourceDir": "./lambda/eu-west-1_arn2"
+            }
+          }
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

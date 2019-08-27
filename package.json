@@ -1,0 +1,101 @@
+{
+  "name": "ask-cli-x",
+  "version": "0.1.0",
+  "description": "Alexa Skills Kit (ASK) Command Line Interfaces - the X version",
+  "bin": {
+    "askx": "bin/askx.js"
+  },
+  "engines": {
+    "node": ">=6.4.0"
+  },
+  "license": "Apache 2.0",
+  "repository": "alexa-labs/ask-cli",
+  "author": {
+    "name": "RonWang",
+    "email": "nonwang@amazon.com"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "cli",
+    "package",
+    "cloudformation",
+    "serverless",
+    "deploy"
+  ],
+  "scripts": {
+    "test": "node_modules/mocha/bin/_mocha -u exports -R spec test/unit/run-test.js",
+    "test:watch": "node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
+    "test:report": "nyc --cache npm test && nyc report --reporter=html",
+    "test:browser": "npm run test:report && open coverage/index.html",
+    "functional-test": "node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
+    "lint": "eslint lib"
+  },
+  "dependencies": {
+    "archiver": "^1.1.0",
+    "async": "^2.1.5",
+    "aws-profile-handler": "2.0.3",
+    "aws-sdk": "^2.288.0",
+    "bunyan": "^1.8.12",
+    "chalk": "2.4.2",
+    "commander": "^2.9.0",
+    "folder-hash": "^3.0.0",
+    "fs-extra": "^2.1.0",
+    "inquirer": "^6.2.0",
+    "js-yaml": "^3.13.1",
+    "jsonfile": "^2.4.0",
+    "listr": "^0.14.3",
+    "module-alias": "^2.1.0",
+    "opn": "^4.0.2",
+    "ora": "^3.4.0",
+    "portscanner": "^2.1.1",
+    "pretty-bytes": "^5.1.0",
+    "ramda": "^0.25.0",
+    "request": "^2.79.0",
+    "retry": "^0.10.1",
+    "rxjs": "^6.5.2",
+    "semver": "^5.3.0",
+    "shelljs": "^0.8.2",
+    "simple-git": "^1.82.0",
+    "simple-oauth2": "1.0.3",
+    "tmp": "^0.1.0",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "gulp": "^3.9.1",
+    "mocha": "^3.2.0",
+    "nyc": "^13.3.0",
+    "proxyquire": "^1.7.11",
+    "sinon": "^6.0.0"
+  },
+  "nyc": {
+    "check-coverage": false,
+    "lines": 90,
+    "statements": 90,
+    "functions": 90,
+    "branches": 90,
+    "include": [
+      "lib/utils/hook-manager.js",
+      "lib/utils/string-utils.js",
+      "lib/utils/url-utils.js",
+      "lib/utils/zip-utils.js",
+      "lib/utils/hash-utils.js",
+      "lib/utils/retry-utility.js",
+      "lib/clients/*",
+      "lib/model/*",
+      "lib/view/*",
+      "lib/controllers/*",
+      "lib/commands/*"
+    ]
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@src": "./lib",
+    "@test": "./test"
+  }
+}
