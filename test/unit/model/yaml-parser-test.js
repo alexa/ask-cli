@@ -35,11 +35,13 @@ describe('Model test - yaml parser', () => {
     });
 
     describe('# test yaml dump function', () => {
-        it('| dump yaml file correctly', () => {
-            const FROM_JSON_PATH = path.join(FIXTURE_PATH, 'yaml-from-json-result.yaml');
-            yaml.dump(FROM_JSON_PATH, YAML_JSON_RESULT);
-            expect(fs.readFileSync(FROM_JSON_PATH, 'utf8')).eql(fs.readFileSync(YAML_FILE_PATH, 'utf-8'));
-        });
+        if (process.platform !== 'win32') {
+            it('| dump yaml file correctly', () => {
+                const FROM_JSON_PATH = path.join(FIXTURE_PATH, 'yaml-from-json-result.yaml');
+                yaml.dump(FROM_JSON_PATH, YAML_JSON_RESULT);
+                expect(fs.readFileSync(FROM_JSON_PATH, 'utf8')).equal(fs.readFileSync(YAML_FILE_PATH, 'utf8'));
+            });
+        }
 
         it('| dump yaml file throws error', () => {
             // setup

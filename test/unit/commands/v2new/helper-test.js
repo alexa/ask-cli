@@ -55,7 +55,7 @@ describe('Commands new test - helper test', () => {
                 helper.loadSkillProjectModel(TEST_SKILL_FOLDER_NAME, TEST_PROFILE);
             } catch (e) {
                 // verify
-                expect(e.message).equal(`File ${TEST_SKILL_FOLDER_NAME}/ask-resources.json not exists.`);
+                expect(e.message).equal(`File ${TEST_SKILL_FOLDER_NAME}${path.sep}ask-resources.json not exists.`);
             }
         });
 

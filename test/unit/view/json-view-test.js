@@ -22,7 +22,7 @@ describe('View test - JSON view test', () => {
             // call
             const jsonDisplay = jsonView.toString(TEST_CIRCULAR_OBJ);
             // verify
-            expect(jsonDisplay).equal('TypeError: Converting circular structure to JSON');
+            expect(jsonDisplay.startsWith('TypeError: Converting circular structure to JSON')).equal(true);
         });
     });
 });

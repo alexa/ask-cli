@@ -49,7 +49,7 @@ describe('Model test - app config test', () => {
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `File ${NOT_EXISTING_PROJECT_CONFIG_PATH} not exists.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             }
         });
 
@@ -63,7 +63,7 @@ describe('Model test - app config test', () => {
             } catch (err) {
                 // verify
                 const expectedError = `No access to read/write file ${APP_CONFIG_PATH}.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             } finally {
                 // clear
                 fs.chmodSync(APP_CONFIG_PATH, 0o644);
@@ -76,7 +76,7 @@ describe('Model test - app config test', () => {
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `Failed to parse JSON file ${INVALID_JSON_PROJECT_CONFIG_PATH}.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             }
         });
 

@@ -87,20 +87,22 @@ describe('Functional test - ask api set-interaction-model', () => {
         new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when file access is not readable', (done) => {
-        fs.chmodSync(NO_ACCESS_FILE_PATH, 0o111);
-        const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${NO_ACCESS_FILE_PATH} -l ${TEST_LOCALE}`;
-        const envVar = {};
-        const httpMockConfig = [];
-        const expectationHandler = (msgCatcher) => {
-            expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: file. The provided file must have read permission.');
-            fs.chmodSync(NO_ACCESS_FILE_PATH, 0o644);
-            done();
-        };
-
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
-    });
+    if (process.platform !== 'win32') {
+        it('| print error when file access is not readable', (done) => {
+            fs.chmodSync(NO_ACCESS_FILE_PATH, 0o111);
+            const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${NO_ACCESS_FILE_PATH} -l ${TEST_LOCALE}`;
+            const envVar = {};
+            const httpMockConfig = [];
+            const expectationHandler = (msgCatcher) => {
+                expect(msgCatcher.info).equal('');
+                expect(msgCatcher.error).equal('Please provide valid input for option: file. The provided file must have read permission.');
+                fs.chmodSync(NO_ACCESS_FILE_PATH, 0o644);
+                done();
+            };
+    
+            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        });
+    }
 
     it('| print error when file input does not exist', (done) => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f invalid.path -l ${TEST_LOCALE}`;

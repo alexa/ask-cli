@@ -12,7 +12,7 @@
   "repository": "alexa-labs/ask-cli",
   "author": {
     "name": "RonWang",
-    "email": "nonwang@amazon.com"
+    "email": "nongwang@amazon.com"
   },
   "keywords": [
     "alexa",
@@ -24,12 +24,12 @@
     "deploy"
   ],
   "scripts": {
-    "test": "node_modules/mocha/bin/_mocha -u exports -R spec test/unit/run-test.js",
-    "test:watch": "node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
+    "test": "node ./node_modules/mocha/bin/_mocha -u exports -R spec test/unit/run-test.js",
+    "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
-    "functional-test": "node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
-    "lint": "eslint lib"
+    "functional-test": "node ./node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
+    "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view"
   },
   "dependencies": {
     "archiver": "^1.1.0",
@@ -74,13 +74,12 @@
     "sinon": "^6.0.0"
   },
   "nyc": {
-    "check-coverage": false,
-    "lines": 90,
-    "statements": 90,
-    "functions": 90,
-    "branches": 90,
+    "check-coverage": true,
+    "lines": 95,
+    "statements": 95,
+    "functions": 95,
+    "branches": 95,
     "include": [
-      "lib/utils/hook-manager.js",
       "lib/utils/string-utils.js",
       "lib/utils/url-utils.js",
       "lib/utils/zip-utils.js",
@@ -91,6 +90,10 @@
       "lib/view/*",
       "lib/controllers/*",
       "lib/commands/*"
+    ],
+    "exclude": [
+      "lib/commands/api/account-linking/set-account-linking/*",
+      "lib/commands/api/catalog/upload-catalog/*"
     ]
   },
   "_moduleAliases": {

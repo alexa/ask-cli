@@ -184,6 +184,8 @@ class ApiCommandBasicTest {
         // Each time when CLI try to read .ask/cli_config file,
         // return static ASK_CONFIG object defined above instead
         const askCliConfig = path.join(os.homedir(), '.ask', 'cli_config');
+        sinon.stub(fs, 'existsSync').withArgs(askCliConfig).returns(true);
+        fs.existsSync.callThrough();
         sinon.stub(fs, 'readFileSync').withArgs(askCliConfig, 'utf-8').returns(JSON.stringify(this._TEST_DATA.ASK_CONFIG));
         fs.readFileSync.callThrough();
 

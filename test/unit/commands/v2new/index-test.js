@@ -57,6 +57,7 @@ describe('Commands new test - command class test', () => {
 
             beforeEach(() => {
                 instance = new NewCommand(optionModel);
+                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
             });
 
             afterEach(() => {
@@ -68,7 +69,7 @@ describe('Commands new test - command class test', () => {
                 const TEST_CMD = {
                     profile: TEST_PROFILE
                 };
-                sinon.stub(profileHelper, 'runtimeProfile').throws(new Error('error'));
+                profileHelper.runtimeProfile.throws(new Error('error'));
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -183,6 +184,7 @@ describe('Commands new test - command class test', () => {
 
             beforeEach(() => {
                 instance = new NewCommand(optionModel);
+                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
                 sinon.stub(helper, 'newWithCustomTemplate').callsArgWith(2, null, TEST_USER_INPUT);
             });
 
@@ -232,6 +234,7 @@ describe('Commands new test - command class test', () => {
 
             beforeEach(() => {
                 instance = new NewCommand(optionModel);
+                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
                 sinon.stub(helper, 'newWithOfficialTemplate').callsArgWith(1, null, TEST_USER_INPUT);
                 sinon.stub(helper, 'loadSkillProjectModel');
                 sinon.stub(helper, 'updateSkillProjectWithUserSettings');

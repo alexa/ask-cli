@@ -40,7 +40,7 @@ describe('Model test - manifest file test', () => {
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `File ${NOT_EXISTING_PROJECT_CONFIG_PATH} not exists.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             }
         });
 
@@ -54,7 +54,7 @@ describe('Model test - manifest file test', () => {
             } catch (err) {
                 // verify
                 const expectedError = `No access to read/write file ${MANIFEST_FILE}.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             } finally {
                 // clear
                 fs.chmodSync(MANIFEST_FILE, 0o644);
@@ -67,7 +67,7 @@ describe('Model test - manifest file test', () => {
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `Failed to parse JSON file ${INVALID_JSON_PROJECT_CONFIG_PATH}.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.message.indexOf(expectedError) !== -1).equal(true);
             }
         });
 

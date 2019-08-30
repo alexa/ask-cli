@@ -195,8 +195,8 @@ describe('Utils test - string utility', () => {
     });
 
     it('| inspect correctness of generateTimeStamp function', () => {
-        sinon.useFakeTimers(new Date(2016, 2, 15));
-        expect(stringUtils.generateTimeStamp()).equal('20160315070000000');
+        sinon.useFakeTimers(Date.UTC(2016, 2, 15));
+        expect(stringUtils.generateTimeStamp()).equal('20160315000000000');
         sinon.restore();
     });
 

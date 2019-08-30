@@ -29,7 +29,7 @@ describe('View test - spinner view test', () => {
             // call
             new ProxySpinnerView();
             // verify
-            expect(oraStub.args[0][0]).deep.equal({ color: 'yellow', spinner: 'dots' });
+            expect(oraStub.args[0][0].color).equal('yellow');
         });
 
         it('| make sure SpinnerView class init with default config, when platform is not darwin', () => {

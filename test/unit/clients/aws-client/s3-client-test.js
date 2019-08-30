@@ -487,26 +487,26 @@ describe('Clients test - s3 client test', () => {
         const TEST_PROFILE_NAME = '1234567890';
 
         beforeEach(() => {
-            sinon.useFakeTimers(new Date(2016, 2, 15));
+            sinon.useFakeTimers(Date.UTC(2016, 2, 15));
         });
 
         it('| when user project name is longer than 22 characters and profile name is longer than 9 characters', () => {
             sinon.stub(path, 'basename').callsFake(() => '123456789012345678901234');
-            const expectedName = 'ask-1234567890123456789012-123456789-apnortheast1-1458025200000';
+            const expectedName = 'ask-1234567890123456789012-123456789-apnortheast1-1458000000000';
             expect(S3Client.generateBucketName(TEST_PROFILE_NAME, TEST_REAL_AWS_REGION)).equal(expectedName);
         });
 
         it('| when user project name and profile name contain special characters which are not allowed', () => {
             sinon.stub(path, 'basename').callsFake(() => ';:,/  +=*&^%$#@test-name!~-.');
             const profileName = 'foo|{}[]?<>_';
-            const expectedName = 'ask-test-name-.-foo-apnortheast1-1458025200000';
+            const expectedName = 'ask-test-name-.-foo-apnortheast1-1458000000000';
             expect(S3Client.generateBucketName(profileName, TEST_REAL_AWS_REGION)).equal(expectedName);
         });
 
         it('| when user project name and profile name contain Capital characters', () => {
             sinon.stub(path, 'basename').callsFake(() => 'TESTPROJECTNAME');
             const profileName = 'PROFILE';
-            const expectedName = 'ask-testprojectname-profile-apnortheast1-1458025200000';
+            const expectedName = 'ask-testprojectname-profile-apnortheast1-1458000000000';
             expect(S3Client.generateBucketName(profileName, TEST_REAL_AWS_REGION)).equal(expectedName);
         });
     });
