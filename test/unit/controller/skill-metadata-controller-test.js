@@ -7,12 +7,15 @@ const ResourcesConfig = require('@src/model/resources-config');
 const httpClient = require('@src/clients/http-client');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const oauthWrapper = require('@src/utils/oauth-wrapper');
+const Manifest = require('@src/model/manifest');
+const Messenger = require('@src/view/messenger');
 const zipUtils = require('@src/utils/zip-utils');
 const hashUtils = require('@src/utils/hash-utils');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Controller test - skill metadata controller test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
+    const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
 
     const TEST_PROFILE = 'default'; // test file contains 'default' profile
     const TEST_VENDOR_ID = 'vendorId';
@@ -151,6 +154,199 @@ describe('Controller test - skill metadata controller test', () => {
                 // verify
                 expect(err).equal('putErr');
                 expect(res).equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method enableSkill', () => {
+        const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+
+        beforeEach(() => {
+            new Manifest(FIXTURE_MANIFEST_FILE_PATH);
+            new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+        });
+
+        afterEach(() => {
+            ResourcesConfig.dispose();
+            Manifest.dispose();
+            sinon.restore();
+        });
+
+        it('| callback error when skillId is not provided', (done) => {
+            // setup
+            ResourcesConfig.getInstance().setSkillId(TEST_PROFILE, '');
+            // call
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal(`[Fatal]: Failed to find the skillId for profile [${TEST_PROFILE}],
+ please make sure the skill metadata deployment has succeeded with result of a valid skillId.`);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| callback error when dominInfo is not provided', (done) => {
+            // setup
+            Manifest.getInstance().setApis({});
+            // call
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal('[Error]: Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.');
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| callback error when dominInfo contains more than one domain', (done) => {
+            // setup
+            Manifest.getInstance().setApis({
+                custom: {},
+                smartHome: {}
+            });
+            // call
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal('[Warn]: Skill with multiple api domains cannot be enabled. Skip the enable process.');
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| callback error when domain cannot be enabled', (done) => {
+            // setup
+            Manifest.getInstance().setApis({
+                smartHome: {}
+            });
+            // call
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal('[Warn]: Skill api domain "smartHome" cannot be enabled. Skip the enable process.');
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| callback error when getSkillEnablement return error', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, 'getSkillEnablementError'); // stub smapi request
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal('getSkillEnablementError');
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| callback error when getSkillEnablement return error', (done) => {
+            // setup
+            const responseBody = {
+                Message: 'somehow fails'
+            };
+            const response = {
+                statusCode: 300,
+                body: responseBody
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, response); // stub smapi request
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal(jsonView.toString(responseBody));
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| when skill already enabled, can callback skip enablement message', (done) => {
+            // setup
+            const response = {
+                statusCode: 200,
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, response); // stub smapi request
+            sinon.stub(Messenger.getInstance(), 'info');
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal(undefined);
+                expect(res).equal(undefined);
+                expect(Messenger.getInstance().info.args[0][0]).equal('Skill is already enabled, skip the enable process.');
+                done();
+            });
+        });
+
+        it('| when skill is not enabled, can callback error when enalbe skill fail', (done) => {
+            // setup
+            const getEnablementResponse = {
+                statusCode: 404,
+                body: {}
+            };
+            sinon.stub(httpClient, 'request')
+                .withArgs(sinon.match.any, 'get-skill-enablement')
+                .callsArgWith(3, null, getEnablementResponse); // stub smapi request
+
+            httpClient.request
+                .withArgs(sinon.match.any, 'enable-skill')
+                .callsArgWith(3, 'enableSkillError'); // stub smapi request
+
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal('enableSkillError');
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| when skill is not enabled, can callback error when statusCode >= 300', (done) => {
+            // setup
+            const getEnablementResponse = {
+                statusCode: 404,
+                body: {}
+            };
+            const enableSkillResponseBody = {
+                Message: 'somehow fail'
+            };
+            const enableSkillResponse = {
+                statusCode: 300,
+                body: enableSkillResponseBody
+            };
+            sinon.stub(httpClient, 'request')
+                .withArgs(sinon.match.any, 'get-skill-enablement')
+                .callsArgWith(3, null, getEnablementResponse); // stub smapi request
+
+            httpClient.request
+                .withArgs(sinon.match.any, 'enable-skill')
+                .callsArgWith(3, null, enableSkillResponse); // stub smapi request
+
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal(jsonView.toString(enableSkillResponseBody));
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| when skill is not enabled, can callback success enable skill message', (done) => {
+            // setup
+            const getEnablementResponse = {
+                statusCode: 404,
+                body: {}
+            };
+            const enableSkillResponse = {
+                statusCode: 200,
+            };
+            sinon.stub(Messenger.getInstance(), 'info');
+            sinon.stub(httpClient, 'request')
+                .withArgs(sinon.match.any, 'get-skill-enablement')
+                .callsArgWith(3, null, getEnablementResponse); // stub smapi request
+
+            httpClient.request
+                .withArgs(sinon.match.any, 'enable-skill')
+                .callsArgWith(3, null, enableSkillResponse); // stub smapi request
+
+            skillMetaController.enableSkill((err, res) => {
+                // verify
+                expect(err).equal(undefined);
+                expect(res).equal(undefined);
+                expect(Messenger.getInstance().info.args[0][0]).equal('Skill is enabled successfully.');
                 done();
             });
         });

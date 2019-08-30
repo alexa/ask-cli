@@ -50,17 +50,17 @@ describe('Commands deploy test - command class test', () => {
             debug: TEST_DEBUG
         };
         let instance;
+        beforeEach(() => {
+            sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+            sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            instance = new DeployCommand(optionModel);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
 
         describe('command handle - before deploy resources', () => {
-            beforeEach(() => {
-                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                instance = new DeployCommand(optionModel);
-            });
-
-            afterEach(() => {
-                sinon.restore();
-            });
 
             it('| when profile is not correct, expect throw error', (done) => {
                 // setup
@@ -121,16 +121,6 @@ describe('Commands deploy test - command class test', () => {
         });
 
         describe('command handle - deploy skill metadata', () => {
-            beforeEach(() => {
-                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                instance = new DeployCommand(optionModel);
-            });
-
-            afterEach(() => {
-                sinon.restore();
-            });
-
             it('| helper deploy skill metadata fails, expect throw error', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2, 'error');
@@ -165,16 +155,6 @@ describe('Commands deploy test - command class test', () => {
         });
 
         describe('command handle - build skill code', () => {
-            beforeEach(() => {
-                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                instance = new DeployCommand(optionModel);
-            });
-
-            afterEach(() => {
-                sinon.restore();
-            });
-
             it('| helper build skill code fails, expect throw error', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
@@ -195,16 +175,6 @@ describe('Commands deploy test - command class test', () => {
         });
 
         describe('command handle - deploy skill infrastructure', () => {
-            beforeEach(() => {
-                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                instance = new DeployCommand(optionModel);
-            });
-
-            afterEach(() => {
-                sinon.restore();
-            });
-
             const TEST_CODE_BUILD_RESULT = [{
                 src: 'codeSrc',
                 build: {
@@ -221,6 +191,7 @@ describe('Commands deploy test - command class test', () => {
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2, 'error');
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
                 sinon.stub(stringUtils, 'isNonBlankString').returns(true);
                 stringUtils.isNonBlankString.withArgs('@ask-cli/cfn-deployer').returns(false);
                 sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
@@ -250,6 +221,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2, 'error');
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
                 sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
                 sinon.stub(fs, 'statSync').returns({
                     isDirectory: () => true
@@ -273,11 +245,12 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 });
             });
 
-            it('| deploy skill all pass, expect deploy succeeds', (done) => {
+            it('| deploy skill all pass, expect deploy succeeds and enbalSkill get called', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
                 sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
                 sinon.stub(fs, 'statSync').returns({
                     isDirectory: () => true
@@ -299,6 +272,33 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     expect(infoStub.args[6][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
                     expect(infoStub.args[7][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
                     expect(warnStub.callCount).equal(0);
+                    expect(helper.enableSkill.calledOnce).equal(true);
+                    done();
+                });
+            });
+        });
+
+        describe('command handle - enable skill', () => {
+            const TEST_CODE_BUILD_RESULT = [{
+                src: 'codeSrc',
+                build: {
+                    file: 'buildFile',
+                    folder: 'buildFolder'
+                },
+                buildFlow: 'build-flow',
+                regionsList: ['default', 'NA']
+            }];
+
+            it('| can callbcak error when enable fails', (done) => {
+                // setup
+                const TEST_ERROR = 'error';
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2, 'error');
+                instance.handle(TEST_CMD, (err) => {
+                    expect(errorStub.args[0][0]).equal(TEST_ERROR);
+                    expect(err).equal(TEST_ERROR);
                     done();
                 });
             });
