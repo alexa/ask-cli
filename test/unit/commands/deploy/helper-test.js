@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const Messenger = require('@src/view/messenger');
 
 const helper = require('@src/commands/deploy/helper');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
@@ -108,6 +109,44 @@ describe('Commands deploy test - helper test', () => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('# test helper method - enableSkill', () => {
+        let infoStub;
+        beforeEach(() => {
+            infoStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                info: infoStub,
+            });
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| skillMetaController enableSkill fails, expect callback error', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').callsArgWith(0, 'error');
+            // call
+            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err) => {
+                expect(err).equal('error');
+                expect(infoStub.args[0][0]).equal('\n==================== Enable Skill ====================');
+                done();
+            });
+        });
+
+        it('| skillMetaController enableSkill passes, expect no error callback', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').callsArgWith(0);
+            // call
+            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+                // verify
+                expect(err).equal(undefined);
+                expect(res).equal(undefined);
+                expect(infoStub.args[0][0]).equal('\n==================== Enable Skill ====================');
                 done();
             });
         });
