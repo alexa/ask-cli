@@ -47,6 +47,10 @@ $ askx new
 
 You'll be asked to select a deployment method for your skill. Currently during the beta, we only support deployment via CloudFormation (@ask-cli/cfn-deployer).
 
+<p align="center">
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/demo-askx-new.gif" height="350" />
+</p>
+
 Your new skill project will provide a number of files and folders that make up the structure of an Alexa skill. Here is an overview on each of the files and folders that are created by default:
 
 | File/Folder       | Description  |
@@ -57,6 +61,7 @@ Your new skill project will provide a number of files and folders that make up t
 | ask-resources config     | Configuration for your Alexa skill project |
 
 See the [ASK SDKs documentation](https://developer.amazon.com/docs/sdk/alexa-skills-kit-sdks.html) to learn more about how to build an Alexa skill.
+
 
 **4. Deploy skill to AWS**
 
@@ -72,5 +77,6 @@ deploy performs the following steps:
 2. `code/` source files will be built and zipped for deployment to AWS. We currently support the build flows of npm for Nodejs, pip for Python and maven for Java developers.
 3. `infrastructure/` definitions will be used to provision resources on AWS. The `code/` zip file from the previous step will be deployed to the provisioned AWS Lambda function. Currently this is deployed by using the `@ask-cli/cfn-deployer`, you can add any AWS services in the skill's stack template and deploy them together.
 
-
-
+<p align="center">
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/demo-askx-deploy.gif" height="350" />
+</p>
