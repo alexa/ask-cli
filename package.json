@@ -1,6 +1,6 @@
 {
   "name": "ask-cli-x",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces - the X version",
   "bin": {
     "askx": "bin/askx.js"
@@ -29,7 +29,8 @@
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
     "functional-test": "node ./node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
-    "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view"
+    "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
+    "pre-release": "standard-version"
   },
   "dependencies": {
     "archiver": "^1.1.0",
@@ -62,16 +63,26 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "chai": "^3.5.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "gulp": "^3.9.1",
+    "husky": "^3.0.8",
     "mocha": "^3.2.0",
     "nyc": "^13.3.0",
     "proxyquire": "^1.7.11",
-    "sinon": "^6.0.0"
+    "sinon": "^6.0.0",
+    "standard-version": "^7.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "npm run test:report"
+    }
   },
   "nyc": {
     "check-coverage": true,
