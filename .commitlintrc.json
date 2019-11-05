@@ -3,10 +3,11 @@
     "body-leading-blank": [1, "always"],
     "footer-leading-blank": [1, "always"],
     "subject-empty": [2, "never"],
+    "subject-full-stop": [2, "never", "."],
     "subject-case": [
       2,
-      "always",
-      ["sentence-case", "lower-case", "pascal-case", "camel-case"]
+      "never",
+      ["sentence-case", "pascal-case", "start-case", "upper-case"]
     ],
     "scope-case": [2, "always", "lower-case"],
     "type-case": [2, "always", "lower-case"],

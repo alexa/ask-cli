@@ -172,7 +172,7 @@ describe('Utils test - retry utility', () => {
             }
             const retryCall = cb => cb(null, stub());
             it(`| ${testCase}`, (done) => {
-                const terminateCondition = (res) => {
+                const shouldRetryCondition = (res) => {
                     if (res) {
                         if (pollCount > 0) {
                             pollCount--;
@@ -183,7 +183,7 @@ describe('Utils test - retry utility', () => {
                     return false;
                 };
                 // call
-                retryUtils.retry(retryConfig, retryCall, terminateCondition, (err, res) => {
+                retryUtils.retry(retryConfig, retryCall, shouldRetryCondition, (err, res) => {
                     assert.strictEqual(err, expectedResult.error);
                     assert.strictEqual(res, expectedResult.response);
                     sinon.assert.callCount(stub, expectedResult.callCount);
