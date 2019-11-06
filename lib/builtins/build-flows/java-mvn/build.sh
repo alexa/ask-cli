@@ -18,8 +18,8 @@ main() {
     echo "###########################"
   fi
 
-  if ! install_dependencies; then
-    display_stderr "Failed to install the dependencies in the project."
+  if ! build_skill_dependencies; then
+    display_stderr "Failed to build the skill artifacts in the project."
     exit 1
   else
     [[ $DO_DEBUG == true ]] && display_debug "Dependencies built successfully."
@@ -45,8 +45,8 @@ display_debug() {
   echo "[Debug] $1" >&2
 }
 
-install_dependencies() {
-  [[ $DO_DEBUG == true ]] && display_debug "Installing Java dependencies based on the pom.xml." 
+build_skill_dependencies() {
+  [[ $DO_DEBUG == true ]] && display_debug "Building skill artifacts based on the pom.xml." 
   [[ $DO_DEBUG == false ]] && QQ=true # decide if quiet flag will be appended
 
   mvn clean org.apache.maven.plugins:maven-assembly-plugin:2.6:assembly -DdescriptorId=jar-with-dependencies package ${QQ:+--quiet}

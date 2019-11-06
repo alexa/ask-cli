@@ -61,7 +61,6 @@ describe('Commands deploy test - command class test', () => {
         });
 
         describe('command handle - before deploy resources', () => {
-
             it('| when profile is not correct, expect throw error', (done) => {
                 // setup
                 profileHelper.runtimeProfile.throws(new Error('error'));

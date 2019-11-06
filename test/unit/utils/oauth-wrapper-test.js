@@ -30,8 +30,8 @@ describe('oauth-wrapper unit test', () => {
         it('| should use CLI credentials when input parameters are omitted', () => {
             oauthWrapper.createOAuth();
             let oauthInput = oauth2.create.getCall(0).args[0];
-            expect(oauthInput.client.clientId).to.equal(CONSTANTS.LWA.CLI_DEFAULT_CREDENTIALS.CLIENT_ID);
-            expect(oauthInput.client.clientConfirmation).to.equal(CONSTANTS.LWA.CLI_DEFAULT_CREDENTIALS.CLIENT_CONFIRMATION);
+            expect(oauthInput.client.clientId).to.equal(CONSTANTS.LWA.CLI_INTERNAL_ONLY_LWA_CLIENT.CLIENT_ID);
+            expect(oauthInput.client.clientConfirmation).to.equal(CONSTANTS.LWA.CLI_INTERNAL_ONLY_LWA_CLIENT.CLIENT_CONFIRMATION);
         });
     });
 });

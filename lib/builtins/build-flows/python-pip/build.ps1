@@ -1,109 +1,162 @@
-# Powershell script for ask-cli code build for python-pip flow.
-# Script Usage: build.ps1 <OUT_FILE> <DO_DEBUG>
- 
-# OUT_FILE is the file name for the output (required)
-# DO_DEBUG is boolean value for debug logging
+#requires -version 3
+<#
+    .SYNOPSIS
+        PowerShell script for ask-cli's Python-pip code building flow.
+    .DESCRIPTION
+        This is the PowerShell version of the build script, for building the AWS Lambda deployable skill code that is written in Python language. This script is only run by the ask-cli whenever a 'requirements.txt' file is found alongside the skill code. The dependencies are installed using 'pip', and are packaged using 'zip'.
+    .EXAMPLE
+        build.ps1 archive.zip
+        This example showcases how to run the build script, to create an AWS Lambda deployable package called 'archive.zip'.
+    .EXAMPLE
+        build.ps1 archive.zip $true
+        This example showcases how to run the previous example, with additional debug information.
+#>
+#----------------[ Parameters ]----------------------------------------------------
+param(
+    [Parameter(Mandatory = $false,
+               ValueFromPipelineByPropertyName = $true,
+               HelpMessage = "Name for the AWS Lambda deployable archive")]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $script:OutFile = "upload.zip",
 
-# Run this script whenever a requirements.txt is found
-
-param( 
-    [string] $OUT_FILE,
-    [bool] $DO_DEBUG = $False
+        # Provide additional debug information during script run
+        [Parameter(Mandatory = $false,
+                   ValueFromPipelineByPropertyName = $true,
+                   HelpMessage = "Enable verbose output")]
+        [bool]
+        $script:Verbose = $false
 )
 
-function create_venv() {
-    if ($DO_DEBUG) {
-        Write-Host "Checking for Python3 installation"
-    }
+#----------------[ Declarations ]----------------------------------------------------
+$ErrorActionPreference = "Stop"
 
-    $python_version = python -V | Select-String -Pattern "Python 3." 2>&1 | Out-Null
-    if ($python_version) {
-        if ($DO_DEBUG) {
-            Write-Host "Python3 installation found on system"
-            Write-Host "Using Python3's venv script to create virtualenv"
-        }
-        $python_venv = python -m venv venv 2>&1 | Out-Null
-        if ($python_venv) {
-            return $true
-        } else {
-            if ($DO_DEBUG) {
-                Write-Host "There was a problem creating virtualenv using venv script"
-                Write-Host "Fallback to use virtualenv library"
+#----------------[ Functions ]----------------------------------------------------
+function Show-Log() {
+    <#
+        .SYNOPSIS
+            Function to log information/error messages to output
+        .EXAMPLE
+            Show-Log "Test"
+                This will log the message as an Information, only if the script is run in Verbose mode
+
+            Show-Log "Test" "Error"
+                This will log the message as an Error and STOP the script execution
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $Message,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('Info','Error')]
+        [string]
+        $Severity = 'Info'
+    )
+
+    begin {}
+    process {
+        if ($Severity -eq 'Info') {
+            if ($Verbose) {
+                Write-Host $Message
             }
-        }
-    } else {
-        if ($DO_DEBUG) {
-            Write-Host "Python3 installation not found on system. Using Python2"
-        }
-        return create_using_virtualenv $DO_DEBUG
-    }
-}
- 
-function create_using_virtualenv() {
-    if ($DO_DEBUG) {
-        Write-Host "Cheking for virtualenv library"
-    }
-    $virtualenv_exist = python -m pip --disable-pip-version-check install virtualenv 2>&1
-    if ($virtualenv_exist) {
-        if ($DO_DEBUG) {
-            Write-Host "Using virtualenv library to create virtualenv"
-        }
-        $virtualenv_create = python -m virtualenv venv 2>&1
-        if ($virtualenv_create) {
-            return $true
         } else {
-            if ($DO_DEBUG) {
-                Write-Host "There was a problem creating virtualenv"
-            }
-        } 
-    } else {
-        if ($DO_DEBUG) {
-            Write-Host "There was a problem installing virtualenv library"
+            Write-Error $Message
         }
     }
-    return $false
+    end {}
 }
 
-function install_dependencies() {
-    # Install dependencies from requirements.txt into build folder
-    $CMD = "./venv/bin/pip --disable-pip-version-check install -r requirements.txt -t ./"
-    Invoke-Expression $CMD 2>&1 | Out-Null
-    if ($?) {
-        if ($DO_DEBUG) {
-            Write-Host "Dependencies installed successfully"
+function New-Py3Venv() {
+    <#
+        .SYNOPSIS
+            Function to create virtual environment using Python3 'venv' module.
+    #>
+    [CmdletBinding()]
+    [OutputType()]
+    param()
+
+    begin {
+        Write-Log "Creating virtualenv using python3 venv."
+    }
+    process {
+        Invoke-Expression -Command "python3 -m venv venv"
+        if(!($LASTEXITCODE -eq 0)) {
+            Show-Log "Failed to create python virtual environment using venv." "Error"
+        }
+    }
+    end {}
+}
+
+function Install-Dependencies() {
+    <#
+        .SYNOPSIS
+            Function to install dependencies in requirements.txt from PyPI, in the current folder.
+    #>
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param()
+
+    begin {
+        Show-Log "Installing skill dependencies based on the requirements.txt."
+    }
+    process {
+        $DepCmd = "./venv/bin/pip --disable-pip-version-check install -r requirements.txt -t ./"
+        if (-not $Verbose) {
+            $DepCmd += " -qq"
+        }
+        Invoke-Expression -Command $DepCmd
+        if(!($LASTEXITCODE -eq 0)) {
+            Show-Log "Failed to install the dependencies in the project" "Error"
         }
         return $true
-    } else {
-        if ($DO_DEBUG) {
-            Write-Host "There was a problem installing dependencies"
-        }
-        return $false
     }
+    end {}
 }
 
-if ($DO_DEBUG) {
-    $LINE_HEADER = "###########################"
-    Write-Host $LINE_HEADER
-    Write-Host "####### Build Code ########"
-    Write-Host $LINE_HEADER
+function Compress-Dependencies() {
+    <#
+        .SYNOPSIS
+            Function to compress source code and dependencies for lambda deployment.
+    #>
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param()
+
+    begin {
+        Show-Log "Zipping source files and dependencies to $OutFile."
+    }
+    process {
+        $Files = Get-ChildItem -Path .\ -Exclude venv
+        Compress-Archive -Path $Files -DestinationPath $OutFile
+        return $?
+    }
+    end {}
+
 }
 
+#----------------[ Main Execution ]----------------------------------------------------
 
+Show-Log "###########################"
+Show-Log "####### Build Code ########"
+Show-Log "###########################"
 
-if ((create_venv) -and (install_dependencies)) {
-    $files = Get-ChildItem -Path .\ -Exclude venv
-    Compress-Archive -Path $files -DestinationPath $OUT_FILE
-    if ($DO_DEBUG) {
-        Write-Host $LINE_HEADER
-        Write-Host "###### Build Success ######"
-        Write-Host $LINE_HEADER
-    }
-    exit 0
-} else {
-    if ($DO_DEBUG) {
-        Write-Host $LINE_HEADER
-        Write-Host "###### Build Failure ######"
-        Write-Host $LINE_HEADER
-    }
-    exit 1
+New-Py3Venv
+Show-Log "Virtual environment set up successfully."
+
+if (Install-Dependencies) {
+    Show-Log "Pip install dependencies successfully."
 }
+
+if (-Not (Compress-Dependencies)) {
+    Show-Log "Failed to zip the artifacts to $OutFile" "Error"
+}
+
+Show-Log "###########################"
+Show-Log "Codebase built successfully"
+Show-Log "###########################"
+
+exit 0

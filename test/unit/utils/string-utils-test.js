@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { expect } = require('chai');
 
 const stringUtils = require('@src/utils/string-utils');

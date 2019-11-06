@@ -15,12 +15,12 @@ describe('Utils test - hash utility', () => {
                 ignoreRootName: true
             },
         };
+
         it('| can correctly callback hash code', (done) => {
             const TEST_HASH_CODE = 'HASH_CODE';
             const TEST_RESULT = {
                 hash: TEST_HASH_CODE
             };
-            const TEST_DIR_PATH = 'DIR_PATH';
             // setup
             sinon.stub(folderHash, 'hashElement').withArgs(TEST_DIR_PATH, expectedOptions).callsArgWith(2, null, TEST_RESULT);
 

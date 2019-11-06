@@ -86,8 +86,8 @@ describe('Utils test - retry utility', () => {
                     factor: -1
                 },
                 expectedResult: {
-                    error: '[Error]: Invalid retry configuration: factor. ' +
-                        'Factor is a required configuration and its value needs to be greater than 0',
+                    error: '[Error]: Invalid retry configuration: factor. '
+                        + 'Factor is a required configuration and its value needs to be greater than 0',
                     response: undefined,
                     callCount: 0
                 }

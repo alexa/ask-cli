@@ -19,26 +19,9 @@ main() {
     echo "###########################"
   fi
 
-  local PYTHON="$(decide_python_cmd)"
-  if [[ -z $PYTHON ]]; then
-    display_stderr "Failed to build the codebase because python runtime is not found. Please open https://www.python.org/downloads/ and install it first."
+  if ! create_using_python3_venv; then
+    display_stderr "Failed to create python virtual environment using venv."
     exit 1
-  fi
-  [[ $DO_DEBUG == true ]] && display_debug "Python command found as $PYTHON"
-
-  if [[ $PYTHON != 'python3' ]]; then
-    if ! create_using_virtualenv $PYTHON; then
-      display_stderr "Failed to create python virtual environment using virtualenv."
-      exit 1
-    fi
-  else
-    if ! create_using_python3_venv; then
-      [[ $DO_DEBUG == true ]] && display_debug "Failed to create python venv."
-      if ! create_using_virtualenv $PYTHON; then
-        display_stderr "Failed to create python virtual environment using either venv or virtualenv."
-        exit 1
-      fi
-    fi
   fi
   [[ $DO_DEBUG == true ]] && display_debug "Virtual environment set up successfully"
 
@@ -70,25 +53,6 @@ display_debug() {
 }
 
 #######################################
-# Check if python3 or python is in usage. Start the check from python3.
-# Arguments:
-#   None
-# Returns:
-#   Python command
-#######################################
-decide_python_cmd() {
-  if command -v python3 $> /dev/null; then
-    echo "python3"
-  else
-    if command -v python $> /dev/null; then
-      echo "python"
-    else
-      echo ""
-    fi
-  fi
-}
-
-#######################################
 # For the version of python which contains venv, create virtual environment using the venv script.
 # Arguments:
 #   None
@@ -99,26 +63,6 @@ create_using_python3_venv() {
   [[ $DO_DEBUG == true ]] && display_debug "Creating virtualenv using python3 venv."
   python3 -m venv venv
   return $?
-}
-
-#######################################
-# For python which doesn't have venv, create virtual environment by "pip install virtualenv" and running virtualenv.
-# Arguments:
-#   Python command
-# Returns:
-#   None
-#######################################
-create_using_virtualenv() {
-  [[ $DO_DEBUG == true ]] && display_debug "Creating virtualenv using virtualenv." 
-  [[ $DO_DEBUG == false ]] && QQ=true # decide if quiet flag will be appended
-
-  $1 -m pip --disable-pip-version-check install virtualenv ${QQ:+-qq}
-  if [[ $? -ne 0 ]]; then
-    return 1
-  else
-    $1 -m virtualenv venv ${QQ:+-q}
-    return $?
-  fi
 }
 
 install_dependencies() {
