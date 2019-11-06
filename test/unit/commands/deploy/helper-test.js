@@ -10,6 +10,7 @@ const profileHelper = require('@src/utils/profile-helper');
 
 describe('Commands deploy test - helper test', () => {
     const TEST_PROFILE = 'default';
+    const TEST_VENDOR_ID = 'vendor';
     const TEST_DO_DEBUG = false;
 
     describe('# test helper method - deploySkillMetadata', () => {
@@ -31,6 +32,7 @@ describe('Commands deploy test - helper test', () => {
 
         it('| skillMetaController deploySkillPackage fails, expect callback error', (done) => {
             // setup
+            sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_VENDOR_ID);
             sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(1, 'error');
             // call
             helper.deploySkillMetadata(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
@@ -43,6 +45,7 @@ describe('Commands deploy test - helper test', () => {
 
         it('| skillMetaController deploySkillPackage passes, expect no error callback', (done) => {
             // setup
+            sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_VENDOR_ID);
             sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(1);
             // call
             helper.deploySkillMetadata(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
