@@ -1,8 +1,8 @@
 const { expect } = require('chai');
-const questions = require('@src/commands/init/questions');
+const questions = require('@src/commands/configure/questions');
 const CONSTANTS = require('@src/utils/constants');
 
-describe('Command: Init - questions validate test', () => {
+describe('Command: Configure - questions validate test', () => {
     describe('# test request AWS profile name validators', () => {
         const TEST_LIST = ['1', '2'];
 
@@ -16,7 +16,7 @@ describe('Command: Init - questions validate test', () => {
         });
 
         it('| input is valid based on profiles list', () => {
-            TEST_LIST.push(CONSTANTS.COMMAND.INIT.AWS_DEFAULT_PROFILE_NAME);
+            TEST_LIST.push(CONSTANTS.COMMAND.CONFIGURE.AWS_DEFAULT_PROFILE_NAME);
             const result = questions.REQUEST_AWS_PROFILE_NAME(TEST_LIST);
             expect(result[0].validate('3')).equal(true);
             expect(result[0].default).equal(null);
@@ -42,6 +42,18 @@ describe('Command: Init - questions validate test', () => {
         it('| valid secretAccessKey', () => {
             // call and verify
             expect(questions.REQUEST_ACCESS_SECRET_KEY_AND_ID[1].validate('secretAccessKey')).equal(true);
+        });
+    });
+
+    describe('# test authCode validators', () => {
+        it('| invalid authCode', () => {
+            // call and verify
+            expect(questions.REQUEST_AUTH_CODE[0].validate('')).equal('Please enter a valid Authorization Code.');
+        });
+
+        it('| valid authCode', () => {
+            // call and verify
+            expect(questions.REQUEST_AUTH_CODE[0].validate('authorizationCode')).equal(true);
         });
     });
 });

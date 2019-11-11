@@ -1,5 +1,4 @@
-const expect = require('chai').expect;
-const sinon = require('sinon');
+const { expect } = require('chai');
 const path = require('path');
 const fs = require('fs');
 const jsonfile = require('jsonfile');
@@ -9,6 +8,7 @@ const AppConfig = require('@src/model/app-config');
 describe('Model test - app config test', () => {
     const FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
     const APP_CONFIG_PATH = path.join(FIXTURE_PATH, 'app-config.json');
+    const APP_CONFIG_NO_PROFILES_PATH = path.join(FIXTURE_PATH, 'app-config-no-profiles.json');
     const YAML_APP_CONFIG_PATH = path.join(FIXTURE_PATH, 'app-config.yaml');
 
     describe('# inspect correctness for constructor, getInstance and dispose', () => {
@@ -96,26 +96,26 @@ describe('Model test - app config test', () => {
             {
                 field: 'AwsProfile',
                 profile: TEST_PROFILE,
-                newValue: "awsProfile new",
-                oldValue: "awsProfile"
+                newValue: 'awsProfile new',
+                oldValue: 'awsProfile'
             },
             {
                 field: 'Token',
                 profile: TEST_PROFILE,
-                newValue: "token new",
+                newValue: 'token new',
                 oldValue: {
-                    "access_token": "accessToken",
-                    "refresh_token": "refreshToken",
-                    "token_type": "bearer",
-                    "expires_in": 3600,
-                    "expires_at": "expiresAt"
+                    access_token: 'accessToken',
+                    refresh_token: 'refreshToken',
+                    token_type: 'bearer',
+                    expires_in: 3600,
+                    expires_at: 'expiresAt'
                 }
             },
             {
                 field: 'VendorId',
                 profile: TEST_PROFILE,
-                newValue: "vendorId new",
-                oldValue: "vendorId"
+                newValue: 'vendorId new',
+                oldValue: 'vendorId'
             }
         ].forEach(({
             field,
@@ -131,6 +131,30 @@ describe('Model test - app config test', () => {
                 AppConfig.getInstance()[`set${field}`](profile, newValue);
                 expect(AppConfig.getInstance()[`get${field}`](profile)).equal(newValue);
             });
+        });
+
+        afterEach(() => {
+            AppConfig.dispose();
+        });
+    });
+
+    describe('# inspect correctness of getProfilesList', () => {
+        it('| test with empty profiles config file, expect empty array', () => {
+            // setup
+            new AppConfig(APP_CONFIG_NO_PROFILES_PATH);
+
+            // call & verify
+            expect(AppConfig.getInstance().getProfilesList().length).to.equal(0);
+        });
+
+        it('| test with valid profiles config file, expect array of objects', () => {
+            // setup
+            new AppConfig(APP_CONFIG_PATH);
+
+            // call & verify
+            expect(AppConfig.getInstance().getProfilesList().length).to.equal(2);
+            expect(AppConfig.getInstance().getProfilesList()).to.deep.equal([{ askProfile: 'testProfile', awsProfile: 'awsProfile' },
+                { askProfile: 'default', awsProfile: 'default' }]);
         });
 
         afterEach(() => {

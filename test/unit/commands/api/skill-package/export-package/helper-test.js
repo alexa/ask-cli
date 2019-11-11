@@ -1,10 +1,10 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const helper = require('@src/commands/api/skill-package/export-package/helper');
 const httpClient = require('@src/clients/http-client');
 const jsonView = require('@src/view/json-view');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
 const SmapiClient = require('@src/clients/smapi-client/index.js');
 
 describe('Commands export-package - helper test', () => {
@@ -30,7 +30,7 @@ describe('Commands export-package - helper test', () => {
             body: {}
         };
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
         afterEach(() => {
             sinon.restore();

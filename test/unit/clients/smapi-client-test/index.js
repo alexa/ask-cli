@@ -2,8 +2,8 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 const SmapiClient = require('@src/clients/smapi-client');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
 const httpClient = require('@src/clients/http-client');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 
 const triggerAccountLinking = require('./resources/account-linking');
@@ -26,6 +26,13 @@ const triggerPublishingTests = require('./resources/publishing');
 describe('Clients test - smapi client test', () => {
     const TEST_PROFILE = 'testProfile';
     const TEST_DO_DEBUG = false;
+    const TEST_ACCESS_TOKEN = {
+        access_token: 'access_token',
+        refresh_token: 'refresh_token',
+        token_type: 'bearer',
+        expires_in: 3600,
+        expires_at: 'expires_at'
+    };
     const smapiClient = new SmapiClient({
         profile: TEST_PROFILE,
         doDebug: TEST_DO_DEBUG
@@ -53,13 +60,13 @@ describe('Clients test - smapi client test', () => {
         const TEST_ERROR = 'error';
 
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead');
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead');
             sinon.stub(httpClient, 'request');
         });
 
         it('| input request options correctly to _smapiRequest', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE);
             // call
             smapiClient._smapiRequest(TEST_API_NAME, TEST_METHOD, TEST_VERSION, TEST_URL_PATH, {}, {}, null, (err, res) => {
@@ -67,12 +74,12 @@ describe('Clients test - smapi client test', () => {
                 const expectedOptions = {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${TEST_VERSION}/${TEST_URL_PATH}`,
                     method: TEST_METHOD,
-                    headers: {},
+                    headers: { authorization: 'access_token' },
                     body: null,
                     json: false
                 };
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedOptions);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][1]).equal(TEST_PROFILE);
+
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).equal(TEST_PROFILE);
                 expect(httpClient.request.args[0][0]).deep.equal(expectedOptions);
                 expect(httpClient.request.args[0][1]).equal(TEST_API_NAME);
                 expect(httpClient.request.args[0][2]).equal(false);
@@ -88,7 +95,7 @@ describe('Clients test - smapi client test', () => {
 
         it('| input request options without headers input to _smapiRequest', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE);
             // call
             smapiClient._smapiRequest(TEST_API_NAME, TEST_METHOD, TEST_VERSION, TEST_URL_PATH, {}, null, null, (err, res) => {
@@ -96,12 +103,11 @@ describe('Clients test - smapi client test', () => {
                 const expectedOptions = {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${TEST_VERSION}/${TEST_URL_PATH}`,
                     method: TEST_METHOD,
-                    headers: {},
+                    headers: { authorization: 'access_token' },
                     body: null,
                     json: false
                 };
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedOptions);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][1]).equal(TEST_PROFILE);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).deep.equal(TEST_PROFILE);
                 expect(httpClient.request.args[0][0]).deep.equal(expectedOptions);
                 expect(httpClient.request.args[0][1]).equal(TEST_API_NAME);
                 expect(httpClient.request.args[0][2]).equal(false);
@@ -117,7 +123,7 @@ describe('Clients test - smapi client test', () => {
 
         it('| input request options but http request fails', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, TEST_ERROR);
             // call
             smapiClient._smapiRequest(TEST_API_NAME, TEST_METHOD, TEST_VERSION, TEST_URL_PATH, {}, {}, null, (err, res) => {
@@ -130,7 +136,7 @@ describe('Clients test - smapi client test', () => {
 
         it('| input request options but the response is not parsable', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_NOT_PARSABLE);
             // call
             smapiClient._smapiRequest(TEST_API_NAME, TEST_METHOD, TEST_VERSION, TEST_URL_PATH, {}, {}, null, (err, res) => {
@@ -144,7 +150,7 @@ describe('Clients test - smapi client test', () => {
 
         it('| input request options and the SMAPI returns error status code but without response object', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ERROR_STATUS_CODE_WITHOUT_BODY);
             // call
             smapiClient._smapiRequest(TEST_API_NAME, TEST_METHOD, TEST_VERSION, TEST_URL_PATH, {}, {}, null, (err, res) => {
@@ -159,7 +165,7 @@ No response body from the service request.`;
 
         afterEach(() => {
             httpClient.request.restore();
-            oauthWrapper.tokenRefreshAndRead.restore();
+            AuthorizationController.prototype.tokenRefreshAndRead.restore();
         });
     });
 
@@ -168,12 +174,12 @@ No response body from the service request.`;
 
         beforeEach(() => {
             sinon.stub(httpClient, 'request');
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead');
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead');
         });
 
         it('| pass the resquest option and make http client request correctly', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE);
             // call
             smapiClient.smapiRedirectRequestWithUrl(TEST_URL, (err, res) => {
@@ -181,11 +187,10 @@ No response body from the service request.`;
                 const expectedRequestOption = {
                     url: TEST_URL,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: { authorization: 'access_token' },
                     body: null
                 };
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedRequestOption);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][1]).equal(TEST_PROFILE);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).deep.equal(TEST_PROFILE);
                 expect(httpClient.request.args[0][0]).deep.equal(expectedRequestOption);
                 expect(httpClient.request.args[0][1]).equal('REDIRECT_URL');
                 expect(httpClient.request.args[0][2]).equal(false);
@@ -201,7 +206,7 @@ No response body from the service request.`;
 
         it('| pass the resquest option correctly but SMAPI response error status code without response body', (done) => {
             // setup
-            oauthWrapper.tokenRefreshAndRead.callsArgWith(2);
+            AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ERROR_STATUS_CODE_WITHOUT_BODY);
             // call
             smapiClient.smapiRedirectRequestWithUrl(TEST_URL, (err, res) => {

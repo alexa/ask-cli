@@ -4,9 +4,9 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const Messenger = require('@src/view/messenger');
 const { commander } = require('@src/commands/api/api-commander');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
 const httpClient = require('@src/clients/http-client');
 const CONSTANTS = require('@src/utils/constants');
 
@@ -164,19 +164,11 @@ class ApiCommandBasicTest {
         // Mock the real behaviour of tokenRefreshAndRead
         // Set the headers property of requestOption object
         // to correspoding token of the profile
-        sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsFake((requestOptions, profile, cb) => {
+        sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsFake((profile, cb) => {
             if (profile === CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME) {
-                Object.assign(requestOptions.headers, {
-                    authorization: testDataProvider.VALID_TOKEN.ENV_PROFILE_TOKEN
-                });
-                cb();
-            } else {
-                if (this._TEST_DATA.ASK_CONFIG.profiles[profile]) {
-                    Object.assign(requestOptions.headers, {
-                        authorization: this._TEST_DATA.ASK_CONFIG.profiles[profile].token
-                    });
-                    cb();
-                }
+                cb(null, testDataProvider.VALID_TOKEN.ENV_PROFILE_TOKEN);
+            } else if (this._TEST_DATA.ASK_CONFIG.profiles[profile]) {
+                cb(null, this._TEST_DATA.ASK_CONFIG.profiles[profile].token);
             }
         });
 

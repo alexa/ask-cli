@@ -1,23 +1,24 @@
-'use strict';
-
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const sinon = require('sinon');
 
-const oauthWrapper = require('@src/utils/oauth-wrapper');
+const httpClient = require('@src/clients/http-client');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 
 const noop = () => {};
 
 module.exports = (smapiClient) => {
     describe('# catalog CRUD related APIs', () => {
+        let httpClientStub;
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead');
+            httpClientStub = sinon.stub(httpClient, 'request').callsFake(noop);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead');
         });
 
         const TEST_SKILL_ID = 'skillId';
         const TEST_CATALOG_ID = 'catalogId';
         const TEST_VENDOR_ID = 'vendorId';
-        const TEST_UPLOAD_ID = 'uploadId'
+        const TEST_UPLOAD_ID = 'uploadId';
         const TEST_NEXT_TOKEN = 'nextToken';
         const TEST_MAX_RESULTS = 'maxResults';
         const TEST_CATALOG_TYPE = 'type';
@@ -25,6 +26,8 @@ module.exports = (smapiClient) => {
         const TEST_CATALOG_TITLE = 'title';
         const TEST_NUMBER_OF_PARTS = 'numberOfParts';
         const TEST_PART_ETAG_LIST = ['list1', 'list2'];
+        const TEST_PROFILE = 'testProfile';
+        const TEST_ACCESS_TOKEN = 'access_token';
 
         [
             {
@@ -34,7 +37,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {
                         title: TEST_CATALOG_TITLE,
                         type: TEST_CATALOG_TYPE,
@@ -51,7 +56,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -59,11 +66,13 @@ module.exports = (smapiClient) => {
             {
                 testCase: 'list-catalogs',
                 apiFunc: smapiClient.catalog.listCatalogs,
-                parameters: [TEST_VENDOR_ID, { nextToken:TEST_NEXT_TOKEN, maxResults: TEST_MAX_RESULTS }, noop],
+                parameters: [TEST_VENDOR_ID, { nextToken: TEST_NEXT_TOKEN, maxResults: TEST_MAX_RESULTS }, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs?nextToken=${TEST_NEXT_TOKEN}&maxResults=${TEST_MAX_RESULTS}&vendorId=${TEST_VENDOR_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -75,19 +84,24 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs?maxResults=${TEST_MAX_RESULTS}&vendorId=${TEST_VENDOR_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
+
             },
             {
                 testCase: 'list-catalogs without max results',
                 apiFunc: smapiClient.catalog.listCatalogs,
-                parameters: [TEST_VENDOR_ID, { nextToken:TEST_NEXT_TOKEN }, noop],
+                parameters: [TEST_VENDOR_ID, { nextToken: TEST_NEXT_TOKEN }, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs?nextToken=${TEST_NEXT_TOKEN}&vendorId=${TEST_VENDOR_ID}&maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -99,19 +113,23 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs?vendorId=${TEST_VENDOR_ID}&maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
             },
             {
-                testCase: 'list-catalogs with null querry',
+                testCase: 'list-catalogs with null query',
                 apiFunc: smapiClient.catalog.listCatalogs,
                 parameters: [TEST_VENDOR_ID, null, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs?vendorId=${TEST_VENDOR_ID}&maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -123,7 +141,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {
                         numberOfParts: TEST_NUMBER_OF_PARTS
                     },
@@ -137,7 +157,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads/${TEST_UPLOAD_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -145,11 +167,13 @@ module.exports = (smapiClient) => {
             {
                 testCase: 'list-catalog-uploads',
                 apiFunc: smapiClient.catalog.listCatalogUploads,
-                parameters: [TEST_CATALOG_ID, { nextToken:TEST_NEXT_TOKEN, maxResults: TEST_MAX_RESULTS }, noop],
+                parameters: [TEST_CATALOG_ID, { nextToken: TEST_NEXT_TOKEN, maxResults: TEST_MAX_RESULTS }, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads?nextToken=${TEST_NEXT_TOKEN}&maxResults=${TEST_MAX_RESULTS}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -161,7 +185,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads?maxResults=${TEST_MAX_RESULTS}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -169,11 +195,13 @@ module.exports = (smapiClient) => {
             {
                 testCase: 'list-catalog-uploads without max results',
                 apiFunc: smapiClient.catalog.listCatalogUploads,
-                parameters: [TEST_CATALOG_ID, { nextToken:TEST_NEXT_TOKEN }, noop],
+                parameters: [TEST_CATALOG_ID, { nextToken: TEST_NEXT_TOKEN }, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads?nextToken=${TEST_NEXT_TOKEN}&maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -185,19 +213,23 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads?maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
             },
             {
-                testCase: 'list-catalog-uploads with null querry',
+                testCase: 'list-catalog-uploads with null query',
                 apiFunc: smapiClient.catalog.listCatalogUploads,
                 parameters: [TEST_CATALOG_ID, null, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads?maxResults=50`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -209,7 +241,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/skills/${TEST_SKILL_ID}/catalogs/${TEST_CATALOG_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.PUT,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -221,7 +255,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v0/catalogs/${TEST_CATALOG_ID}/uploads/${TEST_UPLOAD_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {
                         partETags: TEST_PART_ETAG_LIST
                     },
@@ -229,20 +265,21 @@ module.exports = (smapiClient) => {
                 }
             },
         ].forEach(({ testCase, apiFunc, parameters, expectedOptions }) => {
-            it (`| call ${testCase} successfully`, (done) => {
+            it(`| call ${testCase} successfully`, (done) => {
                 // setup
-                oauthWrapper.tokenRefreshAndRead.callsFake(noop);
+                AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN);
                 // call
                 apiFunc(...parameters);
                 // verify
-                expect(oauthWrapper.tokenRefreshAndRead.called).equal(true);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedOptions);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.called).equal(true);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).equal(TEST_PROFILE);
+                expect(httpClientStub.args[0][0]).deep.equal(expectedOptions);
                 done();
             });
         });
-    
+
         afterEach(() => {
-            oauthWrapper.tokenRefreshAndRead.restore();
+            sinon.restore();
         });
-    })
-}
+    });
+};

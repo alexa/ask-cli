@@ -108,7 +108,7 @@ describe('Functional test - ask api get-manifest', () => {
             ASK_REFRESH_TOKEN: 3,
             ASK_VENDOR_ID: 4
         };
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptions, operation],
             output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
         }];
@@ -131,7 +131,7 @@ describe('Functional test - ask api get-manifest', () => {
             json: false
         };
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptions, operation],
             output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
         }];
@@ -163,7 +163,7 @@ describe('Functional test - ask api get-manifest', () => {
     it('| getManifest function can handle http response with status code < 300', (done) => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [getManifestRequestOptionsWithDevelopmentStage, operation],
             output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
         }];
@@ -196,7 +196,7 @@ describe('Functional test - ask api get-manifest', () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
-            { 
+            {
                 input: [getManifestRequestOptionsWithDevelopmentStage, operation],
                 output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
             },
@@ -218,7 +218,7 @@ describe('Functional test - ask api get-manifest', () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID} -g ${TEST_LIVE_STAGE}`;
         const envVar = {};
         const httpMockConfig = [
-            { 
+            {
                 input: [getManifestRequestOptionsWithLiveStage, operation],
                 output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
             },
@@ -240,7 +240,7 @@ describe('Functional test - ask api get-manifest', () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
-            { 
+            {
                 input: [getManifestRequestOptionsWithDevelopmentStage, operation],
                 output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
             },
@@ -262,7 +262,7 @@ describe('Functional test - ask api get-manifest', () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
-            { 
+            {
                 input: [getManifestRequestOptionsWithDevelopmentStage, operation],
                 output: [null, { statusCode: 303, body: {} }]
             }

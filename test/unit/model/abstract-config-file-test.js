@@ -11,12 +11,28 @@ describe('Model test - abstract config file test', () => {
     const FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
     const JSON_CONFIG_PATH = path.join(FIXTURE_PATH, 'json-config.json');
     const YAML_CONFIG_PATH = path.join(FIXTURE_PATH, 'json-config-yaml.yaml');
+    const CONFIG_FILE = path.join(FIXTURE_PATH, 'cli_config');
 
     describe('# inspect correctness for constructor and content loading', () => {
         const NOT_EXISTING_CONFIG_PATH = path.join(FIXTURE_PATH, 'out-of-noWhere.json');
         const INVALID_JSON_CONFIG_PATH = path.join(FIXTURE_PATH, 'invalid-json.json');
         const INVALID_YAML_CONFIG_PATH = path.join(FIXTURE_PATH, 'invalid-yaml.yaml');
         const NOT_SUPPORTED_FILE_PATH = path.join(FIXTURE_PATH, 'unsupported-file-type.notsupport');
+
+        it('| init with valid config file name, expect to create a ConfigFile instance successfully', () => {
+            let configContent, jsonContent;
+            try {
+                // call
+                configContent = new ConfigFile(CONFIG_FILE);
+                jsonContent = jsonfile.readFileSync(CONFIG_FILE);
+            } catch (err) {
+                expect(err).equal(null);
+            }
+            // verify
+            expect(configContent).to.be.instanceOf(ConfigFile);
+            expect(configContent.fileType).equal('JSON');
+            expect(configContent.content).deep.eq(jsonContent);
+        });
 
         it('| init with valid JSON file path, expect to create a ConfigFile instance successfully', () => {
             let configContent, jsonContent;

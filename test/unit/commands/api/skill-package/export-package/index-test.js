@@ -2,13 +2,13 @@ const { expect } = require('chai');
 const fs = require('fs');
 const sinon = require('sinon');
 
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 const ExportPackageCommand = require('@src/commands/api/skill-package/export-package');
 const helper = require('@src/commands/api/skill-package/export-package/helper');
 const httpClient = require('@src/clients/http-client');
 const jsonView = require('@src/view/json-view');
 const Messenger = require('@src/view/messenger');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
 const optionModel = require('@src/commands/option-model');
 const profileHelper = require('@src/utils/profile-helper');
 const zipUtils = require('@src/utils/zip-utils');
@@ -99,7 +99,7 @@ describe('Commands export-package test - command class test', () => {
                 }
             };
             beforeEach(() => {
-                sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+                sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             });
 
             it('| export skill package fails, expect throw error', (done) => {
@@ -149,7 +149,7 @@ describe('Commands export-package test - command class test', () => {
                 }
             };
             beforeEach(() => {
-                sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+                sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             });
 
             it('| poll skill package fails, expect throw error', (done) => {

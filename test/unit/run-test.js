@@ -15,17 +15,17 @@ require('module-alias/register');
     '@test/unit/commands/abstract-command-test',
     '@test/unit/commands/api/publishing/withdraw/helper-test.js',
     '@test/unit/commands/api/validation/validate-skill/helper-test.js',
-    // command - init
-    '@test/unit/commands/init/ask-setup-helper-test',
-    '@test/unit/commands/init/aws-setup-wizard-test',
-    '@test/unit/commands/init/aws-setup-helper-test',
-    '@test/unit/commands/init/handler-test',
-    '@test/unit/commands/init/ui-test',
-    '@test/unit/commands/init/questions-test',
     // command - new
     '@test/unit/commands/v2new/index-test',
     '@test/unit/commands/v2new/ui-test',
     '@test/unit/commands/v2new/helper-test',
+    // command - configure
+    '@test/unit/commands/configure/index-test',
+    '@test/unit/commands/configure/ui-test',
+    '@test/unit/commands/configure/helper-test',
+    '@test/unit/commands/configure/questions-test',
+    '@test/unit/commands/configure/ask-profile-setup-helper-test',
+    '@test/unit/commands/configure/aws-profile-setup-helper-test',
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
@@ -36,6 +36,7 @@ require('module-alias/register');
     '@test/unit/clients/http-client-test',
     '@test/unit/clients/smapi-client-test',
     '@test/unit/clients/git-client-test',
+    '@test/unit/clients/lwa-auth-code-client-test',
     '@test/unit/clients/aws-client/s3-client-test',
     '@test/unit/clients/aws-client/cloudformation-client-test',
     '@test/unit/clients/aws-client/aws-util-test',
@@ -49,6 +50,8 @@ require('module-alias/register');
     '@test/unit/model/yaml-parser-test',
     '@test/unit/model/regional-stack-file-test',
     // controller
+    '@test/unit/controller/authorization-controller/index-test',
+    '@test/unit/controller/authorization-controller/server-test',
     '@test/unit/controller/skill-metadata-controller-test',
     '@test/unit/controller/skill-code-controller-test',
     '@test/unit/controller/code-builder-test',
@@ -65,6 +68,7 @@ require('module-alias/register');
     '@test/unit/utils/zip-utils-test',
     '@test/unit/utils/hash-utils-test',
     '@test/unit/utils/retry-utility-test',
+    '@test/unit/utils/provider-chain-utils-test',
 
 
     // FUNCTION TEST

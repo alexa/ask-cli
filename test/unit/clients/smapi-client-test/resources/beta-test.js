@@ -1,7 +1,8 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-const oauthWrapper = require('@src/utils/oauth-wrapper');
+const httpClient = require('@src/clients/http-client');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 
 const MAX_RESULTS = CONSTANTS.DEFAULT_LIST_MAX_RESULT;
@@ -10,13 +11,17 @@ const noop = () => {};
 
 module.exports = (smapiClient) => {
     describe('# Beta Test APIs', () => {
+        let httpClientStub;
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead');
+            httpClientStub = sinon.stub(httpClient, 'request').callsFake(noop);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead');
         });
 
         const TEST_SKILL_ID = 'skillId';
         const TEST_FEEDBACK_EMAIL = 'feedback@amazon.com';
         const TESTERS = [{ emailId: 'test@amazon.com' }];
+        const TEST_PROFILE = 'testProfile';
+        const TEST_ACCESS_TOKEN = 'access_token';
 
         [
             {
@@ -26,7 +31,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {
                         feedbackEmail: TEST_FEEDBACK_EMAIL
                     },
@@ -40,7 +47,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.PUT,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {
                         feedbackEmail: TEST_FEEDBACK_EMAIL
                     },
@@ -54,7 +63,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {},
                     json: true
                 }
@@ -66,7 +77,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/start`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {},
                     json: true
                 }
@@ -78,7 +91,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/end`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: {},
                     json: true
                 }
@@ -90,7 +105,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/testers`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -102,7 +119,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/testers/add`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: { testers: TESTERS },
                     json: true
                 }
@@ -114,7 +133,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/testers/remove`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: { testers: TESTERS },
                     json: true
                 }
@@ -126,7 +147,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/testers/sendReminder`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: { testers: TESTERS },
                     json: true
                 }
@@ -138,7 +161,9 @@ module.exports = (smapiClient) => {
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/betaTest/testers/requestFeedback`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: { testers: TESTERS },
                     json: true
                 }
@@ -146,18 +171,19 @@ module.exports = (smapiClient) => {
         ].forEach(({ testCase, apiFunc, parameters, expectedOptions }) => {
             it(`| call ${testCase} successfully`, (done) => {
                 // setup
-                oauthWrapper.tokenRefreshAndRead.callsFake(noop);
+                AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN);
                 // call
                 apiFunc(...parameters);
                 // verify
-                expect(oauthWrapper.tokenRefreshAndRead.called).equal(true);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedOptions);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.called).equal(true);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).equal(TEST_PROFILE);
+                expect(httpClientStub.args[0][0]).deep.equal(expectedOptions);
                 done();
             });
         });
 
         afterEach(() => {
-            oauthWrapper.tokenRefreshAndRead.restore();
+            sinon.restore();
         });
     });
 };

@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const chalk = require('chalk');
 const jsonView = require('@src/view/json-view');
 const CONSTANTS = require('@src/utils/constants');
 const ApiCommandBasicTest = require('@test/functional/commands/api');
@@ -38,7 +37,7 @@ describe('Functional test - ask api list-vendors', () => {
     };
 
     it('| Can get correct http response when profile is set to default ', (done) => {
-        const cmd = `ask api list-vendors`;
+        const cmd = 'ask api list-vendors';
         const envVar = {};
         const httpMockConfig = [{
             input: [defaultRequestOption, operation],
@@ -58,7 +57,7 @@ describe('Functional test - ask api list-vendors', () => {
         const envVar = {};
         const httpMockConfig = [{
             input: [requestOptionWithValidProfile, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
@@ -77,9 +76,9 @@ describe('Functional test - ask api list-vendors', () => {
             ASK_REFRESH_TOKEN: 3,
             ASK_VENDOR_ID: TEST_ENV_VENDOR_ID
         }
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptionWithEnvVarProfile, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
@@ -108,7 +107,7 @@ describe('Functional test - ask api list-vendors', () => {
         const envVar = {};
         const httpMockConfig = [{
             input: [defaultRequestOption, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
@@ -140,7 +139,7 @@ describe('Functional test - ask api list-vendors', () => {
         const envVar = {};
         const httpMockConfig = [{
             input: [defaultRequestOption, operation],
-            output: [null, { statusCode : 300, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');

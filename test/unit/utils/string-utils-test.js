@@ -252,4 +252,70 @@ describe('Utils test - string utility', () => {
             });
         });
     });
+
+    describe('# test function validateSyntax', () => {
+        [
+            {
+                testCase: 'input value is null',
+                value: null,
+                expectation: false
+            },
+            {
+                testCase: 'input value is undefined',
+                value: undefined,
+                expectation: false
+            },
+            {
+                testCase: 'input value is empty',
+                value: '',
+                expectation: false
+            }
+
+        ].forEach(({ testCase, value, expectation }) => {
+            it(`| ${testCase}, is a valid profile: ${expectation}`, () => {
+                // call
+                const callResult = stringUtils.validateSyntax('PROFILE_NAME', value);
+                // verify
+                expect(callResult).equal(expectation);
+            });
+        });
+
+        describe('# test syntax for profile name', () => {
+            [
+                {
+                    testCase: 'input value is with non alphanumeric characters',
+                    value: 'default-!!!???09',
+                    expectation: false
+                },
+                {
+                    testCase: 'input value is with non alphanumeric characters test 2',
+                    value: 'http://lambda.arn.com',
+                    expectation: false
+                },
+                {
+                    testCase: 'input value is all consisted of non alphanumeric characters',
+                    value: '://!@#$%^&*()<>?_',
+                    expectation: false
+                },
+                {
+                    testCase: 'input value includes non-latin character',
+                    value: '中文 にほんご',
+                    expectation: false
+                },
+                {
+                    testCase: 'input value is a valid profile name',
+                    value: 'askProfile',
+                    expectation: true
+                }
+
+            ].forEach(({ testCase, value, expectation }) => {
+                it(`| ${testCase}, is a valid profile: ${expectation}`, () => {
+                    // call
+                    const callResult = stringUtils.validateSyntax('PROFILE_NAME', value);
+                    // verify
+                    expect(callResult).equal(expectation);
+                });
+            });
+        });
+    });
 });

@@ -1,14 +1,18 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
+
+const httpClient = require('@src/clients/http-client');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 
 const noop = () => {};
 
 module.exports = (smapiClient) => {
     describe('# task get and search APIs', () => {
+        let httpClientStub;
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead');
+            httpClientStub = sinon.stub(httpClient, 'request').callsFake(noop);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead');
         });
 
         const TEST_SKILL_ID = 'skillId';
@@ -22,6 +26,8 @@ module.exports = (smapiClient) => {
         const TEST_PROVIDER_SKILL_ID = 'providerSkillId';
         const TEST_MAX_RESULTS = 'maxResults';
         const TEST_NEXT_TOKEN = 'nextToken';
+        const TEST_PROFILE = 'testProfile';
+        const TEST_ACCESS_TOKEN = 'access_token';
 
         [
             {
@@ -32,7 +38,9 @@ module.exports = (smapiClient) => {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}`
                     + `/tasks/${TEST_TASK_NAME}/versions/${TEST_TASK_VERSION}/?skillId=${TEST_SKILL_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -47,7 +55,9 @@ module.exports = (smapiClient) => {
                     + `maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}&`
                     + `skillId=${TEST_SKILL_ID}&keywords=${TEST_SINGLE_KEYWORD}&providerSkillId=${TEST_PROVIDER_SKILL_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -62,7 +72,9 @@ module.exports = (smapiClient) => {
                     + `maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}&`
                     + `skillId=${TEST_SKILL_ID}&keywords=${TEST_MULTIPLE_KEYWORDS_QUERY_PARAM}&providerSkillId=${TEST_PROVIDER_SKILL_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
@@ -78,23 +90,31 @@ module.exports = (smapiClient) => {
                     + `skillId=${TEST_SKILL_ID}&keywords=${TEST_MULTIPLE_KEYWORDS_INCLUDING_SPACES_QUERY_PARAM}&`
                     + `providerSkillId=${TEST_PROVIDER_SKILL_ID}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
-                    headers: {},
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
                     body: null,
                     json: false
                 }
             }
         ].forEach(({ testCase, apiFunc, parameters, expectedOptions }) => {
             it(`| call ${testCase} successfully`, (done) => {
-                oauthWrapper.tokenRefreshAndRead.callsFake(noop);
+                // setup
+                AuthorizationController.prototype.tokenRefreshAndRead.callsArgWith(1, null, TEST_ACCESS_TOKEN);
+
+                // call
                 apiFunc(...parameters);
-                expect(oauthWrapper.tokenRefreshAndRead.called).equal(true);
-                expect(oauthWrapper.tokenRefreshAndRead.args[0][0]).deep.equal(expectedOptions);
+
+                // verify
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.called).equal(true);
+                expect(AuthorizationController.prototype.tokenRefreshAndRead.args[0][0]).equal(TEST_PROFILE);
+                expect(httpClientStub.args[0][0]).deep.equal(expectedOptions);
                 done();
             });
         });
 
         afterEach(() => {
-            oauthWrapper.tokenRefreshAndRead.restore();
+            sinon.restore();
         });
     });
 };

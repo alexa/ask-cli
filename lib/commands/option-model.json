@@ -11,6 +11,12 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "noBrowser": {
+    "name": "no-browser",
+    "description": "ask cli displays a URL that you can use to sign in with your Amazon developer account from anywhere",
+    "alias": null,
+    "stringInput": "NONE"
+  },
   "summary": {
     "name": "summary",
     "description": "summary for in-skill product",
@@ -225,7 +231,7 @@
     "name": "multiturn-token",
     "description": "optional multiturn token for dialog",
     "alias": null,
-    "stringInput": "REQUIRED" 
+    "stringInput": "REQUIRED"
   },
   "filters": {
     "name": "filters",

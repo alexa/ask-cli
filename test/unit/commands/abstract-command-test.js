@@ -1,10 +1,16 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const commander = require('commander');
+const path = require('path');
+
 const { AbstractCommand } = require('@src/commands/abstract-command');
+const AppConfig = require('@src/model/app-config');
 
 
 describe('Command test - AbstractCommand class', () => {
+    const FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
+    const APP_CONFIG_NO_PROFILES_PATH = path.join(FIXTURE_PATH, 'app-config-no-profiles.json');
+
     describe('# Command class constructor', () => {
         const mockOptionModel = {
             'foo-option': {
@@ -32,6 +38,10 @@ describe('Command test - AbstractCommand class', () => {
                 stringInput: 'NONE'
             }
         };
+
+        beforeEach(() => {
+            sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+        });
 
         it('| should be able to register command', (done) => {
             class MockCommand extends AbstractCommand {
@@ -213,6 +223,7 @@ describe('Command test - AbstractCommand class', () => {
 
         afterEach(() => {
             sinon.restore();
+            AppConfig.dispose();
         });
     });
 
@@ -268,6 +279,100 @@ describe('Command test - AbstractCommand class', () => {
         it('| should be able to parse option name', () => {
             expect(AbstractCommand.parseOptionKey('skill-id')).eq('skillId');
             expect(AbstractCommand.parseOptionKey('skill')).eq('skill');
+        });
+    });
+
+    describe('# check AppConfig object ', () => {
+        const mockOptionModel = {
+            'foo-option': {
+                name: 'foo-option',
+                description: 'foo option',
+                alias: 'f',
+                stringInput: 'REQUIRED'
+            },
+            'bar-option': {
+                name: 'bar-option',
+                description: 'bar option',
+                alias: 'b',
+                stringInput: 'REQUIRED'
+            },
+            'another-bar-option': {
+                name: 'another-bar-option',
+                description: 'another bar option',
+                alias: 'a',
+                stringInput: 'OPTIONAL'
+            },
+            'baz-option': {
+                name: 'baz-option',
+                description: 'baz option',
+                alias: 'z',
+                stringInput: 'NONE'
+            }
+        };
+
+        beforeEach(() => {
+            sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+        });
+
+        it('| should not be null for other commands', (done) => {
+            class NonConfigureCommand extends AbstractCommand {
+                constructor(optionModel, handle) {
+                    super(optionModel);
+                    this.handle = handle;
+                }
+
+                name() {
+                    return 'random';
+                }
+
+                description() {
+                    return 'random description';
+                }
+            }
+
+            const mockCommand = new NonConfigureCommand(mockOptionModel, (options) => {
+                expect(options._name).eq('random');
+                expect(options._description).eq('random description');
+                expect(options.options).deep.eq([]);
+                expect(AppConfig.getInstance().getProfilesList().length).eq(0);
+                done();
+            });
+
+            mockCommand.createCommand()(commander);
+            commander.parse(['node', 'mock', 'random']);
+        });
+
+        it('| should be null for configure command', (done) => {
+            class ConfigureCommand extends AbstractCommand {
+                constructor(optionModel, handle) {
+                    super(optionModel);
+                    this.handle = handle;
+                }
+
+                name() {
+                    return 'configure';
+                }
+
+                description() {
+                    return 'configure description';
+                }
+            }
+
+            const mockCommand = new ConfigureCommand(mockOptionModel, (options) => {
+                expect(options._name).eq('configure');
+                expect(options._description).eq('configure description');
+                expect(options.options).deep.eq([]);
+                expect(AppConfig.getInstance()).eq(null);
+                done();
+            });
+
+            mockCommand.createCommand()(commander);
+            commander.parse(['node', 'mock', 'configure']);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+            AppConfig.dispose();
         });
     });
 });

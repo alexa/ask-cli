@@ -11,7 +11,7 @@ const SkillInfrastructureController = require('@src/controllers/skill-infrastruc
 const DeployDelegate = require('@src/controllers/skill-infrastructure-controller/deploy-delegate');
 const MultiTasksView = require('@src/view/multi-tasks-view');
 const jsonView = require('@src/view/json-view');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const hashUtils = require('@src/utils/hash-utils');
 const CONSTANTS = require('@src/utils/constants');
 
@@ -350,7 +350,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| manifest update correctly but hash fails, expect error called back', (done) => {
             // setup
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, 'hash error');
             // call
             skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
@@ -367,7 +367,7 @@ describe('Controller test - skill infrastructure controller test', () => {
         it('| manifest update correctly but hash is same, expect called back with nothing', (done) => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaLastDeployHash(TEST_PROFILE, 'TEST_HASH');
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             // call
             skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
@@ -382,7 +382,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| manifest update correctly but skill manifest update fails, expect update error called back', (done) => {
             // setup
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0, 'update error');
             // call
@@ -398,7 +398,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| manifest update correctly, expect success message and new hash set', (done) => {
             // setup
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
             // call
@@ -569,7 +569,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| SMAPI update manifest connection fails, expect error called back', (done) => {
             // setup
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, 'error');
             // call
             skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
@@ -588,7 +588,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                     message: 'unauthrized'
                 }
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             // call
             skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
@@ -604,7 +604,7 @@ describe('Controller test - skill infrastructure controller test', () => {
             const TEST_SMAPI_RESPONSE = {
                 statusCode: 202
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, 'poll error');
             // call
@@ -624,7 +624,7 @@ describe('Controller test - skill infrastructure controller test', () => {
             const TEST_POLL_RESPONSE = {
                 body: 'invalid'
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
             // call
@@ -650,7 +650,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                     }
                 }
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
             // call
@@ -676,7 +676,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                     }
                 }
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
             // call
@@ -699,7 +699,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| poll skill status but error happens when polling status', (done) => {
             // setup
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, 'error');
             // call
             skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {
@@ -718,7 +718,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                     message: 'unauthrized'
                 }
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             // call
             skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {
@@ -741,7 +741,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                     }
                 }
             };
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
             // call
             skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {

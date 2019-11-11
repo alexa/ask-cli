@@ -100,6 +100,36 @@ describe('Clients test - cli http request client', () => {
         });
     });
 
+    describe('# embedding proxyUrl', () => {
+        let stubRequest;
+        let proxyhttpClient;
+        let initialProxyUrl;
+
+        beforeEach(() => {
+            initialProxyUrl = process.env.ASK_CLI_PROXY;
+            stubRequest = sinon.stub();
+            proxyhttpClient = proxyquire('@src/clients/http-client', { request: stubRequest });
+        });
+
+        it('| proxyUrl is added to request options', (done) => {
+            // setup
+            process.env.ASK_CLI_PROXY = 'proxyUrl';
+            stubRequest.callsFake(() => {});
+            // call
+            proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, true, () => {});
+            // verfiy
+            expect(stubRequest.args[0][0]).to.have.property('proxy');
+            expect(stubRequest.args[0][0].proxy).equal('proxyUrl');
+            done();
+            // reset
+        });
+
+        afterEach(() => {
+            stubRequest.reset();
+            process.env.ASK_DOWNSTREAM_CLIENT = initialProxyUrl;
+        });
+    });
+
     describe('# call request correctly', () => {
         let stubRequest;
         let proxyhttpClient;

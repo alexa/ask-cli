@@ -13,6 +13,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
     const TEST_AWS_REGION_DEFAULT = 'us-east-1';
     const TEST_SKILL_NAME = 'skill_name';
     const TEST_IAM_ROLE_ARN = 'IAM role arn';
+    const NULL_PROFILE = 'null';
 
     describe('# test class method: bootstrap', () => {
         afterEach(() => {
@@ -65,8 +66,8 @@ describe('Builtins test - lambda-deployer index.js test', () => {
             const TEST_OPTIONS_WITHOUT_PROFILE = {
                 profile: null,
             };
-            const TEST_ERROR = `Profile [${null}] doesn't have AWS profile linked to it. Please run "ask init" to re-configure your profile.`;
-            sinon.stub(awsUtil, 'getAWSProfile').withArgs(null).returns(null);
+            const TEST_ERROR = `Profile [${NULL_PROFILE}] doesn't have AWS profile linked to it. Please run "ask configure" to re-configure your porfile.`;
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(NULL_PROFILE).returns(NULL_PROFILE);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_PROFILE, (err) => {
                 // verify

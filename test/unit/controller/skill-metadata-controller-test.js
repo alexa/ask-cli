@@ -6,7 +6,7 @@ const jsonView = require('@src/view/json-view');
 const ResourcesConfig = require('@src/model/resources-config');
 const httpClient = require('@src/clients/http-client');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
-const oauthWrapper = require('@src/utils/oauth-wrapper');
+const AuthorizationController = require('@src/controllers/authorization-controller');
 const Manifest = require('@src/model/manifest');
 const Messenger = require('@src/view/messenger');
 const zipUtils = require('@src/utils/zip-utils');
@@ -169,7 +169,7 @@ describe('Controller test - skill metadata controller test', () => {
         beforeEach(() => {
             new Manifest(FIXTURE_MANIFEST_FILE_PATH);
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {
@@ -683,7 +683,7 @@ describe('Controller test - skill metadata controller test', () => {
 
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {
@@ -748,7 +748,7 @@ describe('Controller test - skill metadata controller test', () => {
 
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {
@@ -814,7 +814,7 @@ describe('Controller test - skill metadata controller test', () => {
         const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
 
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {
@@ -880,7 +880,7 @@ describe('Controller test - skill metadata controller test', () => {
 
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {
@@ -946,7 +946,7 @@ describe('Controller test - skill metadata controller test', () => {
         const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
 
         beforeEach(() => {
-            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
         });
 
         afterEach(() => {

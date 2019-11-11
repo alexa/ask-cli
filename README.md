@@ -35,7 +35,7 @@ $ npm install -g ask-cli-x
 Before you can start using the ASK CLI, configure your ASK (and AWS) credentials:
 
 ```
-$ askx init
+$ askx configure
 ```
 
 You’ll be prompted to sign into your Amazon developer account. If you choose to have your skill hosted by AWS, you’ll have the option of linking your AWS account as well.
