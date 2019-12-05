@@ -96,6 +96,7 @@
       "lib/utils/zip-utils.js",
       "lib/utils/hash-utils.js",
       "lib/utils/retry-utility.js",
+      "lib/builtins/*",
       "lib/clients/*",
       "lib/model/*",
       "lib/view/*",
