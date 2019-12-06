@@ -18,14 +18,18 @@ describe('Controller test - skill metadata controller test', () => {
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
 
     const TEST_PROFILE = 'default'; // test file contains 'default' profile
+    const TEST_ROOT_PATH = 'root';
     const TEST_VENDOR_ID = 'vendorId';
     const TEST_SKILL_ID = 'skillId';
+    const TEST_STAGE = 'stage';
     const TEST_PATH = 'path';
+    const TEST_PACKAGE_URL = 'packageUrl';
     const TEST_CURRENT_HASH = 'currentHash';
     const TEST_UPLOAD_URL = 'uploadUrl';
     const TEST_EXPIRES_AT = 'expiresAt';
     const TEST_LOCATION_URL = 'locationUrl';
     const TEST_IMPORT_ID = 'importId';
+    const TEST_EXPORT_ID = 'exportId';
     const TEST_FILE_CONTENT = 'fileContent';
     const TEST_CONFIGURATION = {
         profile: TEST_PROFILE,
@@ -465,6 +469,104 @@ describe('Controller test - skill metadata controller test', () => {
         });
     });
 
+    describe('# test class method: getSkillPackage', () => {
+        const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+
+        beforeEach(() => {
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| export package request fails, expect callback with error', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, '_exportPackage').callsArgWith(2, 'exportErr');
+            // call
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+                // verify
+                expect(SkillMetadataController.prototype._exportPackage.args[0][0]).equal(TEST_SKILL_ID);
+                expect(SkillMetadataController.prototype._exportPackage.args[0][1]).equal(TEST_STAGE);
+                expect(res).equal(undefined);
+                expect(err).equal('exportErr');
+                done();
+            });
+        });
+
+        it('| export package returns exportId but poll status fails, expect callback with error', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, '_exportPackage').callsArgWith(2, null, {
+                statusCode: 202,
+                headers: {
+                    location: `${TEST_EXPORT_ID}`
+                }
+            });
+            sinon.stub(SkillMetadataController.prototype, '_pollExportStatus').callsArgWith(1, 'polling error');
+            // call
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+                // verify
+                expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
+                expect(res).equal(undefined);
+                expect(err).equal('polling error');
+                done();
+            });
+        });
+
+        it('| package exported successfully but unzip fails, expect callback zip error', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, '_exportPackage').callsArgWith(2, null, {
+                statusCode: 202,
+                headers: {
+                    location: `${TEST_EXPORT_ID}`
+                }
+            });
+            sinon.stub(SkillMetadataController.prototype, '_pollExportStatus').callsArgWith(1, null, {
+                statusCode: 200,
+                body: {
+                    skill: {
+                        location: TEST_PACKAGE_URL
+                    }
+                }
+            });
+            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, 'unzip error');
+            // call
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+                // verify
+                expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
+                expect(res).equal(undefined);
+                expect(err).equal('unzip error');
+                done();
+            });
+        });
+
+        it('| package exported successfully and unzip works, expect no error returned', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, '_exportPackage').callsArgWith(2, null, {
+                statusCode: 202,
+                headers: {
+                    location: `${TEST_EXPORT_ID}`
+                }
+            });
+            sinon.stub(SkillMetadataController.prototype, '_pollExportStatus').callsArgWith(1, null, {
+                statusCode: 200,
+                body: {
+                    skill: {
+                        location: TEST_PACKAGE_URL
+                    }
+                }
+            });
+            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, null);
+            // call
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+                // verify
+                expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
+                expect(res).equal(undefined);
+                expect(err).equal(null);
+                done();
+            });
+        });
+    });
+
     describe('# test class method: uploadSkillPackage', () => {
         const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
 
@@ -708,6 +810,71 @@ describe('Controller test - skill metadata controller test', () => {
         });
     });
 
+    describe('# test class method: _exportPackage', () => {
+        const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+
+        beforeEach(() => {
+            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| export package fails, expect callback error', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, 'exportErr'); // stub smapi request
+            // call
+            skillMetaController._exportPackage(TEST_SKILL_ID, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal('exportErr');
+                done();
+            });
+        });
+
+        it('| export package returns error response, expect callback error', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, {
+                statusCode: 403,
+                body: {
+                    error: 'message'
+                }
+            }); // stub smapi request
+            // call
+            skillMetaController._exportPackage(TEST_SKILL_ID, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal(jsonView.toString({ error: 'message' }));
+                done();
+            });
+        });
+
+        it('| export package succeeds, expect callback with export response', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, {
+                statusCode: 200,
+                headers: {},
+                body: {
+                    response: 'response'
+                }
+            }); // stub smapi request
+            // call
+            skillMetaController._exportPackage(TEST_SKILL_ID, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (err, res) => {
+                // verify
+                expect(err).equal(null);
+                expect(res).deep.equal({
+                    statusCode: 200,
+                    headers: {},
+                    body: {
+                        response: 'response'
+                    }
+                });
+                done();
+            });
+        });
+    });
+
     describe('# test class method: _pollImportStatus', () => {
         const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
 
@@ -773,5 +940,70 @@ describe('Controller test - skill metadata controller test', () => {
                 done();
             });
         }).timeout(20000);
+    });
+
+    describe('# test class method: _pollExportStatus', () => {
+        const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+
+        beforeEach(() => {
+            sinon.stub(oauthWrapper, 'tokenRefreshAndRead').callsArgWith(2);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| poll status with getExportStatus fails, expect callback error', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, 'pollErr'); // stub smapi request
+            // call
+            skillMetaController._pollExportStatus(TEST_EXPORT_ID, (err, res) => {
+                // verify
+                expect(res).equal(null);
+                expect(err).equal('pollErr');
+                done();
+            });
+        });
+
+        it('| poll status with getExportStatus return error response, expect callback error', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, {
+                statusCode: 403,
+                body: {
+                    error: 'message'
+                }
+            }); // stub smapi request
+            // call
+            skillMetaController._pollExportStatus(TEST_EXPORT_ID, (err, res) => {
+                // verify
+                expect(res).equal(null);
+                expect(err).equal(jsonView.toString({ error: 'message' }));
+                done();
+            });
+        });
+
+        it('| poll status with getExportStatus return success, expect callback with getExportStatus response', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, {
+                statusCode: 200,
+                body: {
+                    status: CONSTANTS.SKILL.PACKAGE_STATUS.SUCCEEDED
+                },
+                headers: {}
+            }); // stub smapi request
+            // call
+            skillMetaController._pollExportStatus(TEST_EXPORT_ID, (err, res) => {
+                // verify
+                expect(err).equal(null);
+                expect(res).deep.equal({
+                    statusCode: 200,
+                    body: {
+                        status: CONSTANTS.SKILL.PACKAGE_STATUS.SUCCEEDED
+                    },
+                    headers: {}
+                });
+                done();
+            });
+        });
     });
 });

@@ -17,10 +17,11 @@ require('@src/commands/v2new').createCommand(commander);
 commander
     .description('Command Line Interface for Alexa Skill Kit')
     .command('api', 'list of Alexa Skill Management API commands')
+    .command('util', 'tooling functions when using ask-cli to manage Alexa Skill')
     .version(require('../package.json').version)
     .parse(process.argv);
 
-const ALLOWED_ASK_ARGV_2 = ['api', 'init', 'deploy', 'new', 'help', '-v', '--version', '-h', '--help'];
+const ALLOWED_ASK_ARGV_2 = ['api', 'init', 'deploy', 'new', 'util', 'help', '-v', '--version', '-h', '--help'];
 if (process.argv[2] && ALLOWED_ASK_ARGV_2.indexOf(process.argv[2]) === -1) {
     console.log('Command not recognized. Please run "askx" to check the user instructions.');
 }

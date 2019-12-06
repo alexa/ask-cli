@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const ResourcesConfig = require('@src/model/resources-config');
 const SkillCodeController = require('@src/controllers/skill-code-controller');
 const CodeBuilder = require('@src/controllers/skill-code-controller/code-builder');
@@ -157,8 +157,9 @@ describe('Controller test - skill code controller test', () => {
             };
             ResourcesConfig.getInstance().setCode(TEST_PROFILE, TEST_CODE_MAPS);
             sinon.stub(fs, 'existsSync').returns(true);
-            sinon.stub(fs, 'statSync').returns({
-                isDirectory: () => true
+            sinon.stub(ResourcesConfig.prototype, 'getCodeBuildByRegion').returns({
+                folder: 'folder',
+                file: 'file'
             });
             // call
             let codeLists;
@@ -172,16 +173,16 @@ describe('Controller test - skill code controller test', () => {
                 {
                     src: TEST_CODE_SRC,
                     build: {
-                        folder: `${path.resolve(TEST_CODE_SRC)}${path.sep}build`,
-                        file: `${path.resolve(TEST_CODE_SRC)}${path.sep}build${path.sep}upload.zip`
+                        folder: 'folder',
+                        file: 'file'
                     },
                     regionsList: ['region1', 'region2']
                 },
                 {
                     src: TEST_CODE_BUILD,
                     build: {
-                        folder: `${path.resolve(TEST_CODE_BUILD)}${path.sep}build`,
-                        file: `${path.resolve(TEST_CODE_BUILD)}${path.sep}build${path.sep}upload.zip`
+                        folder: 'folder',
+                        file: 'file'
                     },
                     regionsList: ['region3']
                 }

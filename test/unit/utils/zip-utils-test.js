@@ -5,12 +5,16 @@ const proxyquire = require('proxyquire');
 const { expect } = require('chai');
 
 const zipUtils = require('@src/utils/zip-utils');
+const httpClient = require('@src/clients/http-client');
 const Messenger = require('@src/view/messenger');
+const CONSTANTS = require('@src/utils/constants');
 
 describe('Utils test - zip utility', () => {
     const TEST_SRC = 'TEST_SRC';
     const TEST_ERROR = 'TEST_ERROR';
     const TEST_ZIP_FILE_PATH = 'TEST_ZIP_FILE_PATH';
+    const TEST_REMOTE_ZIP_URL = 'TEST_REMOTE_ZIP_URL';
+    const TEST_REMOTE_ZIP_RESPONSE = { body: 'TEST_REMOTE_ZIP_RESPONSE' };
 
     describe('# test function createTempZip', () => {
         beforeEach(() => {
@@ -173,6 +177,67 @@ describe('Utils test - zip utility', () => {
         afterEach(() => {
             sinon.restore();
             Messenger.getInstance().dispose();
+        });
+    });
+
+    describe('# test function unzipRemoteZipFile', () => {
+        const stubRequest = sinon.stub();
+        const mockAdmZip = function Mock() {
+            return {
+                extractAllTo: stubRequest
+            };
+        };
+        const proxyZipUtil = proxyquire('@src/utils/zip-utils', { 'adm-zip': mockAdmZip });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| get through httpClient fails, expect error callback', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, 'get error');
+            // test
+            zipUtils.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(TEST_REMOTE_ZIP_URL);
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(httpClient.request.args[0][0].encoding).equal(null);
+                expect(httpClient.request.args[0][1]).equal('get-zip-file');
+                expect(httpClient.request.args[0][2]).equal(false);
+                expect(err).equal('get error');
+                done();
+            });
+        });
+
+        it('| admZip extract failure, expect error callback', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_REMOTE_ZIP_RESPONSE);
+            stubRequest.throws('extract error');
+            // test
+            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(TEST_REMOTE_ZIP_URL);
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(httpClient.request.args[0][0].encoding).equal(null);
+                expect(httpClient.request.args[0][1]).equal('get-zip-file');
+                expect(httpClient.request.args[0][2]).equal(false);
+                expect(stubRequest.args[0][0]).deep.equal(TEST_ZIP_FILE_PATH);
+                expect(err.name).equal('extract error');
+                done();
+            });
+        });
+
+        it('| admZip extract success, expect no error callback', (done) => {
+            // setup
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_REMOTE_ZIP_RESPONSE);
+            stubRequest.returns(null);
+            // test
+            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+                // verify
+                expect(stubRequest.args[0][0]).deep.equal(TEST_ZIP_FILE_PATH);
+                expect(err).equal(undefined);
+                done();
+            });
         });
     });
 });
