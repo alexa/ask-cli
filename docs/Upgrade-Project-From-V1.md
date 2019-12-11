@@ -13,6 +13,7 @@ Skills created with CLI 1.x will need to update their project structure in order
 3. Upgrade your skill project with ask-cli-x. From your project's root, run:  
     `$ askx util upgrade-to-v2` 
     * The command will make the following changes to the project structure:
+    
         |                      | v1 project        | beta (askx) project                        |
         |----------------------|-------------------|--------------------------------------------|
         | project config       | .ask/config       | ask-resources.json                         |
