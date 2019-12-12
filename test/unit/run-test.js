@@ -139,7 +139,11 @@ require('module-alias/register');
     '@test/functional/commands/api/catalog/get-catalog-upload',
     '@test/functional/commands/api/catalog/list-catalog-uploads',
     '@test/functional/commands/api/catalog/list-catalogs',
+    // history
     '@test/functional/commands/api/history/intent-requests-history-test',
+    // task
+    '@test/functional/commands/api/task/get-task',
+    '@test/functional/commands/api/task/search-task'
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
     require(testFile);

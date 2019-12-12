@@ -311,5 +311,32 @@
     "description": "id of the certification, '~mostRecent' can be used for most recent certification",
     "alias": "c",
     "stringInput": "REQUIRED"
+  },
+  "task-name": {
+    "name": "task-name",
+    "description": "name of task",
+    "alias": "t",
+    "stringInput": "REQUIRED"
+  },
+  "task-version": {
+    "name": "task-version",
+    "description": "version of task",
+    "alias": "v",
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "INTEGER"
+    }]
+  },
+  "keywords": {
+    "name": "keywords",
+    "description": "string of comma delimited keywords used to search for tasks",
+    "alias": "k",
+    "stringInput": "REQUIRED"
+  },
+  "provider-skill-id": {
+    "name": "provider-skill-id",
+    "description": "skill id of task provider",
+    "alias": null,
+    "stringInput": "REQUIRED"
   }
 }

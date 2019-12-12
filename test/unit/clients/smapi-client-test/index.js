@@ -17,6 +17,7 @@ const triggerSkillPackage = require('./resources/skill-package');
 const triggerSkill = require('./resources/skill');
 const triggerTest = require('./resources/test');
 const triggerVendor = require('./resources/vendor');
+const triggerTask = require('./resources/task');
 const triggerEvaluations = require('./resources/evaluations');
 const triggerAlexaHosted = require('./resources/alexa-hosted');
 const triggerBetaTestTests = require('./resources/beta-test');
@@ -301,4 +302,6 @@ No response body from the service request.`;
     triggerVendor(smapiClient);
 
     triggerCatalog(smapiClient);
+
+    triggerTask(smapiClient);
 });
