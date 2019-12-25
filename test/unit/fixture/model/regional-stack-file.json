@@ -50,7 +50,7 @@
           "S3Key": "endpoint.s3.key",
           "S3ObjectVersion": "endpoint.s3.version"
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "MemorySize": 512,
         "Timeout": 60
       }
