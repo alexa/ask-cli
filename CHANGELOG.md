@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/alexa-labs/ask-cli/compare/v0.4.1...v0.4.2) (2019-12-25)
+
+
+### Bug Fixes
+
+* upgraded nodejs from v8 to v10  &  fixed validate lambda deploy state issue ([7123706](https://github.com/alexa-labs/ask-cli/commit/7123706fb77fdd2d63b6b4066e497c571ec52c62))
+
 ### [0.4.1](https://github.com/alexa-labs/ask-cli/compare/v0.4.0...v0.4.1) (2019-12-05)
 
 ## [0.4.0](https://github.com/alexa-labs/ask-cli/compare/v0.3.0...v0.4.0) (2019-12-05)
