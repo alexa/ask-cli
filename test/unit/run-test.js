@@ -29,6 +29,9 @@ require('module-alias/register');
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
+    // command - export-package
+    '@test/unit/commands/api/skill-package/export-package/index-test.js',
+    '@test/unit/commands/api/skill-package/export-package/helper-test.js',
     // clients
     '@test/unit/clients/http-client-test',
     '@test/unit/clients/smapi-client-test',
@@ -139,11 +142,12 @@ require('module-alias/register');
     '@test/functional/commands/api/catalog/get-catalog-upload',
     '@test/functional/commands/api/catalog/list-catalog-uploads',
     '@test/functional/commands/api/catalog/list-catalogs',
-    // history
     '@test/functional/commands/api/history/intent-requests-history-test',
     // task
     '@test/functional/commands/api/task/get-task',
-    '@test/functional/commands/api/task/search-task'
+    '@test/functional/commands/api/task/search-task',
+    // metrics
+    '@test/functional/commands/api/metrics/get-metrics-test',
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
     require(testFile);

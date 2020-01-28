@@ -210,7 +210,17 @@ module.exports = (smapiClient) => {
         const TEST_SKILL_ID = 'skillId';
         const TEST_SKILL_STAGE = 'skillStage';
         const TEST_VALIDATION_ID = 'validationId';
-        const TEST_LOCALE = ' locale1  , locale2  ';
+        const TEST_LOCALES = ' locale1  , locale2  ';
+        const TEST_LOCALE = 'TEST_LOCALE';
+        const TEST_START_TIME = 'TEST_START_TIME';
+        const TEST_END_TIME = 'TEST_END_TIME';
+        const TEST_PERIOD = 'SINGLE';
+        const TEST_METRIC = 'uniqueCustomers';
+        const TEST_SKILL_TYPE = 'custom';
+        const TEST_INTENT = 'TEST_INTENT';
+        const TEST_NEXT_TOKEN = 'TEST_NEXT_TOKEN';
+        const TEST_MAX_RESULTS = 'TEST_MAX_RESULTS';
+        const TEST_DEFAULT_MAX_RESULTS = '50';
 
         [
             {
@@ -252,7 +262,7 @@ module.exports = (smapiClient) => {
             {
                 testCase: 'validate-skill',
                 apiFunc: smapiClient.skill.validateSkill,
-                parameters: [TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_LOCALE, noop],
+                parameters: [TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_LOCALES, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/stages/${TEST_SKILL_STAGE}/validations`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.POST,
@@ -279,6 +289,171 @@ module.exports = (smapiClient) => {
                 parameters: [TEST_SKILL_ID, noop],
                 expectedOptions: {
                     url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/credentials`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    TEST_INTENT, TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}`
+                    + `&locale=${TEST_LOCALE}&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without startTime',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, null, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE, TEST_INTENT,
+                    TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?endTime=${TEST_END_TIME}&period=${TEST_PERIOD}`
+                    + `&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without endTime',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, null, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE, TEST_INTENT,
+                    TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&period=${TEST_PERIOD}`
+                    + `&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without period',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, null, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE, TEST_INTENT,
+                    TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without metric',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, null, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    TEST_INTENT, TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without stage',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, null, TEST_SKILL_TYPE, TEST_INTENT,
+                    TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without skillType',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, null, TEST_INTENT,
+                    TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&intent=${TEST_INTENT}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without intent',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    null, TEST_LOCALE, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&locale=${TEST_LOCALE}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without locale',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    TEST_INTENT, null, TEST_MAX_RESULTS, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}`
+                    + `&maxResults=${TEST_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without maxResults',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    TEST_INTENT, TEST_LOCALE, null, TEST_NEXT_TOKEN, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}`
+                    + `&locale=${TEST_LOCALE}&maxResults=${TEST_DEFAULT_MAX_RESULTS}&nextToken=${TEST_NEXT_TOKEN}`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                    headers: {},
+                    body: null,
+                    json: false
+                }
+            },
+            {
+                testCase: 'get-metrics without nextToken',
+                apiFunc: smapiClient.skill.getMetrics,
+                parameters: [TEST_SKILL_ID, TEST_START_TIME, TEST_END_TIME, TEST_PERIOD, TEST_METRIC, TEST_SKILL_STAGE, TEST_SKILL_TYPE,
+                    TEST_INTENT, TEST_LOCALE, TEST_MAX_RESULTS, null, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/${TEST_SKILL_ID}/metrics?startTime=${TEST_START_TIME}&endTime=${TEST_END_TIME}`
+                    + `&period=${TEST_PERIOD}&metric=${TEST_METRIC}&stage=${TEST_SKILL_STAGE}&skillType=${TEST_SKILL_TYPE}&intent=${TEST_INTENT}`
+                    + `&locale=${TEST_LOCALE}&maxResults=${TEST_MAX_RESULTS}`,
                     method: CONSTANTS.HTTP_REQUEST.VERB.GET,
                     headers: {},
                     body: null,

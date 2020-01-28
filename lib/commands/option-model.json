@@ -338,5 +338,54 @@
     "description": "skill id of task provider",
     "alias": null,
     "stringInput": "REQUIRED"
+  },
+  "start-time": {
+    "name": "start-time",
+    "description": "the start time of query",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
+  "end-time": {
+    "name": "end-time",
+    "description": "the end time of the query (maximum duration one week)",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
+  "period": {
+    "name": "period",
+    "description": "the aggregation period that is used when retrieving the metric",
+    "alias": null,
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "ENUM",
+      "values": ["SINGLE", "PT15M", "PT1H", "P1D"]
+    }]
+  },
+  "metric": {
+    "name": "metric",
+    "description": "a distinct set of logic that predictably returns a set of data",
+    "alias": null,
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "ENUM",
+      "values": ["uniqueCustomers", "totalEnablements", "totalUtterances", "successfulUtterances", "failedUtterances", "totalSessions", 
+        "successfulSessions", "incompleteSessions", "userEndedSessions", "skillEndedSessions"]
+    }]
+  },
+  "skill-type": {
+    "name": "skill-type",
+    "description": "the type of skill",
+    "alias": null,
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "ENUM",
+      "values": ["custom", "smartHome", "flashBriefing"]
+    }]
+  },
+  "intent": {
+    "name": "intent",
+    "description": "the skill intent",
+    "alias": null,
+    "stringInput": "REQUIRED"
   }
 }

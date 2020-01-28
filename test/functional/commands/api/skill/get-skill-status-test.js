@@ -85,7 +85,7 @@ describe('Functional test - ask api get-skill-status', () => {
             ASK_REFRESH_TOKEN: 3,
             ASK_VENDOR_ID: 4
         };
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptionsWithEnvVarProfile, operation],
             output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
