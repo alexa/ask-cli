@@ -9,18 +9,18 @@ The `SkillID` is the Alexa identifier for the application.
 
 
 ## Skill Metadata
-The `SkillMetadata` component stands for all the skill build-time data you need to upload. This includes a great variety of JSON data such as skill's supported language, skill's capabilities, in-skill purchases etc. To deploy skill's `SkillMetadata`, CLI directly follows the [Skill Package](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format) structure and calls the service. 
+The `SkillMetadata` component stands for all the skill build-time data you need to upload. This includes a great variety of JSON data such as the skill's supported languages, skill's capabilities, in-skill purchases etc. To deploy skill's `SkillMetadata`, CLI directly follows the [Skill Package](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format) structure and calls the service. 
 
 Please check the `skillMetadata` field in the example below for its representation in project config.
 
 
 ## Skill Code
-The `SkillCode` component manages the source code for each region. CLI will be in charge of the building process for the code, and passing the code built result to the infrastructure deployer. We support code management for all the regions that [Alexa supported](https://developer.amazon.com/en-US/docs/alexa/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html#select-the-optimal-region-for-your-aws-lambda-function).
+The `SkillCode` component manages the source code for each region. CLI will be in charge of the building process for the code, and passing the code built result to the infrastructure deployer. We support code management for all the regions that [Alexa supports](https://developer.amazon.com/en-US/docs/alexa/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html#select-the-optimal-region-for-your-aws-lambda-function).
 
 Please check the `code` field in the example below for its representation in project config.
 
 ## Skill Infrastructure
-The `SkillInfrastructure` represents the configuration on how to deploy skill's code, and tracks the deployment status for continuous deployment. This deployer platform is invented to cope with the variety of serverless frameworks, with necessary interfaces including `userConfig` and `deployState`. For more details, please check [how to create an Alexa skill deployer](TODO).
+The `SkillInfrastructure` represents the configuration on how to deploy skill's code, and tracks the deployment status for continuous deployment. This deployer platform is designed to cope with the variety of serverless frameworks, with necessary interfaces including `userConfig` and `deployState`. For more details, please check [how to create an Alexa skill deployer](TODO).
 
 Please check the `skillInfrastructure` field in the example below for its representation in project config.
 

@@ -17,7 +17,7 @@ CLI relies on the [Skill Package service](https://developer.amazon.com/en-US/doc
 In the deploy process of skillCode, CLI helps skill developers build all of their codebases. The built result will be used to host the skill endpoint afterwards. 
 
 * Codebase settings are always region-specific. Available regions are consistent with the regions that Alexa supports (currently `NA`, `EU`, `FE`), plus a `default` region that must be provided before other regions. If you set the `code.{region}.src` path for a certain region, CLI will update the skill's endpoint (by updating the "apis" field in skill.json) through the SMAPI's update-manifest request once the endpoint is provisioned.
-* Multiple regions mapping to one codebase is recommended, as we encourage you to handle the Internationalization through code.
+* Multiple regions mapping to one codebase is recommended, as we encourage you to handle Internationalization through code.
 * The `build` folder, which contains the built result, is stored inside each codebase's source path after build succeeds.
 * This step is skippable when you remove the entire `code` field from ask-resources config file. However, it's required for the deployment of next component `skillInfrastructure`.
 
@@ -25,7 +25,7 @@ In the deploy process of skillCode, CLI helps skill developers build all of thei
 To support the building of multiple programming languages, CLI's philosophy is to provide a **built-in or customized** build-flows (*i.e. {programmingLanguage}-{builderTool}*) to fullfill normal needs as well as special requests. This is called `CodeBuilder` in CLI.
 
 * Most use cases will be covered by using the **built-in** build-flows. When building skillCode with this flow, CLI will infer the builderTool (based on the type of builder's config file) from the codebase, and further decide which build-flow to execute. Build-flows are represented by cross-OS executable scripts. Current built-in build-flows include:
-  * nodejs-mvn [(scripts)](https://github.com/alexa-labs/ask-cli/tree/master/lib/builtins/build-flows/nodejs-npm)
+  * nodejs-npm [(scripts)](https://github.com/alexa-labs/ask-cli/tree/master/lib/builtins/build-flows/nodejs-npm)
   * python-pip [(scripts)](https://github.com/alexa-labs/ask-cli/tree/master/lib/builtins/build-flows/python-pip)
   * java-mvn [(scripts)](https://github.com/alexa-labs/ask-cli/tree/master/lib/builtins/build-flows/java-mvn)
 * For developers who have further desire to **customize** the build-flow by themselves, CLI also supports the `custom` type of build-flow. If you provide the hook script in the following location, the script will be executed instead of using the built-in build-flows, and it is codebase-agnostic:
@@ -35,9 +35,9 @@ To support the building of multiple programming languages, CLI's philosophy is t
 
 
 ## Skill Infrastructure
-To provision the backend services which are used to execute customized logics for Alexa skills, CLI invents the `skillInfrastructure` concept to incorporate different deploy mechanisms into one platform. Each deployment flow is presented as a type of deployer, which is the value set in `skillInfrastructure.type`. Another two fields, `skillInfrastructure.userConfig` is designed to configure the deployment, and `skillInfrastructure.deployState` is used to facilitate CD and is not supposed to be modified manually.
+To provision the backend services which are used to execute customized logics for Alexa skills, CLI introduces the `skillInfrastructure` concept to incorporate different deploy mechanisms into one platform. Each deployment flow is presented as a type of deployer, which is the value set in `skillInfrastructure.type`. Another two fields, `skillInfrastructure.userConfig` is designed to configure the deployment, and `skillInfrastructure.deployState` is used to facilitate CD and is not supposed to be modified manually.
 
-* CLI's core logic manages the cross-region deployments. CLI deploys the skill infrastructures in parallel with a spinners to indicate if the task is in progress, and with a progress bar to display the latest status. 
+* CLI's core logic manages the cross-region deployments. CLI deploys the skill infrastructures in parallel with spinners to indicate if the task is in progress, and with a progress bar to display the latest status. 
 * CLI makes sure the result after the invocation of deployer (e.g newly created AWS Lambda ARN) will get updated in the Alexa skill for each region.
 * If failure happens in one region, CLI won't rollback the changes. Please try with a further deploy which contains the fix to the failure.
 * This step is skippable when you remove the entire `skillInfrastructure` field from ask-resources config file. 
