@@ -1,6 +1,6 @@
 # Deploy Command
 
-`askx deploy` deploys all the Alexa skill project resources by following the settings from the project config file (i.e. ask-resources.json). It will deploy each [resource component](./Alexa-Skill-Project-Definition.md) from the local file(s) to the target endpoint sequentially. The deploy flow for each component has been optimized to be executed only when new changes exist in the local (see [usage of lastDeployHash]()). Users of deploy command can focus more on the content within each component, and only control the deployment when it's necessary. 
+`askx deploy` deploys all the Alexa skill project resources by following the settings from the project config file (i.e. ask-resources.json). It will deploy each [resource component](./Alexa-Skill-Project-Definition.md) from the local file(s) to the target endpoint sequentially. The deploy flow for each component has been optimized to be executed only when new changes exist in the local (see [usage of lastDeployHash](#track-lastdeployhash)). Users of deploy command can focus more on the content within each component, and only control the deployment when it's necessary. 
 
 This document focuses on explaining the deploy command in details for each type of resource that CLI deploys. If you are looking for references of the ask-resources config file, please check [here](./Alexa-Skill-Project-Definition.md).
 
@@ -9,7 +9,7 @@ CLI relies on the [Skill Package service](https://developer.amazon.com/en-US/doc
 
 * Set the `skillMetadata.src` field with the source path to skill package, which is compliant with the [required format](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format). Whenever CLI deploys skillMetadata, the source folder will be uploaded to SMAPI by a skillPackage's import request.
 
-* The deploy of skillMetadata always happens, as it contains necessary Alexa skill JSON files. However, it is still skippable with the usage of `skillMetadata.lasDeployHash`, and users will be prompted if this happens. Please see [usage of lastDeployHash]() for more details.
+* The deploy of skillMetadata always happens, as it contains necessary Alexa skill JSON files. However, it is still skippable with the usage of `skillMetadata.lasDeployHash`, and users will be prompted if this happens. Please see [usage of lastDeployHash](#track-lastdeployhash) for more details.
 
 * This step might take about one minute or more to finish, because the deployment possibly includes the training and building process of language's InteractionModel and it takes time.
 
@@ -42,7 +42,7 @@ To provision the backend services which are used to execute customized logics fo
 * If failure happens in one region, CLI won't rollback the changes. Please try with a further deploy which contains the fix to the failure.
 * This step is skippable when you remove the entire `skillInfrastructure` field from ask-resources config file. 
 
-### Deploy Delegate / Deployer
+### Deployer
 Deployer is the module that serve for any unique serverless deploy mechanism. Deployer can be triggered in two scenarios, which are also the interfaces a deployer has to be implemented:
 
 * bootstrap: Bootstrap is the step to provide any necessary preparation before calling **invoke**. It'll be called when the first time a deployer is selected. `skillInfrastructure.userConfig` is supposed to be filled with this step, and also provide developers a chance to confirm `skillInfrastructure.userConfig` before deploy. Please check [this](https://github.com/alexa-labs/ask-cli/blob/master/lib/controllers/skill-infrastructure-controller/deploy-delegate.js#L22) for details about how to configure of a bootstrap call.
@@ -78,3 +78,8 @@ This deployer is implementing the idea of **Code as Infra** by using AWS CloudFo
      * If the `lastDeployHash` doesn't change for the source skillCode, the deployer will not upload the code to S3, and thus no new version will be created.
   3. Based on the presense of stackId, the deployer will create/update AWS CloudFormation stack for each region. The creation of a stack usually takes some time as new infrastructures are being provisioned; while the update of a stack resource is much faster as the update is executed based on the changeset. Please read more about the [CloudFormation update](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html).
   4. Polling stack status and real-time display the latest event message. Provide detailed resource-level reason message if any deployment of resource fails.
+
+## Other Concepts
+
+### Track lastDeployHash
+CLI helps developers avoid unnecessary deployment by introducing the `lastDeployHash`, which stores the hash of the src folder for each project resource (i.e. skillMetadata src, regional skillCode src). The hash will be calculated and stored in ask-resources config, only when the src is deployed successfully. And during the deploy process, CLI will calculate the hash for current src folder, and compare it with the `lastDeployHash` to decide if the resource changes and if a deploy is needed.

@@ -20,7 +20,7 @@ The `SkillCode` component manages the source code for each region. CLI will be i
 Please check the `code` field in the example below for its representation in project config.
 
 ## Skill Infrastructure
-The `SkillInfrastructure` represents the configuration on how to deploy skill's code, and tracks the deployment status for continuous deployment. This deployer platform is designed to cope with the variety of serverless frameworks, with necessary interfaces including `userConfig` and `deployState`. For more details, please check [how to create an Alexa skill deployer](TODO).
+The `SkillInfrastructure` represents the configuration on how to deploy skill's code, and tracks the deployment status for continuous deployment. This deployer platform is designed to cope with the variety of serverless frameworks, with necessary interfaces including `userConfig` and `deployState`. For more details, please check [skill infrastructure's deployer](./Deploy-Command.md#Deployer).
 
 Please check the `skillInfrastructure` field in the example below for its representation in project config.
 
