@@ -84,7 +84,7 @@ describe('Commands deploy test - command class test', () => {
                     expect(err.message).equal('File invalidPath not exists.');
                     expect(errorStub.args[0][0].message).equal('File invalidPath not exists.');
                     expect(infoStub.callCount).equal(0);
-                    expect(warnStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(1);
                     done();
                 });
             });
@@ -113,7 +113,7 @@ describe('Commands deploy test - command class test', () => {
                     expect(err.message).equal('File invalidPath not exists.');
                     expect(errorStub.args[0][0].message).equal('File invalidPath not exists.');
                     expect(infoStub.callCount).equal(0);
-                    expect(warnStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(1);
                     done();
                 });
             });
