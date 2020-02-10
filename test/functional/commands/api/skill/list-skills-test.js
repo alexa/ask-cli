@@ -177,7 +177,7 @@ describe('Functional test - ask api list-skills', () => {
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
                 url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills?nextToken=${TEST_NEXT_TOKEN1}`
-                + `&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&vendorId=${TEST_DEFAULT_VENDOR_ID}`,
+                + `&vendorId=${TEST_DEFAULT_VENDOR_ID}&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}`,
                 method: CONSTANTS.HTTP_REQUEST.VERB.GET,
                 headers: { authorization: TEST_DEFAULT_PROFILE_TOKEN },
                 body: null,
@@ -203,7 +203,7 @@ describe('Functional test - ask api list-skills', () => {
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
                 url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills?nextToken=${TEST_NEXT_TOKEN1}`
-                + `&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&vendorId=${TEST_DEFAULT_VENDOR_ID}`,
+                + `&vendorId=${TEST_DEFAULT_VENDOR_ID}&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}`,
                 method: CONSTANTS.HTTP_REQUEST.VERB.GET,
                 headers: { authorization: TEST_DEFAULT_PROFILE_TOKEN },
                 body: null,
@@ -229,7 +229,7 @@ describe('Functional test - ask api list-skills', () => {
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
                 url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills?nextToken=${TEST_NEXT_TOKEN1}`
-                + `&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&vendorId=${TEST_DEFAULT_VENDOR_ID}`,
+                + `&vendorId=${TEST_DEFAULT_VENDOR_ID}&maxResults=${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}`,
                 method: CONSTANTS.HTTP_REQUEST.VERB.GET,
                 headers: { authorization: TEST_DEFAULT_PROFILE_TOKEN },
                 body: null,
@@ -246,6 +246,29 @@ describe('Functional test - ask api list-skills', () => {
                 done();
             };
             new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        });
+
+        it('| list skills when only maxResults is specified for default profile', async () => {
+            const cmd = 'ask api list-skills --max-results 10';
+            const envVar = {};
+            const requestOptionWithDefaultProfileWithOnlyMaxResults = {
+                url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills?`
+                + `maxResults=10&vendorId=${TEST_DEFAULT_VENDOR_ID}`,
+                method: CONSTANTS.HTTP_REQUEST.VERB.GET,
+                headers: { authorization: TEST_DEFAULT_PROFILE_TOKEN },
+                body: null,
+                json: false
+            };
+            const httpMockConfig = [{
+                input: [requestOptionWithDefaultProfileWithOnlyMaxResults, operation],
+                output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
+            }];
+            const expectationHandler = (msgCatcher) => {
+                expect(msgCatcher.info).equal(jsonView.toString(R.omit(['_links'], TEST_HTTP_RESPONSE_BODY)));
+                expect(msgCatcher.warn).equal('');
+                expect(msgCatcher.error).equal('');
+            };
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
         it('| list skills when nextToken and maxResult are specified when profile is default profile', (done) => {

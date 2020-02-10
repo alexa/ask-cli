@@ -26,6 +26,10 @@ require('module-alias/register');
     '@test/unit/commands/configure/questions-test',
     '@test/unit/commands/configure/ask-profile-setup-helper-test',
     '@test/unit/commands/configure/aws-profile-setup-helper-test',
+    // command - init
+    '@test/unit/commands/init/index-test',
+    '@test/unit/commands/init/ui-test',
+    '@test/unit/commands/init/helper-test',
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
