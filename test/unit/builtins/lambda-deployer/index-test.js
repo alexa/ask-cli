@@ -9,8 +9,10 @@ const lambdaDeployer = require('@src/builtins/deploy-delegates/lambda-deployer/i
 
 describe('Builtins test - lambda-deployer index.js test', () => {
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
-    const TEST_ALEXA_REGION = 'default';
+    const TEST_ALEXA_REGION_DEFAULT = 'default';
+    const TEST_AWS_REGION_DEFAULT = 'us-east-1';
     const TEST_SKILL_NAME = 'skill_name';
+    const TEST_IAM_ROLE_ARN = 'IAM role arn';
 
     describe('# test class method: bootstrap', () => {
         afterEach(() => {
@@ -39,14 +41,15 @@ describe('Builtins test - lambda-deployer index.js test', () => {
 
     describe('# test case method: invoke', () => {
         const REPORTER = {};
-        const NULL_PROFILE = null;
         const TEST_OPTIONS = {
             profile: TEST_PROFILE,
-            alexaRegion: TEST_ALEXA_REGION,
+            alexaRegion: TEST_ALEXA_REGION_DEFAULT,
             skillId: '',
             skillName: TEST_SKILL_NAME,
             code: {},
-            userConfig: {},
+            userConfig: {
+                awsRegion: TEST_AWS_REGION_DEFAULT
+            },
             deployState: {}
         };
         const TEST_VALIDATED_DEPLOY_STATE = {
@@ -60,10 +63,10 @@ describe('Builtins test - lambda-deployer index.js test', () => {
         it('| profile is not set, expect an error return', (done) => {
             // setup
             const TEST_OPTIONS_WITHOUT_PROFILE = {
-                profile: NULL_PROFILE,
+                profile: null,
             };
-            const TEST_ERROR = `Profile [${NULL_PROFILE}] doesn't have AWS profile linked to it. Please run "ask init" to re-configure your porfile.`;
-            sinon.stub(awsUtil, 'getAWSProfile').withArgs(NULL_PROFILE).returns(NULL_PROFILE);
+            const TEST_ERROR = `Profile [${null}] doesn't have AWS profile linked to it. Please run "ask init" to re-configure your profile.`;
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(null).returns(null);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_PROFILE, (err) => {
                 // verify
@@ -72,7 +75,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
             });
         });
 
-        it('| profile is set, awsRegion is blank, expect an error return', (done) => {
+        it('| profile is set, alexaRegion is not set correctly, expect an error return', (done) => {
             // setup
             const TEST_OPTIONS_WITHOUT_REGION = {
                 profile: TEST_PROFILE,
@@ -93,7 +96,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
             });
         });
 
-        it('| profile is set, validate Lambda deploy state fails, expect an error return', (done) => {
+        it('| alexaRegion is set correctly, validate Lambda deploy state fails, expect an error return', (done) => {
             // setup
             const TEST_ERROR = 'validateLambdaDeployState error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
@@ -106,7 +109,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
             });
         });
 
-        it('| profile is set, validate Lambda deploy state passes, deploy IAM role fails, expect an error return', (done) => {
+        it('| validate Lambda deploy state passes, deploy IAM role fails, expect an error return', (done) => {
             // setup
             const TEST_ERROR = 'IAMRole error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
@@ -122,12 +125,11 @@ describe('Builtins test - lambda-deployer index.js test', () => {
 
         it('| deploy IAM role passes, deploy Lambda Function fails, expect IAM role arn and an error message return', (done) => {
             // setup
-            const IAM_ROLE_ARN = 'IAM role arn';
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
             sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err, data) => {
@@ -135,35 +137,153 @@ describe('Builtins test - lambda-deployer index.js test', () => {
                 expect(data.reasons).to.be.an.instanceOf(Array);
                 expect(data.reasons.length).equal(1);
                 expect(data.message).equal(TEST_ERROR_MESSAGE_RESPONSE);
-                expect(data.deployState.iamRole).equal(IAM_ROLE_ARN);
+                expect(data.deployState.iamRole).equal(TEST_IAM_ROLE_ARN);
                 done();
             });
         });
 
         it('| deploy IAM role and Lambda Function pass, expect correct data return', (done) => {
             // setup
-            const IAM_ROLE_ARN = 'iam_role_arn';
             const LAMBDA_ARN = 'lambda_arn';
             const LAST_MODIFIED = 'last_modified';
-            const REVISIONID = '1';
-            const TEST_SUCCESS_RESPONSE = `The lambda deploy succeeded for Alexa region "${TEST_ALEXA_REGION}" \
+            const REVISION_ID = '1';
+            const TEST_SUCCESS_RESPONSE = `The lambda deploy succeeded for Alexa region "${TEST_ALEXA_REGION_DEFAULT}" \
 with output Lambda ARN: ${LAMBDA_ARN}.`;
-            const LAMDBA_RESUALT = {
+            const LAMDBA_RESULT = {
                 arn: LAMBDA_ARN,
                 lastModified: LAST_MODIFIED,
-                revisionId: REVISIONID
+                revisionId: REVISION_ID
             };
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
             sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, IAM_ROLE_ARN);
-            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESUALT);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err, res) => {
                 // verify
                 expect(res.endpoint.uri).equal(LAMBDA_ARN);
-                expect(res.deployState.iamRole).equal(IAM_ROLE_ARN);
+                expect(res.deployState.iamRole).equal(TEST_IAM_ROLE_ARN);
                 expect(res.message).equal(TEST_SUCCESS_RESPONSE);
                 expect(err).equal(null);
+                done();
+            });
+        });
+         
+        it('| alexaRegion is default, userConfig awsRegion is set, expect awsRegion is retrieved correctly.', (done) => {
+            // setup
+            const USER_CONFIG_AWS_REGION = 'sa-east-1';
+            const TEST_OPTIONS_WITHOUT_AWS_REGION = {
+                profile: TEST_PROFILE,
+                alexaRegion: TEST_ALEXA_REGION_DEFAULT,
+                skillId: '',
+                skillName: TEST_SKILL_NAME,
+                code: {},
+                userConfig: {
+                    awsRegion: USER_CONFIG_AWS_REGION
+                },
+                deployState: {}
+            };
+            const LAMDBA_RESULT = {};
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
+                // verify
+                expect(err).equal(null);
+                expect(helper.validateLambdaDeployState.args[0][2]).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][4]).equal(USER_CONFIG_AWS_REGION);
+                done();
+            });
+        });
+ 
+        it('| alexaRegion is default, userConfig awsRegion is NOT set, expect awsRegion is set based on Alexa and AWS region map.', (done) => {
+            // setup
+            const MAPPING_ALEXA_DEFAULT_AWS_REGION = 'us-east-1';
+            const TEST_OPTIONS_WITHOUT_AWS_REGION = {
+                profile: TEST_PROFILE,
+                alexaRegion: TEST_ALEXA_REGION_DEFAULT,
+                skillId: '',
+                skillName: TEST_SKILL_NAME,
+                code: {},
+                userConfig: {},
+                deployState: {}
+            };
+            const LAMDBA_RESULT = {};
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
+                // verify
+                expect(err).equal(null);
+                expect(helper.validateLambdaDeployState.args[0][2]).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][4]).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
+                done();
+            });
+        });
+ 
+        it('| alexaRegion is not default, userConfig regionalOverrides awsRegion is set, expect awsRegion is retrieved correctly.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION_EU = 'EU';
+            const USER_CONFIG_AWS_REGION = 'eu-west-2';
+            const TEST_OPTIONS_WITHOUT_EU_REGION = {
+                profile: TEST_PROFILE,
+                alexaRegion: TEST_ALEXA_REGION_EU,
+                skillId: '',
+                skillName: TEST_SKILL_NAME,
+                code: {},
+                userConfig: {
+                    regionalOverrides: {
+                        EU: {
+                            awsRegion: USER_CONFIG_AWS_REGION
+                        }
+                    }
+                },
+                deployState: {}
+            };
+            const LAMDBA_RESULT = {};
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_EU_REGION, (err) => {
+                // verify
+                expect(err).equal(null);
+                expect(helper.validateLambdaDeployState.args[0][2]).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][4]).equal(USER_CONFIG_AWS_REGION);
+                done();
+            });
+        });
+
+        it('| alexaRegion is not default, userConfig regionalOverrides awsRegion is NOT set, '
+        + 'expect awsRegion is set based on Alexa and AWS region map.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION_EU = 'EU';
+            const MAPPING_ALEXA_EU_AWS_REGION = 'eu-west-1';
+            const TEST_OPTIONS_WITHOUT_AWS_REGION = {
+                profile: TEST_PROFILE,
+                alexaRegion: TEST_ALEXA_REGION_EU,
+                skillId: '',
+                skillName: TEST_SKILL_NAME,
+                code: {},
+                userConfig: {},
+                deployState: {}
+            };
+            const LAMDBA_RESULT = {};
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
+                // verify
+                expect(err).equal(null);
+                expect(helper.validateLambdaDeployState.args[0][2]).equal(MAPPING_ALEXA_EU_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][4]).equal(MAPPING_ALEXA_EU_AWS_REGION);
                 done();
             });
         });
