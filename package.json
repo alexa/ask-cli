@@ -6,7 +6,7 @@
     "askx": "bin/askx.js"
   },
   "engines": {
-    "node": ">=6.4.0"
+    "node": ">=8.3.0"
   },
   "license": "Apache 2.0",
   "repository": "alexa-labs/ask-cli",

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /* eslint-disable global-require */
 
-if (!require('semver').gte(process.version, '6.4.0')) {
+if (!require('semver').gte(process.version, '8.3.0')) {
     console.log('Version of node.js doesn\'t meet minimum requirement.');
-    console.log('Please ensure system has node.js version 6.4.0 or higher.');
+    console.log('Please ensure system has node.js version 8.3.0 or higher.');
     process.exit(1);
 }
 
