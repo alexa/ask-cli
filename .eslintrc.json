@@ -43,6 +43,8 @@
         }],
         "no-restricted-properties": "off",
         "linebreak-style": "off",
+        "arrow-parens": "off",
+        "max-classes-per-file": "off",
         "one-var": "off",
         "one-var-declaration-per-line": "off"
     }
