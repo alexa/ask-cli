@@ -306,6 +306,11 @@ describe('Utils test - string utility', () => {
                     testCase: 'input value is a valid profile name',
                     value: 'askProfile',
                     expectation: true
+                },
+                {
+                    testCase: 'input value is environment profile name',
+                    value: '__ENVIRONMENT_ASK_PROFILE__',
+                    expectation: false
                 }
 
             ].forEach(({ testCase, value, expectation }) => {
