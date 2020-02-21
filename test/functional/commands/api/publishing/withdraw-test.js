@@ -32,33 +32,31 @@ describe('Functional test - ask api withdraw', () => {
         sinon.restore();
     });
 
-    it('| print error when --skill-id is not provided', (done) => {
+    it('| print error when --skill-id is not provided', async () => {
         const cmd = 'ask api withdraw';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api withdraw -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response', (done) => {
+    it('| can get correct http response', async () => {
         const inputOptions = createWithdrawSkillRequestOptions(TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api withdraw -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -69,13 +67,12 @@ describe('Functional test - ask api withdraw', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Skill withdrawn successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const inputOptions = createWithdrawSkillRequestOptions(TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api withdraw -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -86,13 +83,12 @@ describe('Functional test - ask api withdraw', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const inputOptions = createWithdrawSkillRequestOptions(TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api withdraw -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -103,9 +99,8 @@ describe('Functional test - ask api withdraw', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

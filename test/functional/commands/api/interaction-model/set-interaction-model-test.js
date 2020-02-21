@@ -20,75 +20,70 @@ describe('Functional test - ask api set-interaction-model', () => {
     const TEST_ETAG = 'ETAG';
     const TEST_LOCALE = 'te-ST';
     const TEST_ERROR_MESSAGE = 'ERROR_MESSAGE';
-    const TEST_ERROR_RESPONSE = { 'TEST': TEST_ERROR_MESSAGE };
+    const TEST_ERROR_RESPONSE = { TEST: TEST_ERROR_MESSAGE };
 
-    it('| print error when --skill-id is not provided', (done) => {
+    it('| print error when --skill-id is not provided', async () => {
         const cmd = 'ask api set-interaction-model';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when --file is not provided', (done) => {
+    it('| print error when --file is not provided', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: file. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: file. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when --locale is not provided', (done) => {
+    it('| print error when --locale is not provided', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: locale. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: locale. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input stage is invalid', (done) => {
+    it('| print error when input stage is invalid', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE} -g ${TEST_INVALID_STAGE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
     if (process.platform !== 'win32') {
-        it('| print error when file access is not readable', (done) => {
+        it('| print error when file access is not readable', async () => {
             fs.chmodSync(NO_ACCESS_FILE_PATH, 0o111);
             const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${NO_ACCESS_FILE_PATH} -l ${TEST_LOCALE}`;
             const envVar = {};
@@ -97,53 +92,49 @@ describe('Functional test - ask api set-interaction-model', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: file. The provided file must have read permission.');
                 fs.chmodSync(NO_ACCESS_FILE_PATH, 0o644);
-                done();
             };
-    
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     }
 
-    it('| print error when file input does not exist', (done) => {
+    it('| print error when file input does not exist', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f invalid.path -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: file. File does not exist with the given path.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when file is not JSON file', (done) => {
+    it('| print error when file is not JSON file', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${INVALID_FILE_PATH} -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).include('SyntaxError');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input locale is invalid', (done) => {
+    it('| print error when input locale is invalid', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l invalidLocale`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: locale. Input value (invalidLocale) doesn\'t match REGEX rule ^[a-z]{2}-[A-Z]{2}$.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| get correct http response when profile is set to default and with etag input', (done) => {
+    it('| get correct http response when profile is set to default and with etag input', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE} --etag ${TEST_ETAG}`;
         const envVar = {};
         const requestOptions = {
@@ -160,13 +151,12 @@ describe('Functional test - ask api set-interaction-model', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Interaction model request submitted successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| get correct http response when profile is set by env variable', () => {
+    it('| get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE}`;
         const requestOptions = {
             url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/stages/${TEST_DEVELOPMENT_STAGE}/interactionModel/locales/${TEST_LOCALE}`,
@@ -182,7 +172,7 @@ describe('Functional test - ask api set-interaction-model', () => {
             ASK_VENDOR_ID: 4
         };
         const httpMockConfig = [
-            { 
+            {
                 input: [requestOptions, operation],
                 output: [null, { statusCode: 202 }]
             }
@@ -192,10 +182,10 @@ describe('Functional test - ask api set-interaction-model', () => {
             expect(msgCatcher.info).equal('Interaction model request submitted successfully.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| display error when response itself fails', (done) => {
+    it('| display error when response itself fails', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE}`;
         const envVar = {};
         const requestOptions = {
@@ -212,13 +202,12 @@ describe('Functional test - ask api set-interaction-model', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| display error when response contains error', (done) => {
+    it('| display error when response contains error', async () => {
         const cmd = `ask api set-interaction-model -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -l ${TEST_LOCALE}`;
         const envVar = {};
         const requestOptions = {
@@ -235,9 +224,8 @@ describe('Functional test - ask api set-interaction-model', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_RESPONSE));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

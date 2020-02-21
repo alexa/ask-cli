@@ -27,58 +27,54 @@ describe('Functional test - ask api get-certification', () => {
         return options;
     }
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api get-certification';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when certification-id is not provided', (done) => {
+    it('| print error when certification-id is not provided', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: certification-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when invalid accept-language is not provided', (done) => {
+    it('| print error when invalid accept-language is not provided', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID} --accept-language invalid-language`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: accept-language. Value must be in (en-US, ja-JP).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response with acceptLanguage option', (done) => {
+    it('| can get correct http response with acceptLanguage option', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID} --accept-language ${TEST_ACCEPT_LANGUAGE}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -88,13 +84,12 @@ describe('Functional test - ask api get-certification', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response without acceptLanguage option', (done) => {
+    it('| can get correct http response without acceptLanguage option', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -104,13 +99,12 @@ describe('Functional test - ask api get-certification', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -120,13 +114,12 @@ describe('Functional test - ask api get-certification', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const cmd = `ask api get-certification -s ${TEST_SKILL_ID} -c ${TEST_CERTIFICATION_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -136,9 +129,8 @@ describe('Functional test - ask api get-certification', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

@@ -20,7 +20,7 @@ describe('Functional test - ask api get-catalog-upload', () => {
         json: false
     };
 
-    it('| print error when catalog-id is not provided', (done) => {
+    it('| print error when catalog-id is not provided', async () => {
         const cmd = `ask api get-catalog-upload --upload-id ${TEST_CATALOG_UPLOAD_ID}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -28,13 +28,12 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: catalog-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when upload-id is not provided', (done) => {
+    it('| print error when upload-id is not provided', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -42,13 +41,12 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: upload-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID} --upload-id ${TEST_CATALOG_UPLOAD_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -56,12 +54,11 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID} --upload-id ${TEST_CATALOG_UPLOAD_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -72,13 +69,12 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID} --upload-id ${TEST_CATALOG_UPLOAD_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -89,13 +85,12 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code < 300', (done) => {
+    it('| handle SMAPI response with status code < 300', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID} --upload-id ${TEST_CATALOG_UPLOAD_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -106,13 +101,12 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api get-catalog-upload --catalog-id ${TEST_CATALOG_ID} --upload-id ${TEST_CATALOG_UPLOAD_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -123,9 +117,8 @@ describe('Functional test - ask api get-catalog-upload', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

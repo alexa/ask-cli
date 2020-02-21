@@ -28,33 +28,31 @@ describe('Functional test - ask api validate-skill', () => {
         };
     }
 
-    it('| print error when --skill-id is not provided', (done) => {
+    it('| print error when --skill-id is not provided', async () => {
         const cmd = 'ask api validate-skill';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when invalid stage is provided', (done) => {
+    it('| print error when invalid stage is provided', async () => {
         const cmd = `ask api validate-skill -s ${TEST_SKILL_ID} -g certification`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when --locales is provided', (done) => {
+    it('| print error when --locales is provided', async () => {
         const cmd = `ask api validate-skill -s ${TEST_SKILL_ID}`;
         const envVar = {
             // ASK_DEFAULT_DEVICE_LOCALE: null
@@ -64,26 +62,24 @@ describe('Functional test - ask api validate-skill', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Error: Please provide valid input for option: locales.'
             + ' Specify locale via command line parameter <-l|--locales> or environment variable ASK_DEFAULT_DEVICE_LOCALE.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api validate-skill -s ${TEST_SKILL_ID} -l ${TEST_LOCALE_1},${TEST_LOCALE_2} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, with stage, locales, quick mode provided', (done) => {
+    it('| can get correct http response, with stage, locales, quick mode provided', async () => {
         const inputOptions = createValidateSkillRequestOptions(TEST_STAGE, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2);
         const cmd = `ask api validate-skill -s ${TEST_SKILL_ID} -g ${TEST_STAGE} -l ${TEST_LOCALE_1},${TEST_LOCALE_2} --quick`;
         const envVar = {};
@@ -97,13 +93,12 @@ describe('Functional test - ask api validate-skill', () => {
                 `Validation created for validation id: ${TEST_VALIDATION_ID}`
                 + 'Please use the ask api get-validation command to get the status of the validation'
             );
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, with locales, quick mode provided', (done) => {
+    it('| can get correct http response, with locales, quick mode provided', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -119,13 +114,12 @@ describe('Functional test - ask api validate-skill', () => {
                 `Validation created for validation id: ${TEST_VALIDATION_ID}`
                 + 'Please use the ask api get-validation command to get the status of the validation'
             );
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, with quick mode provided, locales from environment variable', (done) => {
+    it('| can get correct http response, with quick mode provided, locales from environment variable', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -141,13 +135,12 @@ describe('Functional test - ask api validate-skill', () => {
                 `Validation created for validation id: ${TEST_VALIDATION_ID}`
                 + 'Please use the ask api get-validation command to get the status of the validation'
             );
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct response, when waiting for skill validation errors out', (done) => {
+    it('| can get correct response, when waiting for skill validation errors out', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -162,13 +155,12 @@ describe('Functional test - ask api validate-skill', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
             expect(msgCatcher.info).equal(`Validation created for validation id: ${TEST_VALIDATION_ID}`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, when waiting for skill validation passes', (done) => {
+    it('| can get correct http response, when waiting for skill validation passes', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -186,13 +178,12 @@ describe('Functional test - ask api validate-skill', () => {
                 `Validation created for validation id: ${TEST_VALIDATION_ID}`
                 + `${TEST_GET_VALIDATION_MESSAGE}`
             );
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -205,13 +196,12 @@ describe('Functional test - ask api validate-skill', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -224,13 +214,12 @@ describe('Functional test - ask api validate-skill', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with no response body', (done) => {
+    it('| can handle http response with no response body', async () => {
         const inputOptions = createValidateSkillRequestOptions(
             CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN, TEST_LOCALE_1, TEST_LOCALE_2
         );
@@ -243,9 +232,8 @@ describe('Functional test - ask api validate-skill', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Error: No response body from service request.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

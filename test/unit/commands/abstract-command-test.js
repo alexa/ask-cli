@@ -5,6 +5,7 @@ const path = require('path');
 
 const { AbstractCommand } = require('@src/commands/abstract-command');
 const AppConfig = require('@src/model/app-config');
+const metricClient = require('@src/utils/metrics');
 
 
 describe('Command test - AbstractCommand class', () => {
@@ -39,11 +40,17 @@ describe('Command test - AbstractCommand class', () => {
             }
         };
 
+        let mockProcessExit;
+        let mockConsoleError;
+
         beforeEach(() => {
             sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+            mockProcessExit = sinon.stub(process, 'exit');
+            mockConsoleError = sinon.stub(console, 'error');
+            sinon.stub(metricClient, 'sendData').resolves();
         });
 
-        it('| should be able to register command', (done) => {
+        it('| should be able to register command', async () => {
             class MockCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -67,21 +74,21 @@ describe('Command test - AbstractCommand class', () => {
                 }
             }
 
-            const mockCommand = new MockCommand(mockOptionModel, (options) => {
+            const mockCommand = new MockCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('foo');
                 expect(options._description).eq('foo description');
                 expect(options.fooOption).eq('foo');
                 expect(options.barOption).eq('bar');
                 expect(options.anotherBarOption).eq(true);
                 expect(options.bazOption).eq(true);
-                done();
+                cb();
             });
 
             mockCommand.createCommand()(commander);
-            commander.parse(['node', 'mock', 'foo', '-f', 'foo', '-b', 'bar', '-a', '-z']);
+            await commander.parseAsync(['node', 'mock', 'foo', '-f', 'foo', '-b', 'bar', '-a', '-z']);
         });
 
-        it('| should be able to register command without any option', (done) => {
+        it('| should be able to register command without any option', async () => {
             class NoOptionCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -97,18 +104,18 @@ describe('Command test - AbstractCommand class', () => {
                 }
             }
 
-            const mockCommand = new NoOptionCommand(mockOptionModel, (options) => {
+            const mockCommand = new NoOptionCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('empty-option');
                 expect(options._description).eq('empty-option description');
                 expect(options.options).deep.eq([]);
-                done();
+                cb();
             });
 
             mockCommand.createCommand()(commander);
-            commander.parse(['node', 'mock', 'empty-option']);
+            await commander.parseAsync(['node', 'mock', 'empty-option']);
         });
 
-        it('| should throw an error if the command did not override any abstract function', (done) => {
+        it('| should throw an error if the command did not override any abstract function', async () => {
             class CommandWithoutName extends AbstractCommand {
                 description() {
                     return 'foo description';
@@ -125,8 +132,6 @@ describe('Command test - AbstractCommand class', () => {
                 handle() {}
             }
 
-            const mockConsoleError = sinon.stub(console, 'error');
-            const mockProcessExit = sinon.stub(process, 'exit');
             let counter = 0;
             mockProcessExit.callsFake(() => {
                 counter++;
@@ -136,20 +141,15 @@ describe('Command test - AbstractCommand class', () => {
 
                 expect(mockConsoleError.args[0][0]).include('[Fatal]: Unimplemented abstract function: name()!');
                 expect(mockConsoleError.args[1][0]).include('[Fatal]: Unimplemented abstract function: description()!');
-                sinon.restore();
-                done();
             });
 
             new CommandWithoutName({}).createCommand()(commander);
-            commander.parse(['node', 'mock', 'badCommand']);
+            await commander.parseAsync(['node', 'mock', 'badCommand']);
             new CommandWithoutDescription({}).createCommand()(commander);
-            commander.parse(['node', 'mock', 'badCommand']);
+            await commander.parseAsync(['node', 'mock', 'badCommand']);
         });
 
-        it('| should throw an error when no option model is found given option name', (done) => {
-            const mockConsoleError = sinon.stub(console, 'error');
-            const mockProcessExit = sinon.stub(process, 'exit');
-
+        it('| should throw an error when no option model is found given option name', async (done) => {
             class MockCommand extends AbstractCommand {
                 constructor(handle) {
                     super(null);
@@ -175,18 +175,14 @@ describe('Command test - AbstractCommand class', () => {
 
             mockProcessExit.callsFake(() => {
                 expect(mockConsoleError.args[0][0]).include('[Fatal]: Unrecognized option ID: foo-option');
-                sinon.restore();
                 done();
             });
 
             new MockCommand(() => {}).createCommand()(commander);
-            commander.parse(['node', 'mock', 'mockCommandWithNoOptionModel']);
+            await commander.parseAsync(['node', 'mock', 'mockCommandWithNoOptionModel']);
         });
 
-        it('| should throw an error when option validation fails', (done) => {
-            const mockConsoleError = sinon.stub(console, 'error');
-            const mockProcessExit = sinon.stub(process, 'exit');
-
+        it('| should throw an error when option validation fails', async (done) => {
             class MockCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -213,12 +209,11 @@ describe('Command test - AbstractCommand class', () => {
             mockProcessExit.callsFake(() => {
                 expect(mockConsoleError.args[0][0])
                     .include('[Error]: Please provide valid input for option: foo-option. Field is required and must be set.');
-                sinon.restore();
                 done();
             });
 
             new MockCommand(mockOptionModel, () => {}).createCommand()(commander);
-            commander.parse(['node', 'mock', 'mockCommand']);
+            await commander.parseAsync(['node', 'mock', 'mockCommand']);
         });
 
         afterEach(() => {
@@ -312,9 +307,11 @@ describe('Command test - AbstractCommand class', () => {
 
         beforeEach(() => {
             sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+            sinon.stub(process, 'exit');
+            sinon.stub(metricClient, 'sendData').resolves();
         });
 
-        it('| should not be null for other commands', (done) => {
+        it('| should not be null for other commands', async () => {
             class NonConfigureCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -330,19 +327,19 @@ describe('Command test - AbstractCommand class', () => {
                 }
             }
 
-            const mockCommand = new NonConfigureCommand(mockOptionModel, (options) => {
+            const mockCommand = new NonConfigureCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('random');
                 expect(options._description).eq('random description');
                 expect(options.options).deep.eq([]);
                 expect(AppConfig.getInstance().getProfilesList().length).eq(0);
-                done();
+                cb();
             });
 
             mockCommand.createCommand()(commander);
-            commander.parse(['node', 'mock', 'random']);
+            await commander.parseAsync(['node', 'mock', 'random']);
         });
 
-        it('| should be null for configure command', (done) => {
+        it('| should be null for configure command', async () => {
             class ConfigureCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -358,16 +355,16 @@ describe('Command test - AbstractCommand class', () => {
                 }
             }
 
-            const mockCommand = new ConfigureCommand(mockOptionModel, (options) => {
+            const mockCommand = new ConfigureCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('configure');
                 expect(options._description).eq('configure description');
                 expect(options.options).deep.eq([]);
                 expect(AppConfig.getInstance()).eq(null);
-                done();
+                cb();
             });
 
             mockCommand.createCommand()(commander);
-            commander.parse(['node', 'mock', 'configure']);
+            await commander.parseAsync(['node', 'mock', 'configure']);
         });
 
         afterEach(() => {

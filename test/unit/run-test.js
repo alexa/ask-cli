@@ -38,6 +38,7 @@ require('module-alias/register');
     '@test/unit/commands/api/skill-package/export-package/helper-test.js',
     // clients
     '@test/unit/clients/http-client-test',
+    '@test/unit/clients/metric-client-test',
     '@test/unit/clients/smapi-client-test',
     '@test/unit/clients/git-client-test',
     '@test/unit/clients/lwa-auth-code-client-test',
@@ -49,6 +50,7 @@ require('module-alias/register');
     // model
     '@test/unit/model/abstract-config-file-test',
     '@test/unit/model/app-config-test',
+    '@test/unit/model/metric-config-test',
     '@test/unit/model/manifest-test',
     '@test/unit/model/resources-config-test',
     '@test/unit/model/yaml-parser-test',

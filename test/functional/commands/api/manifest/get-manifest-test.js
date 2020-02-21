@@ -37,47 +37,44 @@ describe('Functional test - ask api get-manifest', () => {
         method: CONSTANTS.HTTP_REQUEST.VERB.GET,
         headers: { authorization: TEST_DEFAULT_PROFILE_TOKEN },
         body: null
-    }
+    };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api get-manifest';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input stage is invalid', (done) => {
+    it('| print error when input stage is invalid', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID} -g ${TEST_INVALID_STAGE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -87,13 +84,12 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const requestOptions = {
             url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/stages/${TEST_DEVELOPMENT_STAGE}/manifest`,
@@ -110,18 +106,17 @@ describe('Functional test - ask api get-manifest', () => {
         };
         const httpMockConfig = [{
             input: [requestOptions, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID} -p ${TEST_VALID_PROFILE}`;
         const requestOptions = {
             url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}/stages/${TEST_DEVELOPMENT_STAGE}/manifest`,
@@ -133,18 +128,17 @@ describe('Functional test - ask api get-manifest', () => {
         const envVar = {};
         const httpMockConfig = [{
             input: [requestOptions, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| getManifest function can handle http response error', (done) => {
+    it('| getManifest function can handle http response error', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -154,51 +148,48 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| getManifest function can handle http response with status code < 300', (done) => {
+    it('| getManifest function can handle http response with status code < 300', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
             input: [getManifestRequestOptionsWithDevelopmentStage, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| getManifest function can handle http response with status code >= 300 (except 303)', (done) => {
+    it('| getManifest function can handle http response with status code >= 300 (except 303)', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
             input: [getManifestRequestOptionsWithDevelopmentStage, operation],
-            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| when statusCode is 303, smapiRedirectRequest function can handle error', (done) => {
+    it('| when statusCode is 303, smapiRedirectRequest function can handle error', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
             {
                 input: [getManifestRequestOptionsWithDevelopmentStage, operation],
-                output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
+                output: [null, { statusCode: 303, body: { location: TEST_LOCATION } }]
             },
             {
                 input: [redirectRequestOptions, 'REDIRECT_URL'],
@@ -208,19 +199,18 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| when statusCode is 303, smapiRedirectRequest function can handle response with statusCode < 300', (done) => {
+    it('| when statusCode is 303, smapiRedirectRequest function can handle response with statusCode < 300', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID} -g ${TEST_LIVE_STAGE}`;
         const envVar = {};
         const httpMockConfig = [
             {
                 input: [getManifestRequestOptionsWithLiveStage, operation],
-                output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
+                output: [null, { statusCode: 303, body: { location: TEST_LOCATION } }]
             },
             {
                 input: [redirectRequestOptions, 'REDIRECT_URL'],
@@ -230,19 +220,18 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| when statusCode is 303, smapiRedirectRequest function can handle response with statusCode >= 300', (done) => {
+    it('| when statusCode is 303, smapiRedirectRequest function can handle response with statusCode >= 300', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
             {
                 input: [getManifestRequestOptionsWithDevelopmentStage, operation],
-                output: [null, { statusCode: 303, body: { location: TEST_LOCATION }}]
+                output: [null, { statusCode: 303, body: { location: TEST_LOCATION } }]
             },
             {
                 input: [redirectRequestOptions, 'REDIRECT_URL'],
@@ -252,13 +241,12 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| when statusCode is 303, smapiRedirectRequest function can handle null location url', (done) => {
+    it('| when statusCode is 303, smapiRedirectRequest function can handle null location url', async () => {
         const cmd = `ask api get-manifest -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [
@@ -270,9 +258,8 @@ describe('Functional test - ask api get-manifest', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('The redirect url from get-skill response is empty. Please try run this command with --debug for more details.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

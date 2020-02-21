@@ -22,33 +22,31 @@ describe('Functional test - ask api delete-skill', () => {
         json: false
     };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api delete-skill';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -58,13 +56,12 @@ describe('Functional test - ask api delete-skill', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Skill deleted successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID}`;
         const requestOptions = {
             url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}`,
@@ -79,20 +76,19 @@ describe('Functional test - ask api delete-skill', () => {
             ASK_REFRESH_TOKEN: 3,
             ASK_VENDOR_ID: 4
         };
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptions, operation],
             output: [null, { statusCode: 204 }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Skill deleted successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID} -p ${TEST_VALID_PROFILE}`;
         const requestOptions = {
             url: `${CONSTANTS.SMAPI.ENDPOINT}/${CONSTANTS.SMAPI.VERSION.V1}/skills/${TEST_SKILL_ID}`,
@@ -102,64 +98,60 @@ describe('Functional test - ask api delete-skill', () => {
             json: false
         };
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptions, operation],
             output: [null, { statusCode: 204 }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Skill deleted successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID}`;
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [deleteSkillRequestOptions, operation],
             output: [TEST_ERROR_MESSAGE, null]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code < 300', (done) => {
+    it('| can handle http response with status code < 300', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID}`;
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [deleteSkillRequestOptions, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Skill deleted successfully.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const cmd = `ask api delete-skill -s ${TEST_SKILL_ID}`;
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [deleteSkillRequestOptions, operation],
-            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

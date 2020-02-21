@@ -49,33 +49,31 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
     });
 
     describe('# list-skills with any option will make direct api request', () => {
-        it('| print error when stage is not valid', (done) => {
+        it('| print error when stage is not valid', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} -g notValid`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when max-result is not a number', (done) => {
+        it('| print error when max-result is not a number', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --max-results not_number`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: max-results. Input should be a number.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when status is not valid', (done) => {
+        it('| print error when status is not valid', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --status notValid`;
             const envVar = {};
             const httpMockConfig = [];
@@ -83,13 +81,12 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: status.'
                 + ' Value must be in (INCOMPLETE, COMPLETE, CERTIFICATION, PUBLISHED, SUPPRESSED).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when type is not valid', (done) => {
+        it('| print error when type is not valid', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --type notValid`;
             const envVar = {};
             const httpMockConfig = [];
@@ -97,26 +94,24 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: type.'
                 + ' Value must be in (SUBSCRIPTION, ENTITLEMENT, CONSUMABLE).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when isp-id-list is used with max-results', (done) => {
+        it('| print error when isp-id-list is used with max-results', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --max-results 50 --isp-id-list 123,456`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('isp-id-list cannot used with max-results or next-token.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list isp when nextToken is specified for default profile but api request fails', (done) => {
+        it('| list isp when nextToken is specified for default profile but api request fails', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const httpMockConfig = [{
@@ -127,25 +122,23 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when input invalid profile', (done) => {
+        it('| print error when input invalid profile', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list isp when nextToken is specified for default profile', (done) => {
+        it('| list isp when nextToken is specified for default profile', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const httpMockConfig = [{
@@ -158,12 +151,11 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                     inSkillProductSummaryList: [TEST_ISP_INFO1, TEST_ISP_INFO2]
                 }));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list isp when nextToken and maxResult are specified when profile is default profile', (done) => {
+        it('| list isp when nextToken and maxResult are specified when profile is default profile', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const httpMockConfig = [{
@@ -181,12 +173,11 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                     inSkillProductSummaryList: [TEST_ISP_INFO1, TEST_ISP_INFO2]
                 }));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list isp when isp-id-list are specified and profile is default profile', (done) => {
+        it('| list isp when isp-id-list are specified and profile is default profile', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation} --isp-id-list 123`;
             const envVar = {};
             const httpMockConfig = [{
@@ -203,12 +194,11 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                     nextToken: TEST_NEXT_TOKEN1,
                     inSkillProductSummaryList: [TEST_ISP_INFO1, TEST_ISP_INFO2]
                 }));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list isp when reference-name, status, type, is-associated-with-skill are specified and profile is default profile', (done) => {
+        it('| list isp when reference-name, status, type, is-associated-with-skill are specified and profile is default profile', async () => {
             const TEST_REFERENCE_NAME = 'name';
             const TEST_STATUS = 'INCOMPLETE';
             const TEST_TYPE = 'SUBSCRIPTION';
@@ -232,12 +222,11 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
                 expect(msgCatcher.info).deep.equal(jsonView.toString({
                     inSkillProductSummaryList: [TEST_ISP_INFO1, TEST_ISP_INFO2]
                 }));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list all the isp when no option set for default profile but fails the request in the middle', (done) => {
+        it('| list all the isp when no option set for default profile but fails the request in the middle', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation}`;
             const envVar = {};
             const httpMockConfig = [
@@ -262,12 +251,11 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the isp when no option set for default profile', (done) => {
+        it('| iteratively list all the isp when no option set for default profile', async () => {
             const cmd = `${TEST_COMMAND_PREFIX} ${operation}`;
             const envVar = {};
             const httpMockConfig = [
@@ -295,9 +283,8 @@ describe('Functional test - ask api list-isp-for-vendor', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).deep.equal(jsonView.toString(expectedResponse));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

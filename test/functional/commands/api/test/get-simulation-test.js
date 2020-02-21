@@ -47,7 +47,7 @@ describe('Functional test - ask api get-simulation', () => {
             envVar: {},
             cmd: `${SKILL_COMMAND} -i ${TEST_SIMULATION_ID} -s ${TEST_SKILL_ID} -g ${CONSTANTS.SKILL.STAGE.CERTIFICATION}`,
             expectedResult: {
-                error: `Please provide valid input for option: stage. Value must be in (development, live).`,
+                error: 'Please provide valid input for option: stage. Value must be in (development, live).',
                 response: ''
             },
             httpMockConfig: []
@@ -128,14 +128,13 @@ describe('Functional test - ask api get-simulation', () => {
             }]
         }
     ].forEach(({ testCase, envVar, cmd, expectedResult, httpMockConfig }) => {
-        it(`| ${testCase}`, (done) => {
+        it(`| ${testCase}`, async () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(expectedResult.response);
                 expect(msgCatcher.error).equal(expectedResult.error);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

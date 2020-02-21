@@ -9,6 +9,7 @@ const Messenger = require('@src/view/messenger');
 const { commander } = require('@src/commands/api/api-commander');
 const httpClient = require('@src/clients/http-client');
 const CONSTANTS = require('@src/utils/constants');
+const metricClient = require('@src/utils/metrics');
 
 /**
  *  Provide static profile and token related Test data
@@ -114,14 +115,15 @@ class ApiCommandBasicTest {
         }
     }
 
-    test() {
+    async test() {
         try {
             // setup
             this.testSetUp();
 
             // call
-            commander.parse(this.cmd.split(' '));
+            await commander.parseAsync(this.cmd.split(' '));
         } finally {
+            this.expectationHandler(this.msgCatcher);
             // restore
             sinon.restore();
             this.processEnvSetBack();
@@ -135,6 +137,8 @@ class ApiCommandBasicTest {
     testSetUp() {
         // modify the process.env to test env setting || ''
         this.processEnvSetup(this.envVar);
+
+        sinon.stub(metricClient, 'sendData').resolves();
 
         // stdCacher is used to record messenger usage
         sinon.stub(Messenger.prototype, 'trace').callsFake((input) => {
@@ -156,10 +160,7 @@ class ApiCommandBasicTest {
             this.msgCatcher.fatal += input;
         });
 
-        // If meet process.exit, let expectation be executed immediately,
-        sinon.stub(process, 'exit').onFirstCall().callsFake(() => {
-            this.expectationHandler(this.msgCatcher);
-        });
+        sinon.stub(process, 'exit');
 
         // Mock the real behaviour of tokenRefreshAndRead
         // Set the headers property of requestOption object

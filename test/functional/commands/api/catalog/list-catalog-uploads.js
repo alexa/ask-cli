@@ -72,7 +72,7 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
         uploads: [TEST_CATALOG_UPLOADS_LIST_RESPONSE]
     };
 
-    it('| print error when catalog-id is not provided', (done) => {
+    it('| print error when catalog-id is not provided', async () => {
         const cmd = 'ask api list-catalog-uploads';
         const envVar = {};
         const httpMockConfig = [];
@@ -80,14 +80,13 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: catalog-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
     describe('# list-catalog-uploads with any option will make direct api request', () => {
-        it('| print error when max-result is not a number', (done) => {
+        it('| print error when max-result is not a number', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --max-results not_number`;
             const envVar = {};
             const httpMockConfig = [];
@@ -95,13 +94,12 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: max-results. Input should be a number.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when profile is invalid', (done) => {
+        it('| print error when profile is invalid', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --max-results 10 -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -109,13 +107,12 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list-catalog-uploads when nextToken is specified for default profile but api request fails with no error response', (done) => {
+        it('| list-catalog-uploads when nextToken is specified for default profile but api request fails with no error response', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -134,12 +131,11 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list-catalog-uploads when nextToken is specified for default profile but api request fails', (done) => {
+        it('| list-catalog-uploads when nextToken is specified for default profile but api request fails', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -158,12 +154,11 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list-catalog-uploads when nextToken is specified for default profile', (done) => {
+        it('| list-catalog-uploads when nextToken is specified for default profile', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -182,12 +177,11 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list-catalog-uploads when nextToken and maxResult are specified when profile is default profile', (done) => {
+        it('| list-catalog-uploads when nextToken and maxResult are specified when profile is default profile', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID} --next-token ${TEST_NEXT_TOKEN1} \
 --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
@@ -199,14 +193,13 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 
     describe('# list-catalog-uploads without options traverses the list automatically', () => {
-        it('| list all the skills when no option set for default profile but fails the request in the middle', (done) => {
+        it('| list all the skills when no option set for default profile but fails the request in the middle', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID}`;
             const envVar = {};
             const httpMockConfig = [
@@ -223,12 +216,11 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the uploads when no option set for default profile', (done) => {
+        it('| iteratively list all the uploads when no option set for default profile', async () => {
             const cmd = `ask api list-catalog-uploads --catalog-id ${TEST_CATALOG_ID}`;
             const envVar = {};
             const httpMockConfig = [
@@ -256,9 +248,8 @@ ${CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE}&nextToken=${TEST_NEXT_TOKEN2}`,
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

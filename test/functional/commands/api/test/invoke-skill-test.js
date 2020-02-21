@@ -177,14 +177,13 @@ describe('Functional test - ask api invoke-skill', () => {
             }]
         }
     ].forEach(({ testCase, envVar, cmd, expectedResult, httpMockConfig }) => {
-        it(`| ${testCase}`, (done) => {
+        it(`| ${testCase}`, async () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(expectedResult.response);
                 expect(msgCatcher.error).equal(expectedResult.error);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

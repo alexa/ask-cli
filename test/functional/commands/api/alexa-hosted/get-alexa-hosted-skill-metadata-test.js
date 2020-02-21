@@ -9,14 +9,13 @@ function testRunner(selectiveTestExecution, run, testCase, expectedResult, opera
             return;
         }
     }
-    it(`| ${testCase}`, (done) => {
+    it(`| ${testCase}`, async () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal(expectedResult.info);
             expect(msgCatcher.error).equal(expectedResult.error);
             expect(msgCatcher.warn).equal(expectedResult.warn);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 }
 

@@ -91,7 +91,7 @@ describe('Functional test - ask api search-task', () => {
         taskSummaryList: taskSummary
     });
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = `ask api search-task --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID} `
         + `--max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
         const envVar = {};
@@ -100,13 +100,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -114,13 +113,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
         const envVar = {};
@@ -133,13 +131,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
         const envVar = {};
@@ -151,13 +148,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with skill-id, keywords and provider-skill-id defined', (done) => {
+    it('| search task with skill-id, keywords and provider-skill-id defined', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
         const envVar = {};
@@ -169,13 +165,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with multiple keywords', (done) => {
+    it('| search task with multiple keywords', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_MULTIPLE_KEYWORDS}`
         + ` --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
@@ -190,13 +185,12 @@ describe('Functional test - ask api search-task', () => {
                 nextToken: TEST_NEXT_TOKEN,
                 taskSummaryList: [TEST_TASK_SUMMARY_1, TEST_TASK_SUMMARY_2]
             }));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with auto-pagination', (done) => {
+    it('| search task with auto-pagination', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD}`
         + ` --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`;
         const envVar = {};
@@ -215,14 +209,13 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).deep.equal(jsonView.toString({
                 taskSummaryList: [TEST_TASK_SUMMARY_1, TEST_TASK_SUMMARY_2]
             }));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
 
-    it('| search task with auto-pagination http request error', (done) => {
+    it('| search task with auto-pagination http request error', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD}`
         + ` --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`;
         const envVar = {};
@@ -240,13 +233,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with no auto-pagination, no next-token', (done) => {
+    it('| search task with no auto-pagination, no next-token', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS}`;
         const envVar = {};
@@ -258,13 +250,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with no auto-pagination, no max-results', (done) => {
+    it('| search task with no auto-pagination, no max-results', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID} --keywords ${TEST_SINGLE_KEYWORD} --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --next-token ${TEST_NEXT_TOKEN}`;
         const envVar = {};
@@ -276,13 +267,12 @@ describe('Functional test - ask api search-task', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| search task with no keywords', (done) => {
+    it('| search task with no keywords', async () => {
         const cmd = `ask api search-task --skill-id ${TEST_SKILL_ID}`
         + ` --provider-skill-id ${TEST_PROVIDER_SKILL_ID}`
         + ` --max-results ${TEST_MAX_RESULTS} --next-token ${TEST_NEXT_TOKEN}`;
@@ -297,9 +287,8 @@ describe('Functional test - ask api search-task', () => {
                 nextToken: TEST_NEXT_TOKEN,
                 taskSummaryList: [TEST_TASK_SUMMARY_1, TEST_TASK_SUMMARY_2]
             }));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

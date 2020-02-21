@@ -88,7 +88,7 @@ describe('Functional test - ask api intent-requests-history', () => {
     }
 
     describe('# intent-requests-history with any option will make direct api request', () => {
-        it('| print error when --skill-id is not provided', (done) => {
+        it('| print error when --skill-id is not provided', async () => {
             const cmd = TEST_CLI_CMD;
             const envVar = {};
             const httpMockConfig = [];
@@ -96,13 +96,12 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when max-result is not a number', (done) => {
+        it('| print error when max-result is not a number', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --max-results not_number`;
             const envVar = {};
             const httpMockConfig = [];
@@ -110,13 +109,12 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: max-results. Input should be a number.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when sort-direction is invalid', (done) => {
+        it('| print error when sort-direction is invalid', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-direction invalid`;
             const envVar = {};
             const httpMockConfig = [];
@@ -124,13 +122,12 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: sort-direction. Value must be in (asc, desc).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when profile is invalid', (done) => {
+        it('| print error when profile is invalid', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -138,13 +135,12 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when nextToken is specified but api request fails', (done) => {
+        it('| get intent-requests-history when nextToken is specified but api request fails', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -158,12 +154,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when nextToken is specified', (done) => {
+        it('| get intent-requests-history when nextToken is specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -177,12 +172,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when invalid filters are specified', (done) => {
+        it('| get intent-requests-history when invalid filters are specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --filters ${TEST_INVALID_FILTERS}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -196,12 +190,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Error] : No parsable value(s) for Name=locale. Please verify "--filters" parameter is a double-quote-qualified, semicolon-delimited list of name/value pairs, for instance: "Name=intent.name,Values=MyIntent,YourIntent;Name=interactionType,Value=MODAL".');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when invalid filters are specified', (done) => {
+        it('| get intent-requests-history when invalid filters are specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --filters invalidFilter`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -215,12 +208,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Error] : Invalid name/value pair. Please verify "--filters" parameter is a double-quote-qualified, semicolon-delimited list of name/value pairs, for instance: "Name=intent.name,Values=MyIntent,YourIntent;Name=interactionType,Value=MODAL".');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when valid filters are specified', (done) => {
+        it('| get intent-requests-history when valid filters are specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --filters ${TEST_FILTERS_1}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -234,12 +226,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when maxResults is specified but api request fails', (done) => {
+        it('| get intent-requests-history when maxResults is specified but api request fails', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -253,12 +244,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when maxResults is specified', (done) => {
+        it('| get intent-requests-history when maxResults is specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -272,12 +262,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when sortDirection is specified but api request fails', (done) => {
+        it('| get intent-requests-history when sortDirection is specified but api request fails', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-direction ${TEST_SORT_DIRECTION}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -291,12 +280,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when sortDirection is specified', (done) => {
+        it('| get intent-requests-history when sortDirection is specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-direction ${TEST_SORT_DIRECTION}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -310,12 +298,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when sortField is specified but api request fails with no error response', (done) => {
+        it('| get intent-requests-history when sortField is specified but api request fails with no error response', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-field ${TEST_SORT_FIELD}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -329,12 +316,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when sortField is specified but api request fails', (done) => {
+        it('| get intent-requests-history when sortField is specified but api request fails', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-field ${TEST_SORT_FIELD}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -348,12 +334,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when sortField is specified', (done) => {
+        it('| get intent-requests-history when sortField is specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --sort-field ${TEST_SORT_FIELD}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -367,12 +352,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history when filters, nextToken, maxResult, sortDirection, sortField are specified', (done) => {
+        it('| get intent-requests-history when filters, nextToken, maxResult, sortDirection, sortField are specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} --filters ${TEST_FILTERS}`
              + ` --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT}`
              + ` --sort-direction ${TEST_SORT_DIRECTION} --sort-field ${TEST_SORT_FIELD}`;
@@ -388,12 +372,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| get intent-requests-history no options are specified', (done) => {
+        it('| get intent-requests-history no options are specified', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID}`;
             const envVar = {};
             const requestOption = createIntentRequestsHistoryRequestOptions(
@@ -407,9 +390,8 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 
@@ -450,7 +432,7 @@ describe('Functional test - ask api intent-requests-history', () => {
             items: [TEST_INTENT_REQUESTS_HISTORY_RESPONSE]
         };
 
-        it('| list all the intent requests when no option set but fails the request in the middle', (done) => {
+        it('| list all the intent requests when no option set but fails the request in the middle', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID}`;
             const envVar = {};
             const httpMockConfig = [
@@ -468,12 +450,11 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the intent requests when no option set', (done) => {
+        it('| iteratively list all the intent requests when no option set', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID}`;
             const envVar = {};
             const httpMockConfig = [
@@ -501,9 +482,8 @@ describe('Functional test - ask api intent-requests-history', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.warn).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

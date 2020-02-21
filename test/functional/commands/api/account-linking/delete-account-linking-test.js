@@ -38,7 +38,7 @@ describe('Functional test - ask api delete-account-linking', () => {
         json: false
     };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api delete-account-linking';
         const envVar = {};
         const httpMockConfig = [];
@@ -46,13 +46,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -60,12 +59,11 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input stage is invalid', (done) => {
+    it('| print error when input stage is invalid', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID} -g ${TEST_INVALID_STAGE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -73,13 +71,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live, certification).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -90,13 +87,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('Account linking deleted successfully.');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID}`;
         const envVar = {
             AWS_ACCESS_KEY_ID: 1,
@@ -112,13 +108,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('Account linking deleted successfully.');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID} -p ${TEST_VALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -129,13 +124,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('Account linking deleted successfully.');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -146,13 +140,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code < 300', (done) => {
+    it('| handle SMAPI response with status code < 300', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -163,13 +156,12 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('Account linking deleted successfully.');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api delete-account-linking -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -180,9 +172,8 @@ describe('Functional test - ask api delete-account-linking', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

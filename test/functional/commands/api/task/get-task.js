@@ -23,7 +23,7 @@ describe('Functional test - ask api get-task', () => {
         json: false
     };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = `ask api get-task --task-name ${TEST_TASK_NAME} --task-version ${TEST_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -31,13 +31,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when task-name is not provided', (done) => {
+    it('| print error when task-name is not provided', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-version ${TEST_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -45,13 +44,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: task-name. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when task-version is not provided', (done) => {
+    it('| print error when task-version is not provided', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -59,13 +57,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: task-version. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when task-version is not an integer', (done) => {
+    it('| print error when task-version is not an integer', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME} --task-version ${TEST_INVALID_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -73,13 +70,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: task-version. Input should be a number.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME} --task-version ${TEST_TASK_VERSION}`
         + ` -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
@@ -88,13 +84,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME} --task-version ${TEST_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -105,13 +100,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME} --task-version ${TEST_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -122,13 +116,12 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code < 300', (done) => {
+    it('| handle SMAPI response with status code < 300', async () => {
         const cmd = `ask api get-task --skill-id ${TEST_SKILL_ID} --task-name ${TEST_TASK_NAME} --task-version ${TEST_TASK_VERSION}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -139,9 +132,8 @@ describe('Functional test - ask api get-task', () => {
             expect(msgCatcher.info).include(jsonView.toString(JSON.parse(TEST_HTTP_RESPONSE_BODY.definition)));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

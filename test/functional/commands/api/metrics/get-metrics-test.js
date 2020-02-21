@@ -48,7 +48,7 @@ describe('Functional test - ask api get-metrics', () => {
         json: false
     };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api get-metrics';
         const envVar = {};
         const httpMockConfig = [];
@@ -56,13 +56,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when start-time is not provided', (done) => {
+    it('| print error when start-time is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -70,13 +69,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: start-time. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when end-time is not provided', (done) => {
+    it('| print error when end-time is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -84,13 +82,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: end-time. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when period is not provided', (done) => {
+    it('| print error when period is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -98,13 +95,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: period. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when metric is not provided', (done) => {
+    it('| print error when metric is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD}`;
         const envVar = {};
@@ -113,13 +109,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: metric. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when stage is not provided', (done) => {
+    it('| print error when stage is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC}`;
         const envVar = {};
@@ -128,13 +123,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when skill-type is not provided', (done) => {
+    it('| print error when skill-type is not provided', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE}`;
         const envVar = {};
@@ -143,13 +137,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-type. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`
         + ` -p ${TEST_INVALID_PROFILE}`;
@@ -159,13 +152,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`;
         const envVar = {};
@@ -177,13 +169,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`;
         const envVar = {
@@ -200,13 +191,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`
         + ` -p ${TEST_VALID_PROFILE}`;
@@ -219,13 +209,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`;
         const envVar = {};
@@ -237,13 +226,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code < 300', (done) => {
+    it('| handle SMAPI response with status code < 300', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`;
         const envVar = {};
@@ -255,13 +243,12 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api get-metrics --skill-id ${TEST_SKILL_ID} --start-time ${TEST_START_TIME} --end-time ${TEST_END_TIME}`
         + ` --period ${TEST_PERIOD} --metric ${TEST_METRIC} --stage ${TEST_DEVELOPMENT_STAGE} --skill-type ${TEST_SKILL_TYPE}`;
         const envVar = {};
@@ -273,9 +260,8 @@ describe('Functional test - ask api get-metrics', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

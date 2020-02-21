@@ -22,46 +22,43 @@ describe('Functional test - ask api get-skill-enablement', () => {
         };
     }
 
-    it('| print error when --skill-id is not provided', (done) => {
+    it('| print error when --skill-id is not provided', async () => {
         const cmd = 'ask api get-skill-enablement';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when invalid stage is provided', (done) => {
+    it('| print error when invalid stage is provided', async () => {
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID} -g invalid_stage`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, when stage is set by valid input', (done) => {
+    it('| can get correct http response, when stage is set by valid input', async () => {
         const inputOptions = createGetSkillEnablementRequestOptions(TEST_SKILL_STAGE, TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID} -g ${TEST_SKILL_STAGE}`;
         const envVar = {};
@@ -72,13 +69,12 @@ describe('Functional test - ask api get-skill-enablement', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('The skill is enabled.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, when stage is not provided', (done) => {
+    it('| can get correct http response, when stage is not provided', async () => {
         const inputOptions = createGetSkillEnablementRequestOptions(CONSTANTS.SKILL.STAGE.DEVELOPMENT, TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -89,13 +85,12 @@ describe('Functional test - ask api get-skill-enablement', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('The skill is enabled.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const inputOptions = createGetSkillEnablementRequestOptions(TEST_SKILL_STAGE, TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID} -g ${TEST_SKILL_STAGE}`;
         const envVar = {};
@@ -106,13 +101,12 @@ describe('Functional test - ask api get-skill-enablement', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const inputOptions = createGetSkillEnablementRequestOptions(TEST_SKILL_STAGE, TEST_DEFAULT_PROFILE_TOKEN);
         const cmd = `ask api get-skill-enablement -s ${TEST_SKILL_ID} -g ${TEST_SKILL_STAGE}`;
         const envVar = {};
@@ -123,9 +117,8 @@ describe('Functional test - ask api get-skill-enablement', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

@@ -140,14 +140,13 @@ describe('Functional test - ask api delete-private-distribution-account', () => 
         if (!expectedResult.warn) {
             expectedResult.warn = '';
         }
-        it(`| ${testCase}`, (done) => {
+        it(`| ${testCase}`, async () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(expectedResult.info);
                 expect(msgCatcher.error).equal(expectedResult.error);
                 expect(msgCatcher.warn).equal(expectedResult.warn);
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

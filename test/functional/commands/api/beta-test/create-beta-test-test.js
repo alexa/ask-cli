@@ -30,7 +30,7 @@ describe('Functional test - ask api create-beta-test', () => {
         };
     }
 
-    it('| print error if skill-id is not provided', (done) => {
+    it('| print error if skill-id is not provided', async () => {
         const cmd = CREATE_BETA_TEST_COMMAND;
         const envVar = {};
         const httpMockConfig = [];
@@ -38,13 +38,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input is an invalid profile', (done) => {
+    it('| print error when input is an invalid profile', async () => {
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -52,13 +51,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input is an invalid feedback email', (done) => {
+    it('| print error when input is an invalid feedback email', async () => {
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID} --feedback-email ${TEST_INVALID_FEEDBACK_EMAIL}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -66,13 +64,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Please provide valid input for option: feedback-email. Input value (${TEST_INVALID_FEEDBACK_EMAIL}) doesn't match REGEX rule ${FEEDBACK_EMAIL_REGEX}.`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, when valid skill Id is provided', (done) => {
+    it('| can get correct http response, when valid skill Id is provided', async () => {
         const inputOptions = getCreateBetaTestRequestOptions(EMPTY_BODY);
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -84,13 +81,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal(CREATE_BETA_TEST_SUCCESS_MESSAGE);
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response, when valid skill Id is provided with valid feedback email', (done) => {
+    it('| can get correct http response, when valid skill Id is provided with valid feedback email', async () => {
         const inputOptions = getCreateBetaTestRequestOptions({ feedbackEmail: VALID_EMAIL });
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID} --feedback-email ${VALID_EMAIL}`;
         const envVar = {};
@@ -102,13 +98,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal(CREATE_BETA_TEST_SUCCESS_MESSAGE);
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const inputOptions = getCreateBetaTestRequestOptions(EMPTY_BODY);
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -120,13 +115,12 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const inputOptions = getCreateBetaTestRequestOptions(EMPTY_BODY);
         const cmd = `${CREATE_BETA_TEST_COMMAND} -s ${TEST_SKILL_ID}`;
         const envVar = {};
@@ -138,9 +132,8 @@ describe('Functional test - ask api create-beta-test', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

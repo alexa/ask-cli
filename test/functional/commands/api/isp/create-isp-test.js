@@ -52,46 +52,43 @@ describe('Functional test - ask api create-isp', () => {
         json: true
     };
 
-    it('| print error when file is not provided', (done) => {
+    it('| print error when file is not provided', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: file. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when file does not exist', (done) => {
+    it('| print error when file does not exist', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f invalid.path`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: file. File does not exist with the given path.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -101,13 +98,12 @@ describe('Functional test - ask api create-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH}`;
         const envVar = {
             AWS_ACCESS_KEY_ID: 1,
@@ -122,13 +118,12 @@ describe('Functional test - ask api create-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH} -p ${TEST_VALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -138,13 +133,12 @@ describe('Functional test - ask api create-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -154,13 +148,12 @@ describe('Functional test - ask api create-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -170,9 +163,8 @@ describe('Functional test - ask api create-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

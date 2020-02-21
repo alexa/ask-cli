@@ -32,8 +32,7 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
     }
 
     describe('# send-reminder-to-beta-testers with any option will make direct api request', () => {
-
-        it('| print error when --skill-id is not provided', (done) => {
+        it('| print error when --skill-id is not provided', async () => {
             const cmd = TEST_CLI_CMD;
             const envVar = {};
             const httpMockConfig = [];
@@ -41,13 +40,12 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when --file is not provided', (done) => {
+        it('| print error when --file is not provided', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -55,13 +53,12 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: file. Field is required and must be set.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when file type is invalid', (done) => {
+        it('| print error when file type is invalid', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} -f ${TEST_INVALID_FILE_EXTENSION}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -69,13 +66,12 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(`Please provide valid input for option: file. File extension is not of type ${VALID_FILE_EXTENSION_TYPE}.`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when profile is invalid', (done) => {
+        it('| print error when profile is invalid', async () => {
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH} -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -83,13 +79,12 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| can get correct http response, when valid skill Id and file path are provided', (done) => {
+        it('| can get correct http response, when valid skill Id and file path are provided', async () => {
             const inputOptions = createSendReminderToBetaTestersRequestOptions();
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH}`;
             const envVar = {};
@@ -101,13 +96,12 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
                 expect(msgCatcher.info).equal(SEND_REMINDER_TO_BETA_TESTERS_SUCCESS_MESSAGE);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| can handle http response with status code >= 300', (done) => {
+        it('| can handle http response with status code >= 300', async () => {
             const inputOptions = createSendReminderToBetaTestersRequestOptions();
             const cmd = `${TEST_CLI_CMD} -s ${TEST_SKILL_ID} -f ${TEST_FILE_PATH}`;
             const envVar = {};
@@ -119,10 +113,9 @@ describe('Functional test - ask api send-reminder-to-beta-testers', () => {
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

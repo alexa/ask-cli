@@ -144,7 +144,7 @@ describe('Functional test - ask api list-skills', () => {
     };
 
     describe('# list-skills with any option will make direct api request', () => {
-        it('| print error when max-result is not a number', (done) => {
+        it('| print error when max-result is not a number', async () => {
             const cmd = 'ask api list-skills --max-results not_number';
             const envVar = {};
             const httpMockConfig = [];
@@ -152,13 +152,12 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: max-results. Input should be a number.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when profile is invalid', (done) => {
+        it('| print error when profile is invalid', async () => {
             const cmd = `ask api list-skills --max-results 10 -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
@@ -166,13 +165,12 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken is specified for default profile but api request fails with no error response', (done) => {
+        it('| list skills when nextToken is specified for default profile but api request fails with no error response', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -193,12 +191,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken is specified for default profile but api request fails', (done) => {
+        it('| list skills when nextToken is specified for default profile but api request fails', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -219,12 +216,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken is specified for default profile', (done) => {
+        it('| list skills when nextToken is specified for default profile', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOptionWithDefaultProfileWithoutMaxResults = {
@@ -243,9 +239,8 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(R.omit(['_links'], TEST_HTTP_RESPONSE_BODY)));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
         it('| list skills when only maxResults is specified for default profile', async () => {
@@ -271,7 +266,7 @@ describe('Functional test - ask api list-skills', () => {
             await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken and maxResult are specified when profile is default profile', (done) => {
+        it('| list skills when nextToken and maxResult are specified when profile is default profile', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const httpMockConfig = [{
@@ -282,12 +277,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(R.omit(['_links'], TEST_HTTP_RESPONSE_BODY)));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken and maxResult are specified when profile is valid profile', (done) => {
+        it('| list skills when nextToken and maxResult are specified when profile is valid profile', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT} -p ${TEST_VALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [{
@@ -298,12 +292,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(R.omit(['_links'], TEST_HTTP_RESPONSE_BODY)));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken and maxResult are specified when profile is set by env variable', (done) => {
+        it('| list skills when nextToken and maxResult are specified when profile is set by env variable', async () => {
             const cmd = `ask api list-skills --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {
                 AWS_ACCESS_KEY_ID: 1,
@@ -319,14 +312,13 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(R.omit(['_links'], TEST_HTTP_RESPONSE_BODY)));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 
     describe('# list-skills without options traverses the list automatically', () => {
-        it('| list all the skills when no option set for default profile but fails the request in the middle', (done) => {
+        it('| list all the skills when no option set for default profile but fails the request in the middle', async () => {
             const cmd = 'ask api list-skills';
             const envVar = {};
             const httpMockConfig = [
@@ -343,12 +335,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the skills when no option set for default profile', (done) => {
+        it('| iteratively list all the skills when no option set for default profile', async () => {
             const cmd = 'ask api list-skills';
             const envVar = {};
             const httpMockConfig = [
@@ -376,12 +367,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the skills when no option set and with a valid profile', (done) => {
+        it('| iteratively list all the skills when no option set and with a valid profile', async () => {
             const cmd = `ask api list-skills -p ${TEST_VALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [
@@ -404,12 +394,11 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the skills when no option set and with an env variable profile', (done) => {
+        it('| iteratively list all the skills when no option set and with an env variable profile', async () => {
             const cmd = 'ask api list-skills';
             const envVar = {
                 AWS_ACCESS_KEY_ID: 1,
@@ -437,9 +426,8 @@ describe('Functional test - ask api list-skills', () => {
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.warn).equal('');
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

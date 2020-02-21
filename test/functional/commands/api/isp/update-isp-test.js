@@ -48,46 +48,43 @@ describe('Functional test - ask api update-isp', () => {
         json: true
     };
 
-    it('| print error when file is not provided', (done) => {
+    it('| print error when file is not provided', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: file. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when isp-id is not provided', (done) => {
+    it('| print error when isp-id is not provided', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: isp-id. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -97,13 +94,12 @@ describe('Functional test - ask api update-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Succeeded to update in-skill product 456');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response with etag option ', (done) => {
+    it('| can get correct http response with etag option ', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH} --etag ${TEST_ETAG}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -113,26 +109,24 @@ describe('Functional test - ask api update-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal('Succeeded to update in-skill product 456');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when stage is not valid', (done) => {
+    it('| print error when stage is not valid', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH} -g test`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error with live stage option ', (done) => {
+    it('| print error with live stage option ', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH} -g live`;
         const envVar = {};
         const httpMockConfig = [{
@@ -142,13 +136,12 @@ describe('Functional test - ask api update-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('Only supported value for stage option is development.');
             expect(msgCatcher.info).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -158,13 +151,12 @@ describe('Functional test - ask api update-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code >= 300', async () => {
         const cmd = `${TEST_COMMAND_PREFIX} ${operation} -i ${TEST_ISP_ID} -f ${TEST_FILE_PATH}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -174,9 +166,8 @@ describe('Functional test - ask api update-isp', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

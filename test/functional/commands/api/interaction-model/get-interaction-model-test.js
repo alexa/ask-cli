@@ -39,71 +39,66 @@ describe('Functional test - ask api get-interaction-model', () => {
         json: false
     };
 
-    it('| print error when skill-id is not provided', (done) => {
+    it('| print error when skill-id is not provided', async () => {
         const cmd = 'ask api get-interaction-model';
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.')
-            done();
+            expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when locale is not provided ', (done) => {
+    it('| print error when locale is not provided ', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: locale. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input stage is invalid', (done) => {
+    it('| print error when input stage is invalid', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -g ${TEST_INVALID_STAGE}`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input locale is invalid', (done) => {
+    it('| print error when input locale is invalid', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l invalidLocale`;
         const envVar = {};
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: locale. Input value (invalidLocale) doesn\'t match REGEX rule ^[a-z]{2}-[A-Z]{2}$.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -113,13 +108,12 @@ describe('Functional test - ask api get-interaction-model', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by env variable', (done) => {
+    it('| can get correct http response when profile is set by env variable', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
         const envVar = {
             AWS_ACCESS_KEY_ID: 1,
@@ -127,36 +121,34 @@ describe('Functional test - ask api get-interaction-model', () => {
             ASK_REFRESH_TOKEN: 3,
             ASK_VENDOR_ID: 4
         };
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptionsWithEnvVarProfile, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set by valid input', (done) => {
+    it('| can get correct http response when profile is set by valid input', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -p ${TEST_VALID_PROFILE}`;
         const envVar = {};
-        const httpMockConfig = [{ 
+        const httpMockConfig = [{
             input: [requestOptionsWithValidProfile, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.error).equal('');
             expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response error', (done) => {
+    it('| can handle http response error', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [{
@@ -166,41 +158,38 @@ describe('Functional test - ask api get-interaction-model', () => {
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can handle http response with status code < 300', (done) => {
-        const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
-        const envVar = {};
-        const httpMockConfig = [{ 
-            input: [requestOptionsWithDefaultProfile, operation],
-            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY}]
-        }];
-        const expectationHandler = (msgCatcher) => {
-            expect(msgCatcher.error).equal('');
-            expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
-        };
-
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
-    });
-
-    it('| can handle http response with status code >= 300', (done) => {
+    it('| can handle http response with status code < 300', async () => {
         const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
         const envVar = {};
         const httpMockConfig = [{
             input: [requestOptionsWithDefaultProfile, operation],
-            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY}]
+            output: [null, { statusCode: 200, body: TEST_HTTP_RESPONSE_BODY }]
+        }];
+        const expectationHandler = (msgCatcher) => {
+            expect(msgCatcher.error).equal('');
+            expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
+        };
+
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+    });
+
+    it('| can handle http response with status code >= 300', async () => {
+        const cmd = `ask api get-interaction-model -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
+        const envVar = {};
+        const httpMockConfig = [{
+            input: [requestOptionsWithDefaultProfile, operation],
+            output: [null, { statusCode: 300, body: TEST_HTTP_RESPONSE_BODY }]
         }];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });

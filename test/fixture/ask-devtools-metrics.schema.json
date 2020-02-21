@@ -1,0 +1,102 @@
+{
+  "type" : "object",
+  "required" : [ "payload" ],
+  "properties" : {
+    "payload" : {
+      "type" : "object",
+      "title" : "The payload Schema",
+      "properties" : {
+        "time_uploaded" : {
+          "type" : "string",
+          "title" : "The time_uploaded Schema",
+          "pattern" : "^(.*)$",
+          "default" : ""
+        },
+        "new_user" : {
+          "type" : "boolean",
+          "title" : "The new_user Schema",
+          "default" : false
+        },
+        "time_started" : {
+          "type" : "string",
+          "title" : "The time_started Schema",
+          "pattern" : "^(.*)$",
+          "default" : ""
+        },
+        "machine_id" : {
+          "type" : "string",
+          "title" : "The machine_id Schema",
+          "pattern" : "^(.*)$",
+          "default" : ""
+        },
+        "actions" : {
+          "type" : "array",
+          "title" : "The actions Schema",
+          "items" : {
+            "type" : "object",
+            "title" : "The items Schema",
+            "properties" : {
+              "result" : {
+                "type" : "string",
+                "title" : "The result Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "start_time" : {
+                "type" : "string",
+                "title" : "The start_time Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "name" : {
+                "type" : "string",
+                "title" : "The name Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "end_time" : {
+                "type" : "string",
+                "title" : "The end_time Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "failure_message" : {
+                "type" : "string",
+                "title" : "The failure_message schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "id" : {
+                "type" : "string",
+                "title" : "The id Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              },
+              "type" : {
+                "type" : "string",
+                "title" : "The type Schema",
+                "pattern" : "^(.*)$",
+                "default" : ""
+              }
+            },
+            "required" : [ "id", "name", "result", "start_time", "type" ]
+          }
+        },
+        "version" : {
+          "type" : "string",
+          "title" : "The version Schema",
+          "pattern" : "^(.*)$",
+          "default" : ""
+        },
+        "client_id" : {
+          "type" : "string",
+          "title" : "The client_id Schema",
+          "pattern" : "^(.*)$",
+          "default" : ""
+        }
+      },
+      "required" : [ "actions", "client_id", "machine_id", "new_user", "time_started", "time_uploaded", "version" ]
+    }
+  },
+  "title" : "The Root Schema"
+}

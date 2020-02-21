@@ -76,85 +76,79 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
     }
 
     describe('# list-interaction-model-versions with any option will make direct api request', () => {
-        it('| print error when --skill-id is not provided', (done) => {
+        it('| print error when --skill-id is not provided', async () => {
             const cmd = 'ask api list-interaction-model-versions';
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: skill-id. Field is required and must be set.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when --locale is not provided', (done) => {
+        it('| print error when --locale is not provided', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID}`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: locale. Field is required and must be set.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when --stage provided is invalid', (done) => {
+        it('| print error when --stage provided is invalid', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -g no_stage`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: stage. Value must be in (development, live).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when max-result is not a number', (done) => {
+        it('| print error when max-result is not a number', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --max-results not_number`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: max-results. Input should be a number.');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when sort-direction is invalid', (done) => {
+        it('| print error when sort-direction is invalid', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --sort-direction invalid`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('Please provide valid input for option: sort-direction. Value must be in (asc, desc).');
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| print error when profile is invalid', (done) => {
+        it('| print error when profile is invalid', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -p ${TEST_INVALID_PROFILE}`;
             const envVar = {};
             const httpMockConfig = [];
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-                done();
             };
 
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when nextToken is specified but api request fails', (done) => {
+        it('| list interaction model versions when nextToken is specified but api request fails', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -167,12 +161,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when nextToken is specified', (done) => {
+        it('| list interaction model versions when nextToken is specified', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --next-token ${TEST_NEXT_TOKEN1}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -185,12 +178,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when maxResults is specified but api request fails', (done) => {
+        it('| list interaction model versions when maxResults is specified but api request fails', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -203,12 +195,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when maxResults is specified', (done) => {
+        it('| list interaction model versions when maxResults is specified', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --max-results ${TEST_MAX_RESULT}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -221,12 +212,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when sortDirection is specified but api request fails', (done) => {
+        it('| list interaction model versions when sortDirection is specified but api request fails', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --sort-direction ${TEST_SORT_DIRECTION}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -239,12 +229,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when sortDirection is specified', (done) => {
+        it('| list interaction model versions when sortDirection is specified', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --sort-direction ${TEST_SORT_DIRECTION}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -257,12 +246,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when sortField is specified but api request fails', (done) => {
+        it('| list interaction model versions when sortField is specified but api request fails', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --sort-field ${TEST_SORT_FIELD}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -275,12 +263,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal('[Fatal]: SMAPI error code 401. No response body from the service request.');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list interaction model versions when sortField is specified', (done) => {
+        it('| list interaction model versions when sortField is specified', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} --sort-field ${TEST_SORT_FIELD}`;
             const envVar = {};
             const requestOption = createListInteractionModelVersionsRequestOptions(
@@ -293,12 +280,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list skills when nextToken, maxResult, sortDirection, sortField are specified', (done) => {
+        it('| list skills when nextToken, maxResult, sortDirection, sortField are specified', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`
             + ` --next-token ${TEST_NEXT_TOKEN1} --max-results ${TEST_MAX_RESULT}`
             + ` --sort-direction ${TEST_SORT_DIRECTION} --sort-field ${TEST_SORT_FIELD}`;
@@ -314,9 +300,8 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 
@@ -357,7 +342,7 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             skillModelVersions: [TEST_INTERACTION_MODEL_VERSIONS_RESPONSE]
         };
 
-        it('| list all the certifications when no option set but fails the request in the middle', (done) => {
+        it('| list all the certifications when no option set but fails the request in the middle', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
             const envVar = {};
             const httpMockConfig = [
@@ -374,12 +359,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
             const expectationHandler = (msgCatcher) => {
                 expect(msgCatcher.info).equal('');
                 expect(msgCatcher.error).equal(jsonView.toString(TEST_ERROR_MESSAGE));
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| iteratively list all the skills when no option set', (done) => {
+        it('| iteratively list all the skills when no option set', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE}`;
             const envVar = {};
             const httpMockConfig = [
@@ -406,12 +390,11 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
                 };
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
 
-        it('| list all the skills when no option set, stage provided', (done) => {
+        it('| list all the skills when no option set, stage provided', async () => {
             const cmd = `ask api list-interaction-model-versions -s ${TEST_SKILL_ID} -l ${TEST_LOCALE} -g ${TEST_STAGE}`;
             const envVar = {};
             const requestOptionWithStageForTraverseMode = {
@@ -439,9 +422,8 @@ describe('Functional test - ask api list-interaction-model-versions', () => {
                 };
                 expect(msgCatcher.info).equal(jsonView.toString(aggregatedResult));
                 expect(msgCatcher.error).equal('');
-                done();
             };
-            new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+            await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
         });
     });
 });

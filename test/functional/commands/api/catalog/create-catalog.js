@@ -27,7 +27,7 @@ describe('Functional test - ask api create-catalog', () => {
         json: true
     };
 
-    it('| print error when catalog-type is not provided', (done) => {
+    it('| print error when catalog-type is not provided', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -35,13 +35,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: catalog-type. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when catalog-title is not provided', (done) => {
+    it('| print error when catalog-title is not provided', async () => {
         const cmd = `ask api create-catalog --catalog-type ${TEST_CATALOG_TYPE} --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -49,13 +48,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: catalog-title. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when catalog-usage is not provided', (done) => {
+    it('| print error when catalog-usage is not provided', async () => {
         const cmd = `ask api create-catalog --catalog-type ${TEST_CATALOG_TYPE} --catalog-title ${TEST_CATALOG_TITLE}`;
         const envVar = {};
         const httpMockConfig = [];
@@ -63,13 +61,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('Please provide valid input for option: catalog-usage. Field is required and must be set.');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| print error when input invalid profile', (done) => {
+    it('| print error when input invalid profile', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-type ${TEST_CATALOG_TYPE} \
 --catalog-usage ${TEST_CATALOG_USAGE} -p ${TEST_INVALID_PROFILE}`;
         const envVar = {};
@@ -78,12 +75,11 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(`Cannot resolve profile [${TEST_INVALID_PROFILE}]`);
-            done();
         };
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| can get correct http response when profile is set to default ', (done) => {
+    it('| can get correct http response when profile is set to default ', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-type ${TEST_CATALOG_TYPE} \
 --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
@@ -95,13 +91,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle http request error', (done) => {
+    it('| handle http request error', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-type ${TEST_CATALOG_TYPE} \
 --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
@@ -113,13 +108,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal(TEST_ERROR_MESSAGE);
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code < 300', (done) => {
+    it('| handle SMAPI response with status code < 300', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-type ${TEST_CATALOG_TYPE} \
 --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
@@ -131,13 +125,12 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).equal('');
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 
-    it('| handle SMAPI response with status code >= 300', (done) => {
+    it('| handle SMAPI response with status code >= 300', async () => {
         const cmd = `ask api create-catalog --catalog-title ${TEST_CATALOG_TITLE} --catalog-type ${TEST_CATALOG_TYPE} \
 --catalog-usage ${TEST_CATALOG_USAGE}`;
         const envVar = {};
@@ -149,9 +142,8 @@ describe('Functional test - ask api create-catalog', () => {
             expect(msgCatcher.info).equal('');
             expect(msgCatcher.warn).equal('');
             expect(msgCatcher.error).include(jsonView.toString(TEST_HTTP_RESPONSE_BODY));
-            done();
         };
 
-        new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
+        await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();
     });
 });
