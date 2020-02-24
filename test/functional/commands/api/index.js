@@ -181,6 +181,8 @@ class ApiCommandBasicTest {
         fs.existsSync.callThrough();
         sinon.stub(fs, 'readFileSync').withArgs(askCliConfig, 'utf-8').returns(JSON.stringify(this._TEST_DATA.ASK_CONFIG));
         fs.readFileSync.callThrough();
+        sinon.stub(fs, 'accessSync').withArgs(askCliConfig, fs.constants.R_OK | fs.constants.W_OK).returns(true);
+        fs.accessSync.callThrough();
 
         // Mock http server
         // According to input httpClienConfig,
