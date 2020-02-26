@@ -30,6 +30,11 @@ require('module-alias/register');
     '@test/unit/commands/init/index-test',
     '@test/unit/commands/init/ui-test',
     '@test/unit/commands/init/helper-test',
+    // command - dialog
+    '@test/unit/commands/dialog/index-test',
+    '@test/unit/commands/dialog/helper-test',
+    '@test/unit/commands/dialog/replay-mode-test',
+    '@test/unit/commands/dialog/interactive-mode-test',
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
@@ -55,11 +60,15 @@ require('module-alias/register');
     '@test/unit/model/resources-config-test',
     '@test/unit/model/yaml-parser-test',
     '@test/unit/model/regional-stack-file-test',
+    '@test/unit/model/dialog-replay-file-test',
     // controller
     '@test/unit/controller/authorization-controller/index-test',
     '@test/unit/controller/authorization-controller/server-test',
+    '@test/unit/controller/dialog-controller/index-test',
+    '@test/unit/controller/dialog-controller/simulation-response-parser-test',
     '@test/unit/controller/skill-metadata-controller-test',
     '@test/unit/controller/skill-code-controller-test',
+    '@test/unit/controller/skill-simulation-controller-test',
     '@test/unit/controller/code-builder-test',
     '@test/unit/controller/skill-infrastructure-controller-test',
     '@test/unit/controller/deploy-delegate-test',
@@ -68,6 +77,8 @@ require('module-alias/register');
     '@test/unit/view/json-view-test',
     '@test/unit/view/spinner-view-test',
     '@test/unit/view/multi-tasks-view-test',
+    '@test/unit/view/cli-repl-view-test',
+    '@test/unit/view/dialog-repl-view-test',
     // utils
     '@test/unit/utils/url-utils-test',
     '@test/unit/utils/string-utils-test',

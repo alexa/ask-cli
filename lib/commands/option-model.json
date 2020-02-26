@@ -29,6 +29,16 @@
     "alias": "s",
     "stringInput": "REQUIRED"
   },
+  "replay": {
+    "name": "replay",
+    "description": "Specify a replay file to simulate dialog with Alexa",
+    "alias": "r",
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "REGEX",
+      "regex": "^[./]?[\\w\\-. /]+\\.(json)"
+    }]
+  },
   "isp-id": {
     "name": "isp-id",
     "description": "isp-id for the in skill product",
@@ -374,7 +384,7 @@
     "stringInput": "REQUIRED",
     "rule": [{
       "type": "ENUM",
-      "values": ["uniqueCustomers", "totalEnablements", "totalUtterances", "successfulUtterances", "failedUtterances", "totalSessions", 
+      "values": ["uniqueCustomers", "totalEnablements", "totalUtterances", "successfulUtterances", "failedUtterances", "totalSessions",
         "successfulSessions", "incompleteSessions", "userEndedSessions", "skillEndedSessions"]
     }]
   },

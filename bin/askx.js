@@ -14,6 +14,7 @@ require('@src/commands/configure').createCommand(commander);
 require('@src/commands/deploy').createCommand(commander);
 require('@src/commands/v2new').createCommand(commander);
 require('@src/commands/init').createCommand(commander);
+require('@src/commands/dialog').createCommand(commander);
 
 commander
     .description('Command Line Interface for Alexa Skill Kit')
@@ -22,7 +23,7 @@ commander
     .version(require('../package.json').version)
     .parse(process.argv);
 
-const ALLOWED_ASK_ARGV_2 = ['api', 'configure', 'deploy', 'new', 'init', 'util', 'help', '-v', '--version', '-h', '--help'];
+const ALLOWED_ASK_ARGV_2 = ['api', 'configure', 'deploy', 'new', 'init', 'dialog', 'util', 'help', '-v', '--version', '-h', '--help'];
 if (process.argv[2] && ALLOWED_ASK_ARGV_2.indexOf(process.argv[2]) === -1) {
     console.log('Command not recognized. Please run "askx" to check the user instructions.');
 }

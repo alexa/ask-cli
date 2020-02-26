@@ -1,0 +1,9 @@
+{
+    "skillId": "amzn1.ask.skill.1234567890",
+    "locale": "en-US",
+    "type": "text",
+    "userInput": [
+        "hello",
+        "world"
+    ]
+}

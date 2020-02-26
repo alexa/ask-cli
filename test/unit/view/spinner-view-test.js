@@ -8,9 +8,6 @@ describe('View test - spinner view test', () => {
     const TEST_MESSAGE = 'TEST_MESSAGE';
 
     describe('# inspect correctness for constructor', () => {
-        beforeEach(() => {
-        });
-
         afterEach(() => {
             sinon.restore();
         });
@@ -65,10 +62,9 @@ describe('View test - spinner view test', () => {
 
     describe('# test class methods', () => {
         let ProxySpinnerView;
-        let textStub, startStub, stopStub, succeedStub, failStub, warnStub, infoStub, stopAndPersistStub;
+        let startStub, stopStub, succeedStub, failStub, warnStub, infoStub, stopAndPersistStub;
 
         beforeEach(() => {
-            textStub = sinon.stub();
             startStub = sinon.stub();
             stopStub = sinon.stub();
             succeedStub = sinon.stub();
@@ -78,7 +74,6 @@ describe('View test - spinner view test', () => {
             stopAndPersistStub = sinon.stub();
             ProxySpinnerView = proxyquire('@src/view/spinner-view', {
                 ora: () => ({
-                    text: textStub,
                     start: startStub,
                     stop: stopStub,
                     succeed: succeedStub,
@@ -94,7 +89,7 @@ describe('View test - spinner view test', () => {
             sinon.restore();
         });
 
-        it('| test SpinnerViwe class method - start spinner', () => {
+        it('| test SpinnerView class method - start spinner', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.start();
@@ -103,7 +98,7 @@ describe('View test - spinner view test', () => {
             expect(startStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - start with message', () => {
+        it('| test SpinnerView class method - start with message', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.start(TEST_MESSAGE);
@@ -112,16 +107,15 @@ describe('View test - spinner view test', () => {
             expect(startStub.args[0][0]).equal(TEST_MESSAGE);
         });
 
-        it('| test SpinnerViwe class method - update with message', () => {
+        it('| test SpinnerView class method - update with message', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.update(TEST_MESSAGE);
             // expect
-            expect(textStub.callCount).equal(1);
-            expect(textStub.args[0][0]).equal(TEST_MESSAGE);
+            expect(spinner.oraSpinner.text).equal(TEST_MESSAGE);
         });
 
-        it('| test SpinnerViwe class method - terminate with succeed style', () => {
+        it('| test SpinnerView class method - terminate with succeed style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.SUCCEED);
@@ -130,7 +124,7 @@ describe('View test - spinner view test', () => {
             expect(succeedStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with fail style', () => {
+        it('| test SpinnerView class method - terminate with fail style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.FAIL);
@@ -139,7 +133,7 @@ describe('View test - spinner view test', () => {
             expect(failStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with warn style', () => {
+        it('| test SpinnerView class method - terminate with warn style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.WARN);
@@ -148,7 +142,7 @@ describe('View test - spinner view test', () => {
             expect(warnStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with info style', () => {
+        it('| test SpinnerView class method - terminate with info style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.INFO);
@@ -157,7 +151,7 @@ describe('View test - spinner view test', () => {
             expect(infoStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with persist style', () => {
+        it('| test SpinnerView class method - terminate with persist style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.PERSIST);
@@ -166,7 +160,7 @@ describe('View test - spinner view test', () => {
             expect(stopAndPersistStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with clear style', () => {
+        it('| test SpinnerView class method - terminate with clear style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate(SpinnerView.TERMINATE_STYLE.CLEAR);
@@ -175,7 +169,7 @@ describe('View test - spinner view test', () => {
             expect(stopStub.args[0][0]).equal(undefined);
         });
 
-        it('| test SpinnerViwe class method - terminate with default style', () => {
+        it('| test SpinnerView class method - terminate with default style', () => {
             // call
             const spinner = new ProxySpinnerView();
             spinner.terminate();
