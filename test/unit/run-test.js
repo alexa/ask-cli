@@ -15,6 +15,8 @@ require('module-alias/register');
     '@test/unit/commands/abstract-command-test',
     '@test/unit/commands/api/publishing/withdraw/helper-test.js',
     '@test/unit/commands/api/validation/validate-skill/helper-test.js',
+    // command - util
+    '@test/unit/commands/util/git-credentials-helper/index-test',
     // command - new
     '@test/unit/commands/v2new/index-test',
     '@test/unit/commands/v2new/ui-test',
@@ -79,6 +81,8 @@ require('module-alias/register');
     '@test/unit/controller/code-builder-test',
     '@test/unit/controller/skill-infrastructure-controller-test',
     '@test/unit/controller/deploy-delegate-test',
+    '@test/unit/controller/hosted-skill-controller/index-test',
+    '@test/unit/controller/hosted-skill-controller/clone-flow-test',
     // view
     '@test/unit/view/messenger-test',
     '@test/unit/view/json-view-test',

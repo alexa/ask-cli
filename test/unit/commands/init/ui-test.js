@@ -1,14 +1,14 @@
 const { expect } = require('chai');
-const sinon = require('sinon');
-const inquirer = require('inquirer');
 const fs = require('fs');
+const inquirer = require('inquirer');
 const path = require('path');
-
-const ui = require('@src/commands/init/ui');
+const sinon = require('sinon');
 
 const CONSTANTS = require('@src/utils/constants');
 const Messenger = require('@src/view/messenger');
 const JsonView = require('@src/view/json-view');
+
+const ui = require('@src/commands/init/ui');
 
 function validateInquirerConfig(stub, expectedConfig) {
     const { message, type, defaultValue, choices } = expectedConfig;
@@ -349,6 +349,84 @@ describe('Commands init - UI test', () => {
                 // verify
                 expect(err).equal(null);
                 expect(response).equal(true);
+                done();
+            });
+        });
+    });
+
+    describe('# validate ui.getProjectFolderName', () => {
+        beforeEach(() => {
+            infoStub = sinon.stub();
+            sinon.stub(inquirer, 'prompt');
+            sinon.stub(Messenger, 'getInstance').returns({
+                info: infoStub
+            });
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| confirm project folder name from user fails, expect error thrown', (done) => {
+            // setup
+            const TEST_DEFAULT_NAME = 'TEST_DEFAULT_NAME';
+            inquirer.prompt.rejects(TEST_ERROR);
+            // call
+            ui.getProjectFolderName(TEST_DEFAULT_NAME, (err, response) => {
+                // verify
+                validateInquirerConfig(inquirer.prompt.args[0][0][0], {
+                    message: 'Please type in your folder name for the skill project (alphanumeric): ',
+                    type: 'input',
+                    default: TEST_DEFAULT_NAME,
+                });
+                expect(err.name).equal(TEST_ERROR);
+                expect(response).equal(undefined);
+                done();
+            });
+        });
+
+        it('| confirm project folder name from user', (done) => {
+            // setup
+            const TEST_DEFAULT_NAME = 'HOSTED-SKILL_NAME@';
+            const TEST_FILTERED_NAME = 'HOSTEDSKILLNAME';
+            inquirer.prompt.resolves({ projectFolderName: TEST_FILTERED_NAME });
+            // call
+            ui.getProjectFolderName(TEST_DEFAULT_NAME, (err, response) => {
+                // verify
+                validateInquirerConfig(inquirer.prompt.args[0][0][0], {
+                    message: 'Please type in your folder name for the skill project (alphanumeric): ',
+                    type: 'input',
+                    default: TEST_DEFAULT_NAME,
+                    name: 'projectFolderName',
+                });
+                expect(err).equal(null);
+                expect(response).equal(TEST_FILTERED_NAME);
+                done();
+            });
+        });
+
+        it('| project folder name from user with NonAlphanumeric filter is empty, expect error thrown', (done) => {
+            // setup
+            const TEST_DEFAULT_NAME = 'HOSTED-SKILL_NAME@';
+            inquirer.prompt.resolves({ projectFolderName: TEST_DEFAULT_NAME });
+            // call
+            ui.getProjectFolderName(TEST_DEFAULT_NAME, () => {
+                // verify
+                expect(inquirer.prompt.args[0][0][0].validate(TEST_DEFAULT_NAME)).equal(true);
+                done();
+            });
+        });
+
+        it('| project folder name from user with NonAlphanumeric filter is valid, expect return true', (done) => {
+            // setup
+            const TEST_DEFAULT_NAME = '@_@';
+            const TEST_EMPTY_ERROR = 'Project folder name should consist of alphanumeric character(s) plus "-" only.';
+            inquirer.prompt.resolves({ projectFolderName: TEST_DEFAULT_NAME });
+            // call
+            ui.getProjectFolderName(TEST_DEFAULT_NAME, () => {
+                // verify
+                expect(inquirer.prompt.args[0][0][0].validate(TEST_DEFAULT_NAME))
+                    .equal(TEST_EMPTY_ERROR);
                 done();
             });
         });

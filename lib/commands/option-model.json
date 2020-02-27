@@ -38,6 +38,12 @@
       "type": "REGEX",
       "regex": "^[./]?[\\w\\-. /]+\\.(json)"
     }]
+  },  
+  "hosted-skill-id": {
+    "name": "hosted-skill-id",
+    "description": "skill-id for the Alexa hosted skill",
+    "alias": null,
+    "stringInput": "REQUIRED"
   },
   "isp-id": {
     "name": "isp-id",
