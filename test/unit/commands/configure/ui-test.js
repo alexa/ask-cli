@@ -223,7 +223,6 @@ describe('Command: Configure - UI test', () => {
 
         it('| invalid profile name entered by user', (done) => {
             // setup
-            sinon.stub(profileHelper, 'askProfileSyntaxValidation').returns(false);
             inquirer.prompt.resolves({ profile: '  %*^@&!' });
 
             // call
@@ -316,7 +315,6 @@ describe('Command: Configure - UI test', () => {
     describe('# createOrUpdateProfile check', () => {
         beforeEach(() => {
             sinon.stub(inquirer, 'prompt');
-            sinon.stub(profileHelper, 'askProfileSyntaxValidation');
         });
 
         it('| returns error | invalid profile name entered', (done) => {
@@ -326,7 +324,6 @@ describe('Command: Configure - UI test', () => {
                 'askProfile2'
             ];
             const createNewProfile = 'Create new profile';
-            profileHelper.askProfileSyntaxValidation.withArgs(sinon.match.string).returns(true);
             inquirer.prompt.resolves({ profile: createNewProfile });
             sinon.stub(ui, 'createNewProfile').callsArgWith(0, null, 'askProfile2');
 
@@ -347,7 +344,6 @@ describe('Command: Configure - UI test', () => {
                 'askProfile2'
             ];
             const createNewProfile = 'Create new profile';
-            profileHelper.askProfileSyntaxValidation.withArgs(sinon.match.string).returns(true);
             inquirer.prompt.resolves({ profile: createNewProfile });
             sinon.stub(stringUtils, 'validateSyntax').returns(true);
             sinon.stub(ui, 'createNewProfile').callsArgWith(0, null, 'askProfile2');
@@ -368,7 +364,6 @@ describe('Command: Configure - UI test', () => {
                 'askProfile2',
                 '#$*%#$(%$43'
             ];
-            profileHelper.askProfileSyntaxValidation.withArgs(sinon.match.string).returns(true);
             inquirer.prompt.resolves({ profile: listOfProfiles[1] });
 
             // call
@@ -386,7 +381,6 @@ describe('Command: Configure - UI test', () => {
                 'askProfile1',
                 '#$*%#$(%$43'
             ];
-            profileHelper.askProfileSyntaxValidation.withArgs(sinon.match.string).returns(false);
             inquirer.prompt.resolves({ profile: listOfProfiles[1] });
 
             // call
