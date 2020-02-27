@@ -21,6 +21,11 @@ describe('Functional test - ask api update-manifest', () => {
     const TEST_ERROR_MESSAGE = 'ERROR_MESSAGE';
     const TEST_ERROR_RESPONSE = { TEST: TEST_ERROR_MESSAGE };
 
+    after(() => {
+        // guaranteed to convert the file access back
+        fs.chmodSync(NO_ACCESS_FILE_PATH, 0o644);
+    });
+
     it('| print error when --skill-id is not provided', async () => {
         const cmd = 'ask api update-manifest';
         const envVar = {};

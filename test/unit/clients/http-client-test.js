@@ -134,8 +134,6 @@ describe('Clients test - cli http request client', () => {
         let stubRequest;
         let proxyhttpClient;
 
-        const expectedError = `[Error]: Failed to make request to ${VALID_OPERATION}. Please make sure "${VALID_OPTIONS.url}" is responding.`;
-
         before(() => {
             stubRequest = sinon.stub();
             proxyhttpClient = proxyquire('@src/clients/http-client', { request: stubRequest });
@@ -147,7 +145,7 @@ describe('Clients test - cli http request client', () => {
             // call
             proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
                 // verify
-                expect(err).equal(expectedError);
+                expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nError response: error`);
                 expect(response).equal(undefined);
                 done();
             });
@@ -159,7 +157,7 @@ describe('Clients test - cli http request client', () => {
             // call
             proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
                 // verify
-                expect(err).equal(expectedError);
+                expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nPlease make sure "${VALID_OPTIONS.url}" is responding.`);
                 expect(response).equal(undefined);
                 done();
             });
@@ -243,7 +241,7 @@ describe('Clients test - cli http request client', () => {
                 expect(stubRequest.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.PUT);
                 expect(stubRequest.args[0][0].body).equal(TEST_PAYLOAD);
                 expect(res).equal(undefined);
-                expect(err).equal(`[Error]: Failed to make request to ${VALID_OPERATION}. Please make sure "${TEST_UPLOAD_URL}" is responding.`);
+                expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nError response: uploadErr`);
                 done();
             });
         });
