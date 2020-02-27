@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 const fs = require('fs');
+const { readJsonSync } = require('fs-extra');
 const tmp = require('tmp');
 const jsonView = require('@src/view/json-view');
-const jsonRead = require('@src/utils/json-read');
 const CONSTANTS = require('@src/utils/constants');
 const ApiCommandBasicTest = require('@test/functional/commands/api');
 
@@ -16,7 +16,7 @@ describe('Functional test - ask api invoke-skill', () => {
     const TEST_INVALID_PROFILE = ApiCommandBasicTest.testDataProvider.INVALID_PROFILE;
     const TEST_DEFAULT_PROFILE_TOKEN = ApiCommandBasicTest.testDataProvider.VALID_TOKEN.DEFAULT_PROFILE_TOKEN;
     const TEST_FILE_PATH = tmpobj.name;
-    const TEST_FILE_CONTENT = JSON.stringify(jsonRead.readFile(TEST_FILE_PATH, 'utf8'));
+    const TEST_FILE_CONTENT = JSON.stringify(readJsonSync(TEST_FILE_PATH));
     const TEST_HTTP_RESPONSE_BODY = { TEST: 'RESPONSE_BODY' };
     const TEST_ERROR_MESSAGE = 'ERROR_MESSAGE';
     const SKILL_COMMAND = `ask api ${operation}`;

@@ -56,12 +56,10 @@
     "pretty-bytes": "^5.1.0",
     "ramda": "^0.25.0",
     "request": "^2.79.0",
-    "retry": "^0.10.1",
     "rxjs": "^6.5.2",
     "semver": "^5.3.0",
     "shelljs": "^0.8.2",
     "simple-git": "^1.82.0",
-    "simple-oauth2": "1.0.3",
     "tmp": "^0.1.0",
     "uuid": "^3.4.0",
     "valid-url": "^1.0.9"
