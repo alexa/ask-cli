@@ -1,0 +1,40 @@
+{
+    "stageV2": {
+        "name": "stage"
+    },
+    "createSkillRequest": {
+        "skipUnwrap": true,
+        "name": "manifest"
+    },
+    "updateSkillRequest": {
+        "skipUnwrap": true,
+        "name": "manifest"
+    },
+    "TestersRequest": {
+        "customParameters": [{
+            "name": "testersEmails",
+            "description": "List of email address of beta testers.",
+            "required": true,
+            "isArray": true
+        }]
+    },
+    "createInSkillProductRequest": {
+        "skipUnwrap": true
+    },
+    "updateInSkillProductRequest": {
+        "skipUnwrap": true,
+        "name": "inSkillProduct"
+    },
+    "accountLinkingRequest": {
+        "skipUnwrap": true
+    },
+    "interactionModel": {
+        "skipUnwrap": true
+    },
+    "slotType": {
+        "skipUnwrap": true
+    },
+    "sslCertificatePayload": {
+        "skipUnwrap": true
+    }
+}

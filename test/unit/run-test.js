@@ -38,6 +38,13 @@ require('module-alias/register');
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
+    // command - smapi
+    '@test/unit/commands/smapi/cli-customization-processor-test.js',
+    '@test/unit/commands/smapi/smapi-command-handler-test.js',
+    '@test/unit/commands/smapi/smapi-commander-test.js',
+    '@test/unit/commands/smapi/customizations/smapi-hooks-test.js',
+    '@test/unit/commands/smapi/hook-functions/append-vendor-id-test.js',
+    '@test/unit/commands/smapi/hook-functions/map-testers-emails-test.js',
     // command - export-package
     '@test/unit/commands/api/skill-package/export-package/index-test.js',
     '@test/unit/commands/api/skill-package/export-package/helper-test.js',

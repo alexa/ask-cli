@@ -1,0 +1,19 @@
+{
+    "profile": "p",
+    "skill-id": "s",
+    "isp-id": "i",
+    "stage": "g",
+    "locale": "l",
+    "locales": "l",
+    "file": "f",
+    "catalog-id": "c",
+    "validation-id": "i",
+    "utterance": "u",
+    "simulation-id": "i",
+    "json": "j",
+    "text": "t",
+    "certification-id": "c",
+    "task-name": "t",
+    "task-version": "v",
+    "keywords": "k"
+}
