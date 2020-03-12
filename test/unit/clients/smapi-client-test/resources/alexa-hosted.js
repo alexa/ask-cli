@@ -15,6 +15,13 @@ module.exports = (smapiClient) => {
         const TEST_PERMISSION_TYPE = 'permissionType';
         const TEST_PROFILE = 'testProfile';
         const TEST_ACCESS_TOKEN = 'access_token';
+        const TEST_RUNTIME_FIELD = 'NodeJS';
+        const TEST_RUNTIME_VALUE = 'NODE_10_X';
+        const TEST_MANIFEST = {
+            runtime: TEST_RUNTIME_FIELD,
+            vendorId: TEST_VENDOR_ID,
+            manifest: {}
+        };
         let httpClientStub;
 
         beforeEach(() => {
@@ -23,6 +30,28 @@ module.exports = (smapiClient) => {
         });
 
         [
+            {
+                testCase: 'create-hosted-skill',
+                apiFunc: smapiClient.skill.alexaHosted.createHostedSkill,
+                parameters: [TEST_MANIFEST, noop],
+                expectedOptions: {
+                    url: `${CONSTANTS.SMAPI.ENDPOINT}/v1/skills/`,
+                    method: CONSTANTS.HTTP_REQUEST.VERB.POST,
+                    headers: {
+                        authorization: TEST_ACCESS_TOKEN
+                    },
+                    body: {
+                        vendorId: TEST_VENDOR_ID,
+                        manifest: {},
+                        hosting: {
+                            alexaHosted: {
+                                runtime: TEST_RUNTIME_VALUE
+                            }
+                        }
+                    },
+                    json: true
+                }
+            },
             {
                 testCase: 'get-hosted-skill-metadata',
                 apiFunc: smapiClient.skill.alexaHosted.getAlexaHostedSkillMetadata,

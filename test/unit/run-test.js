@@ -21,6 +21,8 @@ require('module-alias/register');
     '@test/unit/commands/v2new/index-test',
     '@test/unit/commands/v2new/ui-test',
     '@test/unit/commands/v2new/helper-test',
+    '@test/unit/commands/v2new/wizard-helper-test',
+    '@test/unit/commands/v2new/hosted-skill-helper-test',
     // command - configure
     '@test/unit/commands/configure/index-test',
     '@test/unit/commands/configure/ui-test',
@@ -97,6 +99,7 @@ require('module-alias/register');
     '@test/unit/utils/hash-utils-test',
     '@test/unit/utils/retry-utility-test',
     '@test/unit/utils/provider-chain-utils-test',
+    '@test/unit/utils/local-host-server-test',
 
 
     // FUNCTION TEST

@@ -2,21 +2,24 @@ const { expect } = require('chai');
 const fs = require('fs');
 const sinon = require('sinon');
 
+const httpClient = require('@src/clients/http-client');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const CloneFlow = require('@src/controllers/hosted-skill-controller/clone-flow');
-const CONSTANTS = require('@src/utils/constants');
 const helper = require('@src/controllers/hosted-skill-controller/helper');
-const httpClient = require('@src/clients/http-client');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller');
-const jsonView = require('@src/view/json-view');
-const Messenger = require('@src/view/messenger');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
+const CONSTANTS = require('@src/utils/constants');
+const Messenger = require('@src/view/messenger');
+const jsonView = require('@src/view/json-view');
 
 describe('Controller test - hosted skill controller test', () => {
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
     const TEST_DO_DEBUG = false;
     const TEST_SKILL_ID = 'SKILL_ID';
     const TEST_SKILL_NAME = 'SKILL_NAME';
+    const TEST_MANIFEST = {};
+    const TEST_VENDOR_ID = 'TEST_VENDOR_ID';
+    const TEST_PERMISSION_TYPE = 'TEST_PERMISSION_TYPE';
     const TEST_PROJECT_PATH = 'PROJECT_PATH';
     const TEST_LOCALE = 'en-US';
     const TEST_CONFIGURATION = {
@@ -29,6 +32,86 @@ describe('Controller test - hosted skill controller test', () => {
             expect(hostedSkillController).to.be.instanceOf(HostedSkillController);
             expect(hostedSkillController.profile).equal(TEST_PROFILE);
             expect(hostedSkillController.doDebug).equal(TEST_DO_DEBUG);
+        });
+    });
+
+    describe('# test class method: createSkill', () => {
+        let hostedSkillController;
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| create hosted skill fails, expect error thrown', (done) => {
+            // setup
+            const TEST_ERROR = 'TEST_ERROR';
+            sinon.stub(httpClient, 'request').callsArgWith(3, TEST_ERROR); // stub createHostedSkill request
+            // call
+            hostedSkillController.createSkill(TEST_MANIFEST, (err, res) => {
+                expect(err).equal(TEST_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| create hosted skill response status >= 300, expect error thrown', (done) => {
+            // setup
+            const TEST_ERROR = 'TEST_ERROR';
+            const TEST_STATUS_ERROR = {
+                statusCode: 403,
+                body: {
+                    error: TEST_ERROR
+                }
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_ERROR); // stub createHostedSkill request
+            // call
+            hostedSkillController.createSkill(TEST_MANIFEST, (err, res) => {
+                expect(err).equal(jsonView.toString({ error: TEST_ERROR }));
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| polling skill status fails, expect error thrown', (done) => {
+            // setup
+            const TEST_CREATE_SKILL_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {}
+            };
+            const TEST_POLLING_ERROR = 'TEST_POLLING_ERROR';
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_CREATE_SKILL_RESPONSE); // stub createHostedSkill request
+            sinon.stub(helper, 'pollingSkillStatus').callsArgWith(2, TEST_POLLING_ERROR);
+            // call
+            hostedSkillController.createSkill(TEST_MANIFEST, (err, res) => {
+                expect(err).equal(TEST_POLLING_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| polling skill status succeed, expect skillId return', (done) => {
+            // setup
+            const TEST_CREATE_SKILL_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {
+                    skillId: TEST_SKILL_ID
+                }
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_CREATE_SKILL_RESPONSE); // stub createHostedSkill request
+            sinon.stub(helper, 'pollingSkillStatus').callsArgWith(2, null);
+            sinon.stub(helper, 'handleSkillStatus').callsArgWith(2, null);
+            // call
+            hostedSkillController.createSkill(TEST_MANIFEST, (err, res) => {
+                expect(err).equal(null);
+                expect(res).equal(TEST_SKILL_ID);
+                done();
+            });
         });
     });
 
@@ -124,7 +207,7 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, (err) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package`
+                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
@@ -158,8 +241,66 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, (err) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package`
+                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
+                done();
+            });
+        });
+    });
+
+
+    describe('# test class method: getHostedSkillPermission', () => {
+        let hostedSkillController;
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| get hosted skill permission fails, expect error thrown', (done) => {
+            // setup
+            const TEST_ERROR = 'TEST_ERROR';
+            sinon.stub(httpClient, 'request').callsArgWith(3, TEST_ERROR); // stub getHostedSkillPermission request
+            // call
+            hostedSkillController.getHostedSkillPermission(TEST_VENDOR_ID, TEST_PERMISSION_TYPE, (err, res) => {
+                expect(err).equal(TEST_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| get hosted skill permission response status >= 300, expect error thrown', (done) => {
+            // setup
+            const TEST_ERROR = 'TEST_ERROR';
+            const TEST_STATUS_ERROR = {
+                statusCode: 403,
+                body: {
+                    error: TEST_ERROR
+                }
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_ERROR); // stub getHostedSkillPermission request
+            // call
+            hostedSkillController.getHostedSkillPermission(TEST_VENDOR_ID, TEST_PERMISSION_TYPE, (err, res) => {
+                expect(err).equal(jsonView.toString({ error: TEST_ERROR }));
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| get hosted skill permission succeed, expect error thrown', (done) => {
+            // setup
+            const TEST_PERMISSION_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {}
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_PERMISSION_RESPONSE); // stub getHostedSkillPermission request
+            // call
+            hostedSkillController.getHostedSkillPermission(TEST_VENDOR_ID, TEST_PERMISSION_TYPE, (err) => {
+                expect(err).equal(null);
                 done();
             });
         });
@@ -322,6 +463,45 @@ describe('Controller test - hosted skill controller test', () => {
                     + 'Infrastructure provision for the hosted skill failed. Please try again.'
                 );
                 expect(res).equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method: deleteSkill', () => {
+        let hostedSkillController;
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| delete skill fails, expect error thrown', (done) => {
+            // setup
+            const TEST_ERROR = 'TEST_ERROR';
+            sinon.stub(httpClient, 'request').callsArgWith(3, TEST_ERROR); // stub deleteSkill request
+            // call
+            hostedSkillController.deleteSkill(TEST_SKILL_ID, (err, res) => {
+                expect(err).equal(TEST_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| delete skill  succeed, expect no response', (done) => {
+            // setup
+            const TEST_DELETE_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {}
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_DELETE_RESPONSE); // stub deleteSkill request
+            // call
+            hostedSkillController.deleteSkill(TEST_SKILL_ID, (err) => {
+                expect(err).equal(undefined);
                 done();
             });
         });

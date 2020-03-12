@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const queryString = require('querystring');
 const portscanner = require('portscanner');
 const proxyquire = require('proxyquire');
+const url = require('url');
 
 const httpClient = require('@src/clients/http-client');
 const LWAClient = require('@src/clients/lwa-auth-code-client');
@@ -10,9 +11,10 @@ const AuthorizationController = require('@src/controllers/authorization-controll
 const messages = require('@src/controllers/authorization-controller/messages');
 const AppConfig = require('@src/model/app-config');
 const CONSTANTS = require('@src/utils/constants');
+const LocalHostServer = require('@src/utils/local-host-server');
 const Messenger = require('@src/view/messenger');
 const SpinnerView = require('@src/view/spinner-view');
-const LocalHostServer = require('@src/controllers/authorization-controller/server');
+
 
 describe('Controller test - Authorization controller test', () => {
     const DEFAULT_CLIENT_ID = CONSTANTS.LWA.CLI_INTERNAL_ONLY_LWA_CLIENT.CLIENT_ID;
@@ -77,9 +79,9 @@ describe('Controller test - Authorization controller test', () => {
             };
             const uri = `${authorizeHost}${authorizePath}?${queryString.stringify(queryParams)}`;
 
-            const url = authorizationController.getAuthorizeUrl();
+            const authUrl = authorizationController.getAuthorizeUrl();
             // call and verify
-            expect(url).eq(uri);
+            expect(authUrl).eq(uri);
         });
     });
 
@@ -399,10 +401,10 @@ describe('Controller test - Authorization controller test', () => {
             const socket = {
                 unref: () => {}
             };
-            const spinnerStartStub = sinon.stub(SpinnerView.prototype, 'start');
-            const listenStub = sinon.stub(LocalHostServer.prototype, 'listen').callsArgWith(0);
-            const registerEventStub = sinon.stub(LocalHostServer.prototype, 'registerEvent').callsArgWith(1, socket);
             const createStub = sinon.stub(LocalHostServer.prototype, 'create');
+            const listenStub = sinon.stub(LocalHostServer.prototype, 'listen').callsArgWith(0);
+            const spinnerStartStub = sinon.stub(SpinnerView.prototype, 'start');
+            const registerEventStub = sinon.stub(LocalHostServer.prototype, 'registerEvent').callsArgWith(1, socket);
 
             // call
             authorizationController._listenResponseFromLWA(TEST_PORT, () => {});
@@ -417,28 +419,73 @@ describe('Controller test - Authorization controller test', () => {
 
         it('| local host server returns error', (done) => {
             // setup
+            sinon.stub(LocalHostServer.prototype, 'listen');
+            sinon.stub(LocalHostServer.prototype, 'registerEvent');
+            const requestDestroyStub = sinon.stub();
+            const request = {
+                url: '/cb?error',
+                socket: {
+                    destroy: requestDestroyStub
+                }
+            };
+            const endStub = sinon.stub();
+            const response = {
+                on: sinon.stub().callsArgWith(1),
+                end: endStub
+            };
             const spinnerTerminateStub = sinon.stub(SpinnerView.prototype, 'terminate');
-            sinon.stub(LocalHostServer.prototype, 'create').callsArgWith(0, TEST_ERROR_MESSAGE);
-
+            const requestQuery = {
+                query: {
+                    error: 'error',
+                    error_description: 'errorDescription'
+                }
+            };
+            sinon.stub(url, 'parse').returns(requestQuery);
+            const serverDestroyStub = sinon.stub(LocalHostServer.prototype, 'destroy');
+            sinon.stub(LocalHostServer.prototype, 'create').callsArgWith(0, request, response);
             // call
-            authorizationController._listenResponseFromLWA(TEST_PORT, (err, authCode) => {
+            authorizationController._listenResponseFromLWA(TEST_PORT, (err) => {
                 // verify
                 expect(spinnerTerminateStub.callCount).eq(1);
-                expect(err).eq(TEST_ERROR_MESSAGE);
-                expect(authCode).eq(undefined);
+                expect(serverDestroyStub.callCount).eq(1);
+                expect(endStub.callCount).eq(1);
+                expect(endStub.args[0][0]).eq(`Error: ${requestQuery.query.error}\nError description: ${requestQuery.query.error_description}`);
+                expect(err).eq(messages.ASK_SIGN_IN_FAILURE_MESSAGE);
                 done();
             });
         });
 
         it('| local server returns valid authCode', (done) => {
             // setup
-            const spinnerTerminateStub = sinon.stub(SpinnerView.prototype, 'terminate');
-            sinon.stub(LocalHostServer.prototype, 'create').callsArgWith(0, null, TEST_AUTH_CODE);
+            sinon.stub(LocalHostServer.prototype, 'listen');
+            sinon.stub(LocalHostServer.prototype, 'registerEvent');
+            const requestDestroyStub = sinon.stub();
+            const request = {
+                url: '/cb?code',
+                socket: {
+                    destroy: requestDestroyStub
+                }
+            };
+            const endStub = sinon.stub();
+            const response = {
+                on: sinon.stub().callsArgWith(1),
+                end: endStub
+            };
+            sinon.stub(SpinnerView.prototype, 'terminate');
+            const requestQuery = {
+                query: {
+                    code: TEST_AUTH_CODE
+                }
+            };
+            sinon.stub(url, 'parse').returns(requestQuery);
+            sinon.stub(LocalHostServer.prototype, 'destroy');
+            sinon.stub(LocalHostServer.prototype, 'create').callsArgWith(0, request, response);
 
             // call
             authorizationController._listenResponseFromLWA(TEST_PORT, (err, authCode) => {
                 // verify
-                expect(spinnerTerminateStub.callCount).eq(1);
+                expect(endStub.callCount).eq(1);
+                expect(endStub.args[0][0]).eq(messages.ASK_SIGN_IN_SUCCESS_MESSAGE);
                 expect(err).eq(null);
                 expect(authCode).eq(TEST_AUTH_CODE);
                 done();

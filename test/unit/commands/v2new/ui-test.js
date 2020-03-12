@@ -34,17 +34,26 @@ describe('Commands new - UI test', () => {
             description: 'templateDescription1'
         },
         template2: {
-            url: 'templateUrl2',
-            description: 'templateDescription2'
+            url: 'templateUrl2'
+        }
+    };
+    const TEST_DEPLOYMENT_MAP = {
+        HOSTED: {
+            NAME: 'HOSTED_NAME',
+            DESCRIPTION: 'HOSTED_DESCRIPTION'
+        },
+        CFN: {
+            NAME: 'CFN_NAME',
+            DESCRIPTION: 'CFN_DESCRIPTION'
         }
     };
     const TEST_TEMPLATE_CHOICES = [
         `template1\t\t    ${chalk.gray('templateDescription1')}`,
-        `template2\t\t    ${chalk.gray('templateDescription2')}`
+        `template2\t\t    ${chalk.gray('')}`
     ];
-    const TEST_TEMPLATE_CHOICES_WITH_SEP = [
-        `template1\n  ${chalk.gray('templateDescription1')}`,
-        `template2\n  ${chalk.gray('templateDescription2')}`,
+    const TEST_DEPLOYMENT_CHOICES_WITH_SEP = [
+        `HOSTED_NAME\n  ${chalk.gray('HOSTED_DESCRIPTION')}`,
+        `CFN_NAME\n  ${chalk.gray('CFN_DESCRIPTION')}`,
         new inquirer.Separator(),
         ui.SKIP_DEPLOY_DELEGATE_SELECTION
     ];
@@ -71,6 +80,23 @@ describe('Commands new - UI test', () => {
                 });
                 expect(err.message).equal(TEST_ERROR);
                 expect(response).equal(undefined);
+                done();
+            });
+        });
+
+        it('| set defaultName as the default hosted skill name and return correctly', (done) => {
+            // setup
+            inquirer.prompt.resolves({ skillName: CONSTANTS.HOSTED_SKILL.DEFAULT_SKILL_NAME });
+            // call
+            ui.getSkillName(null, (err, response) => {
+                // verify
+                validateInquirerConfig(inquirer.prompt.args[0][0][0], {
+                    message: 'Please type in your skill name: ',
+                    type: 'input',
+                    default: TEST_REPO_NAME,
+                });
+                expect(err).equal(null);
+                expect(response).equal(CONSTANTS.HOSTED_SKILL.DEFAULT_SKILL_NAME);
                 done();
             });
         });
@@ -334,7 +360,7 @@ describe('Commands new - UI test', () => {
         });
     });
 
-    describe('# validate ui.getDeployDelegateType', () => {
+    describe('# validate ui.getDeploymentType', () => {
         beforeEach(() => {
             sinon.stub(inquirer, 'prompt');
         });
@@ -347,12 +373,12 @@ describe('Commands new - UI test', () => {
             // setup
             inquirer.prompt.resolves({ deployDelegate: TEST_DEPLOY_DELEGATE });
             // call
-            ui.getDeployDelegateType(TEST_TEMPLATES_MAP, (err, response) => {
+            ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Please specify the type of deploy delegate to deploy your skill infrastructures: ',
                     type: 'list',
-                    choices: TEST_TEMPLATE_CHOICES_WITH_SEP
+                    choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP
                 });
                 expect(inquirer.prompt.args[0][0][0].filter('a \n \n b')).equal('a ');
                 expect(err).equal(null);
@@ -365,12 +391,12 @@ describe('Commands new - UI test', () => {
             // setup
             inquirer.prompt.rejects(new Error(TEST_ERROR));
             // call
-            ui.getDeployDelegateType(TEST_TEMPLATES_MAP, (err, response) => {
+            ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Please specify the type of deploy delegate to deploy your skill infrastructures: ',
                     type: 'list',
-                    choices: TEST_TEMPLATE_CHOICES_WITH_SEP
+                    choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP
                 });
                 expect(inquirer.prompt.args[0][0][0].filter('a \n \n b')).equal('a ');
                 expect(err.message).equal(TEST_ERROR);
