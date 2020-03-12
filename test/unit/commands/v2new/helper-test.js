@@ -7,7 +7,6 @@ const helper = require('@src/commands/v2new/helper');
 const ui = require('@src/commands/v2new/ui');
 const gitClient = require('@src/clients/git-client');
 const httpClient = require('@src/clients/http-client');
-const DeployDelegate = require('@src/controllers/skill-infrastructure-controller/deploy-delegate');
 const SkillInfrastructureController = require('@src/controllers/skill-infrastructure-controller');
 const ResourcesConfig = require('@src/model/resources-config');
 const Manifest = require('@src/model/manifest');

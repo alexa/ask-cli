@@ -28,12 +28,15 @@ describe('Controller test - Authorization controller test', () => {
     const TEST_ERROR_MESSAGE = 'errorMessage';
     const TEST_AUTH_CODE = 'authCode';
     const TEST_PORT = CONSTANTS.LWA.LOCAL_PORT;
+    const TEST_ALREADY_EXPIRED_DATE = new Date();
+    TEST_ALREADY_EXPIRED_DATE.setFullYear(TEST_ALREADY_EXPIRED_DATE.getFullYear() - 1);
+    const TEST_ALREADY_EXPIRED_AT = TEST_ALREADY_EXPIRED_DATE.toISOString();
     const TEST_RESPONSE = {
         body: {
             access_token: 'access_token',
             refresh_token: 'refresh_token',
             expires_in: 3600,
-            expires_at: new Date('05 October 2011 14:48 UTC').toISOString()
+            expires_at: TEST_ALREADY_EXPIRED_AT
         }
     };
     const currentDatePlusHalfAnHour = new Date(new Date(Date.now()).getTime() + (0.5 * 60 * 60 * 1000)).toISOString();
@@ -94,7 +97,7 @@ describe('Controller test - Authorization controller test', () => {
             authorizationController.getAccessTokenUsingAuthCode(TEST_AUTH_CODE, (error, accessToken) => {
                 // verify
                 expect(error).eq(null);
-                expect(accessToken).to.deep.eq(TEST_RESPONSE.body);
+                expect(accessToken.access_token).to.eq(TEST_RESPONSE.body.access_token);
                 done();
             });
         });
@@ -123,6 +126,7 @@ describe('Controller test - Authorization controller test', () => {
         const TEST_ENV_ACCESS_TOKEN = 'envAccessToken';
         const TEST_ENV_REFRESH_TOKEN = 'envRefreshToken';
         const authorizationController = new AuthorizationController(TEST_CONFIG);
+
         beforeEach(() => {
             getTokenStub = sinon.stub();
             sinon.stub(AppConfig, 'getInstance').returns({
@@ -131,23 +135,24 @@ describe('Controller test - Authorization controller test', () => {
             sinon.stub(httpClient, 'request');
         });
 
-        describe('# returns valid token', () => {
-            afterEach(() => {
-                sinon.restore();
-                delete process.env.ASK_REFRESH_TOKEN;
-                delete process.env.ASK_ACCESS_TOKEN;
-            });
+        afterEach(() => {
+            sinon.restore();
+            delete process.env.ASK_REFRESH_TOKEN;
+            delete process.env.ASK_ACCESS_TOKEN;
+        });
 
+        describe('# returns valid token', () => {
             it('| non-environment profile, expired access token', (done) => {
                 // setup
-                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, null, VALID_ACCESS_TOKEN);
                 getTokenStub.withArgs(TEST_PROFILE).returns(TEST_RESPONSE.body);
+                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig')
+                    .callsArgWith(2, null, VALID_ACCESS_TOKEN.access_token);
 
                 // call
                 authorizationController.tokenRefreshAndRead(TEST_PROFILE, (error, accessToken) => {
                     // verify
                     expect(error).eq(null);
-                    expect(accessToken).to.deep.eq(VALID_ACCESS_TOKEN);
+                    expect(accessToken).to.equal(VALID_ACCESS_TOKEN.access_token);
                     done();
                 });
             });
@@ -194,17 +199,10 @@ describe('Controller test - Authorization controller test', () => {
         });
 
         describe('# returns error', () => {
-
-            afterEach(() => {
-                sinon.restore();
-                delete process.env.ASK_REFRESH_TOKEN;
-                delete process.env.ASK_ACCESS_TOKEN;
-            });
-
             it('| non-environment profile, expired access token, _getRefreshTokenAndUpdateConfig fails', (done) => {
                 // setup
-                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, TEST_ERROR_MESSAGE);
                 getTokenStub.withArgs(TEST_PROFILE).returns(TEST_RESPONSE.body);
+                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, TEST_ERROR_MESSAGE);
 
                 // call
                 authorizationController.tokenRefreshAndRead(TEST_PROFILE, (error, response) => {
@@ -268,7 +266,9 @@ describe('Controller test - Authorization controller test', () => {
             authorizationController._getRefreshTokenAndUpdateConfig(TEST_PROFILE, TEST_TOKEN, (error, accessToken) => {
                 // verify
                 expect(setTokenStub.args[0][0]).eq(TEST_PROFILE);
-                expect(setTokenStub.args[0][1]).to.deep.eq(TEST_RESPONSE.body);
+                expect(setTokenStub.args[0][1].access_token).to.eq(TEST_RESPONSE.body.access_token);
+                expect(setTokenStub.args[0][1].refresh_token).to.eq(TEST_RESPONSE.body.refresh_token);
+                expect(setTokenStub.args[0][1].expires_in).to.eq(TEST_RESPONSE.body.expires_in);
                 expect(error).eq(null);
                 expect(accessToken).to.deep.eq(TEST_RESPONSE.body.access_token);
                 done();
@@ -379,7 +379,9 @@ describe('Controller test - Authorization controller test', () => {
                 // verify
                 expect(infoStub.args[0][0]).eq(messages.AUTH_MESSAGE);
                 expect(error).eq(null);
-                expect(accessToken).eq(TEST_RESPONSE.body);
+                expect(accessToken.access_token).to.eq(TEST_RESPONSE.body.access_token);
+                expect(accessToken.refresh_token).to.eq(TEST_RESPONSE.body.refresh_token);
+                expect(accessToken.expires_in).to.eq(TEST_RESPONSE.body.expires_in);
                 done();
             });
         });

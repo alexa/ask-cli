@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { URL } = require('url');
 const queryString = require('querystring');
+const proxyquire = require('proxyquire');
 
 const httpClient = require('@src/clients/http-client');
 const LWAClient = require('@src/clients/lwa-auth-code-client');
@@ -26,6 +27,9 @@ describe('# Clients test - LWA OAuth2 client test', () => {
     const POST_REQUEST_METHOD = 'POST';
     const REFRESH_TOKEN_GRANT_TYPE = 'refresh_token';
     const AUTHORIZATION_CODE_GRANT_TYPE = 'authorization_code';
+    const TEST_EXPIRES_AT = {
+        toISOString: () => 'expires_at'
+    };
     const TEST_REQUEST_RESPONSE_ACCESS_TOKEN = {
         statusCode: 200,
         body: { token: 'BODY' },
@@ -123,12 +127,14 @@ describe('# Clients test - LWA OAuth2 client test', () => {
     describe('# test refreshToken', () => {
         beforeEach(() => {
             sinon.stub(httpClient, 'request');
+            sinon.stub(LWAClient.prototype, '_getExpiresAt');
         });
 
         it('| refreshing access token successful', (done) => {
             // setup
             const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ACCESS_TOKEN);
+            LWAClient.prototype._getExpiresAt.returns(TEST_EXPIRES_AT);
             // call
             lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
                 const expectedOptions = {
@@ -146,7 +152,10 @@ describe('# Clients test - LWA OAuth2 client test', () => {
                 expect(httpClient.request.args[0][0]).deep.equal(expectedOptions);
                 expect(httpClient.request.args[0][2]).equal(false);
                 expect(err).equal(null);
-                expect(res).deep.equal({ token: 'BODY' });
+                expect(res).deep.equal({
+                    token: 'BODY',
+                    expires_at: 'expires_at'
+                });
                 done();
             });
         });
@@ -173,12 +182,14 @@ describe('# Clients test - LWA OAuth2 client test', () => {
     describe('# test getAccessTokenUsingAuthCode', () => {
         beforeEach(() => {
             sinon.stub(httpClient, 'request');
+            sinon.stub(LWAClient.prototype, '_getExpiresAt');
         });
 
         it('| fetch access token successful using auth code', (done) => {
             // setup
             const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
             httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ACCESS_TOKEN);
+            LWAClient.prototype._getExpiresAt.returns(TEST_EXPIRES_AT);
             // call
             lwaClient.getAccessTokenUsingAuthCode(VALID_AUTH_CODE, (err, res) => {
                 const expectedOptions = {
@@ -197,7 +208,10 @@ describe('# Clients test - LWA OAuth2 client test', () => {
                 expect(httpClient.request.args[0][0]).deep.equal(expectedOptions);
                 expect(httpClient.request.args[0][2]).equal(false);
                 expect(err).equal(null);
-                expect(res).deep.equal({ token: 'BODY' });
+                expect(res).deep.equal({
+                    token: 'BODY',
+                    expires_at: 'expires_at'
+                });
                 done();
             });
         });
@@ -276,6 +290,20 @@ describe('# Clients test - LWA OAuth2 client test', () => {
             process.env.ASK_LWA_CLIENT_ID = initialClientId;
             process.env.ASK_LWA_CLIENT_CONFIRMATION = initialClientConfirmation;
             sinon.restore();
+        });
+    });
+
+    describe('# test _getExpiresAt', () => {
+        it('| calls addSeconds with expireIn to data.now', () => {
+            // setup
+            const TEST_EXPIRES_IN = 'expires_in';
+            const addSecondsStub = sinon.stub();
+            const proxyLwaClient = proxyquire('@src/clients/lwa-auth-code-client', {
+                'date-fns/addSeconds': addSecondsStub
+            });
+            addSecondsStub.returns(TEST_EXPIRES_AT);
+            // call & verify
+            expect(proxyLwaClient.prototype._getExpiresAt(TEST_EXPIRES_IN)).equal(TEST_EXPIRES_AT);
         });
     });
 });
