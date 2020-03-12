@@ -212,7 +212,7 @@ describe('Commands new test - command class test', () => {
                 // setup
                 const TEST_USER_INPUT = {};
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, TEST_ERROR);
+                helper.downloadTemplateFromGit.callsArgWith(2, TEST_ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -227,7 +227,7 @@ describe('Commands new test - command class test', () => {
                 // setup
                 const TEST_USER_INPUT = {};
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, null);
+                helper.downloadTemplateFromGit.callsArgWith(2, null);
                 helper.loadSkillProjectModel.throws(new Error(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -243,7 +243,7 @@ describe('Commands new test - command class test', () => {
                 // setup
                 const TEST_USER_INPUT = {};
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, null);
+                helper.downloadTemplateFromGit.callsArgWith(2, null);
                 helper.updateSkillProjectWithUserSettings.throws(new Error(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -259,7 +259,7 @@ describe('Commands new test - command class test', () => {
                 // setup
                 const TEST_USER_INPUT = {};
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, null);
+                helper.downloadTemplateFromGit.callsArgWith(2, null);
                 helper.initializeDeployDelegate.callsArgWith(4, TEST_ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -277,7 +277,7 @@ describe('Commands new test - command class test', () => {
                     skillName: TEST_SKILL_NAME
                 };
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, null, TEST_PROJECT_PATH);
+                helper.downloadTemplateFromGit.callsArgWith(2, null, TEST_PROJECT_PATH);
                 helper.initializeDeployDelegate.callsArgWith(4, null, TEST_DEPLOYMENT_TYPE);
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -297,7 +297,7 @@ describe('Commands new test - command class test', () => {
                     skillName: TEST_SKILL_NAME
                 };
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(1, null, TEST_PROJECT_PATH);
+                helper.downloadTemplateFromGit.callsArgWith(2, null, TEST_PROJECT_PATH);
                 helper.initializeDeployDelegate.callsArgWith(4, null, null);
                 // call
                 instance.handle(TEST_CMD, (err) => {

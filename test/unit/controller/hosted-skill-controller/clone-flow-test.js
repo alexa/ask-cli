@@ -72,13 +72,13 @@ describe('Controller test - CloneFlow test', () => {
 
         it('| clone project from Git without debug mode, expect correct workflow', () => {
             // setup
-            sinon.stub(GitClient, 'init');
-            sinon.stub(GitClient, 'configureCredentialHelper');
-            sinon.stub(GitClient, 'addOrigin');
-            sinon.stub(GitClient, 'fetchAll');
-            sinon.stub(GitClient, 'checkoutBranch');
-            sinon.stub(GitClient, 'setupGitIgnore');
-            sinon.stub(GitClient, 'add');
+            sinon.stub(GitClient.prototype, 'init');
+            sinon.stub(GitClient.prototype, 'configureCredentialHelper');
+            sinon.stub(GitClient.prototype, 'addOrigin');
+            sinon.stub(GitClient.prototype, 'fetchAll');
+            sinon.stub(GitClient.prototype, 'checkoutBranch');
+            sinon.stub(GitClient.prototype, 'setupGitIgnore');
+            sinon.stub(GitClient.prototype, 'add');
             // call
             cloneFlow.cloneProjectFromGit(TEST_PROJECT_PATH, TEST_SKILL_NAME, TEST_PROFILE, TEST_DO_DEBUG);
             // verify
@@ -88,13 +88,13 @@ describe('Controller test - CloneFlow test', () => {
         it('| clone project from Git with debug mode, expect correct workflow', () => {
             // setup
             TEST_DO_DEBUG = true;
-            sinon.stub(GitClient, 'init');
-            sinon.stub(GitClient, 'configureCredentialHelper');
-            sinon.stub(GitClient, 'addOrigin');
-            sinon.stub(GitClient, 'fetchAll');
-            sinon.stub(GitClient, 'checkoutBranch');
-            sinon.stub(GitClient, 'setupGitIgnore');
-            sinon.stub(GitClient, 'add');
+            sinon.stub(GitClient.prototype, 'init');
+            sinon.stub(GitClient.prototype, 'configureCredentialHelper');
+            sinon.stub(GitClient.prototype, 'addOrigin');
+            sinon.stub(GitClient.prototype, 'fetchAll');
+            sinon.stub(GitClient.prototype, 'checkoutBranch');
+            sinon.stub(GitClient.prototype, 'setupGitIgnore');
+            sinon.stub(GitClient.prototype, 'add');
             // call
             cloneFlow.cloneProjectFromGit(TEST_PROJECT_PATH, TEST_SKILL_NAME, TEST_PROFILE, TEST_DO_DEBUG);
             // verify

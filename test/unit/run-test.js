@@ -74,7 +74,6 @@ require('module-alias/register');
     '@test/unit/model/dialog-replay-file-test',
     // controller
     '@test/unit/controller/authorization-controller/index-test',
-    '@test/unit/controller/authorization-controller/server-test',
     '@test/unit/controller/dialog-controller/index-test',
     '@test/unit/controller/dialog-controller/simulation-response-parser-test',
     '@test/unit/controller/skill-metadata-controller-test',

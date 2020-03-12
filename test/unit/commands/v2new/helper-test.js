@@ -3,10 +3,10 @@ const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 
-const gitClient = require('@src/clients/git-client');
+const GitClient = require('@src/clients/git-client');
 const SkillInfrastructureController = require('@src/controllers/skill-infrastructure-controller');
-const ResourcesConfig = require('@src/model/resources-config');
 const helper = require('@src/commands/v2new/helper');
+const ResourcesConfig = require('@src/model/resources-config');
 const Manifest = require('@src/model/manifest');
 const stringUtils = require('@src/utils/string-utils');
 
@@ -86,30 +86,15 @@ describe('Commands new test - helper test', () => {
             sinon.restore();
         });
 
-        it('| git glient fail, expect throws error', (done) => {
-            // setup
-            const TEST_FOLDER_PATH = 'TEST_FOLDER_PATH';
-            sinon.stub(path, 'join').returns(TEST_FOLDER_PATH);
-            sinon.stub(gitClient, 'clone').callsArgWith(3, 'error');
-            // call
-            helper.downloadTemplateFromGit(TEST_USER_INPUT, (err, res) => {
-                // verify
-                expect(gitClient.clone.args[0][0]).equal(TEST_TEMPLATE_URL);
-                expect(res).equal(undefined);
-                expect(err).equal('error');
-                done();
-            });
-        });
-
         it('| git clone pass, expect return folder path', (done) => {
             // setup
             const TEST_FOLDER_PATH = 'TEST_FOLDER_PATH';
             sinon.stub(path, 'join').returns(TEST_FOLDER_PATH);
-            sinon.stub(gitClient, 'clone').callsArgWith(3, null);
+            sinon.stub(GitClient.prototype, 'clone');
             // call
-            helper.downloadTemplateFromGit(TEST_USER_INPUT, (err, res) => {
+            helper.downloadTemplateFromGit(TEST_USER_INPUT, TEST_DO_DEBUG, (err, res) => {
                 // verify
-                expect(gitClient.clone.args[0][0]).equal(TEST_TEMPLATE_URL);
+                expect(GitClient.prototype.clone.args[0][0]).equal(TEST_TEMPLATE_URL);
                 expect(res).equal(TEST_FOLDER_PATH);
                 expect(err).equal(null);
                 done();
