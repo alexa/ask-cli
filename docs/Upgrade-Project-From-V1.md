@@ -2,7 +2,7 @@
  
 > **Use this guide to upgrade CLI 1.x projects for deployment with the CLI Beta (askx)**
  
-Skills created with CLI 1.x will need to update their project structure in order to deploy with the CLI Beta (askx). To help projects upgrade to the new format, we have provided an `askx util upgrade-to-v2` command that will attempt to perform the necessary changes.  
+Skills created with CLI 1.x will need to update their project structure in order to deploy with the CLI Beta (askx). To help projects upgrade to the new format, we have provided an `askx util upgrade-project` command that will attempt to perform the necessary changes.  
  
 ## Upgrade steps
  
@@ -11,7 +11,7 @@ Skills created with CLI 1.x will need to update their project structure in order
 2. Install ask-cli-x:  
     `$ npm install -g ask-cli-x`
 3. Upgrade your skill project with ask-cli-x. From your project's root, run:  
-    `$ askx util upgrade-to-v2` 
+    `$ askx util upgrade-project` 
     * The command will make the following changes to the project structure:
     
         |                      | v1 project        | beta (askx) project                        |
@@ -30,7 +30,7 @@ Skills created with CLI 1.x will need to update their project structure in order
   
 **NOTE:**
 * No changes will be made to existing AWS resources. We will utilize existing Lambda ARN(s) from the Lambda resources list in v1.
-* The upgrade-to-v2 command assumes v1 project structure, and focusing on managing existing resources in Alexa or AWS. Should this fail, we will present developers with error, link to GitHub issues to ask for support.
+* The upgrade-project command assumes v1 project structure, and focusing on managing existing resources in Alexa or AWS. Should this fail, we will present developers with error, link to GitHub issues to ask for support.
 * The ./hooks folder is no longer needed, as ask-cli v2 can infer code build flow.
 
 If you encounter any problems during this upgrade process, please create a [issues](https://github.com/alexa-labs/ask-cli/issues) to us.

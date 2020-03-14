@@ -49,9 +49,11 @@ require('module-alias/register');
     '@test/unit/commands/smapi/customizations/smapi-hooks-test.js',
     '@test/unit/commands/smapi/hook-functions/append-vendor-id-test.js',
     '@test/unit/commands/smapi/hook-functions/map-testers-emails-test.js',
-    // command - export-package
-    '@test/unit/commands/api/skill-package/export-package/index-test.js',
-    '@test/unit/commands/api/skill-package/export-package/helper-test.js',
+    // command - util
+    '@test/unit/commands/util/upgrade-project/index-test',
+    '@test/unit/commands/util/upgrade-project/ui-test',
+    '@test/unit/commands/util/upgrade-project/helper-test',
+    '@test/unit/commands/util/upgrade-project/hosted-skill-helper-test',
     // clients
     '@test/unit/clients/http-client-test',
     '@test/unit/clients/metric-client-test',
@@ -182,6 +184,9 @@ require('module-alias/register');
     '@test/functional/commands/api/task/search-task',
     // metrics
     '@test/functional/commands/api/metrics/get-metrics-test',
+    // export-package
+    '@test/unit/commands/api/skill-package/export-package/index-test.js',
+    '@test/unit/commands/api/skill-package/export-package/helper-test.js',
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
     require(testFile);

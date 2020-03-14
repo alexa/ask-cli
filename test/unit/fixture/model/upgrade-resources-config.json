@@ -1,0 +1,91 @@
+{
+  "askcliResourcesobjectVersion": "1.0",
+  "profiles": {
+    "default": {
+      "skillId": "amzn1.ask.skill.5555555-4444-3333-2222-1111111111",
+      "skillMetadata": {
+        "src": "./skill-package",
+        "lastDeployHash": "hash"
+      },
+      "code": {
+        "default": {
+          "src": "lambda/codeUri"
+        },
+        "NA": {
+          "src": "lambda/codeUri"
+        },
+        "EU": {
+          "src": "./awsStack/lambda-EU/src",
+          "lastDeployHash": ""
+        },
+        "FE": {
+          "src": "lambda/codeUri"
+        },
+        "EI": {
+          "src": "lambda/codeUri"
+        },
+        "IN": {
+          "src": "lambda/codeUri"
+        }
+      },
+      "skillInfrastructure": {
+        "type": "@ask-cli/lambda-deployer",
+        "userConfig": {
+          "runtime": "runtime",
+          "handler": "handler",
+          "awsRegion": "us-west-2",
+          "regionalOverrides": {
+            "FE": {
+              "runtime": "JAVA",
+              "handler": "index.js"
+            },
+            "IN": {
+              "runtime": "JAVA",
+              "handler": "index.js"
+            }
+          }
+        },
+        "deployState": {
+          "default": {
+            "lambda": {
+              "arn": "arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default",
+              "revisionId": "revisionId"
+            }
+          },
+          "NA": {
+            "lambda": {
+              "arn": "arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default",
+              "revisionId": "revisionId"
+            }
+          },
+          "EU": {
+            "stackId": "",
+            "s3": {
+              "bucket": "",
+              "key": "endpoint/code",
+              "objectVersion": ""
+            }
+          },
+          "FE": {
+            "lambda": {
+              "arn": "arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default",
+              "revisionId": "revisionId"
+            }
+          },
+          "EI": {
+            "lambda": {
+              "arn": "arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default",
+              "revisionId": "revisionId"
+            }
+          },
+          "IN": {
+            "lambda": {
+              "arn": "arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default",
+              "revisionId": "revisionId"
+            }
+          }
+        }
+      }
+    }
+  }
+}
