@@ -89,13 +89,15 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| handle lambdaCode and update resources JSON file, expect update correctly', () => {
             // setup
+            const TEST_REPO_URL = 'repo_url';
             sinon.stub(awsUtil, 'getAWSProfile');
             sinon.stub(awsUtil, 'getCLICompatibleDefaultRegion').returns(TEST_AWS_REGION);
             const copyStub = sinon.stub(fs, 'copySync');
             // call
-            hostedSkillHelper.handleExistingLambdaCode(TEST_ROOT_PATH, TEST_PROFILE);
+            hostedSkillHelper.handleExistingLambdaCode(TEST_ROOT_PATH, TEST_REPO_URL, TEST_PROFILE);
             // verify
-            // expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).deep.equal(CONSTANTS.DEPLOYER_TYPE.HOSTED.NAME);
+            expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).equal(CONSTANTS.DEPLOYER_TYPE.HOSTED.NAME);
+            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE).repository.url).equal(TEST_REPO_URL);
             expect(copyStub.args[0][0]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.LEGACY_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
             expect(copyStub.args[0][1]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
         });

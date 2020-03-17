@@ -10,7 +10,7 @@ const CLiError = require('@src/exceptions/cli-error');
 const Messenger = require('@src/view/messenger');
 const profileHelper = require('@src/utils/profile-helper');
 
-describe('Commands init test - command class test', () => {
+describe('Commands upgrade project test - command class test', () => {
     const TEST_PROFILE = 'default';
     const TEST_ERROR = 'upgrade project error';
     const TEST_SKILL_ID = 'skillId';

@@ -61,6 +61,9 @@ describe('Commands upgrade-project test - helper test', () => {
 
     describe('# test helper method - extractUpgradeInformation', () => {
         const TEST_V1_CONFIG_PATH = 'v1ConfigPath';
+        const TEST_PROTOCOL = 'https';
+        const TEST_HOST = 'git-codecommit.us-west-2.amazonaws.com';
+        const TEST_PATH = 'v1/repos/11111111-2222-3333-4444-555555555555';
         const formV1Config = (skillId, isHosted, lambdaResources) => {
             const result = { deploy_settings: {}, alexaHosted: {} };
             result.deploy_settings[TEST_PROFILE] = {
@@ -70,7 +73,12 @@ describe('Commands upgrade-project test - helper test', () => {
                 }
             };
             result.alexaHosted = {
-                isAlexaHostedSkill: isHosted
+                isAlexaHostedSkill: isHosted,
+                gitCredentialsCache: {
+                    protocol: TEST_PROTOCOL,
+                    host: TEST_HOST,
+                    path: TEST_PATH
+                }
             };
             return result;
         };
@@ -110,7 +118,8 @@ If the skill has never been deployed in v1 ask-cli, please start from v2 structu
             // verify
             expect(info).deep.equal({
                 skillId: TEST_SKILL_ID,
-                isHosted: true
+                isHosted: true,
+                gitRepoUrl: `${TEST_PROTOCOL}://${TEST_HOST}/${TEST_PATH}`
             });
         });
 
@@ -266,7 +275,8 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
 
     describe('# test helper method - moveOldProjectToLegacyFolder', () => {
         const TEST_FILE = 'file';
-        const TEST_OLD_FILES = [TEST_FILE];
+        const TEST_GIT_FILE = '.git';
+        const TEST_OLD_FILES = [TEST_FILE, TEST_GIT_FILE];
 
         afterEach(() => {
             sinon.restore();
