@@ -35,7 +35,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "async": "^2.1.5",
+    "async": "^3.0.0",
     "aws-profile-handler": "2.0.3",
     "aws-sdk": "^2.288.0",
     "axios": "^0.19.2",
