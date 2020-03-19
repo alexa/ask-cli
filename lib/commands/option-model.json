@@ -35,6 +35,16 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "simulation-type": {
+    "name": "simulation-type",
+    "description": "run skill in the specified simulation mode (currently supports DEFAULT / NFI_ISOLATED_SIMULATION)",
+    "alias": null,
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "ENUM",
+      "values": ["DEFAULT", "NFI_ISOLATED_SIMULATION"]
+    }]
+  },
   "skill-id": {
     "name": "skill-id",
     "description": "Skill id",

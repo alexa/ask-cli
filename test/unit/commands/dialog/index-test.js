@@ -52,7 +52,7 @@ describe('Commands Dialog test - command class test', () => {
         expect(instance.name()).eq('dialog');
         expect(instance.description()).eq('simulate your skill via an interactive dialog with Alexa');
         expect(instance.requiredOptions()).deep.eq([]);
-        expect(instance.optionalOptions()).deep.eq(['skill-id', 'locale', 'stage', 'replay', 'save-skill-io', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.eq(['skill-id', 'locale', 'stage', 'replay', 'save-skill-io', 'simulation-type', 'profile', 'debug']);
     });
 
     describe('# validate command handle', () => {
@@ -203,7 +203,8 @@ describe('Commands Dialog test - command class test', () => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
                     stage: '',
-                    replay: DIALOG_REPLAY_FILE_JSON_PATH
+                    replay: DIALOG_REPLAY_FILE_JSON_PATH,
+                    simulationType: 'NFI_ISOLATED_SIMULATION'
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
                 sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
@@ -216,9 +217,30 @@ describe('Commands Dialog test - command class test', () => {
                     expect(config.replay).equal(DIALOG_REPLAY_FILE_JSON_PATH);
                     expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                     expect(config.stage).equal('development');
+                    expect(config.simulationType).equal('NFI_ISOLATED_SIMULATION');
                     expect(config.userInputs).deep.equal(['hello', 'world']);
                     done();
                 });
+            });
+
+            it('| returns valid config with default simulation type', () => {
+                // setup
+                const TEST_CMD_WITH_VALUES = {
+                    stage: '',
+                    replay: DIALOG_REPLAY_FILE_JSON_PATH,
+                };
+                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                // call
+                const config = instance._getDialogConfig(TEST_CMD_WITH_VALUES);
+                // verify
+                expect(config.debug).equal(false);
+                expect(config.locale).equal('en-US');
+                expect(config.profile).equal('default');
+                expect(config.replay).equal(DIALOG_REPLAY_FILE_JSON_PATH);
+                expect(config.skillId).equal('amzn1.ask.skill.1234567890');
+                expect(config.stage).equal('development');
+                expect(config.simulationType).equal('DEFAULT');
+                expect(config.userInputs).deep.equal(['hello', 'world']);
             });
 
             it('| returns error when initialization of DialogReplayFile fails', (done) => {

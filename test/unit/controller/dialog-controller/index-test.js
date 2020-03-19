@@ -63,7 +63,7 @@ describe('Controller test - dialog controller test', () => {
 
         it('| test utterance input and response is stored into appropriate caches', (done) => {
             // setup
-            simulateSkillStub.callsArgWith(5, null, { msg: TEST_MSG });
+            simulateSkillStub.callsArgWith(6, null, { msg: TEST_MSG });
             // call
             dialogController.startSkillSimulation(TEST_MSG, (err, response) => {
                 // verify
@@ -76,7 +76,7 @@ describe('Controller test - dialog controller test', () => {
 
         it('| test an error in request does not effect caches', (done) => {
             // setup
-            simulateSkillStub.callsArgWith(5, TEST_MSG, null);
+            simulateSkillStub.callsArgWith(6, TEST_MSG, null);
             // call
             dialogController.startSkillSimulation(TEST_MSG, (err, response) => {
                 // verify

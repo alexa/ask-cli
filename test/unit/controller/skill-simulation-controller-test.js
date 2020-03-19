@@ -63,7 +63,7 @@ describe('Controller test - skill simulation controller test', () => {
                     result: null
                 }
             };
-            simulateSkillStub.callsArgWith(5, null, TEST_RES);
+            simulateSkillStub.callsArgWith(6, null, TEST_RES);
             // call
             simulationController.startSkillSimulation(TEST_MSG, true, (err, response) => {
                 // verify
@@ -82,7 +82,7 @@ describe('Controller test - skill simulation controller test', () => {
                     message: TEST_MSG
                 }
             };
-            simulateSkillStub.callsArgWith(5, null, TEST_RES);
+            simulateSkillStub.callsArgWith(6, null, TEST_RES);
             // call
             simulationController.startSkillSimulation(TEST_MSG, true, (err, response) => {
                 // verify
@@ -94,7 +94,7 @@ describe('Controller test - skill simulation controller test', () => {
 
         it('| test for SMAPI.test.simulateSkill gives correct error', (done) => {
             // setup
-            simulateSkillStub.callsArgWith(5, TEST_MSG, null);
+            simulateSkillStub.callsArgWith(6, TEST_MSG, null);
             // call
             simulationController.startSkillSimulation(TEST_MSG, true, (err, response) => {
                 // verify
