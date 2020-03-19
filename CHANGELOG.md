@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/alexa-labs/ask-cli/compare/v0.8.0...v0.9.0) (2020-03-19)
+
+
+### Features
+
+* port dialog command to cli v2 ([c88938c](https://github.com/alexa-labs/ask-cli/commit/c88938cc2054645162f16d0e0bc6c7085b96cd5f))
+
+
+### Bug Fixes
+
+* check environmental variable ASK_SMAPI_SERVER_BASE_URL in smapi client before default endpoint ([3710699](https://github.com/alexa-labs/ask-cli/commit/3710699031accfd45c8b5a97d60ccae6f615f452))
+
 ## [0.8.0](https://github.com/alexa-labs/ask-cli/compare/v0.7.3...v0.8.0) (2020-02-25)
 
 
