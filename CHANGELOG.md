@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/alexa-labs/ask-cli/compare/v0.9.1...v0.10.0) (2020-03-20)
+
+
+### Features
+
+* implemented smapi command ([2f81f03](https://github.com/alexa-labs/ask-cli/commit/2f81f03c97c8fe12339d9547a8cc0d37572e82bf))
+
 ### [0.9.1](https://github.com/alexa-labs/ask-cli/compare/v0.9.0...v0.9.1) (2020-03-20)
 
 
