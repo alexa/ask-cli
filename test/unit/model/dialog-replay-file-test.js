@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 const yaml = require('@src/model/yaml-parser');
@@ -24,7 +24,7 @@ describe('Model test - dialog replay file test', () => {
             } catch (err) {
                 // verify
                 const expectedError = `File ${NOT_EXISTING_DIALOG_REPLAY_FILE_PATH} not exists.`;
-                expect(err).to.match(new RegExp(expectedError));
+                expect(err.endsWith(expectedError)).equal(true);
             }
         });
 
