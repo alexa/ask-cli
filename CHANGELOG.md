@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.1](https://github.com/alexa-labs/ask-cli/compare/v0.9.0...v0.9.1) (2020-03-20)
+
+
+### Bug Fixes
+
+* track "expires_at" into credentials file when getting lwa tokens ([52f1872](https://github.com/alexa-labs/ask-cli/commit/52f1872b4a8e2a41d89f9ada4c026e105b98762f))
+
 ## [0.9.0](https://github.com/alexa-labs/ask-cli/compare/v0.8.0...v0.9.0) (2020-03-19)
 
 
