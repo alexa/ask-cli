@@ -483,6 +483,38 @@ describe('Commands init test - command class test', () => {
             });
         });
 
+        it('| download Git Hooks Template fails, expect error thrown', (done) => {
+            // setup
+            const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
+            const TEST_LOCALE = 'en-US';
+            const GET_MANIFEST_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {
+                    manifest: {
+                        publishingInformation: {
+                            locales: {
+                                [TEST_LOCALE]: {
+                                    name: TEST_SKILL_NAME
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
+            sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
+            // call
+            instance.handle(TEST_CMD, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                expect(errorStub.args[0][0]).equal(TEST_ERROR);
+                done();
+            });
+        });
+
         it('| hosted skill controller clone succeed, expect project initialized', (done) => {
             // setup
             const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
@@ -505,6 +537,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify

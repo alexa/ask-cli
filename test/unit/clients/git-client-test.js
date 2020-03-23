@@ -63,8 +63,8 @@ describe('Clients test - cli git client', () => {
 
     describe('# test configureCredentialHelper', () => {
         const TEST_CREDENTIAL_HELPER_PATH = 'TEST_CREDENTIAL_HELPER_PATH';
-        const TEST_COMMAND = ['git config --local credential.helper \'\'',
-            `git config --local --add credential.helper '!${TEST_CREDENTIAL_HELPER_PATH}'`,
+        const TEST_COMMAND = [
+            `git config --local --replace-all credential.helper '!${TEST_CREDENTIAL_HELPER_PATH}'`,
             'git config --local credential.UseHttpPath true'];
 
         afterEach(() => {
@@ -78,10 +78,9 @@ describe('Clients test - cli git client', () => {
             // call
             gitClient.configureCredentialHelper(TEST_CREDENTIAL_HELPER_PATH);
             // verify
-            expect(gitClient._execChildProcessSync.callCount).eq(3);
+            expect(gitClient._execChildProcessSync.callCount).eq(2);
             expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
             expect(gitClient._execChildProcessSync.args[1][0]).eq(TEST_COMMAND[1]);
-            expect(gitClient._execChildProcessSync.args[2][0]).eq(TEST_COMMAND[2]);
         });
 
         it('| test git configureCredentialHelper fails', () => {
@@ -232,6 +231,122 @@ describe('Clients test - cli git client', () => {
             sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
             // call & verify
             expect(() => gitClient.add(TEST_REPO_DIR)).throw(CLiError, `CliError: ${TEST_ERROR}`);
+        });
+    });
+
+    describe('# git deleteBranch', () => {
+        const TEST_BRANCH = 'dev';
+        const TEST_COMMAND = [`git branch -d ${TEST_BRANCH}`];
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| test git delete execute commands correctly ', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            sinon.stub(gitClient, '_execChildProcessSync');
+            // call
+            gitClient.deleteBranch(TEST_BRANCH);
+            // verify
+            expect(gitClient._execChildProcessSync.callCount).eq(1);
+            expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
+        });
+
+        it('| test git add fails', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
+            sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
+            // call & verify
+            expect(() => gitClient.deleteBranch(TEST_BRANCH)).throw(CLiError, `CliError: ${TEST_ERROR}`);
+        });
+    });
+
+    describe('# git merge', () => {
+        const TEST_BRANCH = 'dev';
+        const TEST_COMMAND = [`git merge ${TEST_BRANCH}`];
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| test git merge execute commands correctly ', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            sinon.stub(gitClient, '_execChildProcessSync');
+            // call
+            gitClient.merge(TEST_BRANCH);
+            // verify
+            expect(gitClient._execChildProcessSync.callCount).eq(1);
+            expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
+        });
+
+        it('| test git merge fails', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
+            sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
+            // call & verify
+            expect(() => gitClient.merge(TEST_BRANCH)).throw(CLiError, `CliError: ${TEST_ERROR}`);
+        });
+    });
+
+    describe('# git shortStatus', () => {
+        const TEST_COMMAND = 'git status -s';
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| test git status execute commands correctly ', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            const TEST_STDOUT = 'stdout';
+            sinon.stub(gitClient, '_execChildProcessSync').returns(TEST_STDOUT);
+            // call
+            const res = gitClient.shortStatus();
+            // verify
+            expect(res).equal(TEST_STDOUT);
+            expect(gitClient._execChildProcessSync.callCount).eq(1);
+            expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND);
+        });
+
+        it('| test git status fails', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
+            // call & verify
+            expect(() => gitClient.shortStatus()).throw(CLiError, `CliError: ${TEST_ERROR}`);
+        });
+    });
+
+    describe('# git countCommitDifference', () => {
+        const COMMIT1 = 'origin/dev';
+        const COMMIT2 = 'dev';
+        const TEST_COMMAND = `git rev-list --count ${COMMIT1}...${COMMIT2}`;
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| test git rev-list --count execute commands correctly ', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            const TEST_STDOUT = 'stdout';
+            sinon.stub(gitClient, '_execChildProcessSync').returns(TEST_STDOUT);
+            // call
+            const res = gitClient.countCommitDifference(COMMIT1, COMMIT2);
+            // verify
+            expect(res).equal(TEST_STDOUT);
+            expect(gitClient._execChildProcessSync.callCount).eq(1);
+            expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND);
+        });
+
+        it('| test git rev-list --count fails', () => {
+            // setup
+            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
+            sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
+            // call & verify
+            expect(() => gitClient.countCommitDifference(COMMIT1, COMMIT2)).throw(CLiError, `CliError: ${TEST_ERROR}`);
         });
     });
 

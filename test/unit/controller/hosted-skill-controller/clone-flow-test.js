@@ -100,7 +100,7 @@ describe('Controller test - CloneFlow test', () => {
             // verify
             expect(Messenger.getInstance().info.args[0][0]).equal('- Setting up git repo...');
             expect(Messenger.getInstance().info.args[1][0]).equal('- Fetching git repo...');
-            expect(Messenger.getInstance().info.args[2][0]).equal('- Checking out dev branch...');
+            expect(Messenger.getInstance().info.args[2][0]).equal('- Checking out master branch...');
             expect(Messenger.getInstance().info.args[3][0]).equal('- Setting up .gitignore...');
             expect(Messenger.getInstance().info.args[4][0]).equal('- Git repo successfully setup');
             expect(Messenger.getInstance().info.args[5][0]).equal(`\nLambda code for ${TEST_SKILL_NAME} created at\n\t./lambda`);
@@ -142,6 +142,24 @@ describe('Controller test - CloneFlow test', () => {
             fs.existsSync.withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(fs, 'mkdirSync');
             fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'models')).returns(true);
+            fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'skill.json')).returns(true);
+            fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'isps')).returns(true);
+            sinon.stub(fs, 'moveSync');
+            // call
+            cloneFlow.doSkillPackageExist(TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_SKILL_ID, (err, res) => {
+                // verify
+                expect(err).equal(null);
+                expect(res).equal(true);
+                done();
+            });
+        });
+
+        it('| models NOT exists but Skill-Package and skill-json exist, expect skill-package generated', (done) => {
+            // setup
+            sinon.stub(fs, 'existsSync');
+            fs.existsSync.withArgs(TEST_PROJECT_PATH).returns(false);
+            sinon.stub(fs, 'mkdirSync');
+            fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'models')).returns(false);
             fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'skill.json')).returns(true);
             fs.existsSync.withArgs(path.join(TEST_PROJECT_PATH, 'isps')).returns(true);
             sinon.stub(fs, 'moveSync');

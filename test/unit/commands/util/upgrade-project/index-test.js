@@ -67,7 +67,7 @@ describe('Commands upgrade project test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal('error');
-                    expect(errorStub.args[0][0].message).equal('error');
+                    expect(errorStub.args[0][0]).equal('error');
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
                     done();
@@ -81,7 +81,7 @@ describe('Commands upgrade project test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal(TEST_ERROR);
-                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0]).equal(TEST_ERROR);
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
                     done();
@@ -131,6 +131,26 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.restore();
             });
 
+            it('| hostedSkillHelper check If Dev Branch Clean fails, expect throw error', (done) => {
+                // setup
+                const TEST_USER_INPUT = {
+                    isHosted: true,
+                    skillId: TEST_SKILL_ID
+                };
+                sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
+                sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean').throws(new CLiError(TEST_ERROR));
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err.message).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
             it('| helper move old project to legacy folder fails, expect throw error', (done) => {
                 // setup
                 const TEST_USER_INPUT = {
@@ -139,6 +159,7 @@ describe('Commands upgrade project test - command class test', () => {
                 };
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder').throws(new CLiError(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -159,6 +180,7 @@ describe('Commands upgrade project test - command class test', () => {
                 };
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton').throws(new CLiError(TEST_ERROR));
                 // call
@@ -180,6 +202,7 @@ describe('Commands upgrade project test - command class test', () => {
                 };
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -203,6 +226,7 @@ describe('Commands upgrade project test - command class test', () => {
                 };
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -219,6 +243,32 @@ describe('Commands upgrade project test - command class test', () => {
                 });
             });
 
+            it('| hostedSkillHelper post Upgrade Git Setup fails , expect no error thrown', (done) => {
+                // setup
+                const TEST_USER_INPUT = {
+                    isHosted: true,
+                    skillId: TEST_SKILL_ID
+                };
+                sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
+                sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
+                sinon.stub(helper, 'moveOldProjectToLegacyFolder');
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
+                sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
+                sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
+                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(3, TEST_ERROR);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0]).equal(TEST_ERROR);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
             it('| hosted skill project migration succeeds , expect no error thrown', (done) => {
                 // setup
                 const TEST_USER_INPUT = {
@@ -227,11 +277,13 @@ describe('Commands upgrade project test - command class test', () => {
                 };
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
+                sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
+                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(3, null);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
