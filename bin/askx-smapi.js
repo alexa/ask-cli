@@ -11,6 +11,11 @@ if (!process.argv.slice(2).length) {
     commander.outputHelp();
 } else {
     commander.parseAsync(process.argv)
-        .then(response => Messenger.getInstance().info(jsonView.toString(response)))
-        .catch(err => Messenger.getInstance().fatal(err.message));
+        .then(response => {
+            Messenger.getInstance().info(jsonView.toString(response[0]));
+        })
+        .catch(err => {
+            Messenger.getInstance().fatal(err.message);
+            process.exit(1);
+        });
 }
