@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.1](https://github.com/alexa-labs/ask-cli/compare/v0.10.0...v0.10.1) (2020-03-23)
+
+
+### Bug Fixes
+
+* add exit code 1 for failed smapi command; take first element from ask-smapi-sdk client response; add commander handling for required options ([756b5b0](https://github.com/alexa-labs/ask-cli/commit/756b5b0fc23b300e072be61202a5e02c9fb55e76))
+
 ## [0.10.0](https://github.com/alexa-labs/ask-cli/compare/v0.9.1...v0.10.0) (2020-03-20)
 
 
