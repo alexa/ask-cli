@@ -13,6 +13,7 @@ const ResourcesConfig = require('@src/model/resources-config');
 const CLiError = require('@src/exceptions/cli-error');
 const CONSTANTS = require('@src/utils/constants');
 
+//
 describe('Commands upgrade-project test - hosted skill helper test', () => {
     const TEST_ERROR = 'testError';
     const TEST_PROFILE = 'default';
