@@ -4,6 +4,7 @@ const path = require('path');
 const portScanner = require('portscanner');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const { URL } = require('url');
 
 const hostedSkillHelper = require('@src/commands/v2new/hosted-skill-helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller/index');
@@ -35,6 +36,7 @@ describe('Commands new test - hosted skill helper test', () => {
         let proxyHelper;
         let endStub;
         let response;
+        let loginUrl;
 
         beforeEach(() => {
             infoStub = sinon.stub();
@@ -50,6 +52,7 @@ describe('Commands new test - hosted skill helper test', () => {
                 on: sinon.stub().callsArgWith(1),
                 end: endStub
             };
+            loginUrl = new URL(CONSTANTS.LWA.SIGNIN_URL);
         });
 
         afterEach(() => {
@@ -118,7 +121,7 @@ describe('Commands new test - hosted skill helper test', () => {
             });
         });
 
-        it('| new user required to solve captcha, open login url with redirect url, expect local host server is listening', () => {
+        it.only('| new user required to solve captcha, open login url with redirect url, expect local host server is listening', () => {
             // setup
             sinon.stub(HostedSkillController.prototype, 'getHostedSkillPermission').callsArgWith(2, null, TEST_PERMISSION_REGISTRATION_REQUIRED);
             sinon.stub(portScanner, 'checkPortStatus').callsArgWith(1, null, TEST_PORT_STATUS_CLOSED);
