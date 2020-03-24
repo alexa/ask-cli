@@ -1,0 +1,18 @@
+{
+  "askcliResourcesVersion": "2020-03-31",
+  "profiles": {
+    "default": {
+      "skillId": "amzn1.ask.skill.5555555-4444-3333-2222-1111111111",
+      "skillInfrastructure": {
+        "@ask-cli/hosted-skill-deployer": {
+          "deployState": {
+            "repository": {
+              "type": "GIT",
+              "url": "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/5555555-4444-3333-2222-1111111111"
+            }
+          }
+        }
+      }
+    }
+  }
+}

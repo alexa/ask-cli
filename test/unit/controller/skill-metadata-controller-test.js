@@ -14,7 +14,7 @@ const hashUtils = require('@src/utils/hash-utils');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Controller test - skill metadata controller test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
 
     const TEST_PROFILE = 'default'; // test file contains 'default' profile

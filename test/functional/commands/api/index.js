@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const R = require('ramda');
 const os = require('os');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 const AuthorizationController = require('@src/controllers/authorization-controller');
@@ -60,59 +60,55 @@ const testDataProvider = {
 
 class ApiCommandBasicTest {
     constructor({ operation, cmd, envVar, httpMockConfig, expectationHandler }) {
-        try {
-            this.operation = operation;
-            this.cmd = cmd;
-            this.envVar = envVar;
-            this.httpMockConfig = httpMockConfig;
-            this.expectationHandler = expectationHandler;
-            // Record original commander keys
-            // Since the commander object is not stateless,
-            // need to record its original status and
-            // set back each time after commander.parse
-            this.apiCommandIndex = R.findIndex(R.propEq('_name', this.operation))(commander.commands);
-            this.keys = R.keys(commander.commands[this.apiCommandIndex]);
+        this.operation = operation;
+        this.cmd = cmd;
+        this.envVar = envVar;
+        this.httpMockConfig = httpMockConfig;
+        this.expectationHandler = expectationHandler;
+        // Record original commander keys
+        // Since the commander object is not stateless,
+        // need to record its original status and
+        // set back each time after commander.parse
+        this.apiCommandIndex = R.findIndex(R.propEq('_name', this.operation))(commander.commands);
+        this.keys = R.keys(commander.commands[this.apiCommandIndex]);
 
-            // Used to record all stdout and stderr
+        // Used to record all stdout and stderr
 
-            this.msgCatcher = {
-                trace: '',
-                debug: '',
-                info: '',
-                warn: '',
-                error: '',
-                fatal: '',
-            };
-            // private test data to mock ASK config file,
-            // and record original process env var
-            this._TEST_DATA = {
-                ASK_CONFIG: {
-                    profiles: {
-                        default: {
-                            token: testDataProvider.VALID_TOKEN.DEFAULT_PROFILE_TOKEN,
-                            vendor_id: testDataProvider.VALID_VENDOR_ID.DEFAULT_VENDOR_ID,
-                            aws_profile: 'DEFAULT_AWS_PROFILE'
-                        },
-                        TEST_VALID_PROFILE: {
-                            token: testDataProvider.VALID_TOKEN.VALID_PROFILE_TOKEN,
-                            vendor_id: testDataProvider.VALID_VENDOR_ID.VALID_VENDOR_ID,
-                            aws_profile: 'VALID_AWS_PROFILE'
-                        }
+        this.msgCatcher = {
+            trace: '',
+            debug: '',
+            info: '',
+            warn: '',
+            error: '',
+            fatal: '',
+        };
+        // private test data to mock ASK config file,
+        // and record original process env var
+        this._TEST_DATA = {
+            ASK_CONFIG: {
+                profiles: {
+                    default: {
+                        token: testDataProvider.VALID_TOKEN.DEFAULT_PROFILE_TOKEN,
+                        vendor_id: testDataProvider.VALID_VENDOR_ID.DEFAULT_VENDOR_ID,
+                        aws_profile: 'DEFAULT_AWS_PROFILE'
+                    },
+                    TEST_VALID_PROFILE: {
+                        token: testDataProvider.VALID_TOKEN.VALID_PROFILE_TOKEN,
+                        vendor_id: testDataProvider.VALID_VENDOR_ID.VALID_VENDOR_ID,
+                        aws_profile: 'VALID_AWS_PROFILE'
                     }
-                },
-                ORIGINAL_PROCESS_ENV_MAP: [
-                    { name: 'ASK_DEFAULT_PROFILE', value: process.env.ASK_DEFAULT_PROFILE },
-                    { name: 'AWS_ACCESS_KEY_ID', value: process.env.AWS_ACCESS_KEY_ID },
-                    { name: 'AWS_SECRET_ACCESS_KEY', value: process.env.AWS_SECRET_ACCESS_KEY },
-                    { name: 'ASK_REFRESH_TOKEN', value: process.env.ASK_REFRESH_TOKEN },
-                    { name: 'ASK_ACCESS_TOKEN', value: process.env.ASK_ACCESS_TOKEN },
-                    { name: 'ASK_VENDOR_ID', value: process.env.ASK_VENDOR_ID },
-                    { name: 'ASK_DEFAULT_DEVICE_LOCALE', value: process.env.ASK_DEFAULT_DEVICE_LOCALE }
-                ],
-            };
-        } catch (err) {
-            throw err;
-        }
+                }
+            },
+            ORIGINAL_PROCESS_ENV_MAP: [
+                { name: 'ASK_DEFAULT_PROFILE', value: process.env.ASK_DEFAULT_PROFILE },
+                { name: 'AWS_ACCESS_KEY_ID', value: process.env.AWS_ACCESS_KEY_ID },
+                { name: 'AWS_SECRET_ACCESS_KEY', value: process.env.AWS_SECRET_ACCESS_KEY },
+                { name: 'ASK_REFRESH_TOKEN', value: process.env.ASK_REFRESH_TOKEN },
+                { name: 'ASK_ACCESS_TOKEN', value: process.env.ASK_ACCESS_TOKEN },
+                { name: 'ASK_VENDOR_ID', value: process.env.ASK_VENDOR_ID },
+                { name: 'ASK_DEFAULT_DEVICE_LOCALE', value: process.env.ASK_DEFAULT_DEVICE_LOCALE }
+            ],
+        };
     }
 
     async test() {

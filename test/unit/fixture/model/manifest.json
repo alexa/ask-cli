@@ -39,7 +39,7 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "sourceDir": "./lambda/us-east-1_arn1"
+          "url": "TEST_URL1"
         },
         "interfaces": [
           {
@@ -49,12 +49,7 @@
         "regions": {
           "EU": {
             "endpoint": {
-              "sourceDir": "./lambda/eu-west-1_arn2"
-            }
-          },
-          "FE": {
-            "endpoint": {
-              "sourceDir": "./lambda/eu-west-1_arn2"
+              "url": "TEST_URL2"
             }
           }
         }

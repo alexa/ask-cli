@@ -9,11 +9,13 @@ const GitClient = require('@src/clients/git-client');
 const hostedSkillHelper = require('@src/commands/util/upgrade-project/hosted-skill-helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
-const ResourcesConfig = require('@src/model/resources-config');
 const CLiError = require('@src/exceptions/cli-error');
+const ResourcesConfig = require('@src/model/resources-config');
+const AskResources = require('@src/model/resources-config/ask-resources');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands upgrade-project test - hosted skill helper test', () => {
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
     const TEST_ERROR = 'testError';
     const TEST_PROFILE = 'default';
     const TEST_AWS_REGION = 'us-west-2';
@@ -21,7 +23,6 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
     const TEST_SKILL_ID = 'skillId';
     const TEST_SKILL_STAGE = 'development';
     const TEST_ROOT_PATH = 'rootPath';
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-skill-resources-config.json');
     const TEST_PROJECT_PATH = 'TEST_PROJECT_PATH';
     const TEST_VERBOSITY_OPTIONS = {
         showOutput: false,
@@ -80,14 +81,14 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
         it('| crate v2 project skeleton, expect write JSON file correctly', () => {
             // setup
             const ensureDirStub = sinon.stub(fs, 'ensureDirSync');
-            const writeStub = sinon.stub(fs, 'writeJSONSync');
+            const askStatesStub = sinon.stub(AskResources, 'withContent');
             sinon.stub(R, 'clone').returns({ profiles: {} });
             // call
             hostedSkillHelper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
-            expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
-            expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
-            expect(writeStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
-            expect(writeStub.args[0][1]).deep.equal({
+            expect(ensureDirStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE}`);
+            expect(ensureDirStub.args[1][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
+            expect(askStatesStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
+            expect(askStatesStub.args[0][1]).deep.equal({
                 profiles: {
                     [TEST_PROFILE]: {
                         skillId: TEST_SKILL_ID

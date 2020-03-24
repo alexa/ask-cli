@@ -2,20 +2,21 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs');
+const fse = require('fs-extra');
 
 const DeployCommand = require('@src/commands/deploy');
 const helper = require('@src/commands/deploy/helper');
 const optionModel = require('@src/commands/option-model');
 const CliWarn = require('@src/exceptions/cli-warn');
+const ResourcesConfig = require('@src/model/resources-config');
 const Messenger = require('@src/view/messenger');
 const profileHelper = require('@src/utils/profile-helper');
 const stringUtils = require('@src/utils/string-utils');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands deploy test - command class test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
-    const FIXTURE_HOSTED_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-skill-resources-config.json');
-
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
+    const FIXTURE_MANIFEST_FILE = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default';
     const TEST_DEBUG = false;
 
@@ -51,11 +52,16 @@ describe('Commands deploy test - command class test', () => {
             profile: TEST_PROFILE,
             debug: TEST_DEBUG
         };
+        const TEST_SKILL_METADATA_SRC = './skillPackage';
         let instance;
         let pathStub;
+
         beforeEach(() => {
             sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
             pathStub = sinon.stub(path, 'join');
+            pathStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            pathStub.withArgs(TEST_SKILL_METADATA_SRC, CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST).returns(FIXTURE_MANIFEST_FILE);
+            pathStub.callThrough();
             instance = new DeployCommand(optionModel);
         });
 
@@ -80,7 +86,7 @@ describe('Commands deploy test - command class test', () => {
 
             it('| when ResourcesConfig initiation fails, expect throw error', (done) => {
                 // setup
-                pathStub.returns('invalidPath');
+                pathStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns('invalidPath');
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -92,26 +98,9 @@ describe('Commands deploy test - command class test', () => {
                 });
             });
 
-
-            it('| when skillPackage src is not set, expect throw error, expect throw error', (done) => {
-                // setup
-                const TEST_FILE_PATH = './filePath';
-                pathStub.onCall(0).returns(FIXTURE_HOSTED_CONFIG_FILE_PATH);
-                pathStub.onCall(1).returns(TEST_FILE_PATH);
-                // call
-                instance.handle(TEST_CMD, (err) => {
-                    // verify
-                    expect(err.message).equal('The skill-package does not exist. This skill cannot be deployed.');
-                    expect(errorStub.args[0][0].message).equal('The skill-package does not exist. This skill cannot be deployed.');
-                    expect(infoStub.callCount).equal(0);
-                    expect(warnStub.callCount).equal(0);
-                    done();
-                });
-            });
-
             it('| when deployer is alexa-hosted-deployer, expect throw warning', (done) => {
                 // setup
-                pathStub.returns(FIXTURE_HOSTED_CONFIG_FILE_PATH);
+                sinon.stub(ResourcesConfig.prototype, 'getSkillInfraType').returns(CONSTANTS.DEPLOYER_TYPE.HOSTED.NAME);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -125,7 +114,6 @@ describe('Commands deploy test - command class test', () => {
 
             it('| when skillPackage src is not set, expect throw error', (done) => {
                 // setup
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 sinon.stub(stringUtils, 'isNonBlankString').returns(false);
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -138,9 +126,24 @@ describe('Commands deploy test - command class test', () => {
                 });
             });
 
+            it('| when skillPackage src does not exist, expect throw error', (done) => {
+                // setup
+                sinon.stub(fse, 'existsSync').withArgs('./skillPackage').returns(false);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err.message).equal('The skillMetadata src file ./skillPackage does not exist.');
+                    expect(errorStub.args[0][0].message).equal('The skillMetadata src file ./skillPackage does not exist.');
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
             it('| when Manifest initiation fails, expect throw error', (done) => {
                 // setup
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+                sinon.stub(fse, 'existsSync').withArgs('./skillPackage').returns(true);
+                fse.existsSync.withArgs('invalidPath').returns(false);
                 sinon.stub(stringUtils, 'isNonBlankString').returns(true);
                 path.join.withArgs('./skillPackage', CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST).returns('invalidPath');
                 // call
@@ -157,7 +160,7 @@ describe('Commands deploy test - command class test', () => {
 
         describe('command handle - deploy skill metadata', () => {
             beforeEach(() => {
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+                sinon.stub(fse, 'existsSync').returns(true);
             });
 
             it('| helper deploy skill metadata fails, expect throw error', (done) => {
@@ -195,7 +198,7 @@ describe('Commands deploy test - command class test', () => {
 
         describe('command handle - build skill code', () => {
             beforeEach(() => {
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+                sinon.stub(fse, 'existsSync').returns(true);
             });
 
             it('| helper build skill code fails, expect throw error', (done) => {
@@ -230,7 +233,7 @@ describe('Commands deploy test - command class test', () => {
             const TEST_CODE_SRC_BASENAME = 'base';
 
             beforeEach(() => {
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+                sinon.stub(fse, 'existsSync').returns(true);
             });
 
             it('| helper deploy skill infra without infraType, expect skip the flow by calling back', (done) => {
@@ -337,7 +340,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
             }];
 
             beforeEach(() => {
-                pathStub.returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+                sinon.stub(fse, 'existsSync').returns(true);
             });
 
             it('| can callbcak error when enable fails', (done) => {

@@ -13,11 +13,12 @@ const profileHelper = require('@src/utils/profile-helper');
 const wizardHelper = require('@src/commands/v2new/wizard-helper');
 
 describe('Commands new test - command class test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
-    const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
-    const FIXTURE_HOSTED_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model',
-        'hosted-skill-resources-config.json');
+    const FIXTURE_BASE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(FIXTURE_BASE_PATH, 'regular-proj', 'ask-resources.json');
+    const FIXTURE_MANIFEST_FILE_PATH = path.join(FIXTURE_BASE_PATH, 'manifest.json');
+    const FIXTURE_HOSTED_RESOURCES_CONFIG_FILE_PATH = path.join(FIXTURE_BASE_PATH, 'hosted-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default';
+    const TEST_VENDOR_ID = 'vendorId';
     const TEST_SKILL_ID = 'TEST_SKILL_ID';
     const TEST_SKILL_NAME = 'skillName';
     const TEST_PROJECT_PATH = 'projectPath';
@@ -192,12 +193,12 @@ describe('Commands new test - command class test', () => {
             beforeEach(() => {
                 instance = new NewCommand(optionModel);
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_PROFILE);
-                sinon.stub(wizardHelper, 'collectUserCreationProjectInfo');
-                sinon.stub(helper, 'downloadTemplateFromGit');
+                sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_VENDOR_ID);
                 sinon.stub(helper, 'loadSkillProjectModel');
-                sinon.stub(helper, 'updateSkillProjectWithUserSettings');
+                sinon.stub(helper, 'downloadTemplateFromGit');
                 sinon.stub(helper, 'initializeDeployDelegate');
+                sinon.stub(wizardHelper, 'collectUserCreationProjectInfo');
+                sinon.stub(helper, 'updateSkillProjectWithUserSettings');
                 new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 new Manifest(FIXTURE_MANIFEST_FILE_PATH);
             });

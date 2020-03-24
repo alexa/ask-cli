@@ -30,7 +30,7 @@ describe('Commands upgrade-project test - helper test', () => {
     const TEST_REVISION_ID = 'revisionId';
     const TEST_ROOT_PATH = 'rootPath';
     const TEST_ARN = 'arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default';
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'upgrade-resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const TEST_LAMBDAS = [
         {
             alexaUsage: ['custom/default'],
@@ -84,7 +84,10 @@ describe('Commands upgrade-project test - helper test', () => {
         };
 
         beforeEach(() => {
-            sinon.stub(path, 'join').returns(TEST_V1_CONFIG_PATH);
+            sinon.stub(path, 'join').withArgs(
+                process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+            ).returns(TEST_V1_CONFIG_PATH);
+            path.join.callThrough();
             sinon.stub(fs, 'existsSync').returns(true);
             sinon.stub(fs, 'readJsonSync').returns({});
         });
@@ -325,6 +328,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
     describe('# test helper method - downloadSkillPackage', () => {
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(ResourcesConfig.prototype, 'write');
         });
 
         afterEach(() => {
@@ -365,6 +369,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
                 expect(err).eq(undefined);
                 expect(ResourcesConfig.getInstance().getSkillMetaSrc(TEST_PROFILE)).equal('./skill-package');
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal(TEST_HASH);
+                expect(ResourcesConfig.prototype.write.callCount).to.equal(1);
                 done();
             });
         });
@@ -373,6 +378,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
     describe('# test helper method - handleExistingLambdaCode', () => {
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(ResourcesConfig.prototype, 'write');
         });
 
         afterEach(() => {
@@ -404,6 +410,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             expect(copyStub.args[0][0]).equal(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.LEGACY_PATH, TEST_CODE_URI));
             expect(copyStub.args[0][1]).equal(path.join(TEST_ROOT_PATH, TEST_V2_CODE_URI));
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)[TEST_PROFILE].lambda.arn).deep.equal(TEST_ARN);
+            expect(ResourcesConfig.prototype.write.callCount).to.equal(1);
         });
 
         it('| handle lambdaCode and update resources JSON file with overwrite, expect, expect update correctly', () => {
@@ -469,6 +476,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             expect(copyStub.args[0][1]).equal(path.join(TEST_ROOT_PATH, TEST_V2_CODE_URI));
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)[TEST_PROFILE].lambda.arn).deep.equal(TEST_ARN);
             expect(ResourcesConfig.getInstance().getSkillInfraUserConfig(TEST_PROFILE)).deep.equal(TEST_CONFIG);
+            expect(ResourcesConfig.prototype.write.callCount).to.equal(1);
         });
     });
 });

@@ -1,0 +1,39 @@
+{
+  "askcliResourcesobjectVersion": "1.0",
+  "profiles": {
+    "default": {
+      "skillMetadata": {
+        "src": "./skillPackage"
+      },
+      "code": {
+        "default": {
+          "src": "./awsStack/lambda-NA/src"
+        },
+        "NA": {
+          "src": "./awsStack/lambda-NA/src"
+        },
+        "EU": {
+          "src": "./awsStack/lambda-EU/src"
+        }
+      },
+      "skillInfrastructure": {
+        "type": "@ask-cli/cfn-deployer",
+        "userConfig": {
+          "runtime": "nodejs10.x",
+          "handler": "index.handler",
+          "template": "./awsStacks/skill-infra.yaml",
+          "regionOverrides": {
+            "NA": {
+              "awsRegion": "us-east-1",
+              "template": "./awsStacks/skill-infra.yaml"
+            },
+            "FE": {
+              "awsRegion": "us-east-2",
+              "template": "./awsStacks/skill-infra.yaml"
+            }
+          }
+        }
+      }
+    }
+  }
+}

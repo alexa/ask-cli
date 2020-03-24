@@ -7,12 +7,14 @@ const SkillInfrastructureController = require('@src/controllers/skill-infrastruc
 const helper = require('@src/commands/init/helper');
 const ui = require('@src/commands/init/ui');
 const ResourcesConfig = require('@src/model/resources-config');
+const AskResources = require('@src/model/resources-config/ask-resources');
+const AskStates = require('@src/model/resources-config/ask-states');
 const CONSTANTS = require('@src/utils/constants');
 const Messenger = require('@src/view/messenger');
 
 
 describe('Commands init - helper test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default';
     const TEST_SKILL_ID = 'skillId';
     const TEST_SRC = 'src';
@@ -285,8 +287,10 @@ describe('Commands init - helper test', () => {
 
         beforeEach(() => {
             sinon.stub(ui, 'showPreviewAndConfirm');
-            sinon.stub(fs, 'writeJSONSync');
+            sinon.stub(fs, 'removeSync');
             sinon.stub(path, 'join').returns(TEST_SRC);
+            sinon.stub(AskResources, 'withContent');
+            sinon.stub(AskStates, 'withContent');
         });
 
         afterEach(() => {
@@ -317,10 +321,10 @@ describe('Commands init - helper test', () => {
             });
         });
 
-        it('| previewAndWriteAskResources fails when write file fails', (done) => {
+        it('| previewAndWriteAskResources fails when remove file/folder fails', (done) => {
             // setup
             ui.showPreviewAndConfirm.callsArgWith(2, null, true);
-            fs.writeJSONSync.throws(TEST_ERROR);
+            fs.removeSync.throws(TEST_ERROR);
             // call
             helper.previewAndWriteAskResources(TEST_ROOT, TEST_USER_INPUT, TEST_PROFILE, (err, response) => {
                 // verify
@@ -336,9 +340,10 @@ describe('Commands init - helper test', () => {
             // call
             helper.previewAndWriteAskResources(TEST_ROOT, TEST_USER_INPUT, TEST_PROFILE, (err, response) => {
                 // verify
-                expect(fs.writeJSONSync.args[0][0]).equal(TEST_SRC);
-                expect(fs.writeJSONSync.args[0][1].profiles[TEST_PROFILE]).deep.equal({
-                    skillId: TEST_SKILL_ID,
+                expect(fs.removeSync.args[0][0]).equal(TEST_SRC);
+                expect(fs.removeSync.args[1][0]).equal(TEST_SRC);
+                expect(AskResources.withContent.args[0][0]).equal(TEST_SRC);
+                expect(AskResources.withContent.args[0][1].profiles[TEST_PROFILE]).deep.equal({
                     skillMetadata: {
                         src: TEST_SRC
                     },
@@ -355,6 +360,15 @@ describe('Commands init - helper test', () => {
                         }
                     }
                 });
+                expect(AskStates.withContent.args[0][0]).equal(TEST_SRC);
+                expect(AskStates.withContent.args[0][1].profiles[TEST_PROFILE]).deep.equal({
+                    skillId: TEST_SKILL_ID,
+                    skillInfrastructure: {
+                        '@ask-cli/cfn-deployer': {
+                            deployState: {}
+                        }
+                    }
+                });
                 expect(err).equal(undefined);
                 expect(response).equal(undefined);
                 done();
@@ -367,7 +381,9 @@ describe('Commands init - helper test', () => {
         let infoStub;
 
         beforeEach(() => {
-            sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(path, 'join');
+            path.join.withArgs(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            path.join.callThrough();
             sinon.stub(fs, 'ensureDirSync');
             sinon.stub(SkillInfrastructureController.prototype, 'bootstrapInfrastructures');
 
@@ -388,10 +404,6 @@ describe('Commands init - helper test', () => {
             // call
             helper.bootstrapSkillInfra(TEST_ROOT_PATH, TEST_PROFILE, false, (err, response) => {
                 // verify
-                expect(path.join.args[1][0]).equal(TEST_ROOT_PATH);
-                expect(path.join.args[1][1]).equal(CONSTANTS.FILE_PATH.SKILL_INFRASTRUCTURE.INFRASTRUCTURE);
-                expect(path.join.args[1][2]).equal(ResourcesConfig.getInstance().getSkillInfraType('default').substring(9));
-                expect(fs.ensureDirSync.args[0][0]).equal(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 expect(err).equal(TEST_ERROR);
                 expect(response).equal(undefined);
                 done();
@@ -404,10 +416,6 @@ describe('Commands init - helper test', () => {
             // call
             helper.bootstrapSkillInfra(TEST_ROOT_PATH, TEST_PROFILE, false, (err, response) => {
                 // verify
-                expect(path.join.args[1][0]).equal(TEST_ROOT_PATH);
-                expect(path.join.args[1][1]).equal(CONSTANTS.FILE_PATH.SKILL_INFRASTRUCTURE.INFRASTRUCTURE);
-                expect(path.join.args[1][2]).equal(ResourcesConfig.getInstance().getSkillInfraType('default').substring(9));
-                expect(fs.ensureDirSync.args[0][0]).equal(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 expect(infoStub.args[0][0]).equal('Project bootstrap from deployer "@ask-cli/cfn-deployer" succeeded.');
                 expect(err).equal(undefined);
                 expect(response).equal(undefined);

@@ -138,7 +138,7 @@ describe('Model test - manifest file test', () => {
                 oldValue: {
                     custom: {
                         endpoint: {
-                            sourceDir: './lambda/us-east-1_arn1'
+                            url: 'TEST_URL1'
                         },
                         interfaces: [{
                             type: 'VIDEO_APP'
@@ -146,12 +146,7 @@ describe('Model test - manifest file test', () => {
                         regions: {
                             EU: {
                                 endpoint: {
-                                    sourceDir: './lambda/eu-west-1_arn2'
-                                }
-                            },
-                            FE: {
-                                endpoint: {
-                                    sourceDir: './lambda/eu-west-1_arn2'
+                                    url: 'TEST_URL2'
                                 }
                             }
                         }
@@ -164,7 +159,7 @@ describe('Model test - manifest file test', () => {
                 newValue: 'apisDomain new',
                 oldValue: {
                     endpoint: {
-                        sourceDir: './lambda/us-east-1_arn1'
+                        url: 'TEST_URL1'
                     },
                     interfaces: [{
                         type: 'VIDEO_APP'
@@ -172,12 +167,7 @@ describe('Model test - manifest file test', () => {
                     regions: {
                         EU: {
                             endpoint: {
-                                sourceDir: './lambda/eu-west-1_arn2'
-                            }
-                        },
-                        FE: {
-                            endpoint: {
-                                sourceDir: './lambda/eu-west-1_arn2'
+                                url: 'TEST_URL2'
                             }
                         }
                     }
@@ -188,7 +178,7 @@ describe('Model test - manifest file test', () => {
                 input: ['custom', 'default'],
                 newValue: 'endpoint new default',
                 oldValue: {
-                    sourceDir: './lambda/us-east-1_arn1'
+                    url: 'TEST_URL1'
                 }
             },
             {
@@ -196,7 +186,7 @@ describe('Model test - manifest file test', () => {
                 input: ['custom', 'EU'],
                 newValue: 'endpoint new EU',
                 oldValue: {
-                    sourceDir: './lambda/eu-west-1_arn2'
+                    url: 'TEST_URL2'
                 }
             }
         ].forEach(({

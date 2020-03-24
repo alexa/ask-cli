@@ -5,7 +5,7 @@ const httpClient = require('@src/clients/http-client');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 
-const MAX_RESULTS = CONSTANTS.DEFAULT_LIST_MAX_RESULT;
+const MAX_RESULTS = CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE;
 const NEXT_TOKEN = 'NEXT_TOKEN';
 const noop = () => {};
 
