@@ -89,14 +89,14 @@ describe('Commands upgrade-project test - UI test', () => {
                         codeUri: TEST_CODE_URI,
                         runtime: TEST_RUNTIME,
                         handler: TEST_HANDLER,
-                        v2CodeUri: `./${TEST_V2_CODE_URI}`,
+                        v2CodeUri: `.${path.sep}${TEST_V2_CODE_URI}`,
                         revisionId: TEST_REVISION_ID
                     },
                     [TEST_REGION_NA]: {
                         codeUri: TEST_CODE_URI,
                         runtime: TEST_RUNTIME,
                         handler: TEST_HANDLER,
-                        v2CodeUri: `./${TEST_V2_CODE_URI}`,
+                        v2CodeUri: `.${path.sep}${TEST_V2_CODE_URI}`,
                         revisionId: TEST_REVISION_ID
                     }
                 }

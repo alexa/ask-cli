@@ -51,7 +51,7 @@ describe('Clients test - cli git client', () => {
 
         it('| test git init succeed', () => {
             // setup
-            const TEST_COMMAND = `git init '${TEST_PROJECT_PATH}'${TEST_VERBOSITY_OPTIONS_DEBUG.showOutput === false ? ' --quiet' : ''}`;
+            const TEST_COMMAND = `git init "${TEST_PROJECT_PATH}"${TEST_VERBOSITY_OPTIONS_DEBUG.showOutput === false ? ' --quiet' : ''}`;
             const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
             sinon.stub(gitClient, '_execChildProcessSync');
             // call
@@ -64,7 +64,7 @@ describe('Clients test - cli git client', () => {
     describe('# test configureCredentialHelper', () => {
         const TEST_CREDENTIAL_HELPER_PATH = 'TEST_CREDENTIAL_HELPER_PATH';
         const TEST_COMMAND = [
-            `git config --local --replace-all credential.helper '!${TEST_CREDENTIAL_HELPER_PATH}'`,
+            `git config --local --replace-all credential.helper "!${TEST_CREDENTIAL_HELPER_PATH}"`,
             'git config --local credential.UseHttpPath true'];
 
         afterEach(() => {
@@ -208,7 +208,7 @@ describe('Clients test - cli git client', () => {
 
     describe('# git add', () => {
         const TEST_REPO_DIR = 'repoDir';
-        const TEST_COMMAND = [`git add '${TEST_REPO_DIR}'`];
+        const TEST_COMMAND = [`git add "${TEST_REPO_DIR}"`];
 
         afterEach(() => {
             sinon.restore();
