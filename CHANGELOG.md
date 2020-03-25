@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.4](https://github.com/alexa-labs/ask-cli/compare/v0.10.3...v0.10.4) (2020-03-25)
+
+
+### Bug Fixes
+
+* default success message when no response body from smapi ([b7fdd59](https://github.com/alexa-labs/ask-cli/commit/b7fdd5980b179402d917f7293f60385846fda261))
+* fix issue when test was switching git branch to master ([0ca3582](https://github.com/alexa-labs/ask-cli/commit/0ca3582b23db4cb9ffa6fcad766151de37ddd60e))
+
 ### [0.10.3](https://github.com/alexa-labs/ask-cli/compare/v0.10.2...v0.10.3) (2020-03-25)
 
 
