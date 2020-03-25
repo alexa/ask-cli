@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.2](https://github.com/alexa-labs/ask-cli/compare/v0.10.1...v0.10.2) (2020-03-23)
+
+
+### Features
+
+* git-client refactoring ([394fe82](https://github.com/alexa-labs/ask-cli/commit/394fe8298c5d873ce714905432dcb42cc30114bd))
+* hosted skill create  + clone ([25bac7e](https://github.com/alexa-labs/ask-cli/commit/25bac7e399d2498b090fb48e3069ff92a25d19c3))
+* hosted skill deploy ([b303741](https://github.com/alexa-labs/ask-cli/commit/b3037418f18ffa36c213a4948c68c4074dc1d02f))
+* hosted skill-upgrade project ([72b9ac7](https://github.com/alexa-labs/ask-cli/commit/72b9ac7e726b06cf45d7c06afb47846b338963a2))
+* hosted skills initialization - git clone ([3dca627](https://github.com/alexa-labs/ask-cli/commit/3dca627fb8c982d3b8f0dcd929f8d4e87d35832f))
+
+
+### Bug Fixes
+
+* keep .git in migrated project & add git repositoryurl in ask-resources.json for hosted skill ([91a6cd9](https://github.com/alexa-labs/ask-cli/commit/91a6cd9c695ac441b78018551c275d208a2abd91))
+
 ### [0.10.1](https://github.com/alexa-labs/ask-cli/compare/v0.10.0...v0.10.1) (2020-03-23)
 
 
