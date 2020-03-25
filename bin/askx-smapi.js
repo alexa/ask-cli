@@ -12,7 +12,8 @@ if (!process.argv.slice(2).length) {
 } else {
     commander.parseAsync(process.argv)
         .then(response => {
-            Messenger.getInstance().info(jsonView.toString(response[0]));
+            const message = response[0] ? jsonView.toString(response[0]) : 'Command executed successfully!';
+            Messenger.getInstance().info(message);
         })
         .catch(err => {
             Messenger.getInstance().fatal(err.message);
