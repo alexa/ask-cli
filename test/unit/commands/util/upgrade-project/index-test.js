@@ -227,6 +227,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
+                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
