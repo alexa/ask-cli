@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.3](https://github.com/alexa-labs/ask-cli/compare/v0.10.2...v0.10.3) (2020-03-25)
+
+
+### Bug Fixes
+
+* import URL object & handle cross-platform file separator ([#65](https://github.com/alexa-labs/ask-cli/issues/65)) ([83ab50e](https://github.com/alexa-labs/ask-cli/commit/83ab50efb13a6f66be55576b4c90bf42fa233f32))
+
 ### [0.10.2](https://github.com/alexa-labs/ask-cli/compare/v0.10.1...v0.10.2) (2020-03-23)
 
 
