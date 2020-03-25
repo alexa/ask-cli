@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.5](https://github.com/alexa-labs/ask-cli/compare/v0.10.4...v0.10.5) (2020-03-25)
+
+
+### Bug Fixes
+
+* add the missed return before the callback when handleExistingLambda fails in upgrade command ([#67](https://github.com/alexa-labs/ask-cli/issues/67)) ([6b941af](https://github.com/alexa-labs/ask-cli/commit/6b941afe20490d2003565d0c9b68fecf62ae603e))
+
 ### [0.10.4](https://github.com/alexa-labs/ask-cli/compare/v0.10.3...v0.10.4) (2020-03-25)
 
 
