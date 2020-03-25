@@ -4,6 +4,7 @@ const path = require('path');
 const portScanner = require('portscanner');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const { URL, URLSearchParams } = require('url');
 
 const hostedSkillHelper = require('@src/commands/v2new/hosted-skill-helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller/index');
@@ -35,6 +36,8 @@ describe('Commands new test - hosted skill helper test', () => {
         let proxyHelper;
         let endStub;
         let response;
+        let loginUrl;
+        let urlSearchParams;
 
         beforeEach(() => {
             infoStub = sinon.stub();
@@ -50,6 +53,8 @@ describe('Commands new test - hosted skill helper test', () => {
                 on: sinon.stub().callsArgWith(1),
                 end: endStub
             };
+            loginUrl = new URL(CONSTANTS.LWA.SIGNIN_URL);
+            urlSearchParams = new URLSearchParams();
         });
 
         afterEach(() => {

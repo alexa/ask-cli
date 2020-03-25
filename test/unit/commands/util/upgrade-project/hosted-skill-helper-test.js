@@ -13,6 +13,7 @@ const ResourcesConfig = require('@src/model/resources-config');
 const CLiError = require('@src/exceptions/cli-error');
 const CONSTANTS = require('@src/utils/constants');
 
+//
 describe('Commands upgrade-project test - hosted skill helper test', () => {
     const TEST_ERROR = 'testError';
     const TEST_PROFILE = 'default';
@@ -84,9 +85,9 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(R, 'clone').returns({ profiles: {} });
             // call
             hostedSkillHelper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
-            expect(ensureDirStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE}`);
-            expect(ensureDirStub.args[1][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
-            expect(writeStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
+            expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
+            expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
+            expect(writeStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
             expect(writeStub.args[0][1]).deep.equal({
                 profiles: {
                     [TEST_PROFILE]: {
@@ -150,8 +151,8 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             // verify
             expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).equal(CONSTANTS.DEPLOYER_TYPE.HOSTED.NAME);
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE).repository.url).equal(TEST_REPO_URL);
-            expect(copyStub.args[0][0]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.LEGACY_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
-            expect(copyStub.args[0][1]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
+            expect(copyStub.args[0][0]).equal(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.LEGACY_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
+            expect(copyStub.args[0][1]).equal(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
         });
     });
 
@@ -195,7 +196,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'configureCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
-            sinon.stub(gitClient, 'deleteBranch')
+            sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
@@ -210,7 +211,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'configureCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
-            sinon.stub(gitClient, 'deleteBranch')
+            sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {

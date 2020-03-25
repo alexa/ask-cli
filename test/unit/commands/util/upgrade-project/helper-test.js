@@ -24,7 +24,7 @@ describe('Commands upgrade-project test - helper test', () => {
     const TEST_SKILL_ID = 'skillId';
     const TEST_SKILL_STAGE = 'development';
     const TEST_CODE_URI = 'codeUri';
-    const TEST_V2_CODE_URI = `${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}/${TEST_CODE_URI}`;
+    const TEST_V2_CODE_URI = path.join(CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA, TEST_CODE_URI);
     const TEST_RUNTIME = 'runtime';
     const TEST_HANDLER = 'handler';
     const TEST_REVISION_ID = 'revisionId';
@@ -46,7 +46,7 @@ describe('Commands upgrade-project test - helper test', () => {
             codeUri: TEST_CODE_URI,
             runtime: TEST_RUNTIME,
             handler: TEST_HANDLER,
-            v2CodeUri: `./${TEST_V2_CODE_URI}`,
+            v2CodeUri: `.${path.sep}${TEST_V2_CODE_URI}`,
             revisionId: TEST_REVISION_ID
         },
         [TEST_REGION_NA]: {
@@ -54,7 +54,7 @@ describe('Commands upgrade-project test - helper test', () => {
             codeUri: TEST_CODE_URI,
             runtime: undefined,
             handler: undefined,
-            v2CodeUri: `./${TEST_V2_CODE_URI}`,
+            v2CodeUri: `.${path.sep}${TEST_V2_CODE_URI}`,
             revisionId: undefined
         }
     };
@@ -291,7 +291,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             helper.moveOldProjectToLegacyFolder(TEST_ROOT_PATH);
             // verify
             expect(moveStub.args[0][0]).eq(TEST_FILE);
-            expect(moveStub.args[0][1]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.LEGACY_PATH}/${TEST_FILE}`);
+            expect(moveStub.args[0][1]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.LEGACY_PATH, TEST_FILE));
         });
     });
 
@@ -307,9 +307,9 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             sinon.stub(R, 'clone').returns({ profiles: {} });
             // call
             helper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
-            expect(ensureDirStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE}`);
-            expect(ensureDirStub.args[1][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
-            expect(writeStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
+            expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
+            expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
+            expect(writeStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
             expect(writeStub.args[0][1]).deep.equal({
                 profiles: {
                     [TEST_PROFILE]: {
@@ -401,8 +401,8 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             // verify
             expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).deep.equal(CONSTANTS.DEPLOYER_TYPE.LAMBDA.NAME);
             expect(ResourcesConfig.getInstance().getSkillInfraUserConfig(TEST_PROFILE)).deep.equal(TEST_CONFIG);
-            expect(copyStub.args[0][0]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.LEGACY_PATH}/${TEST_CODE_URI}`);
-            expect(copyStub.args[0][1]).equal(`${TEST_ROOT_PATH}/${TEST_V2_CODE_URI}`);
+            expect(copyStub.args[0][0]).equal(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.LEGACY_PATH, TEST_CODE_URI));
+            expect(copyStub.args[0][1]).equal(path.join(TEST_ROOT_PATH, TEST_V2_CODE_URI));
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)[TEST_PROFILE].lambda.arn).deep.equal(TEST_ARN);
         });
 
@@ -465,8 +465,8 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
             helper.handleExistingLambdaCode(TEST_ROOT_PATH, TEST_RESOURCE_MAP_MULTIPLE_REGION, TEST_PROFILE);
             // verify
             expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).deep.equal(CONSTANTS.DEPLOYER_TYPE.LAMBDA.NAME);
-            expect(copyStub.args[0][0]).equal(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.LEGACY_PATH}/${TEST_CODE_URI}`);
-            expect(copyStub.args[0][1]).equal(`${TEST_ROOT_PATH}/${TEST_V2_CODE_URI}`);
+            expect(copyStub.args[0][0]).equal(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.LEGACY_PATH, TEST_CODE_URI));
+            expect(copyStub.args[0][1]).equal(path.join(TEST_ROOT_PATH, TEST_V2_CODE_URI));
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)[TEST_PROFILE].lambda.arn).deep.equal(TEST_ARN);
             expect(ResourcesConfig.getInstance().getSkillInfraUserConfig(TEST_PROFILE)).deep.equal(TEST_CONFIG);
         });
