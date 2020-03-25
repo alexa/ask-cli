@@ -103,9 +103,9 @@ describe('Commands upgrade-project test - UI test', () => {
             };
             const TEST_PART_2 = `- Existing Lambda codebase will be moved into "${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}" folder`;
             const TEST_PART_2_1 = `\n  - Region ${TEST_REGION}: v1 "${TEST_CODE_URI}"\
- -> v2 "./${TEST_V2_CODE_URI}" for existing Lambda ARN ${TEST_ARN}`;
+ -> v2 ".${path.sep}${TEST_V2_CODE_URI}" for existing Lambda ARN ${TEST_ARN}`;
             const TEST_PART_2_2 = `\n  - Region ${TEST_REGION_NA}: v1 "${TEST_CODE_URI}"\
- -> v2 "./${TEST_V2_CODE_URI}" and will create new Lambda`;
+ -> v2 ".${path.sep}${TEST_V2_CODE_URI}" and will create new Lambda`;
             // call
             ui.displayPreview(TEST_USER_INPUT);
             // verify
