@@ -223,24 +223,27 @@ describe('Commands Dialog test - command class test', () => {
                 });
             });
 
-            it('| returns valid config with default simulation type', () => {
+            it('| returns valid config with default simulation type', (done) => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
                     stage: '',
                     replay: DIALOG_REPLAY_FILE_JSON_PATH,
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 // call
-                const config = instance._getDialogConfig(TEST_CMD_WITH_VALUES);
-                // verify
-                expect(config.debug).equal(false);
-                expect(config.locale).equal('en-US');
-                expect(config.profile).equal('default');
-                expect(config.replay).equal(DIALOG_REPLAY_FILE_JSON_PATH);
-                expect(config.skillId).equal('amzn1.ask.skill.1234567890');
-                expect(config.stage).equal('development');
-                expect(config.simulationType).equal('DEFAULT');
-                expect(config.userInputs).deep.equal(['hello', 'world']);
+                instance._getDialogConfig(TEST_CMD_WITH_VALUES, (err, config) => {
+                    // verify
+                    expect(config.debug).equal(false);
+                    expect(config.locale).equal('en-US');
+                    expect(config.profile).equal('default');
+                    expect(config.replay).equal(DIALOG_REPLAY_FILE_JSON_PATH);
+                    expect(config.skillId).equal('amzn1.ask.skill.1234567890');
+                    expect(config.stage).equal('development');
+                    expect(config.simulationType).equal('DEFAULT');
+                    expect(config.userInputs).deep.equal(['hello', 'world']);
+                    done()
+                });
             });
 
             it('| returns error when initialization of DialogReplayFile fails', (done) => {
