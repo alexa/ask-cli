@@ -16,7 +16,7 @@ if (!process.argv.slice(2).length) {
             Messenger.getInstance().info(message);
         })
         .catch(err => {
-            Messenger.getInstance().warn(err.message);
+            Messenger.getInstance().error(err.message);
             process.exit(1);
         });
 }
