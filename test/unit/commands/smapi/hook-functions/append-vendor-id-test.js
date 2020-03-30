@@ -38,15 +38,6 @@ describe('Smapi hook functions test - appendVendorId tests', () => {
         expect(requestParameters.vendorId).eql(vendorId);
     });
 
-    it('| should not append vendor id to requestParameters if already exists', () => {
-        const existingVendorId = 'some existing vendor id';
-        const requestParameters = { vendorId: existingVendorId };
-
-        appendVendorId(requestParameters, profile);
-
-        expect(requestParameters.vendorId).eql(existingVendorId);
-    });
-
     afterEach(() => {
         sinon.restore();
     });

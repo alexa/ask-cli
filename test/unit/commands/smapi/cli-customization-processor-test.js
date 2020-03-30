@@ -96,6 +96,17 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             expect(flatParamsMap.get(key)).eql(expected);
         });
 
+        it('| should skip processing of parameter', () => {
+            const parameter = makeParameter();
+            const skip = true;
+
+            sinon.stub(customizationMap, 'get').returns({ skip });
+
+            processor.processParameter(parameter, parentOperation, definitions);
+
+            expect(parameter.skip).eql(true);
+        });
+
 
         it('| should add simple array of non body paramter', () => {
             const parameter = makeParameter({ type: 'array' });
