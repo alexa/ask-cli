@@ -1,46 +1,45 @@
 # CREATE SKILL - NEW COMMAND
 
-`askx new` allows developers to create an `Alexa hosted skill`, and clone the skill project to the local machine, which replaces and optimizes `ask create-hosted-skill` command in CLI V1.
+`askx new` creates an [Alexa hosted skill](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/build-a-skill-end-to-end-using-an-alexa-hosted-skill.html), clones the skill project, and provides a git-ready environment on the local machine. This replaces the `ask create-hosted-skill` command in CLI v1. 
 
-Alexa hosted deployer builds Alexa skills quickly by provisioning required resources automatically. 
-Alexa hosted service will create a new AWS account with a deployment pipeline (CodeBuild), a skill Lambda function, a Git repository (CodeCommit) and an S3 bucket for developers.
-Thus, the developers can then develop on the editor inside the portal or checkout the code using Git and develop with their IDEs.
+Using`askx new`, the Alexa hosted skill service will create a new AWS account, which owns a Git repository using AWS CodeCommit, and an AWS Lambda function centered back-end. This allows developers to either code on the portal editor or checkout the code using Git and code on local IDEs.
 
-**STRUCTURE OF INIT COMMAND:**
+**STRUCTURE OF NEW COMMAND:**
 
-`askx init [-p | --profile <profile>] [--debug] [-h | --help]`
+`askx new [-p | --profile <profile>] [--debug] [-h | --help]`
 
 **OPTIONS DESCRIPTION:**
 
-**profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
+**profile**: Optional. Profile name to be used. Uses `default` as the default profile name, if this option or the environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
-**debug**: Optional. Appends a debug message to the standard error.
+**debug**: Optional. Show debug messages.
+
 
 
 ## WORKFLOW:
 
-Users will be asked following questions to create a new skill:
+Users will be asked the following questions to create a new skill:
 
-* Prompts user for a `programming language`
-	* Select a programming language.
-* Prompts user for a `deploy delegate` to depoly skill infrastructure
-	* Select a `@ask-cli/hosted-skill-deployer`.
-* Prompts user for a `skill template`
-	* There is one template- Hello World Skill as a default option for now.
-* Prompts user for a `skill name`
-  * Leave this empty to use default skill name or
-  * Enter a value for skill name.
+* Prompts user for `programming language`
+	* Select programming language
+	* AHS supports Python3.7 and Node10.x
+* Prompts user for `deploy delegate` to deploy skill infrastructure
+	* Select `@ask-cli/hosted-skill-deployer`
+* Prompts user for `skill name`
+ 	 * Leave empty to use the default skill name  `Hello World Skill`
 * Prompts user for a `folder name` for the skill project
-  * Leave this empty to use default folder name or
-  * Enter a value for folder name.
+ 	 * Leave empty to use the default folder name  `HelloWorldSkill`
+
+The user is not prompted for a `skill template`. The [Hello World Skill](https://github.com/alexa/skill-sample-nodejs-hello-world) is the only option for now.
+
 
 
 # DOWNLOAD SKILL - INIT COMMAND 
 
-`askx init --hosted-skill-id <hosted-skill-id>` -- helps developers migrate an Alexa-Hosted Skill (code + resources) to their local environment.
+`askx init --hosted-skill-id <hosted-skill-id>` -- download an existing Alexa-Hosted Skill to their local environment.
 
-This command initializes Alexa Hosted Skills by cloning project from the hosted skill service, 
-and provide git-ready environment, so the developers can checkout, pull from, and push to a remote Git repository from their local machines.
+This command initializes Alexa Hosted Skills by cloning the project from the hosted skill service, downloading the latest Alexa skill package, and provide a git-ready environment. Developers can then checkout, pull from, and push to a remote Git repository from their local machines.
+
 
 **STRUCTURE OF INIT COMMAND:**
 
@@ -48,27 +47,20 @@ and provide git-ready environment, so the developers can checkout, pull from, an
 
 **OPTIONS DESCRIPTION:**
 
-**debug**: Optional. Specify a skill-id for the Alexa hosted skill.
+**hosted-skill-id**: Required. Skill-id for the Alexa hosted skill.
 
-**profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
+**profile**: Optional. Profile name to be used. Uses `default` as the default profile name, if this option or the environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
-**debug**: Optional. Appends a debug message to the standard error.
+**debug**: Optional. Show debug messages.
 
 
-## WORKFLOW:
-
-Users will be asked the following question to create a new skill:
-
-* Prompts user for a `folder name` for the skill project to store in local machine.
-  * Leave this empty to use default folder name or
-  * Enter a value for folder name.
 
 ## GIT CREDENTIALS
 
-To allow developers to access the CodeCommit repository, Alexa hosted service use git-credential along with ASK-CLI and SMAPI to pass down temporary Git credentials automatically.
+To access the CodeCommit repository, the Alexa hosted service uses git-credential along with ASK-CLI and SMAPI to automatically pass down temporary Git credentials.
 
-Git-credential allows other programs to provide credentials to Git for authentication. When configured, git will invoke the configured program and pass the remote host information the program over STDIN. 
-The program can then do whatever is necessary to find the credentials and return a username and a password pair to the STDOUT. Git will then use the pair to authenticate with the remote resource.
+Using `askx util git-credentials-helper` in the skill root directory can retrieve the username and password of the Git credentials.
+
 
 
 # UPGRADE PROJECT - UPGRADE COMMANDS
@@ -76,43 +68,43 @@ The program can then do whatever is necessary to find the credentials and return
 Skills created with CLI 1.x will need to update their project structure in order to deploy with the CLI v2. 
 `askx util upgrade-project` command will attempt to perform the necessary changes. 
 
-**STRUCTURE OF INIT COMMAND:**
+**STRUCTURE OF UPGRADE COMMAND:**
 
 `askx util upgrade-project [-p | --profile <profile>] [--debug] [-h | --help]`
 
 **OPTIONS DESCRIPTION:**
 
-**profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
+**profile**: Optional. Profile name to be used. Uses `default` as the default profile name, if this option or the environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
-**debug**: Optional. Appends a debug message to the standard error.
+**debug**: Optional. Show debug messages.
+
 
 ## UPGRADE STEPS:
-
 1. Using ask-cli 1.x, deploy your skill:
 	* `$ ask deploy`
 2. Install ask-cli-x:
 	* `$ npm install -g ask-cli-x`
-3. Upgrade your skill project with ask-cli-x. From your project's root, run:
+3. Upgrade your skill project with ask-cli-x. From your project's root directory, run:
 	* `$ askx util upgrade-project`
-    * A hidden folder named ./legacy that contains a copy of your v1 skill project.
-    * Skill package will be downloaded into a ./skill-package folder
-    * ask-resources.json will be generated
+    * A hidden folder named ./legacy contains a copy of your v1 skill project.
+    * The CLI v2 skill-package directory is downloaded to the working directory.
+    * The CLI v2 ask-resources.json will be generated.
+    * The dev branch is merged into the master branch. The dev branch is then removed.
 4. Commit upgrade changes:
   * `$ git commit -m "upgrade project for CLI v2"`
-5. Confirm successful upgrade with deploy:
-  * `$ git push`
+
 
 
 # DEPLOY SKILL - GIT PUSH
 
-`$ git push` helps developers deploy skill package resources and skill code.
-In CLI V2, running `ask deploy` on hosted skills will no longer trigger skill deployment. 
-Instead, `$ git push` deployes the latest source code to lambda and also deploys the changes in skill package such as interaction model, skill manifest and in-skill products.
+`$ git push` deploys skill package resources and skill code.
+Unlike in CLI v1, running `ask deploy` on hosted skills will no longer trigger skill deployment in CLI v2.
+Instead, `$ git push` sends the latest source code to Lambda.  It also deploys skill-package changes such as the interaction model, skill manifest and in-skill products.
 
-## UPGRADE STEPS:
-
-* Push to deploy skill resources and code:
+## DEPLOYMENT STEPS:
+* Push to deploy skill code and reosurces:
 	* `$ git push`
-  * Push in `master` branch deploys skill code and resources with development stage
-  * Push in `prod` branch deploys a skill code and resources with live stage
+  * Pushing in `master` branch deploys "lambda" folder to user's `development` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
+  * Pushing in `prod` branch deploys "lambda" folder to user's `live` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
+
 
