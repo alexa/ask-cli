@@ -196,9 +196,9 @@ describe('Command: Configure - AWS profile setup helper test', () => {
         it('| returns valid awsProfile ', (done) => {
             // setup
             const DEFAULT_AWS_PROFILE = 'ask_cli_default';
-            const opnStub = sinon.stub();
+            const openStub = sinon.stub();
             const proxyHelper = proxyquire('@src/commands/configure/aws-profile-setup-helper', {
-                opn: opnStub
+                open: openStub
             });
             const infoStub = sinon.stub();
             sinon.stub(Messenger, 'getInstance').returns({
