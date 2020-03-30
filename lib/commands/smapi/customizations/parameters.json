@@ -2,6 +2,9 @@
     "stageV2": {
         "name": "stage"
     },
+    "vendorId": {
+        "required": false
+    },
     "createSkillRequest": {
         "skipUnwrap": true,
         "name": "manifest"
