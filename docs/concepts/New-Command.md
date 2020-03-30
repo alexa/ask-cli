@@ -1,17 +1,9 @@
 # NEW COMMAND
 
 `askx new` allows developers to create a new skill from Alexa-provided templates or custom templates and support several deployment methods/deployers. 
-The deployment methods are: 
 
-1) Create an `Alexa hosted skill`, clone the skill project, and provide git-ready environment to deploy the skill. 
 
-2) Upload local code to Amazon S3, and use `AWS CloudFormation` to configure AWS resources required for the skill. 
-
-3) Creat an AWS IAM Role with basic permissions to access `AWS Lambda`. Update the configuration and upload the local code to an AWS Lambda function. 
-
-4) Manually deploy skill infrastructure. 
-
-**STRUCTURE OF INIT COMMAND:**
+**STRUCTURE OF NEW COMMAND:**
 
 `askx new [--template-url <template name>]
         [-p | --profile <profile>]
@@ -24,63 +16,29 @@ The deployment methods are:
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
-**debug**: Optional. Appends a debug message to the standard error.
+**debug**: Optional. Show debug messages.
 
 
 ## DEPLOYERS:
 
 * **Alexa Hosted deployer**
   * Dependency: SMAPI
-  * Description: Builds Alexa skills quickly by provisioning required resources automatically. 
-  The deployer will create a new AWS account with a deployment pipeline (CodeBuild), a skill Lambda function, a Git repository (CodeCommit) and an S3 bucket.
-* **AWS Lambda**
-  * Dependency: AWS-SDK
-  * Description: Deploys updated Lambda function code by replicating the existing CLI V1 functionality. Function ARN will be returned back to the CLI and further updated in the skill manifest.
+  * Description: Create an `Alexa hosted skill`, clone the skill project, and provide git-ready environment to deploy the skill. 
 * **AWS CloudFormation**
   * Dependency: AWS-SDK
-  * Description: Provides CloudFormation stack template(s) to deploy skill backends, making it easy to standardize skill infrastructures. Multiple regions can be configured. 
-  Function ARNs need to be the output in each yaml template file.
-* **Custom Deployer**
-  * Dependency: Custom Shell Script
-  * Description: Allows all other serverless deployment flow using CLI deploy logic.
+  * Description: Upload local code to Amazon S3, and use `AWS CloudFormation` to configure AWS resources required for the skill.
+* **AWS Lambda**
+  * Dependency: AWS-SDK
+  * Description: Creat an AWS IAM Role with basic permissions to access `AWS Lambda`. Update the configuration and upload the local code to an AWS Lambda function.
+
 
 
 ## TEMPLATES:
 
 * **Use an Amazon-provided template**
 
-**Structure of a skill project folder**
+Please refer to [Alexa Skill Project Resource Components](https://github.com/alexa-labs/ask-cli/blob/develop/docs/concepts/Alexa-Skill-Project-Definition.md) for the Amazon-provided templates' structure.
 
-To create a new skill project from one of the Amazon-provided templates, the skill project contains the following files and folders:
-
-```
-skill project folder
-├── lambda 
-│   ├── index.js 
-│   ├── package.json 
-│   └── util.js 
-├── infrastructure 
-├── skill-package 
-│   └── assets
-│       └── images
-│           ├── en-US_largeIcon.png
-│           └── en-US_smallIcon.png
-│   └── interactionModels 
-│       └── custom
-│           └── en-US.json
-│   └── skill.json 
-├── ask-resources.json
-├── .gitignore
-```
-The following list explains each part of the skill project:
-  
-  **lambda** – A folder that contains the source code for the skill's AWS Lambda function. The files contained here depend on the runtime for the skill.
-  
-  **infrastructure** – A folder that contains your CloudFormation definitions for deploying your skill to AWS
-  
-  **skill-package** – A folder that contains Skill resources utilized by the ASK platform such as skill manifest, interaction models, and assets.
-
-  **ask-resources.json** - A file that contains configuration for your Alexa skill project
  
 * **Use your own template**
 
