@@ -292,7 +292,7 @@ describe('Controller test - Authorization controller test', () => {
     });
 
     describe('# test getTokensByListeningOnPort', () => {
-        let proxyHelper, opnStub, infoStub;
+        let proxyHelper, openStub, infoStub;
 
         beforeEach(() => {
             sinon.stub(httpClient, 'request');
@@ -301,9 +301,9 @@ describe('Controller test - Authorization controller test', () => {
             sinon.stub(Messenger, 'getInstance').returns({
                 info: infoStub
             });
-            opnStub = sinon.stub();
+            openStub = sinon.stub();
             proxyHelper = proxyquire('@src/controllers/authorization-controller', {
-                opn: opnStub
+                open: openStub
             });
         });
 
