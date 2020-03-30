@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
 
 const httpClient = require('@src/clients/http-client');
@@ -16,7 +17,7 @@ const hashUtils = require('@src/utils/hash-utils');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Controller test - skill infrastructure controller test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
     const TEST_WORKSPACE = 'workspace';
@@ -211,18 +212,6 @@ describe('Controller test - skill infrastructure controller test', () => {
             sinon.restore();
         });
 
-        it('| code does not have any region, expect error called back', (done) => {
-            // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, {});
-            // call
-            skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
-                // verify
-                expect(res).equal(undefined);
-                expect(err).equal('[Warn]: Skip the infrastructure deployment, as the "code" field has not been set in the resources config file.');
-                done();
-            });
-        });
-
         it('| skill name failed to parse, expect error called back', (done) => {
             // setup
             Manifest.getInstance().setSkillName('中文  ');
@@ -237,12 +226,20 @@ describe('Controller test - skill infrastructure controller test', () => {
             });
         });
 
+        it('| code does not have any region, expect error called back', (done) => {
+            // setup
+            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns(null);
+            // call
+            skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal('[Warn]: Skip the infrastructure deployment, as the "code" field has not been set in the resources config file.');
+                done();
+            });
+        });
+
         it('| start multi-tasks fails, expect error called back', (done) => {
             // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, {
-                default: {},
-                NA: {}
-            });
             sinon.stub(MultiTasksView.prototype, 'loadTask');
             sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0, { error: 'error' });
             // call
@@ -250,21 +247,19 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('error');
-                expect(MultiTasksView.prototype.loadTask.callCount).equal(2);
+                expect(MultiTasksView.prototype.loadTask.callCount).equal(3);
                 expect(MultiTasksView.prototype.loadTask.args[0][1]).equal('Deploy Alexa skill infrastructure for region "default"');
                 expect(MultiTasksView.prototype.loadTask.args[0][2]).equal('default');
                 expect(MultiTasksView.prototype.loadTask.args[1][1]).equal('Deploy Alexa skill infrastructure for region "NA"');
                 expect(MultiTasksView.prototype.loadTask.args[1][2]).equal('NA');
+                expect(MultiTasksView.prototype.loadTask.args[2][1]).equal('Deploy Alexa skill infrastructure for region "EU"');
+                expect(MultiTasksView.prototype.loadTask.args[2][2]).equal('EU');
                 done();
             });
         });
 
         it('| start multi-tasks fails partially, expect error called back and state updated', (done) => {
             // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, {
-                default: {},
-                NA: {}
-            });
             sinon.stub(MultiTasksView.prototype, 'loadTask');
             sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0, { error: 'error', partialResult: { NA: 'partial' } });
             sinon.stub(SkillInfrastructureController.prototype, '_updateResourcesConfig');
@@ -280,10 +275,6 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| deploy delegate validate response fails, expect error called back', (done) => {
             // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, {
-                default: {},
-                NA: {}
-            });
             sinon.stub(MultiTasksView.prototype, 'loadTask');
             sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0);
             ddStub.throws(new Error('error'));
@@ -298,10 +289,6 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| deploy infra to all regions pass, expect no error called back', (done) => {
             // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, {
-                default: {},
-                NA: {}
-            });
             sinon.stub(SkillInfrastructureController.prototype, '_deployInfraByRegion');
             sinon.stub(SkillInfrastructureController.prototype, '_updateResourcesConfig');
             sinon.stub(MultiTasksView.prototype, 'loadTask').callsArgWith(0);
@@ -311,11 +298,13 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).deep.equal({});
                 expect(err).equal(null);
-                expect(MultiTasksView.prototype.loadTask.callCount).equal(2);
+                expect(MultiTasksView.prototype.loadTask.callCount).equal(3);
                 expect(MultiTasksView.prototype.loadTask.args[0][1]).equal('Deploy Alexa skill infrastructure for region "default"');
                 expect(MultiTasksView.prototype.loadTask.args[0][2]).equal('default');
                 expect(MultiTasksView.prototype.loadTask.args[1][1]).equal('Deploy Alexa skill infrastructure for region "NA"');
                 expect(MultiTasksView.prototype.loadTask.args[1][2]).equal('NA');
+                expect(MultiTasksView.prototype.loadTask.args[2][1]).equal('Deploy Alexa skill infrastructure for region "EU"');
+                expect(MultiTasksView.prototype.loadTask.args[2][2]).equal('EU');
                 done();
             });
         });
@@ -427,7 +416,7 @@ describe('Controller test - skill infrastructure controller test', () => {
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             sinon.stub(path, 'resolve').returns('base');
-            sinon.stub(fs, 'statSync').returns({
+            sinon.stub(fse, 'statSync').returns({
                 isDirectory: () => true
             });
             ddStub = sinon.stub();
@@ -532,7 +521,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-            sinon.stub(fs, 'writeFileSync');
+            sinon.stub(fse, 'writeFileSync');
         });
 
         afterEach(() => {
@@ -548,7 +537,7 @@ describe('Controller test - skill infrastructure controller test', () => {
             // verify
             expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'default')).equal('TEST_HASH');
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {} });
-            expect(fs.writeFileSync.callCount).equal(1);
+            expect(fse.writeFileSync.callCount).equal(2);
         });
     });
 

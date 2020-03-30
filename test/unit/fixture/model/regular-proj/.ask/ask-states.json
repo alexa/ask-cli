@@ -1,0 +1,52 @@
+{
+  "askcliStatesVersion": "2020-03-31",
+  "profiles": {
+    "default": {
+      "skillId": "amzn1.ask.skill.1234567890",
+      "skillMetadata": {
+        "lastDeployHash": "hash=="
+      },
+      "code": {
+        "default": {
+          "lastDeployHash": "hash=="
+        },
+        "FE": {
+          "lastDeployHash": "hash=="
+        },
+        "NA": {
+          "lastDeployHash": "hash=="
+        }
+      },
+      "skillInfrastructure": {
+        "@ask-cli/cfn-deployer": {
+          "deployState": {
+            "NA": {
+              "s3": {
+                "bucket": "ask-hw-skil-qq-useast1-1583357176863",
+                "key": "endpoint/build.zip",
+                "objectVersion": "NA_hash=="
+              },
+              "stackId": "arn:aws:cloudformation:us-east-1:857295427867:stack/ask-hw-NA-skillStack-1583357176863/d7227d80-5e5e-11ea-99c0-12bdd946785e"
+            },
+            "FE": {
+              "s3": {
+                "bucket": "ask-hw-skil-qq-useast2-1583357176867",
+                "key": "endpoint/build.zip",
+                "objectVersion": "FE_hash=="
+              },
+              "stackId": "arn:aws:cloudformation:us-east-2:857295427867:stack/ask-hw-FE-skillStack-1583357176867/d72bf360-5e5e-11ea-b84f-0a0bafe12bca"
+            },
+            "default": {
+              "s3": {
+                "bucket": "ask-hw-skil-qq-useast1-1583357176794",
+                "key": "endpoint/build.zip",
+                "objectVersion": "default_hash=="
+              },
+              "stackId": "arn:aws:cloudformation:us-east-1:857295427867:stack/ask-hw-default-skillStack-1583357176794/dfab8c80-5e5e-11ea-9888-1245bb6cedee"
+            }
+          }
+        }
+      }
+    }
+  }
+}

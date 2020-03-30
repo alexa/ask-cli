@@ -9,13 +9,13 @@ const optionModel = require('@src/commands/option-model');
 const CLiError = require('@src/exceptions/cli-error');
 const Messenger = require('@src/view/messenger');
 const profileHelper = require('@src/utils/profile-helper');
+const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands upgrade project test - command class test', () => {
+    const FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default';
     const TEST_ERROR = 'upgrade project error';
     const TEST_SKILL_ID = 'skillId';
-    const FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-skill-resources-config.json');
-    const FIXTURE_RESOURCES_CONFIG = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'upgrade-resources-config.json');
     let infoStub;
     let errorStub;
     let warnStub;
@@ -205,7 +205,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, TEST_ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -230,7 +233,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode').throws(new CLiError(TEST_ERROR));
                 // call
@@ -281,7 +287,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
                 sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(3, null);
@@ -357,7 +366,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(helper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(helper, 'downloadSkillPackage').callsArgWith(5, TEST_ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -379,7 +391,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(helper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(helper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(helper, 'handleExistingLambdaCode').throws(new CLiError(TEST_ERROR));
                 // call
@@ -402,7 +417,10 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
                 sinon.stub(helper, 'createV2ProjectSkeleton');
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
+                path.join.callThrough();
                 sinon.stub(helper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(helper, 'handleExistingLambdaCode');
                 // call

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/alexa-labs/ask-cli/compare/v0.10.5...v0.11.0) (2020-03-27)
+
+
+### Features
+
+* move states data from ask-resources.json configuration to .ask/ask-states.json ([45d550e](https://github.com/alexa-labs/ask-cli/commit/45d550ecdf05f0b69ea1a9df9ae69863cf99b8d2))
+
+
+### Bug Fixes
+
+* adding -p shortcut and description for smapi default options ([#73](https://github.com/alexa-labs/ask-cli/issues/73)) ([f50184a](https://github.com/alexa-labs/ask-cli/commit/f50184a045057e3e5c2d503ff06bf75fdae78688))
+* change from fatal to warn message ([#71](https://github.com/alexa-labs/ask-cli/issues/71)) ([37c922f](https://github.com/alexa-labs/ask-cli/commit/37c922f73de8431bbc341f5ee749a62f7070882b))
+* fix issues when parent parameter is not camel case ([#72](https://github.com/alexa-labs/ask-cli/issues/72)) ([8ac3844](https://github.com/alexa-labs/ask-cli/commit/8ac38441178f2ca17aa20bcd12c4481adf9e488a))
+
 ### [0.10.5](https://github.com/alexa-labs/ask-cli/compare/v0.10.4...v0.10.5) (2020-03-25)
 
 

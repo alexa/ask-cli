@@ -10,10 +10,11 @@ const AuthorizationController = require('@src/controllers/authorization-controll
 const ResourcesConfig = require('@src/model/resources-config');
 
 const cloneFlow = require('@src/controllers/hosted-skill-controller/clone-flow');
+const CONSTANTS = require('@src/utils/constants');
 
 describe('Controller test - CloneFlow test', () => {
     let TEST_DO_DEBUG = false;
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-skill-resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default';
     const TEST_PROJECT_PATH = 'TEST_PROJECT_PATH';
     const TEST_SKILL_ID = 'amzn1.ask.skill.5555555-4444-3333-2222-1111111111';
@@ -44,7 +45,8 @@ describe('Controller test - CloneFlow test', () => {
             // setup
             sinon.stub(fs, 'mkdirSync');
             sinon.stub(jsonfile, 'writeFileSync');
-            sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(path, 'join').withArgs(TEST_PROJECT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            path.join.callThrough();
             // call
             cloneFlow.generateProject(TEST_PROJECT_PATH, TEST_SKILL_ID, TEST_SKILL_NAME, TEST_METADATA, TEST_PROFILE);
             // verify

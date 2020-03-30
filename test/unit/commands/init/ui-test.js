@@ -305,8 +305,14 @@ describe('Commands init - UI test', () => {
 
     describe('# validate ui.showPreviewAndConfirm', () => {
         const TEST_ROOT_PATH = 'root';
-        const TEST_ASK_RESOURCES_JSON = 'json';
-        const TEST_ASK_RESOURCES = {};
+        const TEST_ASK_RESOURCES_JSON = 'resources json';
+        const TEST_ASK_STATES_JSON = 'states json';
+        const TEST_ASK_RESOURCES = 'resources';
+        const TEST_ASK_STATES = 'states';
+        const TEST_RESOURCES_COFNIG = {
+            askResources: TEST_ASK_RESOURCES,
+            askStates: TEST_ASK_STATES
+        };
 
         beforeEach(() => {
             infoStub = sinon.stub();
@@ -314,7 +320,9 @@ describe('Commands init - UI test', () => {
                 info: infoStub
             });
             sinon.stub(inquirer, 'prompt');
-            sinon.stub(JsonView, 'toString').returns(TEST_ASK_RESOURCES_JSON);
+            sinon.stub(JsonView, 'toString');
+            JsonView.toString.withArgs(TEST_ASK_RESOURCES).returns(TEST_ASK_RESOURCES_JSON);
+            JsonView.toString.withArgs(TEST_ASK_STATES).returns(TEST_ASK_STATES_JSON);
         });
 
         afterEach(() => {
@@ -325,16 +333,20 @@ describe('Commands init - UI test', () => {
             // setup
             inquirer.prompt.rejects(TEST_ERROR);
             // call
-            ui.showPreviewAndConfirm(TEST_ROOT_PATH, TEST_ASK_RESOURCES, (err, response) => {
+            ui.showPreviewAndConfirm(TEST_ROOT_PATH, TEST_RESOURCES_COFNIG, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Does this look correct? ',
                     type: 'confirm',
                     default: true,
                 });
-                expect(infoStub.args[0][0]).equal(
-                    `\nWriting to ${path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG)}: \n${TEST_ASK_RESOURCES_JSON}\n`
-                );
+                expect(infoStub.args[0][0]).equal(`
+Writing to ${path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG)}:
+${TEST_ASK_RESOURCES_JSON}
+
+Writing to ${path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.HIDDEN_ASK_FOLDER, CONSTANTS.FILE_PATH.ASK_STATES_JSON_CONFIG)}:
+${TEST_ASK_STATES_JSON}
+`);
                 expect(err.name).equal(TEST_ERROR);
                 expect(response).equal(undefined);
                 done();
@@ -345,7 +357,7 @@ describe('Commands init - UI test', () => {
             // setup
             inquirer.prompt.resolves({ confirmPreview: true });
             // call
-            ui.showPreviewAndConfirm(TEST_ROOT_PATH, TEST_ASK_RESOURCES, (err, response) => {
+            ui.showPreviewAndConfirm(TEST_ROOT_PATH, TEST_RESOURCES_COFNIG, (err, response) => {
                 // verify
                 expect(err).equal(null);
                 expect(response).equal(true);
