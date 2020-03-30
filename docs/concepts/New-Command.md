@@ -1,14 +1,19 @@
 # NEW COMMAND
 
 `askx new` allows developers to create a new skill from Alexa-provided templates or custom templates and support several deployment methods/deployers. 
-The deployment methods are: 1) Create an `Alexa hosted skill`, and clone the skill project to the local machine. 
-2)  Upload local code to Amazon S3, and use `AWS CloudFormation` to configure AWS resources required for the skill. 
+The deployment methods are: 
+
+1) Create an `Alexa hosted skill`, clone the skill project, and provide git-ready environment to deploy the skill. 
+
+2) Upload local code to Amazon S3, and use `AWS CloudFormation` to configure AWS resources required for the skill. 
+
 3) Creat an AWS IAM Role with basic permissions to access `AWS Lambda`. Update the configuration and upload the local code to an AWS Lambda function. 
+
 4) Manually deploy skill infrastructure. 
 
 **STRUCTURE OF INIT COMMAND:**
 
-`askx init [--template-url <template name>]
+`askx new [--template-url <template name>]
         [-p | --profile <profile>]
         [--debug]
         [-h | --help]`
@@ -21,23 +26,6 @@ The deployment methods are: 1) Create an `Alexa hosted skill`, and clone the ski
 
 **debug**: Optional. Appends a debug message to the standard error.
 
-
-## WORKFLOW:
-
-Users will be asked following questions to create a new skill:
-
-* Prompts user for a `programming language`
-	* Select a programming language.
-* Prompts user for a `deploy delegate` to depoly skill infrastructure
-	* Select a deployer.
-* Prompts user for a `skill template`
-	* Select a skill template.
-* Prompts user for a `skill name`
-  * Leave this empty to use default skill name or
-  * Enter a value for skill name.
-* Prompts user for a `folder name` for the skill project
-  * Leave this empty to use default folder name or
-  * Enter a value for folder name.
 
 ## DEPLOYERS:
 
@@ -67,7 +55,7 @@ To create a new skill project from one of the Amazon-provided templates, the ski
 
 ```
 skill project folder
-├── code 
+├── lambda 
 │   ├── index.js 
 │   ├── package.json 
 │   └── util.js 
@@ -87,8 +75,6 @@ skill project folder
 The following list explains each part of the skill project:
   
   **lambda** – A folder that contains the source code for the skill's AWS Lambda function. The files contained here depend on the runtime for the skill.
-  
-  **code** –  A folder that contains the source code for your skill that utilizes the ASK SDK.
   
   **infrastructure** – A folder that contains your CloudFormation definitions for deploying your skill to AWS
   
