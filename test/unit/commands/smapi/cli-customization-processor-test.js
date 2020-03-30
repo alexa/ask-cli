@@ -96,19 +96,15 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             expect(flatParamsMap.get(key)).eql(expected);
         });
 
-        it('| should add simple non body paramter and take required from customizations', () => {
+        it('| should skip processing of parameter', () => {
             const parameter = makeParameter();
-            const required = false;
+            const skip = true;
 
-            sinon.stub(customizationMap, 'get').returns({ required });
-            const expected = { ...parameter, required, enum: undefined, isArray: false };
+            sinon.stub(customizationMap, 'get').returns({ skip });
 
             processor.processParameter(parameter, parentOperation, definitions);
 
-            const key = camelCase(parameter.name);
-            const { flatParamsMap } = parentOperation.customizationMetadata;
-
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(parameter.skip).eql(true);
         });
 
 

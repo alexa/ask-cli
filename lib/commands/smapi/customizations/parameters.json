@@ -3,7 +3,7 @@
         "name": "stage"
     },
     "vendorId": {
-        "required": false
+        "skip": true
     },
     "createSkillRequest": {
         "skipUnwrap": true,
