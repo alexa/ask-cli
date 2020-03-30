@@ -85,9 +85,9 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(R, 'clone').returns({ profiles: {} });
             // call
             hostedSkillHelper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
-            expect(ensureDirStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE}`);
-            expect(ensureDirStub.args[1][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA}`);
-            expect(askStatesStub.args[0][0]).eq(`${TEST_ROOT_PATH}/${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
+            expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
+            expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
+            expect(askStatesStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
             expect(askStatesStub.args[0][1]).deep.equal({
                 profiles: {
                     [TEST_PROFILE]: {
