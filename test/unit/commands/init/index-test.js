@@ -5,6 +5,7 @@ const AuthorizationController = require('@src/controllers/authorization-controll
 const InitCommand = require('@src/commands/init');
 const helper = require('@src/commands/init/helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller');
+const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const httpClient = require('@src/clients/http-client');
 const jsonView = require('@src/view/json-view');
 const optionModel = require('@src/commands/option-model');
@@ -506,6 +507,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify
@@ -538,6 +540,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify

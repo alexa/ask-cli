@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs-extra');
 const jsonView = require('@src/view/json-view');
+const CLiError = require('@src/exceptions/cli-error');
 const ResourcesConfig = require('@src/model/resources-config');
 const httpClient = require('@src/clients/http-client');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
@@ -191,45 +192,33 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| callback error when dominInfo is not provided', (done) => {
+        it('| return error when dominInfo is not provided', () => {
             // setup
             Manifest.getInstance().setApis({});
+            const expectedErrMessage = '[Error]: Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.';
             // call
-            skillMetaController.enableSkill((err, res) => {
-                // verify
-                expect(err).equal('[Error]: Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.');
-                expect(res).equal(undefined);
-                done();
-            });
+            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
         });
 
-        it('| callback error when dominInfo contains more than one domain', (done) => {
+        it('| return error when dominInfo contains more than one domain', () => {
             // setup
             Manifest.getInstance().setApis({
                 custom: {},
                 smartHome: {}
             });
+            const expectedErrMessage = '[Warn]: Skill with multiple api domains cannot be enabled. Skip the enable process.';
             // call
-            skillMetaController.enableSkill((err, res) => {
-                // verify
-                expect(err).equal('[Warn]: Skill with multiple api domains cannot be enabled. Skip the enable process.');
-                expect(res).equal(undefined);
-                done();
-            });
+            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
         });
 
-        it('| callback error when domain cannot be enabled', (done) => {
+        it('| return error when domain cannot be enabled', () => {
             // setup
             Manifest.getInstance().setApis({
                 smartHome: {}
             });
+            const expectedErrMessage = '[Warn]: Skill api domain "smartHome" cannot be enabled. Skip the enable process.';
             // call
-            skillMetaController.enableSkill((err, res) => {
-                // verify
-                expect(err).equal('[Warn]: Skill api domain "smartHome" cannot be enabled. Skip the enable process.');
-                expect(res).equal(undefined);
-                done();
-            });
+            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
         });
 
         it('| callback error when getSkillEnablement return error', (done) => {
