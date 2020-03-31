@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.11.1](https://github.com/alexa-labs/ask-cli/compare/v0.11.0...v0.11.1) (2020-03-31)
+
+
+### Bug Fixes
+
+* askx init --hosted-skill-id -> fail when not include ask-resources.json in the git ([#75](https://github.com/alexa-labs/ask-cli/issues/75)) ([f0da5da](https://github.com/alexa-labs/ask-cli/commit/f0da5da5967a099bc414a72fadba9223865057d5))
+* askx new -> list of selections is not static when choosing deployer ([#91](https://github.com/alexa-labs/ask-cli/issues/91)) ([5d86874](https://github.com/alexa-labs/ask-cli/commit/5d868744b19764475a736122ac6f0d78a9124b85))
+* change upgrade-project command to track skill-id in ask-states.json ([#90](https://github.com/alexa-labs/ask-cli/issues/90)) ([97e986e](https://github.com/alexa-labs/ask-cli/commit/97e986e3de17b1996d7350c41f48a272d36b26f7))
+* enable interaction after record and support option to append quit to replay file, continue session after .record ([#89](https://github.com/alexa-labs/ask-cli/issues/89)) ([ea8da7a](https://github.com/alexa-labs/ask-cli/commit/ea8da7ae492aa4b2e1546edc7c738d88b0246296))
+* fix issue of vendor-id being required parameter ([#86](https://github.com/alexa-labs/ask-cli/issues/86)) ([183a3e1](https://github.com/alexa-labs/ask-cli/commit/183a3e16bf6d6cd2332722960deff0a6c7a4bdbe))
+* show error for the smapi commands from the upstream request ([#85](https://github.com/alexa-labs/ask-cli/issues/85)) ([6fcb601](https://github.com/alexa-labs/ask-cli/commit/6fcb601d0a9cb04d3a2bba69dc224b2eb13b8762))
+* update to "open" package and add warn messaging for token security ([aee5c92](https://github.com/alexa-labs/ask-cli/commit/aee5c924caf8903e70134b69a7b447e93baba60d))
+
 ## [0.11.0](https://github.com/alexa-labs/ask-cli/compare/v0.10.5...v0.11.0) (2020-03-27)
 
 
