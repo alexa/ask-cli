@@ -234,7 +234,7 @@ describe('Commands Dialog test - command class test', () => {
                 // call
                 instance.handle(TEST_CMD_WITH_VALUES, (err) => {
                     // verify
-                    expect(err).equal('Failed to read project resource file.');
+                    expect(err.message).equal('Failed to read project resource file. Please run the command within a ask-cli project.');
                     done();
                 });
             });
