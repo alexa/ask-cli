@@ -206,6 +206,7 @@ describe('Command: Configure - AWS profile setup helper test', () => {
             });
             sinon.stub(fs, 'existsSync').returns(false);
             sinon.stub(fs, 'ensureFileSync');
+            sinon.stub(fs, 'chmodSync');
             sinon.stub(stringUtils, 'isNonBlankString').returns(false);
             sinon.stub(ui, 'confirmSettingAws').callsArgWith(0, null, true);
             sinon.stub(ui, 'addNewCredentials').callsArgWith(0, null, TEST_CREDENTIALS);
