@@ -172,13 +172,11 @@ Get the list of in-skill products for the vendor.
 
 `get-isp-list-for-vendor` command format:
 
-`$ askx smapi get-isp-list-for-vendor <--vendor-id <vendor-id>> [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--debug]`
+`$ askx smapi get-isp-list-for-vendor [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] The vendor ID.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
@@ -559,13 +557,11 @@ Get the current user permissions about Alexa hosted skill features.
 
 `get-alexa-hosted-skill-user-permissions` command format:
 
-`$ askx smapi get-alexa-hosted-skill-user-permissions <--vendor-id <vendor-id>> <--permission <permission>> [-p| --profile <profile>] [--debug]`
+`$ askx smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] vendorId.</dd>
     <dt>--permission <permission></dt>
     <dd markdown="span">[REQUIRED] The permission of a hosted skill feature that customer needs to check.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1085,13 +1081,11 @@ List all catalogs for the vendor.
 
 `list-interaction-model-catalogs` command format:
 
-`$ askx smapi list-interaction-model-catalogs <--vendor-id <vendor-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ askx smapi list-interaction-model-catalogs [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] The vendor ID.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
@@ -1392,13 +1386,11 @@ List all slot types for the vendor.
 
 `list-interaction-model-slot-types` command format:
 
-`$ askx smapi list-interaction-model-slot-types <--vendor-id <vendor-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ askx smapi list-interaction-model-slot-types [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] The vendor ID.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
@@ -1889,13 +1881,11 @@ Get the list of skills for the vendor.
 
 `list-skills-for-vendor` command format:
 
-`$ askx smapi list-skills-for-vendor <--vendor-id <vendor-id>> [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--debug]`
+`$ askx smapi list-skills-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] The vendor ID.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
