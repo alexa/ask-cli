@@ -2,7 +2,7 @@
 
 `askx new` creates an [Alexa hosted skill](https://developer.amazon.com/en-US/docs/alexa/hosted-skills/build-a-skill-end-to-end-using-an-alexa-hosted-skill.html), clones the skill project, and provides a git-ready environment on the local machine. This replaces the `ask create-hosted-skill` command in CLI v1. 
 
-Using`askx new`, the Alexa hosted skill service will create a new AWS account, which owns a Git repository using AWS CodeCommit, and an AWS Lambda function centered back-end. This allows developers to either code on the portal editor or checkout the code using Git and code on local IDEs.
+Using `askx new`, the Alexa hosted skill service will create a new AWS account, which owns a Git repository using AWS CodeCommit, and an AWS Lambda function centered back-end. This allows developers to either code on the portal editor or checkout the code using Git and code on local IDEs.
 
 **STRUCTURE OF NEW COMMAND:**
 
@@ -106,5 +106,10 @@ Instead, `$ git push` sends the latest source code to Lambda.  It also deploys s
 	* `$ git push`
   * Pushing in `master` branch deploys "lambda" folder to user's `development` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
   * Pushing in `prod` branch deploys "lambda" folder to user's `live` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
+
+
+## Git Pre-push Hook
+
+CLI v2 supports Alexa Hosted skill, a git-native service, to track deployment states using the pre-push hook. When $ git push executes, the pre-push hook prints the skill portal URL to allow users to track deployment states.
 
 
