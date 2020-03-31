@@ -1,7 +1,6 @@
 const { expect } = require('chai');
 const fs = require('fs-extra');
 const path = require('path');
-const R = require('ramda');
 const sinon = require('sinon');
 
 const awsUtil = require('@src/clients/aws-client/aws-util');
@@ -9,13 +8,15 @@ const GitClient = require('@src/clients/git-client');
 const hostedSkillHelper = require('@src/commands/util/upgrade-project/hosted-skill-helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
-const CLiError = require('@src/exceptions/cli-error');
+const CliError = require('@src/exceptions/cli-error');
 const ResourcesConfig = require('@src/model/resources-config');
 const AskResources = require('@src/model/resources-config/ask-resources');
+const AskStates = require('@src/model/resources-config/ask-states');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands upgrade-project test - hosted skill helper test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
+    const FIXTURE_STATES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', '.ask', 'ask-states.json');
     const TEST_ERROR = 'testError';
     const TEST_PROFILE = 'default';
     const TEST_AWS_REGION = 'us-west-2';
@@ -48,7 +49,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'shortStatus').returns(TEST_OUTPUT);
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CLiError, `Commit the following files in the dev branch before upgrading project:\n${TEST_OUTPUT}`);
+                .throw(CliError, `Commit the following files in the dev branch before upgrading project:\n${TEST_OUTPUT}`);
         });
 
         it('| dev branch commits difference is not zero , expect error thrown', () => {
@@ -58,7 +59,8 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'countCommitDifference').returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CLiError, 'Upgrade project failed. Please follow the project upgrade instruction from '
+                .throw(CliError, 'Upgrade project failed, as your dev branch is ahead of the remote.\n'
+                + 'Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
                 + 'to change to ask-cli v2 structure.');
         });
@@ -73,7 +75,18 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
         });
     });
 
-    describe('# test helper method - createV2ProjectSkeleton', () => {
+    describe('# test helper method - createV2ProjectSkeletonAndLoadModel', () => {
+        beforeEach(() => {
+            sinon.stub(path, 'join');
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+            ).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.HIDDEN_ASK_FOLDER, CONSTANTS.FILE_PATH.ASK_STATES_JSON_CONFIG
+            ).returns(FIXTURE_STATES_CONFIG_FILE_PATH);
+            path.join.callThrough();
+        });
+
         afterEach(() => {
             sinon.restore();
         });
@@ -81,18 +94,20 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
         it('| crate v2 project skeleton, expect write JSON file correctly', () => {
             // setup
             const ensureDirStub = sinon.stub(fs, 'ensureDirSync');
-            const askStatesStub = sinon.stub(AskResources, 'withContent');
-            sinon.stub(R, 'clone').returns({ profiles: {} });
+            sinon.stub(AskResources, 'withContent');
+            sinon.stub(AskStates, 'withContent');
             // call
-            hostedSkillHelper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
+            hostedSkillHelper.createV2ProjectSkeletonAndLoadModel(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
             expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
             expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
-            expect(askStatesStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
-            expect(askStatesStub.args[0][1]).deep.equal({
-                profiles: {
-                    [TEST_PROFILE]: {
-                        skillId: TEST_SKILL_ID
-                    }
+            expect(AskResources.withContent.args[0][0]).eq(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            expect(AskResources.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {}
+            });
+            expect(AskStates.withContent.args[0][0]).eq(FIXTURE_STATES_CONFIG_FILE_PATH);
+            expect(AskStates.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {
+                    skillId: TEST_SKILL_ID
                 }
             });
         });
@@ -168,7 +183,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| set Git Credential Helper fails, expect error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper').throws(new CLiError(TEST_ERROR));
+            sinon.stub(gitClient, 'configureCredentialHelper').throws(new CliError(TEST_ERROR));
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
@@ -182,10 +197,26 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'configureCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
-            sinon.stub(gitClient, 'deleteBranch').throws(new CLiError(TEST_ERROR));
+            sinon.stub(gitClient, 'deleteBranch').throws(new CliError(TEST_ERROR));
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
+                expect(err.message).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| update git ignore file, expect error thrown', (done) => {
+            // setup
+            sinon.stub(gitClient, 'configureCredentialHelper');
+            sinon.stub(gitClient, 'checkoutBranch');
+            sinon.stub(gitClient, 'merge');
+            sinon.stub(gitClient, 'deleteBranch');
+            sinon.stub(gitClient, 'setupGitIgnore').throws(new CliError(TEST_ERROR));
+            // call
+            hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
+                // verify
+                expect(gitClient.setupGitIgnore.args[0][0]).deep.equal(['ask-resources.json', '.ask/']);
                 expect(err.message).equal(TEST_ERROR);
                 done();
             });
@@ -197,6 +228,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
+            sinon.stub(gitClient, 'setupGitIgnore');
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
@@ -212,6 +244,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
+            sinon.stub(gitClient, 'setupGitIgnore');
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {

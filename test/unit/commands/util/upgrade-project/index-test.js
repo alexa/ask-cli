@@ -182,7 +182,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton').throws(new CLiError(TEST_ERROR));
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeletonAndLoadModel').throws(new CLiError(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -204,7 +204,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -232,7 +232,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -260,7 +260,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
@@ -286,7 +286,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(hostedSkillHelper, 'checkIfDevBranchClean');
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeleton');
+                sinon.stub(hostedSkillHelper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -345,7 +345,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(helper, 'createV2ProjectSkeleton').throws(new CLiError(TEST_ERROR));
+                sinon.stub(helper, 'createV2ProjectSkeletonAndLoadModel').throws(new CLiError(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -365,7 +365,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(helper, 'createV2ProjectSkeleton');
+                sinon.stub(helper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -390,7 +390,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(helper, 'createV2ProjectSkeleton');
+                sinon.stub(helper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
@@ -416,7 +416,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(helper, 'extractUpgradeInformation').returns(TEST_USER_INPUT);
                 sinon.stub(helper, 'previewUpgrade').callsArgWith(1, null, true);
                 sinon.stub(helper, 'moveOldProjectToLegacyFolder');
-                sinon.stub(helper, 'createV2ProjectSkeleton');
+                sinon.stub(helper, 'createV2ProjectSkeletonAndLoadModel');
                 sinon.stub(path, 'join').withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);

@@ -10,6 +10,8 @@ const ui = require('@src/commands/util/upgrade-project/ui');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const CLiError = require('@src/exceptions/cli-error');
 const ResourcesConfig = require('@src/model/resources-config');
+const AskResources = require('@src/model/resources-config/ask-resources');
+const AskStates = require('@src/model/resources-config/ask-states');
 const Messenger = require('@src/view/messenger');
 const CONSTANTS = require('@src/utils/constants');
 const hashUtils = require('@src/utils/hash-utils');
@@ -31,6 +33,7 @@ describe('Commands upgrade-project test - helper test', () => {
     const TEST_ROOT_PATH = 'rootPath';
     const TEST_ARN = 'arn:aws:lambda:us-west-2:123456789012:function:ask-custom-skill-sample-nodejs-fact-default';
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
+    const FIXTURE_STATES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', '.ask', 'ask-states.json');
     const TEST_LAMBDAS = [
         {
             alexaUsage: ['custom/default'],
@@ -298,7 +301,18 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
         });
     });
 
-    describe('# test helper method - createV2ProjectSkeleton', () => {
+    describe('# test helper method - createV2ProjectSkeletonAndLoadModel', () => {
+        beforeEach(() => {
+            sinon.stub(path, 'join');
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+            ).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.HIDDEN_ASK_FOLDER, CONSTANTS.FILE_PATH.ASK_STATES_JSON_CONFIG
+            ).returns(FIXTURE_STATES_CONFIG_FILE_PATH);
+            path.join.callThrough();
+        });
+
         afterEach(() => {
             sinon.restore();
         });
@@ -306,20 +320,26 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
         it('| crate v2 project skeleton, expect write JSON file correctly', () => {
             // setup
             const ensureDirStub = sinon.stub(fs, 'ensureDirSync');
-            const writeStub = sinon.stub(fs, 'writeJSONSync');
-            sinon.stub(R, 'clone').returns({ profiles: {} });
+            sinon.stub(AskResources, 'withContent');
+            sinon.stub(AskStates, 'withContent');
             // call
-            helper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
+            helper.createV2ProjectSkeletonAndLoadModel(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
             expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
             expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
-            expect(writeStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
-            expect(writeStub.args[0][1]).deep.equal({
-                profiles: {
-                    [TEST_PROFILE]: {
-                        skillId: TEST_SKILL_ID,
-                        skillMetadata: {},
-                        code: {}
-                    }
+
+            expect(AskResources.withContent.args[0][0]).eq(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            expect(AskResources.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {
+                    skillMetadata: {},
+                    code: {}
+                }
+            });
+            expect(AskStates.withContent.args[0][0]).eq(FIXTURE_STATES_CONFIG_FILE_PATH);
+            expect(AskStates.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {
+                    skillId: TEST_SKILL_ID,
+                    skillMetadata: {},
+                    code: {}
                 }
             });
         });
