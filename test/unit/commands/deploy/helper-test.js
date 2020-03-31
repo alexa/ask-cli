@@ -141,6 +141,17 @@ describe('Commands deploy test - helper test', () => {
             });
         });
 
+        it('| skillMetaController validateDomain fails, expect callback error', (done) => {
+            // setup
+            sinon.stub(SkillMetadataController.prototype, 'validateDomain').throws('test-error');
+            // call
+            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err) => {
+                expect(err.name).equal('test-error');
+                expect(infoStub.args[0][0]).equal('\n==================== Enable Skill ====================');
+                done();
+            });
+        });
+
         it('| skillMetaController enableSkill passes, expect no error callback', (done) => {
             // setup
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').callsArgWith(0);
