@@ -14,7 +14,7 @@ const ResourcesConfig = require('@src/model/resources-config');
 describe('Commands git-credentials-helper test - command class test', () => {
     const TEST_PROFILE = 'default';
     const TEST_DEBUG = false;
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-skill-resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
 
     let infoStub;
     let errorStub;

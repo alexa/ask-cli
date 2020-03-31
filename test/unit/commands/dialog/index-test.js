@@ -17,11 +17,11 @@ const SpinnerView = require('@src/view/spinner-view');
 describe('Commands Dialog test - command class test', () => {
     const TEST_ERROR = 'error';
     const DIALOG_FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'dialog');
-    const RESOURCE_CONFIG_FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
+    const RESOURCE_CONFIG_FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj');
     const DIALOG_REPLAY_FILE_JSON_PATH = path.join(DIALOG_FIXTURE_PATH, 'dialog-replay-file.json');
     const INVALID_DIALOG_REPLAY_FILE_JSON_PATH = path.join(DIALOG_FIXTURE_PATH, 'invalid-dialog-replay-file.json');
-    const INVALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'json-config.json');
-    const VALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'resources-config.json');
+    const INVALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'random-json-config.json');
+    const VALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'ask-resources.json');
     const TEST_PROFILE = 'default';
     const TEST_CMD = {
         profile: TEST_PROFILE
@@ -210,6 +210,7 @@ describe('Commands Dialog test - command class test', () => {
             afterEach(() => {
                 sinon.restore();
             });
+
             it('| empty locale throws error', (done) => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
@@ -255,7 +256,10 @@ describe('Commands Dialog test - command class test', () => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {};
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').returns(VALID_RESOURCES_CONFIG_JSON_PATH);
+                sinon.stub(path, 'join').withArgs(
+                    process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+                ).returns(VALID_RESOURCES_CONFIG_JSON_PATH);
+                path.join.callThrough();
                 process.env.ASK_DEFAULT_DEVICE_LOCALE = 'en-US';
                 // call
                 const config = instance._getDialogConfig(TEST_CMD_WITH_VALUES);
@@ -264,7 +268,7 @@ describe('Commands Dialog test - command class test', () => {
                 expect(config.locale).equal('en-US');
                 expect(config.profile).equal('default');
                 expect(config.replay).equal(undefined);
-                expect(config.skillId).equal('amzn1.ask.skill.5555555-4444-3333-2222-1111111111');
+                expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                 expect(config.stage).equal('development');
                 expect(config.userInputs).equal(undefined);
             });

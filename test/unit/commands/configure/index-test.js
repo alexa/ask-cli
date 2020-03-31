@@ -74,7 +74,7 @@ describe('Commands Configure test - command class test', () => {
             instance.handle(TEST_CMD, (err, askProfile) => {
                 // verify
                 expect(infoStub.args[0][0]).eq(messages.ASK_CLI_CONFIGURATION_MESSAGE);
-                expect(err.message).eq(`File ${INVALID_FILE_PATH} not exists.`);
+                expect(err.message).eq(`No access to read/write file ${INVALID_FILE_PATH}.`);
                 expect(askProfile).eq(undefined);
                 done();
             });

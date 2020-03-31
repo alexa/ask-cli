@@ -92,7 +92,9 @@ describe('Functional test - ask api get-interaction-model', () => {
         const httpMockConfig = [];
         const expectationHandler = (msgCatcher) => {
             expect(msgCatcher.info).equal('');
-            expect(msgCatcher.error).equal('Please provide valid input for option: locale. Input value (invalidLocale) doesn\'t match REGEX rule ^[a-z]{2}-[A-Z]{2}$.');
+            expect(msgCatcher.error).equal(
+                'Please provide valid input for option: locale. Input value (invalidLocale) doesn\'t match REGEX rule ^[a-z]{2}-[A-Z]{2}$.'
+            );
         };
 
         await new ApiCommandBasicTest({ operation, cmd, envVar, httpMockConfig, expectationHandler }).test();

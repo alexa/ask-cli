@@ -44,9 +44,9 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(Messenger, 'getInstance').returns({
                 info: infoStub
             });
-            const opnStub = sinon.stub();
+            const openStub = sinon.stub();
             proxyHelper = proxyquire('@src/commands/v2new/hosted-skill-helper', {
-                opn: opnStub
+                open: openStub
             });
             endStub = sinon.stub();
             response = {

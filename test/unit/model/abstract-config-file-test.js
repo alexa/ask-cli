@@ -1,11 +1,12 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const jsonfile = require('jsonfile');
 
 const ConfigFile = require('@src/model/abstract-config-file');
 const yaml = require('@src/model/yaml-parser');
+const jsonView = require('@src/view/json-view');
 
 describe('Model test - abstract config file test', () => {
     const FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
@@ -120,6 +121,51 @@ describe('Model test - abstract config file test', () => {
             } catch (err) {
                 expect(err.message).to.equal(`File type for ${NOT_SUPPORTED_FILE_PATH} is not supported. Only JSON and YAML files are supported.`);
             }
+        });
+    });
+
+    describe('# inspect correctness for withContent method', () => {
+        const TEST_FILE_PATH = 'any path';
+        const TEST_CONTENT = { key: 'any content' };
+
+        beforeEach(() => {
+            sinon.stub(fs, 'existsSync');
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(fs, 'writeFileSync');
+            sinon.stub(path, 'dirname');
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| if file does exist, it is logical error to call this method, throw error out', () => {
+            // setup
+            fs.existsSync.returns(true);
+            path.dirname.returns(TEST_FILE_PATH);
+            // call
+            try {
+                ConfigFile.withContent(TEST_FILE_PATH, TEST_CONTENT);
+                throw 'Expect this line is not called as it should have failed before this line.';
+            } catch (e) {
+                // verify
+                expect(e.message).equal(`Failed to create file ${TEST_FILE_PATH} as it already exists.`);
+            }
+        });
+
+        it('| with content of JSON file, expect it will write to file correctly', () => {
+            // setup
+            fs.existsSync.returns(false);
+            path.dirname.returns(JSON_CONFIG_PATH);
+            // call
+            try {
+                ConfigFile.withContent(JSON_CONFIG_PATH, TEST_CONTENT);
+            } catch (e) {
+                expect(e).equal(undefined);
+            }
+            // verify
+            expect(fs.writeFileSync.args[0][0]).equal(JSON_CONFIG_PATH);
+            expect(fs.writeFileSync.args[0][1]).equal(jsonView.toString(TEST_CONTENT));
         });
     });
 

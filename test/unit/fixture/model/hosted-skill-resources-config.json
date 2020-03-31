@@ -1,5 +1,5 @@
 {
-  "askcliResourcesVersion": "2019-08-23",
+  "askcliResourcesVersion": "2020-03-31",
   "profiles": {
     "default": {
       "skillId": "amzn1.ask.skill.5555555-4444-3333-2222-1111111111",

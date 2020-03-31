@@ -28,18 +28,21 @@ describe('Command: Configure - helper test', () => {
     };
     let setTokenStub;
     let infoStub;
+    let warnStub;
     let setAwsProfileStub;
     let writeStub;
     let setVendorIdStub;
     describe('# test initiateAskProfileSetup', () => {
         beforeEach(() => {
             infoStub = sinon.stub();
+            warnStub = sinon.stub();
             setAwsProfileStub = sinon.stub();
             setVendorIdStub = sinon.stub();
             writeStub = sinon.stub();
             setTokenStub = sinon.stub();
             sinon.stub(Messenger, 'getInstance').returns({
-                info: infoStub
+                info: infoStub,
+                warn: warnStub
             });
             sinon.stub(AppConfig, 'getInstance').returns({
                 write: writeStub,
@@ -59,6 +62,7 @@ describe('Command: Configure - helper test', () => {
             // call
             helper.initiateAskProfileSetup(TEST_CONFIG, (error, askProfile) => {
                 // verify
+                expect(warnStub.args[0][0]).eq(messages.LWA_TOKEN_SHARE_WARN_MESSAGE);
                 expect(error).eq(TEST_ERROR_MESSAGE);
                 expect(askProfile).eq(undefined);
                 done();
@@ -73,6 +77,7 @@ describe('Command: Configure - helper test', () => {
             // call
             helper.initiateAskProfileSetup(TEST_CONFIG, (error, askProfile) => {
                 // verify
+                expect(warnStub.args[0][0]).eq(messages.LWA_TOKEN_SHARE_WARN_MESSAGE);
                 expect(setTokenStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setTokenStub.args[0][1]).to.deep.eq(TEST_ACCESS_TOKEN);
                 expect(infoStub.args[0][0]).eq(`ASK Profile "${TEST_PROFILE}" was successfully created. The details are recorded in ask-cli config file (.ask/cli_config) located at your **HOME** folder.`);
@@ -91,6 +96,7 @@ describe('Command: Configure - helper test', () => {
             // call
             helper.initiateAskProfileSetup(TEST_CONFIG, (error, askProfile) => {
                 // verify
+                expect(warnStub.args[0][0]).eq(messages.LWA_TOKEN_SHARE_WARN_MESSAGE);
                 expect(setVendorIdStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setVendorIdStub.args[0][1]).to.deep.eq(TEST_VENDOR_ID);
                 expect(infoStub.args[0][0]).eq(`ASK Profile "${TEST_PROFILE}" was successfully created. The details are recorded in ask-cli config file (.ask/cli_config) located at your **HOME** folder.`);
@@ -110,11 +116,13 @@ describe('Command: Configure - helper test', () => {
             // call
             helper.initiateAskProfileSetup(TEST_CONFIG, (error, askProfile) => {
                 // verify
+                expect(warnStub.args[0][0]).eq(messages.LWA_TOKEN_SHARE_WARN_MESSAGE);
                 expect(setVendorIdStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setVendorIdStub.args[0][1]).to.deep.eq(TEST_VENDOR_ID);
                 expect(infoStub.args[0][0]).eq(`ASK Profile "${TEST_PROFILE}" was successfully created. The details are recorded in ask-cli config file (.ask/cli_config) located at your **HOME** folder.`);
                 expect(infoStub.args[1][0]).eq(`Vendor ID set as ${TEST_VENDOR_ID}.\n`);
                 expect(infoStub.args[2][0]).eq(messages.AWS_CONFIGURATION_MESSAGE);
+                expect(warnStub.args[1][0]).eq(messages.AWS_SECRET_ACCESS_KEY_AND_ID_SHARE_WARN_MESSAGE);
                 expect(setAwsProfileStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setAwsProfileStub.args[0][1]).to.deep.eq(undefined);
                 expect(error).eq(null);
@@ -132,11 +140,13 @@ describe('Command: Configure - helper test', () => {
             // call
             helper.initiateAskProfileSetup(TEST_CONFIG, (error, askProfile) => {
                 // verify
+                expect(warnStub.args[0][0]).eq(messages.LWA_TOKEN_SHARE_WARN_MESSAGE);
                 expect(setVendorIdStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setVendorIdStub.args[0][1]).to.deep.eq(TEST_VENDOR_ID);
                 expect(infoStub.args[0][0]).eq(`ASK Profile "${TEST_PROFILE}" was successfully created. The details are recorded in ask-cli config file (.ask/cli_config) located at your **HOME** folder.`);
                 expect(infoStub.args[1][0]).eq(`Vendor ID set as ${TEST_VENDOR_ID}.\n`);
                 expect(infoStub.args[2][0]).eq(messages.AWS_CONFIGURATION_MESSAGE);
+                expect(warnStub.args[1][0]).eq(messages.AWS_SECRET_ACCESS_KEY_AND_ID_SHARE_WARN_MESSAGE);
                 expect(infoStub.args[3][0]).eq(`AWS profile "${TEST_AWS_PROFILE}" was successfully associated with your ASK profile "${TEST_PROFILE}".\n`);
                 expect(setAwsProfileStub.args[0][0]).eq(TEST_PROFILE);
                 expect(setAwsProfileStub.args[0][1]).to.deep.eq(TEST_AWS_PROFILE);

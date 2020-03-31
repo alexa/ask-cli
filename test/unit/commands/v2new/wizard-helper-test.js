@@ -5,6 +5,7 @@ const httpClient = require('@src/clients/http-client');
 const ui = require('@src/commands/v2new/ui');
 const urlUtils = require('@src/utils/url-utils');
 const wizardHelper = require('@src/commands/v2new/wizard-helper');
+const Messenger = require('@src/view/messenger');
 
 describe('Commands new test - wizard helper test', () => {
     const TEST_ERROR = 'TEST_ERROR';
@@ -26,6 +27,25 @@ describe('Commands new test - wizard helper test', () => {
     const TEST_OPTIONS_WITH_TEMPLATE = {
         templateUrl: TEST_TEMPLATE_URL
     };
+
+    let infoStub;
+    let errorStub;
+    let warnStub;
+
+    beforeEach(() => {
+        infoStub = sinon.stub();
+        errorStub = sinon.stub();
+        warnStub = sinon.stub();
+        sinon.stub(Messenger, 'getInstance').returns({
+            info: infoStub,
+            error: errorStub,
+            warn: warnStub
+        });
+    });
+
+    afterEach(() => {
+        sinon.restore();
+    });
     describe('# test wizard helper method - collectUserCreationProjectInfo', () => {
         beforeEach(() => {
             sinon.stub(ui, 'selectSkillCodeLanguage');
@@ -118,6 +138,8 @@ We currently only support ".git" url for user's custom template.`;
             wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS_WITH_TEMPLATE, (err) => {
                 // verify
                 expect(err).equal(TEST_ERROR);
+                expect(infoStub.callCount).equal(0);
+                expect(warnStub.callCount).equal(1);
                 done();
             });
         });
@@ -134,6 +156,8 @@ We currently only support ".git" url for user's custom template.`;
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);
+                expect(infoStub.callCount).equal(0);
+                expect(warnStub.callCount).equal(1);
                 done();
             });
         });

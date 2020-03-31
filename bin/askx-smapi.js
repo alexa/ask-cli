@@ -16,7 +16,7 @@ if (!process.argv.slice(2).length) {
             Messenger.getInstance().info(message);
         })
         .catch(err => {
-            Messenger.getInstance().error(err.message);
+            Messenger.getInstance().error(jsonView.toString(err.response));
             process.exit(1);
         });
 }

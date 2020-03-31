@@ -7,10 +7,11 @@ const SkillCodeController = require('@src/controllers/skill-code-controller');
 const CodeBuilder = require('@src/controllers/skill-code-controller/code-builder');
 
 describe('Controller test - skill code controller test', () => {
-    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'resources-config.json');
+    const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
     const TEST_DO_DEBUG = false;
-    const TEST_CODE_SRC = 'src';
+    const TEST_CODE_SRC = './awsStack/lambda-NA/src';
+    const TEST_EU_CODE_SRC = './awsStack/lambda-EU/src';
     const TEST_CODE_BUILD = 'build';
     const TEST_CONFIGURATION = {
         profile: TEST_PROFILE,
@@ -90,6 +91,7 @@ describe('Controller test - skill code controller test', () => {
         beforeEach(() => {
             skillCodeController = new SkillCodeController(TEST_CONFIGURATION);
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            sinon.stub(fs, 'existsSync').returns(true);
         });
 
         afterEach(() => {
@@ -99,7 +101,7 @@ describe('Controller test - skill code controller test', () => {
 
         it('| codeResources does not exist, expect error throws', () => {
             // setup
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, null);
+            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns(null);
             // call
             try {
                 skillCodeController._resolveUniqueCodeList();
@@ -111,10 +113,7 @@ describe('Controller test - skill code controller test', () => {
 
         it('| codeResources src is blank string, expect error throws', () => {
             // setup
-            const TEST_CODE_MAP = {
-                region1: {}
-            };
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, TEST_CODE_MAP);
+            ResourcesConfig.getInstance().setCodeSrcByRegion(TEST_PROFILE, 'region1', '  ');
             // call
             try {
                 skillCodeController._resolveUniqueCodeList();
@@ -126,37 +125,19 @@ describe('Controller test - skill code controller test', () => {
 
         it('| codeResources src does not exist, expect error throws', () => {
             // setup
-            const TEST_CODE_MAP = {
-                region1: {
-                    src: TEST_CODE_SRC
-                }
-            };
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, TEST_CODE_MAP);
-            sinon.stub(fs, 'existsSync').withArgs(TEST_CODE_SRC).returns(false);
+            ResourcesConfig.getInstance().setCodeSrcByRegion(TEST_PROFILE, 'default', TEST_CODE_SRC);
+            fs.existsSync.withArgs(TEST_CODE_SRC).returns(false);
             // call
             try {
                 skillCodeController._resolveUniqueCodeList();
             } catch (e) {
                 // verify
-                expect(e).equal(`Invalid code setting in region region1. File doesn't exist for code src: ${TEST_CODE_SRC}.`);
+                expect(e).equal(`Invalid code setting in region default. File doesn't exist for code src: ${TEST_CODE_SRC}.`);
             }
         });
 
         it('| codeResources has same src code in different regions, expect the list is unique result', () => {
             // setup
-            const TEST_CODE_MAPS = {
-                region1: {
-                    src: TEST_CODE_SRC
-                },
-                region2: {
-                    src: TEST_CODE_SRC
-                },
-                region3: {
-                    src: TEST_CODE_BUILD
-                }
-            };
-            ResourcesConfig.getInstance().setCode(TEST_PROFILE, TEST_CODE_MAPS);
-            sinon.stub(fs, 'existsSync').returns(true);
             sinon.stub(ResourcesConfig.prototype, 'getCodeBuildByRegion').returns({
                 folder: 'folder',
                 file: 'file'
@@ -164,7 +145,7 @@ describe('Controller test - skill code controller test', () => {
             // call
             let codeLists;
             try {
-                codeLists = skillCodeController._resolveUniqueCodeList(TEST_CODE_MAPS);
+                codeLists = skillCodeController._resolveUniqueCodeList();
             } catch (e) {
                 // verify
                 expect(e).equal(undefined);
@@ -176,15 +157,15 @@ describe('Controller test - skill code controller test', () => {
                         folder: 'folder',
                         file: 'file'
                     },
-                    regionsList: ['region1', 'region2']
+                    regionsList: ['default', 'NA']
                 },
                 {
-                    src: TEST_CODE_BUILD,
+                    src: TEST_EU_CODE_SRC,
                     build: {
                         folder: 'folder',
                         file: 'file'
                     },
-                    regionsList: ['region3']
+                    regionsList: ['EU']
                 }
             ]);
         });
