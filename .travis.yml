@@ -21,7 +21,6 @@ cache:
 
 install:
   - npm install
-  - npm install -g
 
 script:
   - npm run lint
