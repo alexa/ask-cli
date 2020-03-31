@@ -16,7 +16,7 @@ describe('Command: Configure - questions validate test', () => {
         });
 
         it('| input is valid based on profiles list', () => {
-            TEST_LIST.push(CONSTANTS.COMMAND.CONFIGURE.AWS_DEFAULT_PROFILE_NAME);
+            TEST_LIST.push(CONSTANTS.AWS_DEFAULT_PROFILE_NAME);
             const result = questions.REQUEST_AWS_PROFILE_NAME(TEST_LIST);
             expect(result[0].validate('3')).equal(true);
             expect(result[0].default).equal(null);
