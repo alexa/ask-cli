@@ -12,10 +12,12 @@ const SkillMetadataController = require('@src/controllers/skill-metadata-control
 const CLiError = require('@src/exceptions/cli-error');
 const ResourcesConfig = require('@src/model/resources-config');
 const AskResources = require('@src/model/resources-config/ask-resources');
+const AskStates = require('@src/model/resources-config/ask-states');
 const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands upgrade-project test - hosted skill helper test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'hosted-proj', 'ask-resources.json');
+    const FIXTURE_STATES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', '.ask', 'ask-states.json');
     const TEST_ERROR = 'testError';
     const TEST_PROFILE = 'default';
     const TEST_AWS_REGION = 'us-west-2';
@@ -74,7 +76,18 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
         });
     });
 
-    describe('# test helper method - createV2ProjectSkeleton', () => {
+    describe('# test helper method - createV2ProjectSkeletonAndLoadModel', () => {
+        beforeEach(() => {
+            sinon.stub(path, 'join');
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
+            ).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            path.join.withArgs(
+                TEST_ROOT_PATH, CONSTANTS.FILE_PATH.HIDDEN_ASK_FOLDER, CONSTANTS.FILE_PATH.ASK_STATES_JSON_CONFIG
+            ).returns(FIXTURE_STATES_CONFIG_FILE_PATH);
+            path.join.callThrough();
+        });
+
         afterEach(() => {
             sinon.restore();
         });
@@ -82,18 +95,20 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
         it('| crate v2 project skeleton, expect write JSON file correctly', () => {
             // setup
             const ensureDirStub = sinon.stub(fs, 'ensureDirSync');
-            const askStatesStub = sinon.stub(AskResources, 'withContent');
-            sinon.stub(R, 'clone').returns({ profiles: {} });
+            sinon.stub(AskResources, 'withContent');
+            sinon.stub(AskStates, 'withContent');
             // call
-            hostedSkillHelper.createV2ProjectSkeleton(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
+            hostedSkillHelper.createV2ProjectSkeletonAndLoadModel(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_PROFILE);
             expect(ensureDirStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE));
             expect(ensureDirStub.args[1][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.SKILL_CODE.LAMBDA));
-            expect(askStatesStub.args[0][0]).eq(path.join(TEST_ROOT_PATH, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
-            expect(askStatesStub.args[0][1]).deep.equal({
-                profiles: {
-                    [TEST_PROFILE]: {
-                        skillId: TEST_SKILL_ID
-                    }
+            expect(AskResources.withContent.args[0][0]).eq(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+            expect(AskResources.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {}
+            });
+            expect(AskStates.withContent.args[0][0]).eq(FIXTURE_STATES_CONFIG_FILE_PATH);
+            expect(AskStates.withContent.args[0][1].profiles).deep.equal({
+                [TEST_PROFILE]: {
+                    skillId: TEST_SKILL_ID
                 }
             });
         });
