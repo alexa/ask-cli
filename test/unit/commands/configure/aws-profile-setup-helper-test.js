@@ -237,6 +237,7 @@ describe('Command: Configure - AWS profile setup helper test', () => {
             sinon.stub(ui, 'requestAwsProfileName').callsArgWith(1, TEST_ERROR_MESSAGE);
             sinon.stub(awsProfileHandler, 'listProfiles').returns([TEST_PROFILE]);
             sinon.stub(fs, 'ensureFileSync');
+            sinon.stub(fs, 'chmodSync');
             sinon.stub(fs, 'existsSync').returns(true);
 
             // call
@@ -262,6 +263,7 @@ describe('Command: Configure - AWS profile setup helper test', () => {
             sinon.stub(ui, 'addNewCredentials').callsArgWith(0, TEST_ERROR_MESSAGE);
             sinon.stub(awsProfileHandler, 'listProfiles').returns([TEST_PROFILE]);
             sinon.stub(fs, 'ensureFileSync');
+            sinon.stub(fs, 'chmodSync');
             sinon.stub(fs, 'existsSync').returns(true);
 
             // call
@@ -289,6 +291,7 @@ describe('Command: Configure - AWS profile setup helper test', () => {
             sinon.stub(ui, 'addNewCredentials').callsArgWith(0, null, TEST_CREDENTIALS);
             sinon.stub(awsProfileHandler, 'listProfiles').returns([TEST_PROFILE]);
             sinon.stub(fs, 'ensureFileSync');
+            sinon.stub(fs, 'chmodSync');
             sinon.stub(fs, 'existsSync').returns(true);
             sinon.stub(awsProfileHandler, 'addProfile');
             sinon.stub(profileHelper, 'setupProfile');
