@@ -56,7 +56,7 @@ User  > .quit
 ```
 #### Special sub-commands:
 
-**.record**: To record the list of utterances so far in a JSON file. User can continue to interact with the skill once the replay file has been created.
+**.record**: To record the list of utterances so far in a JSON file. User can continue to interact with the skill once the replay file has been created. This command provides user an option  `--append-quit`, which the user can append to record command, to add `.quit` to list of utterances before creation of replay file. Format: `.record <fileName>`  or `.record <fileName> --append-quit`.
 
 **.quit**: Exits the Interactive mode.
 

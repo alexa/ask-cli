@@ -4,12 +4,12 @@ const fs = require('fs-extra');
 const sinon = require('sinon');
 
 const DialogController = require('@src/controllers/dialog-controller');
-const stringUtils = require('@src/utils/string-utils');
 const DialogReplView = require('@src/view/dialog-repl-view');
 const Messenger = require('@src/view/messenger');
 
 describe('Controller test - dialog controller test', () => {
     const TEST_MSG = 'TEST_MSG';
+    const RECORD_FORMAT = 'Please use the format: ".record <fileName>" or ".record <fileName> --append-quit"';
 
     describe('# test constructor', () => {
         it('| constructor with config parameter returns DialogController object', () => {
@@ -19,7 +19,8 @@ describe('Controller test - dialog controller test', () => {
                 debug: true,
                 skillId: 'a1b2c3',
                 locale: 'en-US',
-                stage: 'DEVELOPMENT'
+                stage: 'DEVELOPMENT',
+                newSession: false
             });
             // verify
             expect(dialogController).to.be.instanceOf(DialogController);
@@ -178,14 +179,16 @@ describe('Controller test - dialog controller test', () => {
 
         it('| successful replay file creation', () => {
             // setup
+            const utterances = ['userUtterance'];
             const dialogController = new DialogController({});
             const fileSystemStub = sinon.stub(fs, 'outputJSONSync');
 
             // call
-            dialogController.createReplayFile('random_file_name');
+            dialogController.createReplayFile('random_file_name', utterances);
 
             // verify
             expect(fileSystemStub.callCount).equal(1);
+            expect(fileSystemStub.args[0][1].userInput).deep.equal(utterances);
         });
 
         it('| file name is empty', () => {
@@ -208,29 +211,53 @@ describe('Controller test - dialog controller test', () => {
             sinon.restore();
         });
 
-        it('| file path is empty', (done) => {
+        it('| Invalid record command format', () => {
             // setup
             sinon.stub(DialogReplView.prototype, 'registerRecordCommand');
             DialogReplView.prototype.registerRecordCommand.callsArgWith(0, '');
-            sinon.stub(stringUtils, 'isNonBlankString').returns(false);
+            const warnStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                warn: warnStub
+            });
 
             // call
-            dialogController.setupSpecialCommands(dialogReplView, (error) => {
-                expect(error).equal('A file name has not been specified');
-                done();
-            });
+            dialogController.setupSpecialCommands(dialogReplView, () => {});
+
+            // verify
+            expect(warnStub.args[0][0]).equal(`Incorrect format. ${RECORD_FORMAT}`);
         });
 
-        it('| file is not of JSON type', (done) => {
+        it('| Invalid record command format, malformed --append-quit argument', () => {
             // setup
+            const malFormedAppendQuitArgument = '--append';
+            sinon.stub(DialogReplView.prototype, 'registerRecordCommand');
+            DialogReplView.prototype.registerRecordCommand.callsArgWith(0, `history.json ${malFormedAppendQuitArgument}`);
+            const warnStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                warn: warnStub
+            });
+
+            // call
+            dialogController.setupSpecialCommands(dialogReplView, () => {});
+
+            // verify
+            expect(warnStub.args[0][0]).equal(`Unable to validate arguments: "${malFormedAppendQuitArgument}". ${RECORD_FORMAT}`);
+        });
+
+        it('| file is not of JSON type', () => {
+            // setup
+            const warnStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                warn: warnStub
+            });
             sinon.stub(DialogReplView.prototype, 'registerRecordCommand');
             DialogReplView.prototype.registerRecordCommand.callsArgWith(0, 'file.yml');
 
             // call
-            dialogController.setupSpecialCommands(dialogReplView, (error) => {
-                expect(error).equal("File should be of type '.json'");
-                done();
-            });
+            dialogController.setupSpecialCommands(dialogReplView, () => {});
+
+            // verify
+            expect(warnStub.args[0][0]).equal("File should be of type '.json'");
         });
 
         it('| replay file creation throws error', (done) => {
@@ -250,6 +277,28 @@ describe('Controller test - dialog controller test', () => {
                 expect(infoStub.calledOnce).equal(true);
                 done();
             });
+        });
+
+        it('| Valid record command format, with --append-quit argument', () => {
+            // setup
+            const appendQuitArgument = '--append-quit';
+            const filePath = 'history.json';
+            sinon.stub(DialogReplView.prototype, 'registerRecordCommand');
+            DialogReplView.prototype.registerRecordCommand.callsArgWith(0, `${filePath} ${appendQuitArgument}`);
+            const infoStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                info: infoStub
+            });
+            const replayStub = sinon.stub(DialogController.prototype, 'createReplayFile');
+
+            // call
+            dialogController.setupSpecialCommands(dialogReplView, () => {});
+
+            // verify
+            expect(infoStub.args[0][0]).equal(`Created replay file at ${filePath} (appended ".quit" to list of utterances).`);
+            expect(replayStub.calledOnce).equal(true);
+            expect(replayStub.args[0][0]).equal(filePath);
+            expect(replayStub.args[0][1][0]).equal('.quit');
         });
     });
 
