@@ -99,19 +99,6 @@ describe('Commands new test - wizard helper test', () => {
             });
         });
 
-        it('| Hosted skills do not support custom template, expect throw error', (done) => {
-        // setup
-            const TEST_HOSTED_ERROR = 'No custom template allowed for an Alexa hosted skill.';
-            ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
-            ui.getDeploymentType.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
-            // call
-            wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS_WITH_TEMPLATE, (err) => {
-                // verify
-                expect(err).equal(TEST_HOSTED_ERROR);
-                done();
-            });
-        });
-
         it('| custom template should not be non-git url, expect throw error', (done) => {
             // setup
             const TEST_GIT_ERROR = `The provided template url ${TEST_TEMPLATE_URL} is not a supported type. \
