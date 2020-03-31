@@ -211,9 +211,9 @@ describe('Command: Configure - UI test', () => {
             ui.createNewProfile((error, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: `Please provide a profile name or press enter to use ${CONSTANTS.COMMAND.CONFIGURE.ASK_DEFAULT_PROFILE_NAME} as the profile name: `,
+                    message: `Please provide a profile name or press enter to use ${CONSTANTS.ASK_DEFAULT_PROFILE_NAME} as the profile name: `,
                     type: 'input',
-                    default: CONSTANTS.COMMAND.CONFIGURE.ASK_DEFAULT_PROFILE_NAME
+                    default: CONSTANTS.ASK_DEFAULT_PROFILE_NAME
                 });
                 expect(error).equal(null);
                 expect(response).equal('lambda');
@@ -241,9 +241,9 @@ describe('Command: Configure - UI test', () => {
             ui.createNewProfile((err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: `Please provide a profile name or press enter to use ${CONSTANTS.COMMAND.CONFIGURE.ASK_DEFAULT_PROFILE_NAME} as the profile name: `,
+                    message: `Please provide a profile name or press enter to use ${CONSTANTS.ASK_DEFAULT_PROFILE_NAME} as the profile name: `,
                     type: 'input',
-                    default: CONSTANTS.COMMAND.CONFIGURE.ASK_DEFAULT_PROFILE_NAME
+                    default: CONSTANTS.ASK_DEFAULT_PROFILE_NAME
                 });
                 expect(err.message).equal(TEST_ERROR);
                 expect(response).equal(undefined);
