@@ -56,7 +56,8 @@ describe('Commands init - helper test', () => {
             helper.preInitCheck(TEST_ROOT, TEST_PROFILE, (err, res) => {
                 // verify
                 expect(uiShowInitStub.callCount).equal(1);
-                expect(err).equal(`Please modify the existing ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG} file or choose to overwrite.`);
+                expect(err.message).equal(`Please modify the existing ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG} file or choose to overwrite.`);
+                expect(err.name).equal('CliWarn');
                 expect(res).equal(undefined);
                 done();
             });
@@ -315,7 +316,8 @@ describe('Commands init - helper test', () => {
             // call
             helper.previewAndWriteAskResources(TEST_ROOT, TEST_USER_INPUT, TEST_PROFILE, (err, response) => {
                 // verify
-                expect(err).equal('Project init aborted.');
+                expect(err.message).equal('Project init aborted.');
+                expect(err.name).equal('CliWarn');
                 expect(response).equal(undefined);
                 done();
             });
