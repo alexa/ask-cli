@@ -62,8 +62,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             commitDiffStub.onCall(1).returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CliError, 'Upgrade project failed, as your dev branch is ahead of the remote.\n'
-                + 'Please follow the project upgrade instruction from '
+                .throw(CliError, 'Upgrade project failed. Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
                 + 'to change to ask-cli v2 structure.');
         });
@@ -76,7 +75,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             commitDiffStub.onCall(1).returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CLiError, 'Upgrade project failed. Please follow the project upgrade instruction from '
+                .throw(CliError, 'Upgrade project failed. Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
                 + 'to change to ask-cli v2 structure.');
         });
