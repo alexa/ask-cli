@@ -242,7 +242,7 @@ describe('Commands new - UI test', () => {
             ui.selectSkillCodeLanguage((err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please select the programming language to write your Alexa skill: ',
+                    message: 'Choose the programming language you will use to code your skill: ',
                     type: 'list',
                     choices: Object.keys(CONSTANTS.TEMPLATES.LANGUAGE_MAP)
                 });
@@ -259,7 +259,7 @@ describe('Commands new - UI test', () => {
             ui.selectSkillCodeLanguage((err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please select the programming language to write your Alexa skill: ',
+                    message: 'Choose the programming language you will use to code your skill: ',
                     type: 'list',
                     choices: Object.keys(CONSTANTS.TEMPLATES.LANGUAGE_MAP)
                 });
@@ -286,7 +286,7 @@ describe('Commands new - UI test', () => {
             ui.getTargetTemplateName(TEST_TEMPLATES_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please select the skill template to start with: ',
+                    message: 'Choose a template to start with: ',
                     type: 'list',
                     choices: TEST_TEMPLATE_CHOICES
                 });
@@ -304,7 +304,7 @@ describe('Commands new - UI test', () => {
             ui.getTargetTemplateName(TEST_TEMPLATES_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please select the skill template to start with: ',
+                    message: 'Choose a template to start with: ',
                     type: 'list',
                     choices: TEST_TEMPLATE_CHOICES
                 });
@@ -376,7 +376,7 @@ describe('Commands new - UI test', () => {
             ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please specify the type of deploy delegate to deploy your skill infrastructures: ',
+                    message: 'Choose a method to host your skill\'s backend resources: ',
                     type: 'list',
                     choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP
                 });
@@ -394,7 +394,7 @@ describe('Commands new - UI test', () => {
             ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: 'Please specify the type of deploy delegate to deploy your skill infrastructures: ',
+                    message: 'Choose a method to host your skill\'s backend resources: ',
                     type: 'list',
                     choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP
                 });
