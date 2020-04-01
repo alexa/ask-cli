@@ -6,6 +6,7 @@ const InitCommand = require('@src/commands/init');
 const helper = require('@src/commands/init/helper');
 const HostedSkillController = require('@src/controllers/hosted-skill-controller');
 const httpClient = require('@src/clients/http-client');
+const CliWarn = require('@src/exceptions/cli-warn');
 const jsonView = require('@src/view/json-view');
 const optionModel = require('@src/commands/option-model');
 const Messenger = require('@src/view/messenger');
@@ -16,6 +17,7 @@ const ui = require('@src/commands/init/ui');
 describe('Commands init test - command class test', () => {
     const TEST_PROFILE = 'default';
     const TEST_ERROR = 'init error';
+    const TEST_WARN = new CliWarn('init warn');
     const TEST_SKILL_ID = 'skillId';
     const TEST_SKILL_NAME = 'TEST_SKILL_NAME';
     const TEST_SRC = 'src';
@@ -94,6 +96,23 @@ describe('Commands init test - command class test', () => {
                     expect(errorStub.args[0][0]).equal(TEST_ERROR);
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| when pre init check returns CliWarn, expect provide users warnings', (done) => {
+                // setup
+                const TEST_CMD = {
+                    profile: TEST_PROFILE
+                };
+                sinon.stub(helper, 'preInitCheck').callsArgWith(2, TEST_WARN);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err).deep.equal(TEST_WARN);
+                    expect(warnStub.args[0][0]).equal(TEST_WARN.message);
+                    expect(infoStub.callCount).equal(0);
+                    expect(errorStub.callCount).equal(0);
                     done();
                 });
             });
@@ -276,6 +295,23 @@ describe('Commands init test - command class test', () => {
                     expect(errorStub.args[0][0]).equal(TEST_ERROR);
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| when preview and write returns CliWarn, expect display warnings', (done) => {
+                // setup
+                const TEST_CMD = {
+                    profile: TEST_PROFILE
+                };
+                helper.previewAndWriteAskResources.callsArgWith(3, TEST_WARN);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err).deep.equal(TEST_WARN);
+                    expect(warnStub.args[0][0]).equal(TEST_WARN.message);
+                    expect(infoStub.callCount).equal(0);
+                    expect(errorStub.callCount).equal(0);
                     done();
                 });
             });
