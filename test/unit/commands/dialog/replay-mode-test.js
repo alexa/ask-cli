@@ -94,7 +94,7 @@ describe('# Command: Dialog - Replay Mode test ', () => {
             expect(clearSpecialCommandsStub.calledOnce).equal(true);
             expect(replViewCloseStub.calledOnce).equal(true);
             expect(config.header).equal('Switching to interactive dialog.\n'
-            + 'To automatically quit after replay, append \'.quit\' to the userInput of your replay file.');
+            + 'To automatically quit after replay, append \'.quit\' to the userInput of your replay file.\n');
             expect(interactiveStartStub.calledOnce).equal(true);
         });
     });

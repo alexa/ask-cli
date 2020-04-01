@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "profile",
-    "description": "ask cli profile",
+    "description": "ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile)",
     "alias": "p",
     "stringInput": "REQUIRED"
   },
@@ -38,7 +38,7 @@
       "type": "REGEX",
       "regex": "^[./]?[\\w\\-. /]+\\.(json)"
     }]
-  },  
+  },
   "hosted-skill-id": {
     "name": "hosted-skill-id",
     "description": "skill-id for the Alexa hosted skill",
