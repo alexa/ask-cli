@@ -172,6 +172,8 @@ describe('Commands new test - command class test', () => {
                 const TEST_USER_INPUT = {
                     deploymentType: TEST_HOSTED_DEPLOYMENT
                 };
+                const GIT_USAGE_HOSTED_SKILL_DOCUMENTATION = 'https://developer.amazon.com/en-US/docs/alexa/'
+                    + 'hosted-skills/build-a-skill-end-to-end-using-an-alexa-hosted-skill.html#askcli';
                 wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
                 hostedHelper.validateUserQualification.callsArgWith(2, null);
                 hostedHelper.createHostedSkill.callsArgWith(3, null, TEST_SKILL_ID);
@@ -181,6 +183,8 @@ describe('Commands new test - command class test', () => {
                     expect(err).equal(undefined);
                     expect(infoStub.args[0][0]).equal('Please follow the wizard to start your Alexa skill project ->');
                     expect(infoStub.args[1][0]).equal(`Hosted skill provisioning finished. Skill-Id: ${TEST_SKILL_ID}`);
+                    expect(infoStub.args[2][0]).equal(`Please follow the instructions at ${GIT_USAGE_HOSTED_SKILL_DOCUMENTATION}`
+                        + ' to learn more about the usage of "git" for Hosted skill.');
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
