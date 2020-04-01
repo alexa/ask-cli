@@ -17,5 +17,5 @@ node scripts/smapi-docs.js > docs/concepts/Smapi-Command.md
 ```
 
 ```
-node scripts/smapi-docs.js doc-site > docs/concepts/Smapi-Command.md
+node scripts/smapi-docs.js doc-site > Smapi-Command-Doc-Site.md
 ```
