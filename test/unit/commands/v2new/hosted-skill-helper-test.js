@@ -12,6 +12,7 @@ const CONSTANTS = require('@src/utils/constants');
 const LocalHostServer = require('@src/utils/local-host-server');
 const Messenger = require('@src/view/messenger');
 const SpinnerView = require('@src/view/spinner-view');
+const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 
 describe('Commands new test - hosted skill helper test', () => {
     const TEST_ERROR = 'TEST_ERROR';
@@ -412,12 +413,28 @@ describe('Commands new test - hosted skill helper test', () => {
             });
         });
 
+        it('| hostedSkillController clone succeed, enableSkill fails, expect error thrown', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'createSkill').callsArgWith(1, null, TEST_SKILL_ID);
+            sinon.stub(process, 'cwd').returns('root/');
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields(TEST_ERROR);
+            // call
+            hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
         it('| hostedSkillController clone succeed, downloadGitHooksTemplate fails, expect error thrown', (done) => {
             // setup
             sinon.stub(HostedSkillController.prototype, 'createSkill').callsArgWith(1, null, TEST_SKILL_ID);
             sinon.stub(process, 'cwd').returns('root/');
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
                 // verify
@@ -433,6 +450,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(process, 'cwd').returns('root/');
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
             sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
+            sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
                 // verify
