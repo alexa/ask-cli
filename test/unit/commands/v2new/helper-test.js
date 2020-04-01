@@ -18,10 +18,11 @@ describe('Commands new test - helper test', () => {
     const TEST_PROFILE = 'default';
     const TEST_DO_DEBUG = false;
     const TEST_INFRA_PATH = 'infraPath';
+    const TEST_DEPLOYMENT_TYPE = 'deployer';
     const TEST_TEMPLATE_URL = 'value';
     const TEST_SKILL_FOLDER_NAME = 'skillFolderName';
     const TEST_SKILL_NAME = 'skillName';
-    const TEST_SKIP_DEPLOY_DELEGATE = 'deploy skill infrastructure manually';
+    const TEST_SKIP_DEPLOY_DELEGATE = 'self-hosted and manage your own hosting';
     const TEST_USER_INPUT = {
         skillName: 'testName',
         projectFolderName: 'projectName',
@@ -51,9 +52,22 @@ describe('Commands new test - helper test', () => {
             });
         });
 
+        it('| deployer is set in the template and same as what user wants, expect skip bootstrap', (done) => {
+            // setup
+            ResourcesConfig.getInstance().setSkillInfraType(TEST_PROFILE, TEST_DEPLOYMENT_TYPE);
+            // call
+            helper.initializeDeployDelegate(TEST_DEPLOYMENT_TYPE, TEST_INFRA_PATH, TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+                // verify
+                expect(res).equal(TEST_DEPLOYMENT_TYPE);
+                expect(err).equal(null);
+                done();
+            });
+        });
+
         it('| bootstrap fails, expect throw error', (done) => {
             // setup
             const TEST_SELECTED_TYPE = '@ask-cli/test!!!@ ';
+            ResourcesConfig.getInstance().setSkillInfraType(TEST_PROFILE, '');
             sinon.stub(fs, 'ensureDirSync');
             sinon.stub(SkillInfrastructureController.prototype, 'bootstrapInfrastructures').callsArgWith(1, 'error');
             // call
@@ -69,6 +83,7 @@ describe('Commands new test - helper test', () => {
         it('| bootstrap pass, expect return deployType', (done) => {
             // setup
             const TEST_SELECTED_TYPE = '  !!!test^^^  ';
+            ResourcesConfig.getInstance().setSkillInfraType(TEST_PROFILE, '');
             sinon.stub(fs, 'ensureDirSync');
             sinon.stub(SkillInfrastructureController.prototype, 'bootstrapInfrastructures').callsArgWith(1);
             // call
