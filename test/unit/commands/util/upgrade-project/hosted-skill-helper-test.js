@@ -183,7 +183,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| set Git Credential Helper fails, expect error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper').throws(new CliError(TEST_ERROR));
+            sinon.stub(gitClient, 'updateCredentialHelper').throws(new CliError(TEST_ERROR));
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
@@ -194,7 +194,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| set Master As Default fails, expect error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper');
+            sinon.stub(gitClient, 'updateCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch').throws(new CliError(TEST_ERROR));
@@ -208,7 +208,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| update git ignore file, expect error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper');
+            sinon.stub(gitClient, 'updateCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
@@ -224,7 +224,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| set Pre PushHook Template fails, expect error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper');
+            sinon.stub(gitClient, 'updateCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
@@ -240,7 +240,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| post Upgrade Git Setup succeeds, expect no error thrown', (done) => {
             // setup
-            sinon.stub(gitClient, 'configureCredentialHelper');
+            sinon.stub(gitClient, 'updateCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
