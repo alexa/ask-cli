@@ -62,9 +62,10 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             commitDiffStub.onCall(1).returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CliError, 'Upgrade project failed. Please follow the project upgrade instruction from '
+                .throw('Upgrade project failed. Your branch is ahead of origin/dev by 1 commit(s), '
+                + 'Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
-                + 'to change to ask-cli v2 structure.');
+                + 'to clean your working branch before upgrading project.');
         });
 
         it('| master branch commits difference is not zero , expect error thrown', () => {
@@ -75,9 +76,10 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             commitDiffStub.onCall(1).returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CliError, 'Upgrade project failed. Please follow the project upgrade instruction from '
+                .throw('Upgrade project failed. Your branch is ahead of master by 1 commit(s), '
+                + 'Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
-                + 'to change to ask-cli v2 structure.');
+                + 'to clean your working branch before upgrading project.');
         });
 
         it('| origin and master branch commits difference is zero , expect noe error thrown', () => {
