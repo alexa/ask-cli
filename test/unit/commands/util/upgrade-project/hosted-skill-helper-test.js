@@ -34,8 +34,10 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
     describe('# test helper method - checkIfDevBranchClean', () => {
         let gitClient;
+        let commitDiffStub;
         beforeEach(() => {
             gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
+            commitDiffStub = sinon.stub(gitClient, 'countCommitDifference');
         });
 
         afterEach(() => {
@@ -52,24 +54,40 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
                 .throw(CliError, `Commit the following files in the dev branch before upgrading project:\n${TEST_OUTPUT}`);
         });
 
-        it('| dev branch commits difference is not zero , expect error thrown', () => {
+        it('| origin branch commits difference is not zero , expect error thrown', () => {
             // setup
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'shortStatus').returns('');
-            sinon.stub(gitClient, 'countCommitDifference').returns('1');
+            commitDiffStub.onCall(0).returns('1');
+            commitDiffStub.onCall(1).returns('1');
             // call & verify
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
-                .throw(CliError, 'Upgrade project failed, as your dev branch is ahead of the remote.\n'
+                .throw('Upgrade project failed. Your branch is ahead of origin/dev by 1 commit(s), '
                 + 'Please follow the project upgrade instruction from '
                 + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
-                + 'to change to ask-cli v2 structure.');
+                + 'to clean your working branch before upgrading project.');
         });
 
-        it('| dev branch commits difference is zero , expect noe error thrown', () => {
+        it('| master branch commits difference is not zero , expect error thrown', () => {
             // setup
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'shortStatus').returns('');
-            sinon.stub(gitClient, 'countCommitDifference').returns('0');
+            commitDiffStub.onCall(0).returns('0');
+            commitDiffStub.onCall(1).returns('1');
+            // call & verify
+            expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
+                .throw('Upgrade project failed. Your branch is ahead of master by 1 commit(s), '
+                + 'Please follow the project upgrade instruction from '
+                + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
+                + 'to clean your working branch before upgrading project.');
+        });
+
+        it('| origin and master branch commits difference is zero , expect noe error thrown', () => {
+            // setup
+            sinon.stub(gitClient, 'checkoutBranch');
+            sinon.stub(gitClient, 'shortStatus').returns('');
+            commitDiffStub.onCall(0).returns('0');
+            commitDiffStub.onCall(1).returns('0');
             // call
             hostedSkillHelper.checkIfDevBranchClean(gitClient);
         });
