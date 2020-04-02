@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/alexa-labs/ask-cli/compare/v0.11.1...v0.12.0) (2020-04-02)
+
+
+### Bug Fixes
+
+* ashx new AHS -> fails with credential problem ([#98](https://github.com/alexa-labs/ask-cli/issues/98)) ([2da4326](https://github.com/alexa-labs/ask-cli/commit/2da43269d78ec904476207cc486d0130cffb32f3))
+* askx new --template-url -> the language and deployer selection a… ([#95](https://github.com/alexa-labs/ask-cli/issues/95)) ([1907e07](https://github.com/alexa-labs/ask-cli/commit/1907e07e7f5bde3294b67a709689c75cdba17c0e))
+* askx upgrade-project -> remove skill.json and other v1 artifacts ([#102](https://github.com/alexa-labs/ask-cli/issues/102)) ([936e197](https://github.com/alexa-labs/ask-cli/commit/936e197d6331c92bc156af480885206604401c5b))
+* enable skill for hosted skill init ([#96](https://github.com/alexa-labs/ask-cli/issues/96)) ([8dbf91d](https://github.com/alexa-labs/ask-cli/commit/8dbf91d15ed966346a41f6cf1b84f69f236e9880))
+* file permissions for .ask/cli_config and .aws/credentials ([#94](https://github.com/alexa-labs/ask-cli/issues/94)) ([d891df8](https://github.com/alexa-labs/ask-cli/commit/d891df8352424b29d6513b9975347a3b2452509f))
+* provide instruction in init command and change to warn if no error from user inputs ([2b3ae49](https://github.com/alexa-labs/ask-cli/commit/2b3ae493e73ad8cf2e366707f8e2836aac913be8))
+* simplify the message in new command, skip bootstrap if template is deployer-aware ([8a80e46](https://github.com/alexa-labs/ask-cli/commit/8a80e465b1bdfbed329ab932bf67a11d4fe7f6e9))
+* update messaging in dialog, configure and new commands ([62d747d](https://github.com/alexa-labs/ask-cli/commit/62d747dcd6e522194deaa057b8ee4185257395db))
+
 ### [0.11.1](https://github.com/alexa-labs/ask-cli/compare/v0.11.0...v0.11.1) (2020-03-31)
 
 
