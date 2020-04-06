@@ -4,12 +4,13 @@ const os = require('os');
 const fs = require('fs-extra');
 const path = require('path');
 
-const AuthorizationController = require('@src/controllers/authorization-controller');
-const Messenger = require('@src/view/messenger');
-const { commander } = require('@src/commands/api/api-commander');
 const httpClient = require('@src/clients/http-client');
+const AuthorizationController = require('@src/controllers/authorization-controller');
+const { AbstractCommand } = require('@src/commands/abstract-command');
+const { commander } = require('@src/commands/api/api-commander');
 const CONSTANTS = require('@src/utils/constants');
 const metricClient = require('@src/utils/metrics');
+const Messenger = require('@src/view/messenger');
 
 /**
  *  Provide static profile and token related Test data
@@ -183,6 +184,7 @@ class ApiCommandBasicTest {
         // Mock http server
         // According to input httpClienConfig,
         // decide the httpClient behaviours
+        sinon.stub(AbstractCommand.prototype, '_remindsIfNewVersion').callsArgWith(1);
         sinon.stub(httpClient, 'request');
         httpClient.request.callsArgWith(3, 'HTTP mock failed to handle the current input'); // set fallback when input misses
         this.httpMockConfig.forEach((config) => {
