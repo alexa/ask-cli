@@ -1,6 +1,6 @@
 # Alexa Skill Project Resource Components
 
-Alexa skill is by nature an application which delivers the Voice-User-Interface (VUI) through natural language techniques and cloud infrastructures. Accordingly, `ask-cli-x` helps Alexa skill developers break down the entire deployment into three steps, represented by three components managed by CLI: **Skill Metadata, Skill Code and Skill Infrastructure**. 
+Alexa skill is by nature an application which delivers the Voice-User-Interface (VUI) through natural language techniques and cloud infrastructures. Accordingly, `ask-cli` helps Alexa skill developers break down the entire deployment into three steps, represented by three components managed by CLI: **Skill Metadata, Skill Code and Skill Infrastructure**.
 
 Furthermore, those three components are all represented in the `ask-resources.json` file at the root of the skill project. CLI always loads and respects the data from this config file when executing any CLI commands.
 
@@ -9,7 +9,7 @@ The `SkillID` is the Alexa identifier for the application.
 
 
 ## Skill Metadata
-The `SkillMetadata` component stands for all the skill build-time data you need to upload. This includes a great variety of JSON data such as the skill's supported languages, skill's capabilities, in-skill purchases etc. To deploy skill's `SkillMetadata`, CLI directly follows the [Skill Package](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format) structure and calls the service. 
+The `SkillMetadata` component stands for all the skill build-time data you need to upload. This includes a great variety of JSON data such as the skill's supported languages, skill's capabilities, in-skill purchases etc. To deploy skill's `SkillMetadata`, CLI directly follows the [Skill Package](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html#skill-package-format) structure and calls the service.
 
 Please check the `skillMetadata` field in the example below for its representation in project config.
 

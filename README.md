@@ -3,7 +3,7 @@
   <br/>
   <h1 align="center">Alexa Skills Kit Command Line interface</h1>
   <p align="center">
-    <a href="https://www.npmjs.com/package/ask-cli-x"><img src="https://badge.fury.io/js/ask-cli-x.svg"></a>
+    <a href="https://www.npmjs.com/package/ask-cli"><img src="https://badge.fury.io/js/ask-cli.svg"></a>
     <a href="https://travis-ci.org/alexa/ask-cli"><img src="https://travis-ci.org/alexa/ask-cli.svg?branch=master"></a>
   </p>
   <p align="center">
@@ -26,7 +26,7 @@ The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage,
 **1. Install CLI**
 
 ```
-$ npm install -g ask-cli-x
+$ npm install -g ask-cli
 ```
 
 
@@ -35,7 +35,7 @@ $ npm install -g ask-cli-x
 Before you can start using the ASK CLI, configure your ASK (and AWS) credentials:
 
 ```
-$ askx configure
+$ ask configure
 ```
 
 You’ll be prompted to sign into your Amazon developer account. If you choose to have your skill hosted by AWS, you’ll have the option of linking your AWS account as well.
@@ -45,7 +45,7 @@ You’ll be prompted to sign into your Amazon developer account. If you choose t
 Create a new skill project and follow the prompts from the command:
 
 ```
-$ askx new
+$ ask new
 ```
 
 You'll be asked to select a deployment method for your skill. Currently during the beta, we only support deployment via CloudFormation (@ask-cli/cfn-deployer).
@@ -71,7 +71,7 @@ See the [ASK SDKs documentation](https://developer.amazon.com/docs/sdk/alexa-ski
 In order for Alexa to communicate with your skill code, it will need to be deployed and hosted on the cloud. We currently provide support for deployment via CloudFormation to AWS.
 
 ```
-$ askx deploy
+$ ask deploy
 ```
 
 deploy performs the following steps:

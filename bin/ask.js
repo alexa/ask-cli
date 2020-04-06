@@ -12,7 +12,7 @@ const commander = require('commander');
 
 require('@src/commands/configure').createCommand(commander);
 require('@src/commands/deploy').createCommand(commander);
-require('@src/commands/v2new').createCommand(commander);
+require('@src/commands/new').createCommand(commander);
 require('@src/commands/init').createCommand(commander);
 require('@src/commands/dialog').createCommand(commander);
 

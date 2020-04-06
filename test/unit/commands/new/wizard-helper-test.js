@@ -2,9 +2,9 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 
 const httpClient = require('@src/clients/http-client');
-const ui = require('@src/commands/v2new/ui');
+const ui = require('@src/commands/new/ui');
 const urlUtils = require('@src/utils/url-utils');
-const wizardHelper = require('@src/commands/v2new/wizard-helper');
+const wizardHelper = require('@src/commands/new/wizard-helper');
 const Messenger = require('@src/view/messenger');
 
 describe('Commands new test - wizard helper test', () => {

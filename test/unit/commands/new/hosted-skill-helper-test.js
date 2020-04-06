@@ -6,8 +6,8 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const { URL, URLSearchParams } = require('url');
 
-const hostedSkillHelper = require('@src/commands/v2new/hosted-skill-helper');
-const HostedSkillController = require('@src/controllers/hosted-skill-controller/index');
+const hostedSkillHelper = require('@src/commands/new/hosted-skill-helper');
+const HostedSkillController = require('@src/controllers/hosted-skill-controller');
 const CONSTANTS = require('@src/utils/constants');
 const LocalHostServer = require('@src/utils/local-host-server');
 const Messenger = require('@src/view/messenger');
@@ -46,7 +46,7 @@ describe('Commands new test - hosted skill helper test', () => {
                 info: infoStub
             });
             const openStub = sinon.stub();
-            proxyHelper = proxyquire('@src/commands/v2new/hosted-skill-helper', {
+            proxyHelper = proxyquire('@src/commands/new/hosted-skill-helper', {
                 open: openStub
             });
             endStub = sinon.stub();

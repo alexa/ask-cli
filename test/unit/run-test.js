@@ -18,11 +18,11 @@ require('module-alias/register');
     // command - util
     '@test/unit/commands/util/git-credentials-helper/index-test',
     // command - new
-    '@test/unit/commands/v2new/index-test',
-    '@test/unit/commands/v2new/ui-test',
-    '@test/unit/commands/v2new/helper-test',
-    '@test/unit/commands/v2new/wizard-helper-test',
-    '@test/unit/commands/v2new/hosted-skill-helper-test',
+    '@test/unit/commands/new/index-test',
+    '@test/unit/commands/new/ui-test',
+    '@test/unit/commands/new/helper-test',
+    '@test/unit/commands/new/wizard-helper-test',
+    '@test/unit/commands/new/hosted-skill-helper-test',
     // command - configure
     '@test/unit/commands/configure/index-test',
     '@test/unit/commands/configure/ui-test',

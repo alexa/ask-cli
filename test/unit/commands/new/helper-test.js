@@ -5,7 +5,7 @@ const sinon = require('sinon');
 
 const GitClient = require('@src/clients/git-client');
 const SkillInfrastructureController = require('@src/controllers/skill-infrastructure-controller');
-const helper = require('@src/commands/v2new/helper');
+const helper = require('@src/commands/new/helper');
 const ResourcesConfig = require('@src/model/resources-config');
 const Manifest = require('@src/model/manifest');
 const stringUtils = require('@src/utils/string-utils');

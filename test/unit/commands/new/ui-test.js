@@ -4,7 +4,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 const CONSTANTS = require('@src/utils/constants');
-const ui = require('@src/commands/v2new/ui');
+const ui = require('@src/commands/new/ui');
 
 function validateInquirerConfig(stub, expectedConfig) {
     const { message, type, defaultValue, choices } = expectedConfig;

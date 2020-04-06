@@ -2,15 +2,15 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
 
-const NewCommand = require('@src/commands/v2new');
-const helper = require('@src/commands/v2new/helper');
-const hostedHelper = require('@src/commands/v2new/hosted-skill-helper');
+const NewCommand = require('@src/commands/new');
+const helper = require('@src/commands/new/helper');
+const hostedHelper = require('@src/commands/new/hosted-skill-helper');
 const optionModel = require('@src/commands/option-model');
 const ResourcesConfig = require('@src/model/resources-config');
 const Manifest = require('@src/model/manifest');
 const Messenger = require('@src/view/messenger');
 const profileHelper = require('@src/utils/profile-helper');
-const wizardHelper = require('@src/commands/v2new/wizard-helper');
+const wizardHelper = require('@src/commands/new/wizard-helper');
 
 describe('Commands new test - command class test', () => {
     const FIXTURE_BASE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');

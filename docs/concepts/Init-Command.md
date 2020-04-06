@@ -1,10 +1,10 @@
 # INIT COMMAND
 
-`askx init` helps a skill developer to setup a new or an existing Alexa skill project. The command will walk the user through creating an ask-resources.json file to help deploy the skill. It will cover the most common attributes and will suggest sensible defaults using AWS Lambda as your endpoint.
+`ask init` helps a skill developer to setup a new or an existing Alexa skill project. The command will walk the user through creating an ask-resources.json file to help deploy the skill. It will cover the most common attributes and will suggest sensible defaults using AWS Lambda as your endpoint.
 
 **STRUCTURE OF INIT COMMAND:**
 
-`askx init [--hosted-skill-id <hosted-skill-id>] [-p|--profile <profile>] [--debug]`
+`ask init [--hosted-skill-id <hosted-skill-id>] [-p|--profile <profile>] [--debug]`
 
 **OPTIONS DESCRIPTION:**
 
