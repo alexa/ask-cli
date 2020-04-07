@@ -21,15 +21,15 @@
 
 ## DEPLOYERS:
 
-* **Alexa Hosted deployer**
+* **Alexa-hosted skills**
   * Dependency: SMAPI
   * Description: Create an `Alexa hosted skill`, clone the skill project, and provide git-ready environment to deploy the skill. 
-* **AWS CloudFormation**
+* **AWS with CloudFormation**
   * Dependency: AWS-SDK
   * Description: Upload local code to Amazon S3, and use `AWS CloudFormation` to configure AWS resources required for the skill.
 * **AWS Lambda**
   * Dependency: AWS-SDK
-  * Description: Creat an AWS IAM Role with basic permissions to access `AWS Lambda`. Update the configuration and upload the local code to an AWS Lambda function.
+  * Description: Create an AWS IAM Role with basic permissions to access `AWS Lambda`. Update the configuration and upload the local code to an AWS Lambda function.
 
 
 
