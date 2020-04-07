@@ -340,8 +340,11 @@ describe('Command test - AbstractCommand class', () => {
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
                 );
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
-                expect(infoStub.args[0][0]).equal(`[Info]: \
-New major version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}. Please update!\n`);
+                expect(infoStub.args[0][0]).equal(`\
+##########################################################################
+[Info]: New MAJOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
+##########################################################################\n`);
                 expect(err).equal(undefined);
                 done();
             });
@@ -358,8 +361,11 @@ New major version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is availa
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
                 );
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
-                expect(infoStub.args[0][0]).equal(`[Info]: \
-New minor version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.\n`);
+                expect(infoStub.args[0][0]).equal(`\
+##########################################################################
+[Info]: New MINOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
+##########################################################################\n`);
                 expect(err).equal(undefined);
                 done();
             });
