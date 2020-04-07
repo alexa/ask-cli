@@ -446,11 +446,12 @@ describe('Controller test - Authorization controller test', () => {
             // call
             authorizationController._listenResponseFromLWA(TEST_PORT, (err) => {
                 // verify
+                const EXPECTED_ERR_MESSAGE = `Error: ${requestQuery.query.error}\nReason: ${requestQuery.query.error_description}`;
                 expect(spinnerTerminateStub.callCount).eq(1);
                 expect(serverDestroyStub.callCount).eq(1);
                 expect(endStub.callCount).eq(1);
-                expect(endStub.args[0][0]).eq(`Error: ${requestQuery.query.error}\nError description: ${requestQuery.query.error_description}`);
-                expect(err).eq(messages.ASK_SIGN_IN_FAILURE_MESSAGE);
+                expect(endStub.args[0][0].includes(EXPECTED_ERR_MESSAGE)).equal(true);
+                expect(err).eq(EXPECTED_ERR_MESSAGE);
                 done();
             });
         });
