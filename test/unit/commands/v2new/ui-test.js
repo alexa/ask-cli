@@ -27,7 +27,8 @@ describe('Commands new - UI test', () => {
     const TEST_LANGUAGE = 'language';
     const TEST_TEMPLATE_NAME = 'templateName';
     const TEST_CONFIRMATION = 'confirmation';
-    const TEST_DEPLOY_DELEGATE = 'deployDelegate';
+    const TEST_DEPLOYMENT_OPTION_NAME = 'HOSTED_OPTION_NAME';
+    const TEST_DEPLOYMENT_NAME = 'HOSTED_NAME';
     const TEST_TEMPLATES_MAP = {
         template1: {
             url: 'templateUrl1',
@@ -39,10 +40,12 @@ describe('Commands new - UI test', () => {
     };
     const TEST_DEPLOYMENT_MAP = {
         HOSTED: {
-            NAME: 'HOSTED_NAME',
+            OPTION_NAME: TEST_DEPLOYMENT_OPTION_NAME,
+            NAME: TEST_DEPLOYMENT_NAME,
             DESCRIPTION: 'HOSTED_DESCRIPTION'
         },
         CFN: {
+            OPTION_NAME: 'CFN_OPTION_NAME',
             NAME: 'CFN_NAME',
             DESCRIPTION: 'CFN_DESCRIPTION'
         }
@@ -52,8 +55,8 @@ describe('Commands new - UI test', () => {
         `template2\t\t    ${chalk.gray('')}`
     ];
     const TEST_DEPLOYMENT_CHOICES_WITH_SEP = [
-        `HOSTED_NAME\n  ${chalk.gray('HOSTED_DESCRIPTION')}`,
-        `CFN_NAME\n  ${chalk.gray('CFN_DESCRIPTION')}`,
+        `${TEST_DEPLOYMENT_OPTION_NAME}\n  ${chalk.gray('HOSTED_DESCRIPTION')}`,
+        `CFN_OPTION_NAME\n  ${chalk.gray('CFN_DESCRIPTION')}`,
         new inquirer.Separator(),
         ui.SKIP_DEPLOY_DELEGATE_SELECTION
     ];
@@ -371,7 +374,7 @@ describe('Commands new - UI test', () => {
 
         it('| confirmation entered by user is retrieved correctly', (done) => {
             // setup
-            inquirer.prompt.resolves({ deployDelegate: TEST_DEPLOY_DELEGATE });
+            inquirer.prompt.resolves({ deployDelegate: TEST_DEPLOYMENT_OPTION_NAME });
             // call
             ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
                 // verify
@@ -382,7 +385,7 @@ describe('Commands new - UI test', () => {
                 });
                 expect(inquirer.prompt.args[0][0][0].filter('a \n \n b')).equal('a ');
                 expect(err).equal(null);
-                expect(response).equal(TEST_DEPLOY_DELEGATE);
+                expect(response).equal(TEST_DEPLOYMENT_NAME);
                 done();
             });
         });

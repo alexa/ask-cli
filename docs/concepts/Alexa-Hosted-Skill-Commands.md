@@ -23,8 +23,8 @@ Users will be asked the following questions to create a new skill:
 * Prompts user for `programming language`
 	* Select programming language
 	* AHS supports Python3.7 and Node10.x
-* Prompts user for `deploy delegate` to deploy skill infrastructure
-	* Select `@ask-cli/hosted-skill-deployer`
+* Prompts user for a method to host your skill's backend resources
+	* Select `Alexa-hosted skills`
 * Prompts user for `skill name`
  	 * Leave empty to use the default skill name  `Hello World Skill`
 * Prompts user for a `folder name` for the skill project
