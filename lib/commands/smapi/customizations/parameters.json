@@ -28,6 +28,12 @@
         "skipUnwrap": true,
         "name": "inSkillProduct"
     },
+    "CreateSubscriberRequest": {
+        "skipUnwrap": true
+    },
+    "UpdateSubscriberRequest": {
+        "skipUnwrap": true
+    },
     "accountLinkingRequest": {
         "skipUnwrap": true
     },
