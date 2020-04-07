@@ -1,0 +1,36 @@
+# SMAPI COMMAND
+
+{{{smapiCommandDescription}}}
+
+`smapi` command format:
+
+`$ {{baseCommand}} <subcommand> `
+
+## Subcommands
+
+| Task  | Subcommand |
+|---|---|
+{{#commands}} 
+| {{{description}}} | [{{name}}](#{{name}}) |
+{{/commands}} 
+{{#commands}} 
+
+### {{name}}
+
+{{description}}
+
+`{{name}}` command format:
+
+`$ {{baseCommand}} {{name}} {{{optionsString}}}`
+
+**Options**
+
+<dl>
+   {{#options}}
+    <dt>{{{name}}}</dt>
+    <dd markdown="span">{{{description}}}</dd>
+    {{/options}}
+</dl>
+{{/commands}}
+
+

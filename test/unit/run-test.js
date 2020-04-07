@@ -46,6 +46,7 @@ require('module-alias/register');
     '@test/unit/commands/smapi/cli-customization-processor-test.js',
     '@test/unit/commands/smapi/smapi-command-handler-test.js',
     '@test/unit/commands/smapi/smapi-commander-test.js',
+    '@test/unit/commands/smapi/smapi-docs-test.js',
     '@test/unit/commands/smapi/customizations/smapi-hooks-test.js',
     '@test/unit/commands/smapi/hook-functions/append-vendor-id-test.js',
     '@test/unit/commands/smapi/hook-functions/map-testers-emails-test.js',
