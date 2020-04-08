@@ -181,7 +181,7 @@ describe('Clients test - cli git client', () => {
     });
 
     describe('# test checkoutBranch', () => {
-        const TEST_BRANCH = 'ASK-CLI-X';
+        const TEST_BRANCH = 'ASK-CLI';
         const TEST_COMMAND = [`git checkout ${TEST_BRANCH}${TEST_VERBOSITY_OPTIONS.showOutput === false ? ' --quiet' : ''}`];
 
         afterEach(() => {
@@ -211,7 +211,7 @@ describe('Clients test - cli git client', () => {
     describe('# git clone', () => {
         const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
         const TEST_CLONE_URL = 'https://test.git';
-        const TEST_BRANCH = 'ASK-CLI-X';
+        const TEST_BRANCH = 'ASK-CLI';
         const TEST_COMMAND = [`git clone --branch ${TEST_BRANCH} ${TEST_CLONE_URL} ${TEST_FOLDER_NAME} `
         + `${TEST_VERBOSITY_OPTIONS.showOutput === false ? ' --quiet' : ''}`];
 

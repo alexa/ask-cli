@@ -1,15 +1,15 @@
 {
-  "name": "ask-cli-x",
-  "version": "0.13.0",
-  "description": "Alexa Skills Kit (ASK) Command Line Interfaces - the X version",
+  "name": "ask-cli",
+  "version": "2.0.0",
+  "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
-    "askx": "bin/askx.js"
+    "ask": "bin/ask.js"
   },
   "engines": {
     "node": ">=8.3.0"
   },
   "license": "Apache 2.0",
-  "repository": "alexa-labs/ask-cli",
+  "repository": "alexa/ask-cli",
   "author": {
     "name": "RonWang",
     "email": "nongwang@amazon.com"

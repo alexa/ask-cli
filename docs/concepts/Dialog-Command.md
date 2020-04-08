@@ -1,6 +1,6 @@
 # DIALOG COMMAND
 
-`askx dialog` opens an interactive mode, similar to Node's Read-Eval-Print-Loop (REPL), in which developers can simulate a multi-turn conversation with Alexa. For each utterance, Dialog command leverages [simulate-skill](https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-command-reference.html#simulate-command) to asynchronously poll simulation result until it's available and shows Alexa text responses.
+`ask dialog` opens an interactive mode, similar to Node's Read-Eval-Print-Loop (REPL), in which developers can simulate a multi-turn conversation with Alexa. For each utterance, Dialog command leverages [simulate-skill](https://developer.amazon.com/en-US/docs/alexa/smapi/ask-cli-command-reference.html#simulate-command) to asynchronously poll simulation result until it's available and shows Alexa text responses.
 
 **PRE-REQUISITES:**
 
@@ -11,7 +11,7 @@
 
 **STRUCTURE OF DIALOG COMMAND:**
 
-`askx dialog [-s|--skill-id <skill-id>] [-l|--locale <locale>] [-g|--stage <stage>] [-r|--replay <file-path>] [-p|--profile <profile>] [--debug]`
+`ask dialog [-s|--skill-id <skill-id>] [-l|--locale <locale>] [-g|--stage <stage>] [-r|--replay <file-path>] [-p|--profile <profile>] [--debug]`
 
 **OPTIONS DESCRIPTION:**
 

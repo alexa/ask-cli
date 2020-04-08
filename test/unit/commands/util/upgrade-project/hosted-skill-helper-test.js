@@ -64,7 +64,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
                 .throw('Upgrade project failed. Your branch is ahead of origin/dev by 1 commit(s), '
                 + 'Please follow the project upgrade instruction from '
-                + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
+                + 'https://github.com/alexa/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
                 + 'to clean your working branch before upgrading project.');
         });
 
@@ -78,7 +78,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             expect(() => hostedSkillHelper.checkIfDevBranchClean(gitClient))
                 .throw('Upgrade project failed. Your branch is ahead of master by 1 commit(s), '
                 + 'Please follow the project upgrade instruction from '
-                + 'https://github.com/alexa-labs/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
+                + 'https://github.com/alexa/ask-cli/blob/develop/docs/Upgrade-Project-From-V1.md#upgrade-steps '
                 + 'to clean your working branch before upgrading project.');
         });
 

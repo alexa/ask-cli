@@ -1,6 +1,6 @@
 # Configure Command
 
-`askx configure` configures the credentials that ASK CLI uses to authenticate skill developer to Amazon developer services and Amazon Web Services (AWS). The Amazon developer credentials stored in `cli_config` file located at `(.ask/cli_config)` of your home directory are used to authenticate a request while connecting SMAPI service to deploy a skill and/or interacting with other Alexa Skill resources. If a Skill developer prefers to deploy the backend code to AWS Lambda or manage existing skills that use AWS Lambda, a reference to the developer's Amazon Web Services (AWS) credentials is also stored in `.aws/credentials` file in your home directory.
+`ask configure` configures the credentials that ASK CLI uses to authenticate skill developer to Amazon developer services and Amazon Web Services (AWS). The Amazon developer credentials stored in `cli_config` file located at `(.ask/cli_config)` of your home directory are used to authenticate a request while connecting SMAPI service to deploy a skill and/or interacting with other Alexa Skill resources. If a Skill developer prefers to deploy the backend code to AWS Lambda or manage existing skills that use AWS Lambda, a reference to the developer's Amazon Web Services (AWS) credentials is also stored in `.aws/credentials` file in your home directory.
 
 ## ASK CLI PROFILES' SETUP
 
