@@ -80,10 +80,14 @@ function New-Py3Venv() {
     param()
 
     begin {
-        Write-Log "Creating virtualenv using python3 venv."
+        Show-Log "Creating virtualenv using python3 venv."
     }
     process {
-        Invoke-Expression -Command "python3 -m venv venv"
+        $PythonVersion = & python -V 2>&1
+        if($PythonVersion -match "2\.\d\.\d+") {
+            Show-Log "Current python ($PythonVersion) is not supported. Please make sure you are using python3, or use your custom script to build the code." "Error"
+        }
+        Invoke-Expression -Command "python -m venv venv"
         if(!($LASTEXITCODE -eq 0)) {
             Show-Log "Failed to create python virtual environment using venv." "Error"
         }
@@ -104,7 +108,7 @@ function Install-Dependencies() {
         Show-Log "Installing skill dependencies based on the requirements.txt."
     }
     process {
-        $DepCmd = "./venv/bin/pip --disable-pip-version-check install -r requirements.txt -t ./"
+        $DepCmd = "venv/Scripts/pip3 --disable-pip-version-check install -r requirements.txt -t ./"
         if (-not $Verbose) {
             $DepCmd += " -qq"
         }

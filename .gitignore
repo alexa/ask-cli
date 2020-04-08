@@ -17,3 +17,7 @@ coverage
 
 # MAC OS
 .DS_Store
+
+# Integration test
+test/integration/temp
+

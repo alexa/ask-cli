@@ -1,11 +1,11 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { StandardSmapiClientBuilder } = require('ask-smapi-sdk');
+const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
 const AppConfig = require('@src/model/app-config');
 const { ARRAY_SPLIT_DELIMITER } = require('@src/commands/smapi/cli-customization-processor');
 const Messenger = require('@src/view/messenger');
 const jsonView = require('@src/view/json-view');
-const SmapiHooks = require('@src/commands/smapi/customizations/smapi-hooks');
+const BeforeSendProcessor = require('@src/commands/smapi/before-send-processor');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const profileHelper = require('@src/utils/profile-helper');
 const smapiCommandHandler = require('@src/commands/smapi/smapi-command-handler');
@@ -13,36 +13,37 @@ const smapiCommandHandler = require('@src/commands/smapi/smapi-command-handler')
 
 describe('Smapi test - smapiCommandHandler function', () => {
     const apiOperationName = 'someApiOperation';
+    const commandName = 'some-api-operation';
     const skillId = 'some skill id';
-    const inputContent = 'hello';
-    const deviceLocale = 'en-US';
+    const someNumber = '20';
+    const someBoolean = 'true';
     const jsonValue = { test: 'test' };
     const arrayValue = ['test', 'test1', 'test2'];
     const arrayValueStr = arrayValue.join(ARRAY_SPLIT_DELIMITER);
 
-    const params = [
-        { name: 'skillId', in: 'path' },
-        { name: 'someNonPopulatedProperty', in: 'query' },
-        { name: 'simulationsApiRequest', in: 'body' },
-        { name: 'someJson', in: 'body' },
-        { name: 'someArray', in: 'query' }
-    ];
     const flatParamsMap = new Map([
         ['skillId', { name: 'skillId' }],
         ['someJson', { name: 'someJson', json: true }],
         ['someArray', { name: 'someArray', isArray: true }],
-        ['inputContent', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>content' }],
-        ['deviceLocale', { rootName: 'simulationsApiRequest', bodyPath: 'device>>>locale' }],
+        ['someNumber', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someNumber', isNumber: true }],
+        ['someBoolean', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someBoolean', isBoolean: true }],
         ['sessionMode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
 
     const commanderToApiCustomizationMap = new Map();
     const cmdObj = {
         opts() {
-            return { skillId, inputContent, deviceLocale, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
-        }
+            return { skillId, someNumber, someBoolean, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
+        },
+        _name: commandName
     };
 
-    const clientStub = {};
+    const clientStub = { apiConfiguration: { apiEndpoint: null } };
+
+    const modelInterceptor = {
+        operations: new Map([[commandName, { params: [] }]]),
+        definitions: new Map()
+    };
+
     beforeEach(() => {
         sinon.stub(AuthorizationController.prototype, '_getAuthClientInstance').returns(
             { config: {} }
@@ -56,38 +57,33 @@ describe('Smapi test - smapiCommandHandler function', () => {
             }
         });
         clientStub[apiOperationName] = sinon.stub().resolves();
-        sinon.stub(StandardSmapiClientBuilder.prototype, 'client').returns(clientStub);
+        clientStub[apiOperationName].toString = () => 'function (someJson, skillId, '
+            + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
+        sinon.stub(BeforeSendProcessor.prototype, 'processAll');
+        sinon.stub(CustomSmapiClientBuilder.prototype, 'client').returns(clientStub);
     });
 
-
     it('| should send smapi command with correct parameter mapping', async () => {
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
 
-        const expectedParams = [skillId, null, { input: { content: inputContent }, device: { locale: deviceLocale } }, jsonValue, arrayValue];
+        const expectedParams = [jsonValue, skillId, null, arrayValue,
+            { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
         const calledParams = clientStub[apiOperationName].args[0];
 
         expect(calledParams).eql(expectedParams);
-    });
-
-    it('| should call hook function and send smapi command', async () => {
-        const stubHook = sinon.stub();
-        sinon.stub(SmapiHooks, 'getFunction').returns(stubHook);
-
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
-
-        expect(stubHook.calledOnce).eql(true);
     });
 
     it('| should display debug message when debug flag is passed', async () => {
         const cmdObjDebug = {
             opts() {
                 return { debug: true, skillId };
-            }
+            },
+            _name: commandName
         };
 
         const messengerStub = sinon.stub(Messenger, 'displayMessage');
 
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug);
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug, modelInterceptor);
 
         expect(messengerStub.args[0]).eql(['INFO', 'Operation: someApiOperation']);
         expect(messengerStub.args[1]).eql(['INFO', 'Payload:']);

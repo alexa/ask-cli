@@ -22,7 +22,6 @@ describe('Commands new test - helper test', () => {
     const TEST_TEMPLATE_URL = 'value';
     const TEST_SKILL_FOLDER_NAME = 'skillFolderName';
     const TEST_SKILL_NAME = 'skillName';
-    const TEST_SKIP_DEPLOY_DELEGATE = 'self-hosted and manage your own hosting';
     const TEST_USER_INPUT = {
         skillName: 'testName',
         projectFolderName: 'projectName',
@@ -44,7 +43,7 @@ describe('Commands new test - helper test', () => {
         it('| ui select deploy delegate pass and selection is opt-out, expect quit process', (done) => {
             // setup
             // call
-            helper.initializeDeployDelegate(TEST_SKIP_DEPLOY_DELEGATE, TEST_INFRA_PATH, TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.initializeDeployDelegate(null, TEST_INFRA_PATH, TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);

@@ -49,7 +49,7 @@ describe('Commands Configure test - command class test', () => {
         expect(instance.name()).eq('configure');
         expect(instance.description()).eq('helps to configure the credentials that ask-cli uses to authenticate the user to Amazon developer services');
         expect(instance.requiredOptions()).deep.eq([]);
-        expect(instance.optionalOptions()).deep.eq(['noBrowser', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.eq(['no-browser', 'profile', 'debug']);
     });
 
     describe('validate command handle - ensure AppConfig initiated', () => {

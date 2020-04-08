@@ -15,6 +15,7 @@ require('module-alias/register');
     '@test/unit/commands/abstract-command-test',
     // command - util
     '@test/unit/commands/util/git-credentials-helper/index-test',
+    '@test/unit/commands/util/generate-lwa-tokens/index-test',
     // command - new
     '@test/unit/commands/new/index-test',
     '@test/unit/commands/new/ui-test',
@@ -45,9 +46,7 @@ require('module-alias/register');
     '@test/unit/commands/smapi/smapi-command-handler-test.js',
     '@test/unit/commands/smapi/smapi-commander-test.js',
     '@test/unit/commands/smapi/smapi-docs-test.js',
-    '@test/unit/commands/smapi/customizations/smapi-hooks-test.js',
-    '@test/unit/commands/smapi/hook-functions/append-vendor-id-test.js',
-    '@test/unit/commands/smapi/hook-functions/map-testers-emails-test.js',
+    '@test/unit/commands/smapi/before-send-processor-test.js',
     // command - smapi - export-package
     '@test/unit/commands/smapi/appended-commands/export-package/index-test.js',
     '@test/unit/commands/smapi/appended-commands/export-package/helper-test.js',

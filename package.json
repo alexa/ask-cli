@@ -1,6 +1,6 @@
 {
   "name": "ask-cli",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
     "ask": "bin/ask.js"
@@ -28,14 +28,17 @@
     "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
-    "functional-test": "node ./node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
+    "integration-test:high-level": "mocha -t 180000 test/integration/high-level-commands-test.js",
+    "integration-test:smapi": "mocha -t 180000 test/integration/smapi-commands-test.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
-    "pre-release": "standard-version"
+    "pre-release": "standard-version",
+    "prism": "prism"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "ask-smapi-sdk": "1.1.1",
+    "ask-smapi-model": "1.6.1",
+    "ask-smapi-sdk": "^1.2.0",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",
     "aws-sdk": "^2.288.0",
@@ -69,6 +72,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@stoplight/prism-cli": "^3.3.3",
     "chai": "^3.5.0",
     "chai-json-schema": "^1.5.1",
     "chai-uuid": "^1.0.6",
@@ -79,6 +83,7 @@
     "gulp": "^3.9.1",
     "husky": "^4.2.3",
     "mocha": "^3.2.0",
+    "mocha.parallel": "^0.15.6",
     "nyc": "^13.3.0",
     "proxyquire": "^1.7.11",
     "sinon": "^6.0.0",
@@ -111,9 +116,7 @@
       "lib/commands/*"
     ],
     "exclude": [
-      "lib/clients/aws-client/aws-util.js",
-      "lib/commands/api/account-linking/set-account-linking/*",
-      "lib/commands/api/catalog/upload-catalog/*"
+      "lib/clients/aws-client/aws-util.js"
     ]
   },
   "_moduleAliases": {

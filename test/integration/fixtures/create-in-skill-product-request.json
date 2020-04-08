@@ -1,0 +1,56 @@
+{
+    "inSkillProductDefinition": {
+      "version": "string",
+      "type": "SUBSCRIPTION",
+      "referenceName": "string",
+      "purchasableState": "PURCHASABLE",
+      "subscriptionInformation": {
+        "subscriptionPaymentFrequency": "MONTHLY",
+        "subscriptionTrialPeriodDays": 0
+      },
+      "publishingInformation": {
+        "locales": {
+          "en-US": {
+            "name": "string",
+            "smallIconUri": "https://dummyimage.com/108/108/fff",
+            "largeIconUri": "https://dummyimage.com/512/512/fff",
+            "summary": "string",
+            "description": "string",
+            "examplePhrases": [
+              "string"
+            ],
+            "keywords": [
+              "string"
+            ],
+            "customProductPrompts": {
+                "purchasePromptDescription": "test",
+                "boughtCardDescription": "test"
+            }
+          }
+        },
+        "distributionCountries": [
+          "US"
+        ],
+        "pricing": {
+          "amazon.com": {
+            "releaseDate": "2099-04-13",
+            "defaultPriceListing": {
+              "price": 0.99,
+              "currency": "USD"
+            }
+          }
+        },
+        "taxInformation": {
+          "category": "SOFTWARE"
+        }
+      },
+      "privacyAndCompliance": {
+        "locales": {
+          "en-US": {
+            "privacyPolicyUrl": "http://www.example.com"
+          }
+        }
+      },
+      "testingInstructions": "string"
+    }
+  }

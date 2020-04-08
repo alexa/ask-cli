@@ -34,8 +34,10 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
     const bodyPropertyTwoName = 'propertyTwo';
     const nestedPropertyName = 'nestedProperty';
     const nestedEnumPropertyName = 'nestedEnumProperty';
-    const bodyProperty = {};
-    const bodyPropertyWithDescription = { description: 'property description' };
+    const bodyProperty = { type: 'number' };
+    const bodyPropertyWithSimpleArray = { type: 'array', items: { $ref: '#/definitions/SomeEnumType' } };
+    const bodyPropertyWithComplexArray = { type: 'array', items: { $ref: '#/definitions/SomeSimpleObjectType' } };
+    const bodyPropertyWithDescription = { description: 'property description', type: 'boolean' };
     const nestedProperty = { $ref: 'SomeObjectType' };
     const nestedEnumProperty = { $ref: 'SomeEnumTypeWithDescription' };
     let processor;
@@ -56,8 +58,15 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             ['SomeEnumType', { enum: enumValues }],
             ['SomeEnumTypeWithDescription', { enum: enumValues, description: enumDescription }],
             ['SomeTypeWithDescription', { enum: enumValues, description: refObjectDescription }],
+            ['SomeSimpleObjectType', { type: 'object', properties: {} }],
             ['SomeObjectType', { description: parentDescription,
-                properties: { propertyOne: bodyProperty, propertyTwo: bodyPropertyWithDescription } }],
+                properties: { propertyOne: bodyProperty,
+                    propertyTwo: bodyPropertyWithDescription,
+                    propertyThree: { $ref: 'SomeEnumType' },
+                    propertyFour: { $ref: 'SomeEnumTypeWithDescription' },
+                    propertyFive: bodyPropertyWithSimpleArray,
+                    propertySix: bodyPropertyWithComplexArray,
+                    propertySeven: { type: 'object', properties: { } } } }],
             ['SomeNestedType', { required: [nestedPropertyName],
                 properties: { nestedProperty } }],
             ['SomeTooManyPropertiesType', { properties: { ...objectWithTooManyProperties } }],
@@ -92,7 +101,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const key = camelCase(parameter.name);
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
-            const expected = { ...parameter, enum: undefined, isArray: false };
+            const expected = { ...parameter, enum: undefined };
             expect(flatParamsMap.get(key)).eql(expected);
         });
 
@@ -104,7 +113,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
 
             processor.processParameter(parameter, parentOperation, definitions);
 
-            expect(parameter.skip).eql(true);
+            expect(parentOperation.customizationMetadata.flatParamsMap.size).eql(0);
         });
 
 
@@ -157,7 +166,8 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
                 rootName,
                 bodyPath: bodyPropertyTwoName,
                 name: bodyPropertyTwoName,
-                json: false };
+                json: false,
+                isBoolean: true };
             expect(flatParamsMap.get(bodyPropertyTwoName)).eql(expected);
         });
 
@@ -201,14 +211,22 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
             let { name, bodyPath, key } = mapExpectedParams(nestedPropertyName, bodyPropertyOneName);
 
-            let expected = { description: parentDescription, name, rootName, bodyPath, required: true, enum: null, json: false };
+            let expected = { description: parentDescription,
+                name,
+                rootName,
+                bodyPath,
+                required: true,
+                enum: null,
+                json: false,
+                isNumber: true,
+                type: 'number' };
             expect(flatParamsMap.get(key)).eql(expected);
 
             const expectedParams = mapExpectedParams(nestedPropertyName, bodyPropertyTwoName);
             name = expectedParams.name;
             bodyPath = expectedParams.bodyPath;
             key = expectedParams.key;
-            expected = { ...bodyPropertyWithDescription, name, rootName, bodyPath, required: true, enum: null, json: false };
+            expected = { ...bodyPropertyWithDescription, name, rootName, bodyPath, required: true, enum: null, json: false, isBoolean: true };
 
             expect(flatParamsMap.get(key)).eql(expected);
         });
@@ -239,7 +257,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const name = nestedEnumPropertyName;
             const bodyPath = nestedEnumPropertyName;
 
-            const expected = { ...bodyProperty, name, rootName, bodyPath, required: false, enum: enumValues, description: enumDescription };
+            const expected = { ...bodyProperty, name, rootName, bodyPath, required: false, enum: enumValues, description: enumDescription, type: undefined };
             expect(flatParamsMap.get(nestedEnumPropertyName)).eql(expected);
         });
     });

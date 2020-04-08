@@ -1,0 +1,21 @@
+{
+    "accountLinkingRequest": {
+      "skipOnEnablement": "true",
+      "type": "AUTH_CODE",
+      "authorizationUrl": "https://www.example.com/auth_url",
+      "domains": [
+        "example.com"
+      ],
+      "clientId": "string",
+      "scopes": [
+        "www.example.com"
+      ],
+      "accessTokenUrl": "https://www.example.com/accessToken_url",
+      "clientSecret": "abcdaslkaa",
+      "accessTokenScheme": "HTTP_BASIC",
+      "defaultTokenExpirationInSeconds": 20,
+      "redirectUrls": [
+        "https://www.example.com/redirect"
+      ]    
+    }
+  }

@@ -1,0 +1,21 @@
+{
+    "manifest":{
+       "publishingInformation":{
+          "locales":{
+             "en-US":{
+                "name":"integration test"
+             }
+          }
+       },
+       "apis":{
+          "custom":{
+ 
+          }
+       }
+    },
+    "hosting":{
+       "alexaHosted":{
+          "runtime":"NODE_10_X"
+       }
+    }
+ }
