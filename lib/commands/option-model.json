@@ -1,13 +1,13 @@
 {
   "profile": {
     "name": "profile",
-    "description": "ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile)",
+    "description": "the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.",
     "alias": "p",
     "stringInput": "REQUIRED"
   },
   "debug": {
     "name": "debug",
-    "description": "ask cli debug mode",
+    "description": "when you include this option, ASK CLI shows debug messages in the output of the command.",
     "alias": null,
     "stringInput": "NONE"
   },
@@ -17,15 +17,9 @@
     "alias": null,
     "stringInput": "NONE"
   },
-  "summary": {
-    "name": "summary",
-    "description": "summary for in-skill product",
-    "alisa": null,
-    "stringInput": "NONE"
-  },
   "skill-id": {
     "name": "skill-id",
-    "description": "skill-id for the skill",
+    "description": "the skill ID.",
     "alias": "s",
     "stringInput": "REQUIRED"
   },
@@ -45,72 +39,14 @@
     "alias": null,
     "stringInput": "REQUIRED"
   },
-  "isp-id": {
-    "name": "isp-id",
-    "description": "isp-id for the in skill product",
-    "alias": "i",
-    "stringInput": "REQUIRED"
-  },
-  "isp-id-list": {
-    "name": "isp-id-list",
-    "description": "the list of in-skill product IDs to get the summary for, seperate by comma. Please note that this option must not be used with --next-token and/or --max-results options.",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "isp-type":{
-    "name": "type",
-    "description": "type for the in-skill product. (SUBSCRIPTION / ENTITLEMENT / CONSUMABLE)",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["SUBSCRIPTION", "ENTITLEMENT", "CONSUMABLE"]
-    }]
-  },
-  "isp-status": {
-    "name": "status",
-    "description": "status for the in-skill product. (INCOMPLETE / COMPLETE / CERTIFICATION / PUBLISHED / SUPPRESSED)",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["INCOMPLETE", "COMPLETE", "CERTIFICATION", "PUBLISHED", "SUPPRESSED"]
-    }]
-  },
-  "is-associated-with-skill": {
-    "name": "is-associated-with-skill",
-    "description": "whether or not the in-skill products are associated to a skill.",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["true", "false"]
-    }]
-  },
-  "reference-name": {
-    "name": "reference-name",
-    "description": "reference name for the in-skill product.",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
   "stage": {
     "name": "stage",
-    "description": "stage for the skill (development/live/certification)",
+    "description": "stage for skill.",
     "alias": "g",
     "stringInput": "REQUIRED",
     "rule": [{
       "type": "ENUM",
       "values": ["development", "live", "certification"]
-    }]
-  },
-  "stageWithoutCert": {
-    "name": "stage",
-    "description": "stage for the skill (development/live)",
-    "alias": "g",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["development", "live"]
     }]
   },
   "locale": {
@@ -129,16 +65,6 @@
     "alias": null,
     "stringInput": "REQUIRED"
   },
-  "locales": {
-    "name": "locales",
-    "description": "Locale(s) to perform validations for. All locales are supported.",
-    "alias": "l",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "REGEX",
-      "regex": "^([a-z]{2}-[A-Z]{2})(,\\s*([a-z]{2}-[A-Z]{2}))*$"
-    }]
-  },
   "file": {
     "name": "file",
     "description": "path to the target file input",
@@ -146,16 +72,6 @@
     "stringInput": "REQUIRED",
     "rule": [{
       "type": "FILE_PATH"
-    }]
-  },
-  "csvFile": {
-    "name": "file",
-    "description": "path to the target file input",
-    "alias": "f",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "FILE_PATH",
-      "extension": [".csv"]
     }]
   },
   "max-results": {
@@ -181,233 +97,8 @@
   },
   "catalog-id": {
     "name": "catalog-id",
-    "description": "catalog-id of the catalog",
+    "description": "Unique identifier of the catalog",
     "alias": "c",
-    "stringInput": "REQUIRED"
-  },
-  "catalog-type": {
-    "name": "catalog-type",
-    "description": "type of the catalog",
-    "stringInput": "REQUIRED"
-  },
-  "catalog-title": {
-    "name": "catalog-title",
-    "description": "title of the catalog",
-    "stringInput": "REQUIRED"
-  },
-  "catalog-usage": {
-    "name": "catalog-usage",
-    "description": "usage of the catalog",
-    "stringInput": "REQUIRED"
-  },
-  "catalog-upload-id": {
-    "name": "upload-id",
-    "description": "id of the catalog upload",
-    "stringInput": "REQUIRED"
-  },
-  "sort-field": {
-    "name": "sort-field",
-    "description": "field by which to sort results",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "sort-direction": {
-    "name": "sort-direction",
-    "description": "order to sort results",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["asc", "desc"]
-    }]
-  },
-  "validation-id": {
-    "name": "validation-id",
-    "description": "validation-id for the validation",
-    "alias": "i",
-    "stringInput": "REQUIRED"
-  },
-  "accept-language": {
-    "name": "accept-language",
-    "description": "preferred language variant default: en-US",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["en-US", "ja-JP"]
-    }]
-  },
-  "utterance": {
-    "name": "utterance",
-    "description": "utterance to be profiled",
-    "alias": "u",
-    "stringInput": "REQUIRED"
-  },
-  "multiturn-token": {
-    "name": "multiturn-token",
-    "description": "optional multiturn token for dialog",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "filters": {
-    "name": "filters",
-    "description": "string of semicolon-delimited filters in the format 'Name=[field],Values=[value1][,value2...]'.",
-    "stringInput": "REQUIRED"
-  },
-  "account-id": {
-    "name": "account-id",
-    "description": "account ARN of the Alexa For Business organization",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "simulation-id": {
-    "name": "simulation-id",
-    "description": "simulation id for a simulation",
-    "alias": "i",
-    "stringInput": "REQUIRED"
-  },
-  "endpoint-region": {
-    "name": "endpoint-region",
-    "description": "indicates the endpoint region used by the skill",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [
-      {
-        "type": "ENUM",
-        "values": [
-          "NA",
-          "EU",
-          "FE",
-          "default"
-        ]
-      }
-    ]
-  },
-  "json": {
-    "name": "json",
-    "description": "JSON string for the request payload",
-    "alias": "j",
-    "stringInput": "REQUIRED"
-  },
-  "text": {
-    "name": "text",
-    "description": "utterance text input with which to simulate the skill.",
-    "alias": "t",
-    "stringInput": "REQUIRED"
-  },
-  "force-new-session": {
-    "name": "force-new-session",
-    "description": "starts a new dialog session before running the simulation.",
-    "alias": null,
-    "stringInput": "NONE"
-  },
-  "quick": {
-    "name": "quick",
-    "description": "to opt out of a wait state.",
-    "alias": null,
-    "stringInput": "NONE"
-  },
-  "repo-url": {
-    "name": "repo-url",
-    "description": "repo-url for the Alexa hosted skill",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "permission-type": {
-    "name": "permission-type",
-    "description": "Alexa hosted skill's permission type for the user",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "feedback-email": {
-    "name": "feedback-email",
-    "description": "optional feedback email for beta test",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "REGEX",
-      "regex": "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$"
-    }]
-  },
-  "certification-id": {
-    "name": "certification-id",
-    "description": "id of the certification, '~mostRecent' can be used for most recent certification",
-    "alias": "c",
-    "stringInput": "REQUIRED"
-  },
-  "task-name": {
-    "name": "task-name",
-    "description": "name of task",
-    "alias": "t",
-    "stringInput": "REQUIRED"
-  },
-  "task-version": {
-    "name": "task-version",
-    "description": "version of task",
-    "alias": "v",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "INTEGER"
-    }]
-  },
-  "keywords": {
-    "name": "keywords",
-    "description": "string of comma delimited keywords used to search for tasks",
-    "alias": "k",
-    "stringInput": "REQUIRED"
-  },
-  "provider-skill-id": {
-    "name": "provider-skill-id",
-    "description": "skill id of task provider",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "start-time": {
-    "name": "start-time",
-    "description": "the start time of query",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "end-time": {
-    "name": "end-time",
-    "description": "the end time of the query (maximum duration one week)",
-    "alias": null,
-    "stringInput": "REQUIRED"
-  },
-  "period": {
-    "name": "period",
-    "description": "the aggregation period that is used when retrieving the metric",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["SINGLE", "PT15M", "PT1H", "P1D"]
-    }]
-  },
-  "metric": {
-    "name": "metric",
-    "description": "a distinct set of logic that predictably returns a set of data",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["uniqueCustomers", "totalEnablements", "totalUtterances", "successfulUtterances", "failedUtterances", "totalSessions",
-        "successfulSessions", "incompleteSessions", "userEndedSessions", "skillEndedSessions"]
-    }]
-  },
-  "skill-type": {
-    "name": "skill-type",
-    "description": "the type of skill",
-    "alias": null,
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["custom", "smartHome", "flashBriefing"]
-    }]
-  },
-  "intent": {
-    "name": "intent",
-    "description": "the skill intent",
-    "alias": null,
     "stringInput": "REQUIRED"
   }
 }

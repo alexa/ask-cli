@@ -13,8 +13,6 @@ require('module-alias/register');
     // commands
     '@test/unit/commands/option-validator-test',
     '@test/unit/commands/abstract-command-test',
-    '@test/unit/commands/api/publishing/withdraw/helper-test.js',
-    '@test/unit/commands/api/validation/validate-skill/helper-test.js',
     // command - util
     '@test/unit/commands/util/git-credentials-helper/index-test',
     // command - new
@@ -50,6 +48,9 @@ require('module-alias/register');
     '@test/unit/commands/smapi/customizations/smapi-hooks-test.js',
     '@test/unit/commands/smapi/hook-functions/append-vendor-id-test.js',
     '@test/unit/commands/smapi/hook-functions/map-testers-emails-test.js',
+    // command - smapi - export-package
+    '@test/unit/commands/smapi/appended-commands/export-package/index-test.js',
+    '@test/unit/commands/smapi/appended-commands/export-package/helper-test.js',
     // command - util
     '@test/unit/commands/util/upgrade-project/index-test',
     '@test/unit/commands/util/upgrade-project/ui-test',
@@ -104,92 +105,6 @@ require('module-alias/register');
     '@test/unit/utils/retry-utility-test',
     '@test/unit/utils/provider-chain-utils-test',
     '@test/unit/utils/local-host-server-test',
-
-
-    // FUNCTION TEST
-    // skill
-    '@test/functional/commands/api/skill/create-skill-test',
-    '@test/functional/commands/api/skill/delete-skill-test',
-    '@test/functional/commands/api/skill/get-skill-status-test',
-    '@test/functional/commands/api/skill/list-skills-test',
-    '@test/functional/commands/api/credentials/get-skill-credentials-test',
-    // manifest
-    '@test/functional/commands/api/manifest/get-manifest-test',
-    '@test/functional/commands/api/manifest/update-manifest-test',
-    // interaction model
-    '@test/functional/commands/api/interaction-model/get-interaction-model-test',
-    '@test/functional/commands/api/interaction-model/set-interaction-model-test',
-    '@test/functional/commands/api/interaction-model/head-interaction-model-test',
-    '@test/functional/commands/api/interaction-model/list-interaction-model-versions-test',
-    // account linking
-    '@test/functional/commands/api/account-linking/delete-account-linking-test',
-    '@test/functional/commands/api/account-linking/get-account-linking-test',
-    // skill publishing
-    '@test/functional/commands/api/enablement/enable-skill-test',
-    '@test/functional/commands/api/enablement/disable-skill-test',
-    '@test/functional/commands/api/enablement/get-skill-enablement-test',
-    '@test/functional/commands/api/publishing/submit-test',
-    '@test/functional/commands/api/publishing/withdraw-test',
-    '@test/functional/commands/api/publishing/get-certification-test',
-    '@test/functional/commands/api/publishing/list-certifications-test',
-    // vendor
-    '@test/functional/commands/api/vendor/list-vendors-test',
-    // test
-    '@test/functional/commands/api/test/invoke-skill-test',
-    '@test/functional/commands/api/test/get-simulation-test',
-    '@test/functional/commands/api/test/simulate-skill-test',
-    '@test/functional/commands/api/evaluations/nlu-profile-test',
-    // validation
-    '@test/functional/commands/api/validation/get-validation-test',
-    '@test/functional/commands/api/validation/validate-skill-test',
-    // evaluation
-    '@test/functional/commands/api/evaluations/nlu-profile-test',
-    // alexa hosted skill
-    '@test/functional/commands/api/alexa-hosted/get-git-credentials-test',
-    '@test/functional/commands/api/alexa-hosted/get-alexa-hosted-skill-metadata-test',
-    '@test/functional/commands/api/alexa-hosted/get-hosted-skill-permission-test',
-    // beta test
-    '@test/functional/commands/api/beta-test/create-beta-test-test',
-    '@test/functional/commands/api/beta-test/update-beta-test-test',
-    '@test/functional/commands/api/beta-test/get-beta-test-test',
-    '@test/functional/commands/api/beta-test/start-beta-test-test',
-    '@test/functional/commands/api/beta-test/end-beta-test-test',
-    '@test/functional/commands/api/beta-test/list-beta-testers-test',
-    '@test/functional/commands/api/beta-test/add-beta-testers-test',
-    '@test/functional/commands/api/beta-test/remove-beta-testers-test',
-    '@test/functional/commands/api/beta-test/request-feedback-from-beta-testers-test',
-    '@test/functional/commands/api/beta-test/send-reminder-to-beta-testers-test',
-    // in-skill products
-    '@test/functional/commands/api/isp/create-isp-test',
-    '@test/functional/commands/api/isp/update-isp-test',
-    '@test/functional/commands/api/isp/associate-isp-test',
-    '@test/functional/commands/api/isp/disassociate-isp-test',
-    '@test/functional/commands/api/isp/delete-isp-test',
-    '@test/functional/commands/api/isp/get-isp-test',
-    '@test/functional/commands/api/isp/list-isp-for-skill-test',
-    '@test/functional/commands/api/isp/list-skills-for-isp-test',
-    '@test/functional/commands/api/isp/reset-isp-entitlement-test',
-    '@test/functional/commands/api/isp/list-isp-for-vendor-test',
-    // private skill
-    '@test/functional/commands/api/private/add-private-distribution-account-test.js',
-    '@test/functional/commands/api/private/delete-private-distribution-account-test.js',
-    '@test/functional/commands/api/private/list-private-distribution-accounts-test.js',
-    // catalog
-    '@test/functional/commands/api/catalog/associate-catalog-with-skill',
-    '@test/functional/commands/api/catalog/create-catalog',
-    '@test/functional/commands/api/catalog/get-catalog',
-    '@test/functional/commands/api/catalog/get-catalog-upload',
-    '@test/functional/commands/api/catalog/list-catalog-uploads',
-    '@test/functional/commands/api/catalog/list-catalogs',
-    '@test/functional/commands/api/history/intent-requests-history-test',
-    // task
-    '@test/functional/commands/api/task/get-task',
-    '@test/functional/commands/api/task/search-task',
-    // metrics
-    '@test/functional/commands/api/metrics/get-metrics-test',
-    // export-package
-    '@test/unit/commands/api/skill-package/export-package/index-test.js',
-    '@test/unit/commands/api/skill-package/export-package/helper-test.js',
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
     require(testFile);

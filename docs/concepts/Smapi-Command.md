@@ -4,15 +4,33 @@ The `smapi` command provides a number of subcommandsthat map 1:1 to the underlyi
 
 `smapi` command format:
 
-`$ askx smapi <subcommand> `
+`$ ask smapi <subcommand> `
 
 ## Subcommands
 
 | Task  | Subcommand |
 |---|---|
+| Lists catalogs associated with a vendor. | [list-catalogs-for-vendor](#list-catalogs-for-vendor) |
+| Creates a new catalog based on information provided in the request. | [create-catalog](#create-catalog) |
+| Returns information about a particular catalog. | [get-catalog](#get-catalog) |
+| Lists all the catalogs associated with a skill. | [list-catalogs-for-skill](#list-catalogs-for-skill) |
+| Associate skill with catalog. | [associate-catalog-with-skill](#associate-catalog-with-skill) |
+| Lists all the uploads for a particular catalog. | [list-uploads-for-catalog](#list-uploads-for-catalog) |
+| Creates a new upload for a catalog and returns presigned upload parts for uploading the file. | [create-content-upload](#create-content-upload) |
+| Gets detailed information about an upload which was created for a specific catalog. Includes the upload's ingestion steps and a url for downloading the file. | [get-content-upload-by-id](#get-content-upload-by-id) |
+| Completes an upload. To be called after the file is uploaded to the backend data store using presigned url(s). | [complete-catalog-upload](#complete-catalog-upload) |
+| Lists the subscribers for a particular vendor. | [list-subscribers-for-development-events](#list-subscribers-for-development-events) |
+| Creates a new subscriber resource for a vendor. | [create-subscriber-for-development-events](#create-subscriber-for-development-events) |
+| Returns information about specified subscriber. | [get-subscriber-for-development-events](#get-subscriber-for-development-events) |
+| Updates the properties of a subscriber. | [set-subscriber-for-development-events](#set-subscriber-for-development-events) |
+| Deletes a specified subscriber. | [delete-subscriber-for-development-events](#delete-subscriber-for-development-events) |
+| Lists all the subscriptions for a vendor/subscriber depending on the query parameter. | [list-subscriptions-for-development-events](#list-subscriptions-for-development-events) |
+| Creates a new subscription for a subscriber. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. | [create-subscription-for-development-events](#create-subscription-for-development-events) |
+| Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization. | [get-subscription-for-development-events](#get-subscription-for-development-events) |
+| Updates the mutable properties of a subscription. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated. | [set-subscription-for-development-events](#set-subscription-for-development-events) |
+| Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization. | [delete-subscription-for-development-events](#delete-subscription-for-development-events) |
 | Generate preSigned urls to upload data. | [generate-catalog-upload-url](#generate-catalog-upload-url) |
 | Create a new upload for a catalog and returns location to track the upload process. | [create-catalog-upload](#create-catalog-upload) |
-| Gets detailed information about an upload which was created for a specific catalog. Includes the upload's ingestion steps and a url for downloading the file. | [get-content-upload-by-id](#get-content-upload-by-id) |
 | Get the list of in-skill products for the vendor. | [get-isp-list-for-vendor](#get-isp-list-for-vendor) |
 | Creates a new in-skill product for given vendorId. | [create-isp-for-vendor](#create-isp-for-vendor) |
 | Get the list of in-skill products for the skillId. | [get-isp-list-for-skill-id](#get-isp-list-for-skill-id) |
@@ -82,7 +100,7 @@ The path params
 | Add an id to the private distribution accounts. | [set-private-distribution-account-id](#set-private-distribution-account-id) |
 | Remove an id from the private distribution accounts. | [delete-private-distribution-account-id](#delete-private-distribution-account-id) |
 | List private distribution accounts. | [list-private-distribution-accounts](#list-private-distribution-accounts) |
-| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must be in development stage, and it must also belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
+| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
 | This API gets the result of a previously executed simulation. A successful response will contain the status of the executed simulation. If the simulation successfully completed, the response will also contain information related to skill invocation. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where the simulation failed, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the skill endpoint. Note that simulation results are stored for 10 minutes. A request for an expired simulation result will return a 404 HTTP status code. | [get-skill-simulation](#get-skill-simulation) |
 | This is an asynchronous API which allows a skill developer to execute various validations against their skill. | [submit-skill-validation](#submit-skill-validation) |
 | This API gets the result of a previously executed validation. A successful response will contain the status of the executed validation. If the validation successfully completed, the response will also contain information related to executed validations. In cases where requests to this API results in an error, the response will contain a description of the problem. In cases where the validation failed, the response will contain a status attribute indicating that a failure occurred. Note that validation results are stored for 60 minutes. A request for an expired validation result will return a 404 HTTP status code. | [get-skill-validations](#get-skill-validations) |
@@ -101,6 +119,419 @@ The path params
 | Get status for given importId. | [get-import-status](#get-import-status) |
 | Creates a new uploadUrl. | [create-upload-url](#create-upload-url) |
 | Get the list of Vendor information. | [get-vendor-list](#get-vendor-list) |
+| The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account. | [query-development-audit-logs](#query-development-audit-logs) |
+| This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
+| upload a file for the catalog. | [upload-catalog](#upload-catalog) |
+| download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
+
+### list-catalogs-for-vendor
+
+Lists catalogs associated with a vendor.
+
+`list-catalogs-for-vendor` command format:
+
+`$ ask smapi list-catalogs-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-catalog
+
+Creates a new catalog based on information provided in the request.
+
+`create-catalog` command format:
+
+`$ ask smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--title <title></dt>
+    <dd markdown="span">[REQUIRED] Title of the catalog.</dd>
+    <dt>--type <type></dt>
+    <dd markdown="span">[REQUIRED] Type of catalog. 
+[ENUM]: AMAZON.BroadcastChannel,AMAZON.Genre,AMAZON.MusicAlbum,AMAZON.MusicGroup,AMAZON.MusicPlaylist,AMAZON.MusicRecording,AMAZON.TerrestrialRadioChannel,AMAZON.AudioRecording.</dd>
+    <dt>--usage <usage></dt>
+    <dd markdown="span">[REQUIRED] Usage of the catalog. 
+[ENUM]: AlexaMusic.Catalog.BroadcastChannel,AlexaMusic.Catalog.Genre,AlexaMusic.Catalog.MusicAlbum,AlexaMusic.Catalog.MusicGroup,AlexaMusic.Catalog.MusicPlaylist,AlexaMusic.Catalog.MusicRecording,AlexaMusic.Catalog.TerrestrialRadioChannel,AlexaTest.Catalog.AudioRecording.</dd>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[REQUIRED] ID of the vendor owning the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-catalog
+
+Returns information about a particular catalog.
+
+`get-catalog` command format:
+
+`$ ask smapi get-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-catalogs-for-skill
+
+Lists all the catalogs associated with a skill.
+
+`list-catalogs-for-skill` command format:
+
+`$ ask smapi list-catalogs-for-skill [--next-token <next-token>] [--max-results <max-results>] <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### associate-catalog-with-skill
+
+Associate skill with catalog.
+
+`associate-catalog-with-skill` command format:
+
+`$ ask smapi associate-catalog-with-skill <-s|--skill-id <skill-id>> <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-uploads-for-catalog
+
+Lists all the uploads for a particular catalog.
+
+`list-uploads-for-catalog` command format:
+
+`$ ask smapi list-uploads-for-catalog [--next-token <next-token>] [--max-results <max-results>] <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-content-upload
+
+Creates a new upload for a catalog and returns presigned upload parts for uploading the file.
+
+`create-content-upload` command format:
+
+`$ ask smapi create-content-upload <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--number-of-upload-parts <number-of-upload-parts></dt>
+    <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-content-upload-by-id
+
+Gets detailed information about an upload which was created for a specific catalog. Includes the upload&#39;s ingestion steps and a url for downloading the file.
+
+`get-content-upload-by-id` command format:
+
+`$ ask smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--upload-id <upload-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### complete-catalog-upload
+
+Completes an upload. To be called after the file is uploaded to the backend data store using presigned url(s).
+
+`complete-catalog-upload` command format:
+
+`$ ask smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> <--part-e-tags <part-e-tags>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--upload-id <upload-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
+    <dt>--part-e-tags <part-e-tags></dt>
+    <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-subscribers-for-development-events
+
+Lists the subscribers for a particular vendor.
+
+`list-subscribers-for-development-events` command format:
+
+`$ ask smapi list-subscribers-for-development-events [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-subscriber-for-development-events
+
+Creates a new subscriber resource for a vendor.
+
+`create-subscriber-for-development-events` command format:
+
+`$ ask smapi create-subscriber-for-development-events [--create-subscriber-request <create-subscriber-request>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--create-subscriber-request <create-subscriber-request></dt>
+    <dd markdown="span">[OPTIONAL] Defines the request body for createSubscriber API. 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-subscriber-for-development-events
+
+Returns information about specified subscriber.
+
+`get-subscriber-for-development-events` command format:
+
+`$ ask smapi get-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### set-subscriber-for-development-events
+
+Updates the properties of a subscriber.
+
+`set-subscriber-for-development-events` command format:
+
+`$ ask smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> [--update-subscriber-request <update-subscriber-request>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>--update-subscriber-request <update-subscriber-request></dt>
+    <dd markdown="span">[OPTIONAL] Defines the request body for updateSubscriber API. 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### delete-subscriber-for-development-events
+
+Deletes a specified subscriber.
+
+`delete-subscriber-for-development-events` command format:
+
+`$ ask smapi delete-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-subscriptions-for-development-events
+
+Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query parameter.
+
+`list-subscriptions-for-development-events` command format:
+
+`$ ask smapi list-subscriptions-for-development-events [--next-token <next-token>] [--max-results <max-results>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[OPTIONAL] Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-subscription-for-development-events
+
+Creates a new subscription for a subscriber. This needs to be authorized by the client&#x2F;vendor who created the subscriber and the vendor who publishes the event.
+
+`create-subscription-for-development-events` command format:
+
+`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--vendor-id <vendor-id>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--name <name></dt>
+    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dt>--events <events></dt>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-subscription-for-development-events
+
+Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization.
+
+`get-subscription-for-development-events` command format:
+
+`$ ask smapi get-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### set-subscription-for-development-events
+
+Updates the mutable properties of a subscription. This needs to be authorized by the client&#x2F;vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated.
+
+`set-subscription-for-development-events` command format:
+
+`$ ask smapi set-subscription-for-development-events <--subscription-id <subscription-id>> [--name <name>] [--events <events>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dt>--events <events></dt>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### delete-subscription-for-development-events
+
+Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization.
+
+`delete-subscription-for-development-events` command format:
+
+`$ ask smapi delete-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
 
 ### generate-catalog-upload-url
 
@@ -108,7 +539,7 @@ Generate preSigned urls to upload data.
 
 `generate-catalog-upload-url` command format:
 
-`$ askx smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -129,7 +560,7 @@ Create a new upload for a catalog and returns location to track the upload proce
 
 `create-catalog-upload` command format:
 
-`$ askx smapi create-catalog-upload <-c|--catalog-id <catalog-id>> <--catalog-upload-request-body <catalog-upload-request-body>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-catalog-upload <-c|--catalog-id <catalog-id>> <--catalog-upload-request-body <catalog-upload-request-body>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -145,34 +576,13 @@ Create a new upload for a catalog and returns location to track the upload proce
     <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
 </dl>
 
-### get-content-upload-by-id
-
-Gets detailed information about an upload which was created for a specific catalog. Includes the upload&#39;s ingestion steps and a url for downloading the file.
-
-`get-content-upload-by-id` command format:
-
-`$ askx smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--debug]`
-
-**Options**
-
-<dl>
-    <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--upload-id <upload-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
-    <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
-    <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
-</dl>
-
 ### get-isp-list-for-vendor
 
 Get the list of in-skill products for the vendor.
 
 `get-isp-list-for-vendor` command format:
 
-`$ askx smapi get-isp-list-for-vendor [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-list-for-vendor [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -210,7 +620,7 @@ Creates a new in-skill product for given vendorId.
 
 `create-isp-for-vendor` command format:
 
-`$ askx smapi create-isp-for-vendor <--create-in-skill-product-request <create-in-skill-product-request>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-isp-for-vendor <--create-in-skill-product-request <create-in-skill-product-request>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -230,7 +640,7 @@ Get the list of in-skill products for the skillId.
 
 `get-isp-list-for-skill-id` command format:
 
-`$ askx smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -255,7 +665,7 @@ Returns the in-skill product definition for given productId.
 
 `get-isp-definition` command format:
 
-`$ askx smapi get-isp-definition <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-definition <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -276,7 +686,7 @@ Updates in-skill product definition for given productId. Only development stage 
 
 `update-isp-for-product` command format:
 
-`$ askx smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> <-g|--stage <stage>> <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> <-g|--stage <stage>> <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -302,7 +712,7 @@ Deletes the in-skill product for given productId. Only development stage support
 
 `delete-isp-for-product` command format:
 
-`$ askx smapi delete-isp-for-product <--product-id <product-id>> <-g|--stage <stage>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-isp-for-product <--product-id <product-id>> <-g|--stage <stage>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -325,7 +735,7 @@ Get the summary information for an in-skill product.
 
 `get-isp-summary` command format:
 
-`$ askx smapi get-isp-summary <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-summary <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -346,7 +756,7 @@ Get the associated skills for the in-skill product.
 
 `get-isp-associated-skills` command format:
 
-`$ askx smapi get-isp-associated-skills <--product-id <product-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-associated-skills <--product-id <product-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -371,7 +781,7 @@ Associates an in-skill product with a skill.
 
 `associate-isp-with-skill` command format:
 
-`$ askx smapi associate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi associate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -392,7 +802,7 @@ Disassociates an in-skill product from a skill.
 
 `disassociate-isp-with-skill` command format:
 
-`$ askx smapi disassociate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi disassociate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -413,7 +823,7 @@ Resets the entitlement(s) of the Product for the current user.
 
 `reset-entitlement-for-product` command format:
 
-`$ askx smapi reset-entitlement-for-product <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi reset-entitlement-for-product <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -434,7 +844,7 @@ Get AccountLinking information for the skill.
 
 `get-account-linking-info` command format:
 
-`$ askx smapi get-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -459,7 +869,7 @@ Create AccountLinking information for the skill.
 
 `update-account-linking-info` command format:
 
-`$ askx smapi update-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -489,7 +899,7 @@ Delete AccountLinking information of a skill for the given stage.
 
 `delete-account-linking-info` command format:
 
-`$ askx smapi delete-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -514,7 +924,7 @@ Generates hosted skill repository credentials to access the hosted skill reposit
 
 `generate-credentials-for-alexa-hosted-skill` command format:
 
-`$ askx smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> [--repository-url <repository-url>] [--repository-type <repository-type>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> [--repository-url <repository-url>] [--repository-type <repository-type>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -538,7 +948,7 @@ Get Alexa hosted skill&#39;s metadata.
 
 `get-alexa-hosted-skill-metadata` command format:
 
-`$ askx smapi get-alexa-hosted-skill-metadata <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-alexa-hosted-skill-metadata <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -557,7 +967,7 @@ Get the current user permissions about Alexa hosted skill features.
 
 `get-alexa-hosted-skill-user-permissions` command format:
 
-`$ askx smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -576,7 +986,7 @@ Get beta test for a given Alexa skill.
 
 `get-beta-test` command format:
 
-`$ askx smapi get-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -595,7 +1005,7 @@ Create a beta test for a given Alexa skill.
 
 `create-beta-test` command format:
 
-`$ askx smapi create-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -616,7 +1026,7 @@ Update a beta test for a given Alexa skill.
 
 `update-beta-test` command format:
 
-`$ askx smapi update-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -637,7 +1047,7 @@ Start a beta test for a given Alexa skill. System will send invitation emails to
 
 `start-beta-test` command format:
 
-`$ askx smapi start-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi start-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -656,7 +1066,7 @@ End a beta test for a given Alexa skill. System will revoke the entitlement of e
 
 `end-beta-test` command format:
 
-`$ askx smapi end-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi end-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -675,7 +1085,7 @@ List all testers in a beta test for the given Alexa skill.
 
 `get-list-of-testers` command format:
 
-`$ askx smapi get-list-of-testers <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-list-of-testers <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -698,7 +1108,7 @@ Add testers to a beta test for the given Alexa skill.  System will send invitati
 
 `add-testers-to-beta-test` command format:
 
-`$ askx smapi add-testers-to-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi add-testers-to-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -720,7 +1130,7 @@ Remove testers from a beta test for the given Alexa skill.  System will send acc
 
 `remove-testers-from-beta-test` command format:
 
-`$ askx smapi remove-testers-from-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi remove-testers-from-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -742,7 +1152,7 @@ Send reminder to the testers in a beta test for the given Alexa skill.  System w
 
 `send-reminder-to-testers` command format:
 
-`$ askx smapi send-reminder-to-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi send-reminder-to-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -764,7 +1174,7 @@ Request feedback from the testers in a beta test for the given Alexa skill.  Sys
 
 `request-feedback-from-testers` command format:
 
-`$ askx smapi request-feedback-from-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi request-feedback-from-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -786,7 +1196,7 @@ Get list of all certifications available for a skill, including information abou
 
 `get-certifications-list` command format:
 
-`$ askx smapi get-certifications-list <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-certifications-list <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -809,7 +1219,7 @@ Gets a specific certification resource. The response contains the review trackin
 
 `get-certification-review` command format:
 
-`$ askx smapi get-certification-review [--accept-language <accept-language>] <-s|--skill-id <skill-id>> <-c|--certification-id <certification-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-certification-review [--accept-language <accept-language>] <-s|--skill-id <skill-id>> <-c|--certification-id <certification-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -832,7 +1242,7 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
 
 `get-skill-enablement-status` command format:
 
-`$ askx smapi get-skill-enablement-status <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-enablement-status <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -853,7 +1263,7 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
 
 `set-skill-enablement` command format:
 
-`$ askx smapi set-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -874,7 +1284,7 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
 
 `delete-skill-enablement` command format:
 
-`$ askx smapi delete-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -895,7 +1305,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `profile-nlu` command format:
 
-`$ askx smapi profile-nlu <-u|--utterance <utterance>> <--multi-turn-token <multi-turn-token>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi profile-nlu <-u|--utterance <utterance>> <--multi-turn-token <multi-turn-token>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -922,7 +1332,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `get-utterance-data` command format:
 
-`$ askx smapi get-utterance-data <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-g|--stage <stage>] [-l|--locale <locale>] [--dialog-act-name <dialog-act-name>] [--intent-confidence-bin <intent-confidence-bin>] [--intent-name <intent-name>] [--intent-slots-name <intent-slots-name>] [--interaction-type <interaction-type>] [--publication-status <publication-status>] [--utterance-text <utterance-text>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-utterance-data <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-g|--stage <stage>] [-l|--locale <locale>] [--dialog-act-name <dialog-act-name>] [--intent-confidence-bin <intent-confidence-bin>] [--intent-name <intent-name>] [--intent-slots-name <intent-slots-name>] [--interaction-type <interaction-type>] [--publication-status <publication-status>] [--utterance-text <utterance-text>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -995,7 +1405,7 @@ The path params
 
 `get-interaction-model` command format:
 
-`$ askx smapi get-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1022,7 +1432,7 @@ Get the latest metadata for the interaction model resource for the given stage.
 
 `get-interaction-model-metadata` command format:
 
-`$ askx smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1049,7 +1459,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
 
 `set-interaction-model` command format:
 
-`$ askx smapi set-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1081,7 +1491,7 @@ List all catalogs for the vendor.
 
 `list-interaction-model-catalogs` command format:
 
-`$ askx smapi list-interaction-model-catalogs [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-catalogs [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1104,7 +1514,7 @@ Create a new version of catalog within the given catalogId.
 
 `create-interaction-model-catalog` command format:
 
-`$ askx smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1127,7 +1537,7 @@ get the catalog definition.
 
 `get-interaction-model-catalog-definition` command format:
 
-`$ askx smapi get-interaction-model-catalog-definition <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-definition <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1146,7 +1556,7 @@ Delete the catalog.
 
 `delete-interaction-model-catalog` command format:
 
-`$ askx smapi delete-interaction-model-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1165,7 +1575,7 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
 
 `get-interaction-model-catalog-update-status` command format:
 
-`$ askx smapi get-interaction-model-catalog-update-status <-c|--catalog-id <catalog-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-update-status <-c|--catalog-id <catalog-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1186,7 +1596,7 @@ update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog` command format:
 
-`$ askx smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1207,7 +1617,7 @@ Create a new version of catalog entity for the given catalogId.
 
 `create-interaction-model-catalog-version` command format:
 
-`$ askx smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] <--description <description>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] <--description <description>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1232,7 +1642,7 @@ Get catalog version data of given catalog version.
 
 `get-interaction-model-catalog-version` command format:
 
-`$ askx smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1253,7 +1663,7 @@ Delete catalog version.
 
 `delete-interaction-model-catalog-version` command format:
 
-`$ askx smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1274,7 +1684,7 @@ Update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog-version` command format:
 
-`$ askx smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [--description <description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [--description <description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1297,7 +1707,7 @@ Get catalog values from the given catalogId &amp; version.
 
 `get-interaction-model-catalog-values` command format:
 
-`$ askx smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--version <version>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--version <version>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1322,7 +1732,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
 
 `get-interaction-model-version` command format:
 
-`$ askx smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--version <version>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1351,7 +1761,7 @@ Get the list of interactionModel versions of a skill for the vendor.
 
 `list-interaction-model-versions` command format:
 
-`$ askx smapi list-interaction-model-versions <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-versions <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1386,7 +1796,7 @@ List all slot types for the vendor.
 
 `list-interaction-model-slot-types` command format:
 
-`$ askx smapi list-interaction-model-slot-types [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-slot-types [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1409,7 +1819,7 @@ Create a new version of slot type within the given slotTypeId.
 
 `create-interaction-model-slot-type` command format:
 
-`$ askx smapi create-interaction-model-slot-type <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-slot-type <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1429,7 +1839,7 @@ Get the slot type definition.
 
 `get-interaction-model-slot-type-definition` command format:
 
-`$ askx smapi get-interaction-model-slot-type-definition <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-definition <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1448,7 +1858,7 @@ Delete the slot type.
 
 `delete-interaction-model-slot-type` command format:
 
-`$ askx smapi delete-interaction-model-slot-type <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-slot-type <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1467,7 +1877,7 @@ Get the status of slot type resource and its sub-resources for a given slotTypeI
 
 `get-interaction-model-slot-type-build-status` command format:
 
-`$ askx smapi get-interaction-model-slot-type-build-status <--slot-type-id <slot-type-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-build-status <--slot-type-id <slot-type-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1488,7 +1898,7 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type` command format:
 
-`$ askx smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1509,7 +1919,7 @@ List all slot type versions for the slot type id.
 
 `list-interaction-model-slot-type-versions` command format:
 
-`$ askx smapi list-interaction-model-slot-type-versions <--slot-type-id <slot-type-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-slot-type-versions <--slot-type-id <slot-type-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1534,7 +1944,7 @@ Create a new version of slot type entity for the given slotTypeId.
 
 `create-interaction-model-slot-type-version` command format:
 
-`$ askx smapi create-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1556,7 +1966,7 @@ Get slot type version data of given slot type version.
 
 `get-interaction-model-slot-type-version` command format:
 
-`$ askx smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1577,7 +1987,7 @@ Delete slot type version.
 
 `delete-interaction-model-slot-type-version` command format:
 
-`$ askx smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1598,7 +2008,7 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type-version` command format:
 
-`$ askx smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1621,7 +2031,7 @@ Returns the skill manifest for given skillId and stage.
 
 `get-skill-manifest` command format:
 
-`$ askx smapi get-skill-manifest <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-manifest <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1646,7 +2056,7 @@ Updates skill manifest for given skillId and stage.
 
 `update-skill-manifest` command format:
 
-`$ askx smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1676,7 +2086,7 @@ Get analytic metrics report of skill usage.
 
 `get-skill-metrics` command format:
 
-`$ askx smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> <-g|--stage <stage>> <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> <-g|--stage <stage>> <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1715,7 +2125,7 @@ Add an id to the private distribution accounts.
 
 `set-private-distribution-account-id` command format:
 
-`$ askx smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1738,7 +2148,7 @@ Remove an id from the private distribution accounts.
 
 `delete-private-distribution-account-id` command format:
 
-`$ askx smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1761,7 +2171,7 @@ List private distribution accounts.
 
 `list-private-distribution-accounts` command format:
 
-`$ askx smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1782,17 +2192,19 @@ List private distribution accounts.
 
 ### simulate-skill
 
-This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must be in development stage, and it must also belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported.
+This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported.
 
 `simulate-skill` command format:
 
-`$ askx smapi simulate-skill <-s|--skill-id <skill-id>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--input-content <input-content></dt>
     <dd markdown="span">[REQUIRED] A string corresponding to the utterance text of what a customer would say to Alexa.</dd>
     <dt>--device-locale <device-locale></dt>
@@ -1812,13 +2224,15 @@ This API gets the result of a previously executed simulation. A successful respo
 
 `get-skill-simulation` command format:
 
-`$ askx smapi get-skill-simulation <-s|--skill-id <skill-id>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-simulation <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-i,--simulation-id <simulation-id></dt>
     <dd markdown="span">[REQUIRED] Id of the simulation.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1833,7 +2247,7 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 `submit-skill-validation` command format:
 
-`$ askx smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1856,7 +2270,7 @@ This API gets the result of a previously executed validation. A successful respo
 
 `get-skill-validations` command format:
 
-`$ askx smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> <-g|--stage <stage>> [--accept-language <accept-language>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> <-g|--stage <stage>> [--accept-language <accept-language>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1881,7 +2295,7 @@ Get the list of skills for the vendor.
 
 `list-skills-for-vendor` command format:
 
-`$ askx smapi list-skills-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-skills-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1905,7 +2319,7 @@ Creates a new skill for given vendorId.
 
 `create-skill-for-vendor` command format:
 
-`$ askx smapi create-skill-for-vendor <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-for-vendor <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1925,7 +2339,7 @@ Delete the skill and model for given skillId.
 
 `delete-skill` command format:
 
-`$ askx smapi delete-skill <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-skill <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1944,7 +2358,7 @@ Get the status of skill resource and its sub-resources for a given skillId.
 
 `get-skill-status` command format:
 
-`$ askx smapi get-skill-status <-s|--skill-id <skill-id>> [--resource <resource>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-status <-s|--skill-id <skill-id>> [--resource <resource>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1967,7 +2381,7 @@ Returns the ssl certificate sets currently associated with this skill. Sets cons
 
 `get-ssl-certificates` command format:
 
-`$ askx smapi get-ssl-certificates <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-ssl-certificates <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1986,7 +2400,7 @@ Updates the ssl certificates associated with this skill.
 
 `set-ssl-certificates` command format:
 
-`$ askx smapi set-ssl-certificates <-s|--skill-id <skill-id>> <--ssl-certificate-payload <ssl-certificate-payload>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-ssl-certificates <-s|--skill-id <skill-id>> <--ssl-certificate-payload <ssl-certificate-payload>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2008,7 +2422,7 @@ Submit the skill for certification.
 
 `submit-skill-for-certification` command format:
 
-`$ askx smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2030,7 +2444,7 @@ Withdraws the skill from certification.
 
 `withdraw-skill-from-certification` command format:
 
-`$ askx smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] <--message <message>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] <--message <message>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2054,7 +2468,7 @@ Creates a new export for a skill with given skillId and stage.
 
 `create-export-request-for-skill` command format:
 
-`$ askx smapi create-export-request-for-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-export-request-for-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2075,7 +2489,7 @@ Get status for given exportId.
 
 `get-status-of-export-request` command format:
 
-`$ askx smapi get-status-of-export-request <--export-id <export-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-status-of-export-request <--export-id <export-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2094,7 +2508,7 @@ Creates a new import for a skill.
 
 `create-skill-package` command format:
 
-`$ askx smapi create-skill-package <--vendor-id <vendor-id>> <--location <location>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-package <--vendor-id <vendor-id>> <--location <location>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2115,7 +2529,7 @@ Creates a new import for a skill with given skillId.
 
 `import-skill-package` command format:
 
-`$ askx smapi import-skill-package <--location <location>> <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi import-skill-package <--location <location>> <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2138,7 +2552,7 @@ Get status for given importId.
 
 `get-import-status` command format:
 
-`$ askx smapi get-import-status <--import-id <import-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-import-status <--import-id <import-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2157,7 +2571,7 @@ Creates a new uploadUrl.
 
 `create-upload-url` command format:
 
-`$ askx smapi create-upload-url [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-upload-url [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2174,7 +2588,7 @@ Get the list of Vendor information.
 
 `get-vendor-list` command format:
 
-`$ askx smapi get-vendor-list [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-vendor-list [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2183,6 +2597,118 @@ Get the list of Vendor information.
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
     <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### query-development-audit-logs
+
+The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account.
+
+`query-development-audit-logs` command format:
+
+`$ ask smapi query-development-audit-logs <--vendor-id <vendor-id>> [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[REQUIRED] Vendor Id. See developer.amazon.com/mycid.html.</dd>
+    <dt>--request-filters-clients <request-filters-clients></dt>
+    <dd markdown="span">[OPTIONAL] List of Client IDs for filtering.</dd>
+    <dt>--request-filters-operations <request-filters-operations></dt>
+    <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions.</dd>
+    <dt>--request-filters-resources <request-filters-resources></dt>
+    <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types.</dd>
+    <dt>--request-filters-requesters <request-filters-requesters></dt>
+    <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs.</dd>
+    <dt>--request-filters-start-time <request-filters-start-time></dt>
+    <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
+    <dt>--request-filters-end-time <request-filters-end-time></dt>
+    <dd markdown="span">[OPTIONAL] Sets the end time for this search. Any audit logs with timestamps before this time (exclusive) will be included in the result.</dd>
+    <dt>--request-filters-http-response-codes <request-filters-http-response-codes></dt>
+    <dd markdown="span">[OPTIONAL] Filters for HTTP response codes. For example, '200' or '503'.</dd>
+    <dt>--sort-direction <sort-direction></dt>
+    <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'ASC' these items are returned in ascending order of sortField value and when set to 'DESC' these items are returned in descending order of sortField value. 
+[ENUM]: ASC,DESC.</dd>
+    <dt>--sort-field <sort-field></dt>
+    <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied. 
+[ENUM]: timestamp,operation,resource.id,resource.type,requester.userId,client.id,httpResponseCode.</dd>
+    <dt>--pagination-context-next-token <pagination-context-next-token></dt>
+    <dd markdown="span">[OPTIONAL] When the response to this API call is truncated, the response includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that this API understands. Token has expiry of 1 hour.</dd>
+    <dt>--pagination-context-max-results <pagination-context-max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve more or less than the default of 50 results, you can add this parameter to your request. maxResults can exceed the upper limit of 250 but we will not return more items than that. The response might contain fewer results than maxResults for purpose of keeping SLA or because there are not enough items, but it will never contain more.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### invoke-skill-end-point
+
+This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required.
+
+`invoke-skill-end-point` command format:
+
+`$ ask smapi invoke-skill-end-point <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dt>--endpoint-region <endpoint-region></dt>
+    <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
+[ENUM]: NA,EU,FE.</dd>
+    <dt>--skill-request-body <skill-request-body></dt>
+    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### upload-catalog
+
+upload a file for the catalog.
+
+`upload-catalog` command format:
+
+`$ ask smapi upload-catalog [-c| --catalog-id <catalog-id>] [-f| --file <file>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c, --catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-f, --file <file></dt>
+    <dd markdown="span">[REQUIRED] path to the target file input.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### export-package
+
+download the skill package to &quot;skill-package&quot; folder in current directory.
+
+`export-package` command format:
+
+`$ ask smapi export-package [-s| --skill-id <skill-id>] [-g| --stage <stage>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s, --skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] the skill ID.</dd>
+    <dt>-g, --stage <stage></dt>
+    <dd markdown="span">[REQUIRED] stage for skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
 </dl>
 
 
