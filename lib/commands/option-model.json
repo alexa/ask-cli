@@ -1,13 +1,13 @@
 {
   "profile": {
     "name": "profile",
-    "description": "ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile)",
+    "description": "the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.",
     "alias": "p",
     "stringInput": "REQUIRED"
   },
   "debug": {
     "name": "debug",
-    "description": "ask cli debug mode",
+    "description": "when you include this option, ASK CLI shows debug messages in the output of the command.",
     "alias": null,
     "stringInput": "NONE"
   },
@@ -25,7 +25,7 @@
   },
   "skill-id": {
     "name": "skill-id",
-    "description": "skill-id for the skill",
+    "description": "the skill ID.",
     "alias": "s",
     "stringInput": "REQUIRED"
   },
@@ -95,7 +95,7 @@
   },
   "stage": {
     "name": "stage",
-    "description": "stage for the skill (development/live/certification)",
+    "description": "stage for skill.",
     "alias": "g",
     "stringInput": "REQUIRED",
     "rule": [{
@@ -141,7 +141,7 @@
   },
   "file": {
     "name": "file",
-    "description": "path to the target file input",
+    "description": "[JSON] path to the target file input",
     "alias": "f",
     "stringInput": "REQUIRED",
     "rule": [{
@@ -181,7 +181,7 @@
   },
   "catalog-id": {
     "name": "catalog-id",
-    "description": "catalog-id of the catalog",
+    "description": "Unique identifier of the catalog",
     "alias": "c",
     "stringInput": "REQUIRED"
   },

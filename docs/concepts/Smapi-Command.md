@@ -2681,13 +2681,13 @@ upload a file for the catalog.
 
 <dl>
     <dt>-c, --catalog-id <catalog-id></dt>
-    <dd markdown="span">[Required] catalog-id of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-f, --file <file></dt>
-    <dd markdown="span">[Required] path to the target file input.</dd>
+    <dd markdown="span">[REQUIRED] [JSON] path to the target file input.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">[Optional] ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile).</dd>
+    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[Optional] ask cli debug mode.</dd>
+    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
 </dl>
 
 ### export-package
@@ -2702,13 +2702,13 @@ download the skill package to &quot;skill-package&quot; folder in current direct
 
 <dl>
     <dt>-s, --skill-id <skill-id></dt>
-    <dd markdown="span">[Required] skill-id for the skill.</dd>
+    <dd markdown="span">[REQUIRED] the skill ID.</dd>
     <dt>-g, --stage <stage></dt>
-    <dd markdown="span">[Required] stage for the skill (development/live/certification).</dd>
+    <dd markdown="span">[REQUIRED] stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">[Optional] ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile).</dd>
+    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[Optional] ask cli debug mode.</dd>
+    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
 </dl>
 
 
