@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/alexa/ask-cli/compare/v0.13.0...v2.0.0) (2020-04-08)
+
+
+### Features
+
+* ask-cli v2.0.0 ([#105](https://github.com/alexa/ask-cli/issues/105)) ([984d37b](https://github.com/alexa/ask-cli/commit/984d37b9f7abfb651b2737a71c46accb9dd78dce)), closes [#110](https://github.com/alexa/ask-cli/issues/110)
+
+
+### Bug Fixes
+
+* improve user experiences by updating the post-lwa response webpage ([#108](https://github.com/alexa/ask-cli/issues/108)) ([41c17a6](https://github.com/alexa/ask-cli/commit/41c17a6d15b30334cbea028a99c1662ae58b53af))
+
 ## [0.13.0](https://github.com/alexa-labs/ask-cli/compare/v0.12.0...v0.13.0) (2020-04-08)
 
 
