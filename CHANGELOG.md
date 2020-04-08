@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.0](https://github.com/alexa-labs/ask-cli/compare/v0.12.0...v0.13.0) (2020-04-08)
+
+
+### Features
+
+* add version reminder to high-level commands if ask-cli releases ([#104](https://github.com/alexa-labs/ask-cli/issues/104)) ([4445cfa](https://github.com/alexa-labs/ask-cli/commit/4445cfac3c94bfe7fa1ce56badcfb1ef68bcb17f))
+* implemented auto generation of docs for smapi commands ([#70](https://github.com/alexa-labs/ask-cli/issues/70)) ([9b2f93e](https://github.com/alexa-labs/ask-cli/commit/9b2f93e1205b835c0d42a7bbddcae76f6a181eaf))
+
+
+### Bug Fixes
+
+* add skipUnwrap to 2 new complex body parameters ([c58453c](https://github.com/alexa-labs/ask-cli/commit/c58453ca6c1f51b67b1feba52ea154d1ec90ffa4))
+* askx new -> change the representation layer for deployers ([#106](https://github.com/alexa-labs/ask-cli/issues/106)) ([0c7750c](https://github.com/alexa-labs/ask-cli/commit/0c7750c735f08ffda63559a817653276a1837afe))
+
 ## [0.12.0](https://github.com/alexa-labs/ask-cli/compare/v0.11.1...v0.12.0) (2020-04-02)
 
 
