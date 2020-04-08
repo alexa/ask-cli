@@ -3,12 +3,24 @@ const sinon = require('sinon');
 const commander = require('commander');
 const path = require('path');
 
+const httpClient = require('@src/clients/http-client');
 const { AbstractCommand } = require('@src/commands/abstract-command');
 const AppConfig = require('@src/model/app-config');
+const CONSTANTS = require('@src/utils/constants');
 const metricClient = require('@src/utils/metrics');
+const Messenger = require('@src/view/messenger');
 
+const packageJson = require('@root/package.json');
 
 describe('Command test - AbstractCommand class', () => {
+    const TEST_DO_DEBUG_FALSE = 'false';
+    const TEST_HTTP_ERROR = 'http error';
+    const TEST_NPM_REGISTRY_DATA = inputVersion => {
+        const result = {
+            body: JSON.stringify({ version: inputVersion })
+        };
+        return result;
+    };
     const FIXTURE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
     const APP_CONFIG_NO_PROFILES_PATH = path.join(FIXTURE_PATH, 'app-config-no-profiles.json');
 
@@ -48,6 +60,7 @@ describe('Command test - AbstractCommand class', () => {
             mockProcessExit = sinon.stub(process, 'exit');
             mockConsoleError = sinon.stub(console, 'error');
             sinon.stub(metricClient, 'sendData').resolves();
+            sinon.stub(AbstractCommand.prototype, '_remindsIfNewVersion').callsArgWith(1);
         });
 
         it('| should be able to register command', async () => {
@@ -274,6 +287,106 @@ describe('Command test - AbstractCommand class', () => {
         it('| should be able to parse option name', () => {
             expect(AbstractCommand.parseOptionKey('skill-id')).eq('skillId');
             expect(AbstractCommand.parseOptionKey('skill')).eq('skill');
+        });
+    });
+
+    describe('# verify new version reminder method', () => {
+        const currentMajor = parseInt(packageJson.version.split('.')[0], 10);
+        const currentMinor = parseInt(packageJson.version.split('.')[1], 10);
+        let errorStub, warnStub, infoStub;
+
+        beforeEach(() => {
+            errorStub = sinon.stub();
+            warnStub = sinon.stub();
+            infoStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                info: infoStub,
+                warn: warnStub,
+                error: errorStub
+            });
+            sinon.stub(httpClient, 'request');
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| http client request error, should warn it out and pass the process', (done) => {
+            // setup
+            httpClient.request.callsArgWith(3, TEST_HTTP_ERROR);
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(
+                    `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
+                );
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(errorStub.args[0][0]).equal(
+                    `Failed to get the latest version for ${CONSTANTS.APPLICATION_NAME} from NPM registry.\n${TEST_HTTP_ERROR}\n`
+                );
+                expect(err).equal(undefined);
+                done();
+            });
+        });
+
+        it('| new major version released, should error out and pass the process', (done) => {
+            // setup
+            const latestVersion = `${currentMajor + 1}.0.0`;
+            httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(latestVersion));
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(
+                    `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
+                );
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(infoStub.args[0][0]).equal(`\
+##########################################################################
+[Info]: New MAJOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
+##########################################################################\n`);
+                expect(err).equal(undefined);
+                done();
+            });
+        });
+
+        it('| new minor version released, should warn out and pass the process', (done) => {
+            // setup
+            const latestVersion = `${currentMajor}.${currentMinor + 1}.0`;
+            httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(latestVersion));
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(
+                    `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
+                );
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(infoStub.args[0][0]).equal(`\
+##########################################################################
+[Info]: New MINOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
+##########################################################################\n`);
+                expect(err).equal(undefined);
+                done();
+            });
+        });
+
+        it('| version is latest, should do nothing and pass the process', (done) => {
+            // setup
+            httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(`${currentMajor}.${currentMinor}.0`));
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(
+                    `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
+                );
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(infoStub.callCount).equal(0);
+                expect(warnStub.callCount).equal(0);
+                expect(errorStub.callCount).equal(0);
+                expect(err).equal(undefined);
+                done();
+            });
         });
     });
 
