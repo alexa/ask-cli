@@ -10,9 +10,27 @@ The `smapi` command provides a number of subcommandsthat map 1:1 to the underlyi
 
 | Task  | Subcommand |
 |---|---|
+| Lists catalogs associated with a vendor. | [list-catalogs-for-vendor](#list-catalogs-for-vendor) |
+| Creates a new catalog based on information provided in the request. | [create-catalog](#create-catalog) |
+| Returns information about a particular catalog. | [get-catalog](#get-catalog) |
+| Lists all the catalogs associated with a skill. | [list-catalogs-for-skill](#list-catalogs-for-skill) |
+| Associate skill with catalog. | [associate-catalog-with-skill](#associate-catalog-with-skill) |
+| Lists all the uploads for a particular catalog. | [list-uploads-for-catalog](#list-uploads-for-catalog) |
+| Creates a new upload for a catalog and returns presigned upload parts for uploading the file. | [create-content-upload](#create-content-upload) |
+| Gets detailed information about an upload which was created for a specific catalog. Includes the upload's ingestion steps and a url for downloading the file. | [get-content-upload-by-id](#get-content-upload-by-id) |
+| Completes an upload. To be called after the file is uploaded to the backend data store using presigned url(s). | [complete-catalog-upload](#complete-catalog-upload) |
+| Lists the subscribers for a particular vendor. | [list-subscribers-for-development-events](#list-subscribers-for-development-events) |
+| Creates a new subscriber resource for a vendor. | [create-subscriber-for-development-events](#create-subscriber-for-development-events) |
+| Returns information about specified subscriber. | [get-subscriber-for-development-events](#get-subscriber-for-development-events) |
+| Updates the properties of a subscriber. | [set-subscriber-for-development-events](#set-subscriber-for-development-events) |
+| Deletes a specified subscriber. | [delete-subscriber-for-development-events](#delete-subscriber-for-development-events) |
+| Lists all the subscriptions for a vendor/subscriber depending on the query parameter. | [list-subscriptions-for-development-events](#list-subscriptions-for-development-events) |
+| Creates a new subscription for a subscriber. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. | [create-subscription-for-development-events](#create-subscription-for-development-events) |
+| Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization. | [get-subscription-for-development-events](#get-subscription-for-development-events) |
+| Updates the mutable properties of a subscription. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated. | [set-subscription-for-development-events](#set-subscription-for-development-events) |
+| Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization. | [delete-subscription-for-development-events](#delete-subscription-for-development-events) |
 | Generate preSigned urls to upload data. | [generate-catalog-upload-url](#generate-catalog-upload-url) |
 | Create a new upload for a catalog and returns location to track the upload process. | [create-catalog-upload](#create-catalog-upload) |
-| Gets detailed information about an upload which was created for a specific catalog. Includes the upload's ingestion steps and a url for downloading the file. | [get-content-upload-by-id](#get-content-upload-by-id) |
 | Get the list of in-skill products for the vendor. | [get-isp-list-for-vendor](#get-isp-list-for-vendor) |
 | Creates a new in-skill product for given vendorId. | [create-isp-for-vendor](#create-isp-for-vendor) |
 | Get the list of in-skill products for the skillId. | [get-isp-list-for-skill-id](#get-isp-list-for-skill-id) |
@@ -82,7 +100,7 @@ The path params
 | Add an id to the private distribution accounts. | [set-private-distribution-account-id](#set-private-distribution-account-id) |
 | Remove an id from the private distribution accounts. | [delete-private-distribution-account-id](#delete-private-distribution-account-id) |
 | List private distribution accounts. | [list-private-distribution-accounts](#list-private-distribution-accounts) |
-| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must be in development stage, and it must also belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
+| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
 | This API gets the result of a previously executed simulation. A successful response will contain the status of the executed simulation. If the simulation successfully completed, the response will also contain information related to skill invocation. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where the simulation failed, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the skill endpoint. Note that simulation results are stored for 10 minutes. A request for an expired simulation result will return a 404 HTTP status code. | [get-skill-simulation](#get-skill-simulation) |
 | This is an asynchronous API which allows a skill developer to execute various validations against their skill. | [submit-skill-validation](#submit-skill-validation) |
 | This API gets the result of a previously executed validation. A successful response will contain the status of the executed validation. If the validation successfully completed, the response will also contain information related to executed validations. In cases where requests to this API results in an error, the response will contain a description of the problem. In cases where the validation failed, the response will contain a status attribute indicating that a failure occurred. Note that validation results are stored for 60 minutes. A request for an expired validation result will return a 404 HTTP status code. | [get-skill-validations](#get-skill-validations) |
@@ -101,6 +119,419 @@ The path params
 | Get status for given importId. | [get-import-status](#get-import-status) |
 | Creates a new uploadUrl. | [create-upload-url](#create-upload-url) |
 | Get the list of Vendor information. | [get-vendor-list](#get-vendor-list) |
+| The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account. | [query-development-audit-logs](#query-development-audit-logs) |
+| This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
+| upload a file for the catalog. | [upload-catalog](#upload-catalog) |
+| download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
+
+### list-catalogs-for-vendor
+
+Lists catalogs associated with a vendor.
+
+`list-catalogs-for-vendor` command format:
+
+`$ askx smapi list-catalogs-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-catalog
+
+Creates a new catalog based on information provided in the request.
+
+`create-catalog` command format:
+
+`$ askx smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--title <title></dt>
+    <dd markdown="span">[REQUIRED] Title of the catalog.</dd>
+    <dt>--type <type></dt>
+    <dd markdown="span">[REQUIRED] Type of catalog. 
+[ENUM]: AMAZON.BroadcastChannel,AMAZON.Genre,AMAZON.MusicAlbum,AMAZON.MusicGroup,AMAZON.MusicPlaylist,AMAZON.MusicRecording,AMAZON.TerrestrialRadioChannel,AMAZON.AudioRecording.</dd>
+    <dt>--usage <usage></dt>
+    <dd markdown="span">[REQUIRED] Usage of the catalog. 
+[ENUM]: AlexaMusic.Catalog.BroadcastChannel,AlexaMusic.Catalog.Genre,AlexaMusic.Catalog.MusicAlbum,AlexaMusic.Catalog.MusicGroup,AlexaMusic.Catalog.MusicPlaylist,AlexaMusic.Catalog.MusicRecording,AlexaMusic.Catalog.TerrestrialRadioChannel,AlexaTest.Catalog.AudioRecording.</dd>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[REQUIRED] ID of the vendor owning the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-catalog
+
+Returns information about a particular catalog.
+
+`get-catalog` command format:
+
+`$ askx smapi get-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-catalogs-for-skill
+
+Lists all the catalogs associated with a skill.
+
+`list-catalogs-for-skill` command format:
+
+`$ askx smapi list-catalogs-for-skill [--next-token <next-token>] [--max-results <max-results>] <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### associate-catalog-with-skill
+
+Associate skill with catalog.
+
+`associate-catalog-with-skill` command format:
+
+`$ askx smapi associate-catalog-with-skill <-s|--skill-id <skill-id>> <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-uploads-for-catalog
+
+Lists all the uploads for a particular catalog.
+
+`list-uploads-for-catalog` command format:
+
+`$ askx smapi list-uploads-for-catalog [--next-token <next-token>] [--max-results <max-results>] <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-content-upload
+
+Creates a new upload for a catalog and returns presigned upload parts for uploading the file.
+
+`create-content-upload` command format:
+
+`$ askx smapi create-content-upload <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--number-of-upload-parts <number-of-upload-parts></dt>
+    <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-content-upload-by-id
+
+Gets detailed information about an upload which was created for a specific catalog. Includes the upload&#39;s ingestion steps and a url for downloading the file.
+
+`get-content-upload-by-id` command format:
+
+`$ askx smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--upload-id <upload-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### complete-catalog-upload
+
+Completes an upload. To be called after the file is uploaded to the backend data store using presigned url(s).
+
+`complete-catalog-upload` command format:
+
+`$ askx smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> <--part-e-tags <part-e-tags>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dt>--upload-id <upload-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
+    <dt>--part-e-tags <part-e-tags></dt>
+    <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-subscribers-for-development-events
+
+Lists the subscribers for a particular vendor.
+
+`list-subscribers-for-development-events` command format:
+
+`$ askx smapi list-subscribers-for-development-events [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-subscriber-for-development-events
+
+Creates a new subscriber resource for a vendor.
+
+`create-subscriber-for-development-events` command format:
+
+`$ askx smapi create-subscriber-for-development-events [--create-subscriber-request <create-subscriber-request>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--create-subscriber-request <create-subscriber-request></dt>
+    <dd markdown="span">[OPTIONAL] Defines the request body for createSubscriber API. 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-subscriber-for-development-events
+
+Returns information about specified subscriber.
+
+`get-subscriber-for-development-events` command format:
+
+`$ askx smapi get-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### set-subscriber-for-development-events
+
+Updates the properties of a subscriber.
+
+`set-subscriber-for-development-events` command format:
+
+`$ askx smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> [--update-subscriber-request <update-subscriber-request>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>--update-subscriber-request <update-subscriber-request></dt>
+    <dd markdown="span">[OPTIONAL] Defines the request body for updateSubscriber API. 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### delete-subscriber-for-development-events
+
+Deletes a specified subscriber.
+
+`delete-subscriber-for-development-events` command format:
+
+`$ askx smapi delete-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### list-subscriptions-for-development-events
+
+Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query parameter.
+
+`list-subscriptions-for-development-events` command format:
+
+`$ askx smapi list-subscriptions-for-development-events [--next-token <next-token>] [--max-results <max-results>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[OPTIONAL] Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### create-subscription-for-development-events
+
+Creates a new subscription for a subscriber. This needs to be authorized by the client&#x2F;vendor who created the subscriber and the vendor who publishes the event.
+
+`create-subscription-for-development-events` command format:
+
+`$ askx smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--vendor-id <vendor-id>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--name <name></dt>
+    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dt>--events <events></dt>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
+    <dt>--subscriber-id <subscriber-id></dt>
+    <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### get-subscription-for-development-events
+
+Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization.
+
+`get-subscription-for-development-events` command format:
+
+`$ askx smapi get-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### set-subscription-for-development-events
+
+Updates the mutable properties of a subscription. This needs to be authorized by the client&#x2F;vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated.
+
+`set-subscription-for-development-events` command format:
+
+`$ askx smapi set-subscription-for-development-events <--subscription-id <subscription-id>> [--name <name>] [--events <events>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dt>--events <events></dt>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### delete-subscription-for-development-events
+
+Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization.
+
+`delete-subscription-for-development-events` command format:
+
+`$ askx smapi delete-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--subscription-id <subscription-id></dt>
+    <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
 
 ### generate-catalog-upload-url
 
@@ -139,27 +570,6 @@ Create a new upload for a catalog and returns location to track the upload proce
     <dt>--catalog-upload-request-body <catalog-upload-request-body></dt>
     <dd markdown="span">[REQUIRED] Request body for create content upload 
 [JSON].</dd>
-    <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
-    <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
-</dl>
-
-### get-content-upload-by-id
-
-Gets detailed information about an upload which was created for a specific catalog. Includes the upload&#39;s ingestion steps and a url for downloading the file.
-
-`get-content-upload-by-id` command format:
-
-`$ askx smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--debug]`
-
-**Options**
-
-<dl>
-    <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--upload-id <upload-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1782,17 +2192,19 @@ List private distribution accounts.
 
 ### simulate-skill
 
-This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must be in development stage, and it must also belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported.
+This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported.
 
 `simulate-skill` command format:
 
-`$ askx smapi simulate-skill <-s|--skill-id <skill-id>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--debug]`
+`$ askx smapi simulate-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--input-content <input-content></dt>
     <dd markdown="span">[REQUIRED] A string corresponding to the utterance text of what a customer would say to Alexa.</dd>
     <dt>--device-locale <device-locale></dt>
@@ -1812,13 +2224,15 @@ This API gets the result of a previously executed simulation. A successful respo
 
 `get-skill-simulation` command format:
 
-`$ askx smapi get-skill-simulation <-s|--skill-id <skill-id>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--debug]`
+`$ askx smapi get-skill-simulation <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-i,--simulation-id <simulation-id></dt>
     <dd markdown="span">[REQUIRED] Id of the simulation.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2183,6 +2597,118 @@ Get the list of Vendor information.
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
     <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### query-development-audit-logs
+
+The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account.
+
+`query-development-audit-logs` command format:
+
+`$ askx smapi query-development-audit-logs <--vendor-id <vendor-id>> [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--vendor-id <vendor-id></dt>
+    <dd markdown="span">[REQUIRED] Vendor Id. See developer.amazon.com/mycid.html.</dd>
+    <dt>--request-filters-clients <request-filters-clients></dt>
+    <dd markdown="span">[OPTIONAL] List of Client IDs for filtering.</dd>
+    <dt>--request-filters-operations <request-filters-operations></dt>
+    <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions.</dd>
+    <dt>--request-filters-resources <request-filters-resources></dt>
+    <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types.</dd>
+    <dt>--request-filters-requesters <request-filters-requesters></dt>
+    <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs.</dd>
+    <dt>--request-filters-start-time <request-filters-start-time></dt>
+    <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
+    <dt>--request-filters-end-time <request-filters-end-time></dt>
+    <dd markdown="span">[OPTIONAL] Sets the end time for this search. Any audit logs with timestamps before this time (exclusive) will be included in the result.</dd>
+    <dt>--request-filters-http-response-codes <request-filters-http-response-codes></dt>
+    <dd markdown="span">[OPTIONAL] Filters for HTTP response codes. For example, '200' or '503'.</dd>
+    <dt>--sort-direction <sort-direction></dt>
+    <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'ASC' these items are returned in ascending order of sortField value and when set to 'DESC' these items are returned in descending order of sortField value. 
+[ENUM]: ASC,DESC.</dd>
+    <dt>--sort-field <sort-field></dt>
+    <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied. 
+[ENUM]: timestamp,operation,resource.id,resource.type,requester.userId,client.id,httpResponseCode.</dd>
+    <dt>--pagination-context-next-token <pagination-context-next-token></dt>
+    <dd markdown="span">[OPTIONAL] When the response to this API call is truncated, the response includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that this API understands. Token has expiry of 1 hour.</dd>
+    <dt>--pagination-context-max-results <pagination-context-max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve more or less than the default of 50 results, you can add this parameter to your request. maxResults can exceed the upper limit of 250 but we will not return more items than that. The response might contain fewer results than maxResults for purpose of keeping SLA or because there are not enough items, but it will never contain more.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### invoke-skill-end-point
+
+This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required.
+
+`invoke-skill-end-point` command format:
+
+`$ askx smapi invoke-skill-end-point <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dt>--endpoint-region <endpoint-region></dt>
+    <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
+[ENUM]: NA,EU,FE.</dd>
+    <dt>--skill-request-body <skill-request-body></dt>
+    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+[JSON].</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+</dl>
+
+### upload-catalog
+
+upload a file for the catalog.
+
+`upload-catalog` command format:
+
+`$ askx smapi upload-catalog [-c| --catalog-id <catalog-id>] [-f| --file <file>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c, --catalog-id <catalog-id></dt>
+    <dd markdown="span">[Required] catalog-id of the catalog.</dd>
+    <dt>-f, --file <file></dt>
+    <dd markdown="span">[Required] path to the target file input.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[Optional] ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile).</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[Optional] ask cli debug mode.</dd>
+</dl>
+
+### export-package
+
+download the skill package to &quot;skill-package&quot; folder in current directory.
+
+`export-package` command format:
+
+`$ askx smapi export-package [-s| --skill-id <skill-id>] [-g| --stage <stage>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s, --skill-id <skill-id></dt>
+    <dd markdown="span">[Required] skill-id for the skill.</dd>
+    <dt>-g, --stage <stage></dt>
+    <dd markdown="span">[Required] stage for the skill (development/live/certification).</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[Optional] ask cli profile. A profile is a container that stores sets of credentials (access tokens, vendor id and corresponding aws profile).</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[Optional] ask cli debug mode.</dd>
 </dl>
 
 
