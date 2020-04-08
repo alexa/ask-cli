@@ -25,5 +25,5 @@ commander
 
 const ALLOWED_ASK_ARGV_2 = ['configure', 'deploy', 'new', 'init', 'dialog', 'smapi', 'util', 'help', '-v', '--version', '-h', '--help'];
 if (process.argv[2] && ALLOWED_ASK_ARGV_2.indexOf(process.argv[2]) === -1) {
-    console.log('Command not recognized. Please run "askx" to check the user instructions.');
+    console.log('Command not recognized. Please run "ask" to check the user instructions.');
 }
