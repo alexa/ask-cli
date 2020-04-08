@@ -277,7 +277,7 @@ describe('Commands init - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][2], {
                     message: 'Lambda handler: ',
                     type: 'input',
-                    default: 'index.hanlder',
+                    default: 'index.handler',
                 });
                 expect(err.name).equal(TEST_ERROR);
                 expect(response).equal(undefined);
