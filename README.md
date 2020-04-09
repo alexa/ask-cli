@@ -15,7 +15,7 @@
 The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage, and deploy Alexa skills from the command line.
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/ask-cli-x-flow.gif" height="280" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-intro.gif" height="280" />
 </p>
 
 *NOTE:* This source is currently for a beta version of the ask-cli. For the latest stable version of the ask-cli, see the [ASK CLI quick start guide](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
@@ -30,7 +30,7 @@ $ npm install -g ask-cli
 ```
 
 
-**2. Configure CLI**
+**2. Configure CLI profile**
 
 Before you can start using the ASK CLI, configure your ASK (and AWS) credentials:
 
@@ -40,6 +40,11 @@ $ ask configure
 
 You’ll be prompted to sign into your Amazon developer account. If you choose to have your skill hosted by AWS, you’ll have the option of linking your AWS account as well.
 
+<p align="center">
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-configure.gif" height="350" />
+</p>
+
+
 **3. Create new skill project**
 
 Create a new skill project and follow the prompts from the command:
@@ -48,10 +53,10 @@ Create a new skill project and follow the prompts from the command:
 $ ask new
 ```
 
-You'll be asked to select a deployment method for your skill. Currently during the beta, we only support deployment via CloudFormation (@ask-cli/cfn-deployer).
+You'll be asked to select a deployment method for your skill. Currently we support deployment via AWS CloudFormation (@ask-cli/cfn-deployer), deployment via AWS Lambda (@ask-cli/lambda-deployer), and deployment through Alexa-Hosted skill (@ask-cli/hosted-skill-deployer).
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/demo-askx-new.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-new.gif" height="350" />
 </p>
 
 Your new skill project will provide a number of files and folders that make up the structure of an Alexa skill. Here is an overview on each of the files and folders that are created by default:
@@ -59,27 +64,40 @@ Your new skill project will provide a number of files and folders that make up t
 | File/Folder       | Description  |
 | :--------------   | :----------- |
 | skill-package/    | Skill resources utilized by the ASK platform such as skill manifest, interaction models, and assets |
-| code/	            | Contains the source code for your skill that utilizes the ASK SDK |
+| lambda/	          | Contains the source code for your skill that utilizes the ASK SDK |
 | infrastructure/   | Contains your CloudFormation definitions for deploying your skill to AWS |
 | ask-resources config     | Configuration for your Alexa skill project |
 
 See the [ASK SDKs documentation](https://developer.amazon.com/docs/sdk/alexa-skills-kit-sdks.html) to learn more about how to build an Alexa skill.
 
 
-**4. Deploy skill to AWS**
+**4. Deploy Alexa skill**
 
-In order for Alexa to communicate with your skill code, it will need to be deployed and hosted on the cloud. We currently provide support for deployment via CloudFormation to AWS.
+In order for Alexa to communicate with your skill code, it will need to be deployed and hosted on the cloud using this command.
 
 ```
 $ ask deploy
 ```
 
-deploy performs the following steps:
+The deploy command performs the following steps:
 
 1. `skill-package/` resources will be zipped and uploaded to the ASK platform via SMAPI's [Skill Package Service](https://developer.amazon.com/docs/smapi/skill-package-api-reference.html).
-2. `code/` source files will be built and zipped for deployment to AWS. We currently support the build flows of npm for Nodejs, pip for Python and maven for Java developers.
-3. `infrastructure/` definitions will be used to provision resources on AWS. The `code/` zip file from the previous step will be deployed to the provisioned AWS Lambda function. Currently this is deployed by using the `@ask-cli/cfn-deployer`, you can add any AWS services in the skill's stack template and deploy them together.
+2. `lambda/` source files will be built and zipped for deployment to AWS. We currently support the build flows of npm for Nodejs, pip for Python and maven for Java developers.
+3. `infrastructure/` definitions will be used to provision resources on AWS. The `lambda/`'s zip file from the previous step will be deployed to the provisioned AWS Lambda function. The gif below shows the deployment using `@ask-cli/cfn-deployer`, you can also try other deployers as they serve different purposes.
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/demo-askx-deploy.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-deploy.gif" height="350" />
+</p>
+
+
+**5. Dialog with what you build**
+
+To test while developing your skill locally, or quickly showcase your skill ideas, or even build end-to-end testing, you can use CLI's dialog command.
+
+```
+$ ask dialog
+```
+
+<p align="center">
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-dialog.gif" height="350" />
 </p>
