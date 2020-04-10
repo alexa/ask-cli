@@ -35,6 +35,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
+    "ask-smapi-model": "1.6.0",
     "ask-smapi-sdk": "1.1.1",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",
