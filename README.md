@@ -15,7 +15,7 @@
 The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage, and deploy Alexa skills from the command line.
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-intro.gif" height="280" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-intro.gif" height="350" />
 </p>
 
 *NOTE:* This source is currently for a beta version of the ask-cli. For the latest stable version of the ask-cli, see the [ASK CLI quick start guide](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
@@ -41,7 +41,7 @@ $ ask configure
 You’ll be prompted to sign into your Amazon developer account. If you choose to have your skill hosted by AWS, you’ll have the option of linking your AWS account as well.
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-configure.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-configure.gif" height="520" />
 </p>
 
 
@@ -56,7 +56,7 @@ $ ask new
 You'll be asked to select a deployment method for your skill. Currently we support deployment via AWS CloudFormation (@ask-cli/cfn-deployer), deployment via AWS Lambda (@ask-cli/lambda-deployer), and deployment through Alexa-Hosted skill (@ask-cli/hosted-skill-deployer).
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-new.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-new.gif" height="520" />
 </p>
 
 Your new skill project will provide a number of files and folders that make up the structure of an Alexa skill. Here is an overview on each of the files and folders that are created by default:
@@ -86,7 +86,7 @@ The deploy command performs the following steps:
 3. `infrastructure/` definitions will be used to provision resources on AWS. The `lambda/`'s zip file from the previous step will be deployed to the provisioned AWS Lambda function. The gif below shows the deployment using `@ask-cli/cfn-deployer`, you can also try other deployers as they serve different purposes.
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-deploy.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-deploy.gif" height="520" />
 </p>
 
 
@@ -99,5 +99,5 @@ $ ask dialog
 ```
 
 <p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-dialog.gif" height="350" />
+  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-dialog.gif" height="520" />
 </p>
