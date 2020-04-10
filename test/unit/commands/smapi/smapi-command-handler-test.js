@@ -56,14 +56,16 @@ describe('Smapi test - smapiCommandHandler function', () => {
             }
         });
         clientStub[apiOperationName] = sinon.stub().resolves();
+        clientStub[apiOperationName].toString = () => 'function (someJson, skillId, '
+            + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
         sinon.stub(StandardSmapiClientBuilder.prototype, 'client').returns(clientStub);
     });
 
 
     it('| should send smapi command with correct parameter mapping', async () => {
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
 
-        const expectedParams = [skillId, null, { input: { content: inputContent }, device: { locale: deviceLocale } }, jsonValue, arrayValue];
+        const expectedParams = [jsonValue, skillId, null, arrayValue, { input: { content: inputContent }, device: { locale: deviceLocale } }];
         const calledParams = clientStub[apiOperationName].args[0];
 
         expect(calledParams).eql(expectedParams);
@@ -73,7 +75,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
         const stubHook = sinon.stub();
         sinon.stub(SmapiHooks, 'getFunction').returns(stubHook);
 
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
 
         expect(stubHook.calledOnce).eql(true);
     });
@@ -87,7 +89,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
         const messengerStub = sinon.stub(Messenger, 'displayMessage');
 
-        await smapiCommandHandler(apiOperationName, params, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug);
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug);
 
         expect(messengerStub.args[0]).eql(['INFO', 'Operation: someApiOperation']);
         expect(messengerStub.args[1]).eql(['INFO', 'Payload:']);
