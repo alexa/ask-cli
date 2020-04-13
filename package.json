@@ -111,9 +111,7 @@
       "lib/commands/*"
     ],
     "exclude": [
-      "lib/clients/aws-client/aws-util.js",
-      "lib/commands/api/account-linking/set-account-linking/*",
-      "lib/commands/api/catalog/upload-catalog/*"
+      "lib/clients/aws-client/aws-util.js"
     ]
   },
   "_moduleAliases": {

@@ -15,6 +15,7 @@ require('module-alias/register');
     '@test/unit/commands/abstract-command-test',
     // command - util
     '@test/unit/commands/util/git-credentials-helper/index-test',
+    '@test/unit/commands/util/generate-lwa-tokens/index-test',
     // command - new
     '@test/unit/commands/new/index-test',
     '@test/unit/commands/new/ui-test',
