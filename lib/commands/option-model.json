@@ -11,7 +11,7 @@
     "alias": null,
     "stringInput": "NONE"
   },
-  "noBrowser": {
+  "no-browser": {
     "name": "no-browser",
     "description": "ask cli displays a URL that you can use to sign in with your Amazon developer account from anywhere",
     "alias": null,
@@ -99,6 +99,24 @@
     "name": "catalog-id",
     "description": "Unique identifier of the catalog",
     "alias": "c",
+    "stringInput": "REQUIRED"
+  },
+  "scopes": {
+    "name": "scopes",
+    "description": "request with particular scope(s) from Login with Amazon, delimited by space",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
+  "client-confirmation": {
+    "name": "client-confirmation",
+    "description": "the client-secret when registering LWA application, uses CLI's default if not set",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
+  "client-id": {
+    "name": "client-id",
+    "description": "the client-id when registering LWA application, uses CLI's default if not set",
+    "alias": null,
     "stringInput": "REQUIRED"
   }
 }

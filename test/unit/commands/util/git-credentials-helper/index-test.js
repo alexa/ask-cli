@@ -61,37 +61,41 @@ describe('Commands git-credentials-helper test - command class test', () => {
             sinon.restore();
             const repository = {
                 repository: {
-                    type: "GIT",
-                    url: "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/5555555-4444-3333-2222-1111111111"
+                    type: 'GIT',
+                    url: 'https://git-codecommit.us-east-1.amazonaws.com/v1/repos/5555555-4444-3333-2222-1111111111'
                 }
             };
             ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, repository);
         });
 
         describe('command handle - before get git credentials', () => {
-            it('| when profile is not correct, expect throw error', () => {
+            it('| when profile is not correct, expect throw error', (done) => {
                 // setup
                 profileHelper.runtimeProfile.throws(new Error('error'));
                 // call
-                instance.handle(TEST_CMD);
-                // verify
-                expect(errorStub.args[0][0].message).equal('error');
-                expect(infoStub.callCount).equal(0);
-                expect(warnStub.callCount).equal(0);
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.args[0][0].message).equal('error');
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
             });
 
-            it('| Failed to get the git repository, expect throw error', () => {
+            it('| Failed to get the git repository, expect throw error', (done) => {
                 // setup
                 const errorMessage = 'Failed to get the git repository from ask-cli project. '
                 + 'Please verify the completeness of your skill project.';
                 sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, {});
                 // call
-                instance.handle(TEST_CMD);
-                // verify
-                expect(errorStub.args[0][0]).equal(errorMessage);
-                expect(infoStub.callCount).equal(0);
-                expect(warnStub.callCount).equal(0);
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.args[0][0]).equal(errorMessage);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
             });
         });
 
@@ -100,19 +104,21 @@ describe('Commands git-credentials-helper test - command class test', () => {
                 sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             });
 
-            it('| get git credentials fails, expect throw error', () => {
+            it('| get git credentials fails, expect throw error', (done) => {
                 // setup
                 sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 sinon.stub(httpClient, 'request').callsArgWith(3, ERROR); // stub getGitCredentials request
                 // call
-                instance.handle(TEST_CMD);
-                // verify
-                expect(errorStub.args[0][0].message).equal(TEST_ERROR_MESSAGE);
-                expect(infoStub.callCount).equal(0);
-                expect(warnStub.callCount).equal(0);
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR_MESSAGE);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
             });
 
-            it('| get git credentials response with status code >= 300, expect throw error', () => {
+            it('| get git credentials response with status code >= 300, expect throw error', (done) => {
                 // setup
                 const GET_STATUS_ERROR = {
                     statusCode: 403,
@@ -123,12 +129,14 @@ describe('Commands git-credentials-helper test - command class test', () => {
                 sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_STATUS_ERROR); // stub getGitCredentials request
                 // call
-                instance.handle(TEST_CMD);
-                // verify
-                expect(errorStub.args[0][0]).equal(jsonView.toString({ error: TEST_ERROR_MESSAGE }));
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.args[0][0]).equal(jsonView.toString({ error: TEST_ERROR_MESSAGE }));
+                    done();
+                });
             });
 
-            it('| get git credentials succeed, expect correct output', () => {
+            it('| get git credentials succeed, expect correct output', (done) => {
                 // setup
                 const TEST_STATUS_CODE = 200;
                 const TEST_USERNAME = 'TEST_USERNAME';
@@ -146,10 +154,11 @@ describe('Commands git-credentials-helper test - command class test', () => {
                 sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
                 sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_STATUS_RESPONSE); // stub getGitCredentials request
                 // call
-                instance.handle(TEST_CMD);
-                // verify
-                expect(infoStub.args[0][0]).equal(`username=${TEST_USERNAME}
-password=${TEST_PASSWORD}`);
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(infoStub.args[0][0]).equal(`username=${TEST_USERNAME}\npassword=${TEST_PASSWORD}`);
+                    done();
+                });
             });
         });
     });
