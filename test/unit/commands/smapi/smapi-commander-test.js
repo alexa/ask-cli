@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const { makeSmapiCommander } = require('@src/commands/smapi/smapi-commander');
 
 
-describe('Smapi test - makeSmapiCommander function', () => {
+describe.skip('Smapi test - makeSmapiCommander function', () => {
     beforeEach(() => {
         sinon.stub(process, 'exit');
         sinon.stub(console, 'error');

@@ -14,35 +14,28 @@ const smapiCommandHandler = require('@src/commands/smapi/smapi-command-handler')
 describe('Smapi test - smapiCommandHandler function', () => {
     const apiOperationName = 'someApiOperation';
     const skillId = 'some skill id';
-    const inputContent = 'hello';
-    const deviceLocale = 'en-US';
+    const someNumber = '20';
+    const someBoolean = 'true';
     const jsonValue = { test: 'test' };
     const arrayValue = ['test', 'test1', 'test2'];
     const arrayValueStr = arrayValue.join(ARRAY_SPLIT_DELIMITER);
 
-    const params = [
-        { name: 'skillId', in: 'path' },
-        { name: 'someNonPopulatedProperty', in: 'query' },
-        { name: 'simulationsApiRequest', in: 'body' },
-        { name: 'someJson', in: 'body' },
-        { name: 'someArray', in: 'query' }
-    ];
     const flatParamsMap = new Map([
         ['skillId', { name: 'skillId' }],
         ['someJson', { name: 'someJson', json: true }],
         ['someArray', { name: 'someArray', isArray: true }],
-        ['inputContent', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>content' }],
-        ['deviceLocale', { rootName: 'simulationsApiRequest', bodyPath: 'device>>>locale' }],
+        ['someNumber', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someNumber', isNumber: true }],
+        ['someBoolean', { rootName: 'simulationsApiRequest', bodyPath: 'device>>>someBoolean', isBoolean: true }],
         ['sessionMode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
 
     const commanderToApiCustomizationMap = new Map();
     const cmdObj = {
         opts() {
-            return { skillId, inputContent, deviceLocale, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
+            return { skillId, someNumber, someBoolean, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
         }
     };
 
-    const clientStub = {};
+    const clientStub = { apiConfiguration: { apiEndpoint: null } };
     beforeEach(() => {
         sinon.stub(AuthorizationController.prototype, '_getAuthClientInstance').returns(
             { config: {} }
@@ -65,7 +58,8 @@ describe('Smapi test - smapiCommandHandler function', () => {
     it('| should send smapi command with correct parameter mapping', async () => {
         await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
 
-        const expectedParams = [jsonValue, skillId, null, arrayValue, { input: { content: inputContent }, device: { locale: deviceLocale } }];
+        const expectedParams = [jsonValue, skillId, null, arrayValue,
+            { input: { someNumber: Number(someNumber) }, device: { someBoolean: Boolean(someBoolean) } }];
         const calledParams = clientStub[apiOperationName].args[0];
 
         expect(calledParams).eql(expectedParams);
