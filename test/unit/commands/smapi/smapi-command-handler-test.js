@@ -25,7 +25,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
         ['someJson', { name: 'someJson', json: true }],
         ['someArray', { name: 'someArray', isArray: true }],
         ['someNumber', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someNumber', isNumber: true }],
-        ['someBoolean', { rootName: 'simulationsApiRequest', bodyPath: 'device>>>someBoolean', isBoolean: true }],
+        ['someBoolean', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someBoolean', isBoolean: true }],
         ['sessionMode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
 
     const commanderToApiCustomizationMap = new Map();
@@ -59,7 +59,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
         await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj);
 
         const expectedParams = [jsonValue, skillId, null, arrayValue,
-            { input: { someNumber: Number(someNumber) }, device: { someBoolean: Boolean(someBoolean) } }];
+            { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
         const calledParams = clientStub[apiOperationName].args[0];
 
         expect(calledParams).eql(expectedParams);
