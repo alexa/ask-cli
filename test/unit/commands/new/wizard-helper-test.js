@@ -205,7 +205,7 @@ We currently only support ".git" url for user's custom template.`;
                 body: TEST_TEMPLATE_MAP
             };
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
-            ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_MANUAL_TYPE);
+            ui.getDeploymentType.callsArgWith(1, null);
             httpClient.request.callsArgWith(3, null, TEST_HTTP_RESPONSE);
             ui.getTargetTemplateName.callsArgWith(1, null, TEST_TEMPLATE_NAME);
             ui.getSkillName.callsArgWith(1, TEST_ERROR);

@@ -390,6 +390,24 @@ describe('Commands new - UI test', () => {
             });
         });
 
+        it('| self-hosted confirmation entered by user is retrieved correctly', (done) => {
+            // setup
+            inquirer.prompt.resolves({ deployDelegate: ui.SKIP_DEPLOY_DELEGATE_SELECTION });
+            // call
+            ui.getDeploymentType(TEST_DEPLOYMENT_MAP, (err, response) => {
+                // verify
+                validateInquirerConfig(inquirer.prompt.args[0][0][0], {
+                    message: 'Choose a method to host your skill\'s backend resources: ',
+                    type: 'list',
+                    choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP
+                });
+                expect(inquirer.prompt.args[0][0][0].filter('a \n \n b')).equal('a ');
+                expect(err).equal(undefined);
+                expect(response).equal(undefined);
+                done();
+            });
+        });
+
         it('| get confirmation meets inquirer throws exception', (done) => {
             // setup
             inquirer.prompt.rejects(new Error(TEST_ERROR));
