@@ -316,7 +316,9 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dt>--upload-id <upload-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
-    <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded.</dd>
+    <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -461,7 +463,9 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dt>--name <name></dt>
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
-    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
@@ -507,7 +511,9 @@ Updates the mutable properties of a subscription. This needs to be authorized by
     <dt>--name <name></dt>
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
-    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for.</dd>
+    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1642,14 +1648,14 @@ Get catalog version data of given catalog version.
 
 `get-interaction-model-catalog-version` command format:
 
-`$ ask smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1663,14 +1669,14 @@ Delete catalog version.
 
 `delete-interaction-model-catalog-version` command format:
 
-`$ ask smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1684,14 +1690,14 @@ Update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog-version` command format:
 
-`$ ask smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--version <version>> [--description <description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [--description <description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>--description <description></dt>
     <dd markdown="span">[OPTIONAL] The catalog description with a 255 character maximum.</dd>
@@ -1707,14 +1713,14 @@ Get catalog values from the given catalogId &amp; version.
 
 `get-interaction-model-catalog-values` command format:
 
-`$ ask smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--version <version>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--vers <vers>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
@@ -1732,7 +1738,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
 
 `get-interaction-model-version` command format:
 
-`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1747,7 +1753,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1966,14 +1972,14 @@ Get slot type version data of given slot type version.
 
 `get-interaction-model-slot-type-version` command format:
 
-`$ ask smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1987,14 +1993,14 @@ Delete slot type version.
 
 `delete-interaction-model-slot-type-version` command format:
 
-`$ ask smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -2008,14 +2014,14 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type-version` command format:
 
-`$ ask smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--version <version>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
-    <dt>--version <version></dt>
+    <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
@@ -2253,7 +2259,8 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 <dl>
     <dt>-l,--locales <locales></dt>
-    <dd markdown="span">[REQUIRED].</dd>
+    <dd markdown="span">[REQUIRED]  
+[MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
@@ -2613,19 +2620,28 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[REQUIRED] Vendor Id. See developer.amazon.com/mycid.html.</dd>
     <dt>--request-filters-clients <request-filters-clients></dt>
-    <dd markdown="span">[OPTIONAL] List of Client IDs for filtering.</dd>
+    <dd markdown="span">[OPTIONAL] List of Client IDs for filtering. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>--request-filters-operations <request-filters-operations></dt>
-    <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions.</dd>
+    <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>--request-filters-resources <request-filters-resources></dt>
-    <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types.</dd>
+    <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>--request-filters-requesters <request-filters-requesters></dt>
-    <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs.</dd>
+    <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs. 
+[MULTIPLE]: Values can be separated by comma.
+[JSON].</dd>
     <dt>--request-filters-start-time <request-filters-start-time></dt>
     <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
     <dt>--request-filters-end-time <request-filters-end-time></dt>
     <dd markdown="span">[OPTIONAL] Sets the end time for this search. Any audit logs with timestamps before this time (exclusive) will be included in the result.</dd>
     <dt>--request-filters-http-response-codes <request-filters-http-response-codes></dt>
-    <dd markdown="span">[OPTIONAL] Filters for HTTP response codes. For example, '200' or '503'.</dd>
+    <dd markdown="span">[OPTIONAL] Filters for HTTP response codes. For example, '200' or '503' 
+[MULTIPLE]: Values can be separated by comma.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'ASC' these items are returned in ascending order of sortField value and when set to 'DESC' these items are returned in descending order of sortField value. 
 [ENUM]: ASC,DESC.</dd>
