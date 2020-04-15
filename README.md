@@ -12,14 +12,13 @@
 </p>
 
 
-The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage, and deploy Alexa skills from the command line.
+The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage, and deploy Alexa skills from the command line. Please see the full documentation from [ASK CLI quick start guide](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
 
 <p align="center">
   <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-intro.gif" height="350" />
 </p>
 
-*NOTE:* This source is currently for a beta version of the ask-cli. For the latest stable version of the ask-cli, see the [ASK CLI quick start guide](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
-
+*Note:* To use ask-cli for `Alexa-Hosted skill`, please check our [instructions](https://github.com/alexa/ask-cli/blob/develop/docs/concepts/Alexa-Hosted-Skill-Commands.md) for the usage.
 
 ### Getting Started
 
