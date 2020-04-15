@@ -19,6 +19,8 @@ ASK CLI uses profiles to distinguish between Amazon Developer credentials and AW
    * If user runs `ask configure --no-browser`, CLI displays a URL `(LWA Authorization endpoint)` and prompts user to open the URL in a browser. The browser displays a page for the user to log in to and fetch `Authorization Code`. CLI waits for the user to paste the Authorization Code into the command prompt. Once CLI receives a valid Authorization Code, it makes a call to the `Authentication endpoint` to fetch corresponding Access Token.
    * If user doesn't specify the `--no-browser` option, CLI directly makes a request to Authorization endpoint by opening system default browser, fetch the Authorization code and make a call to Authentication endpoint to fetch the access token. Upon completion, these details are recorded in `.ask/cli_config` file.
 
+* **Listing Profiles:** The list of currently available profiles can be viewed, prior to running a full `ask configure` by using `ask onfigure -l`.  The output will display the ASK profile combined with associated AWS profile name(s).
+
 ### VENDOR ID SETUP
 
 Sometimes Amazon may ask you for your vendor ID (VID) in order to perform debugging or whitelisting. Your VID is tied to your [Developer Console](https://developer.amazon.com/) account. ASK CLI leverages Vendor Operations [API](https://developer.amazon.com/en-US/docs/alexa/smapi/vendor-operations.html) to fetch VID and associate it with a profile.

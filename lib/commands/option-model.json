@@ -118,5 +118,11 @@
     "description": "the client-id when registering LWA application, uses CLI's default if not set",
     "alias": null,
     "stringInput": "REQUIRED"
+  },
+  "list-profiles": {
+    "name": "list-profiles",
+    "description": "Displays a list of profiles that ASK CLI can use.",
+    "alias": "l",
+    "stringInput": "NONE"
   }
 }

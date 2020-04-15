@@ -20,6 +20,9 @@ describe('Commands Configure test - command class test', () => {
     const TEST_CMD = {
         profile: TEST_PROFILE
     };
+    const TEST_CMD_LIST_PROFILES = {
+        listProfiles: true
+    };
     const TEST_INVALID_PROFILE = '&@%$&%@$^';
     const TEST_ERROR_MESSAGE = 'error';
     const TEST_AWS_PROFILE = 'awsProfile';
@@ -49,7 +52,7 @@ describe('Commands Configure test - command class test', () => {
         expect(instance.name()).eq('configure');
         expect(instance.description()).eq('helps to configure the credentials that ask-cli uses to authenticate the user to Amazon developer services');
         expect(instance.requiredOptions()).deep.eq([]);
-        expect(instance.optionalOptions()).deep.eq(['no-browser', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.eq(['no-browser', 'list-profiles', 'profile', 'debug']);
     });
 
     describe('validate command handle - ensure AppConfig initiated', () => {
@@ -73,7 +76,7 @@ describe('Commands Configure test - command class test', () => {
             // call
             instance.handle(TEST_CMD, (err, askProfile) => {
                 // verify
-                expect(infoStub.args[0][0]).eq(messages.ASK_CLI_CONFIGURATION_MESSAGE);
+                // expect(infoStub.args[0][0]).eq(messages.ASK_CLI_CONFIGURATION_MESSAGE);
                 expect(err.message).eq(`No access to read/write file ${INVALID_FILE_PATH}.`);
                 expect(askProfile).eq(undefined);
                 done();
@@ -209,6 +212,19 @@ describe('Commands Configure test - command class test', () => {
                     expect(infoStub.args[4][0]).eq(`Vendor ID: ${TEST_VENDOR_ID}`);
                     expect(fs.ensureDirSync.callCount).eq(1);
                     expect(jsonfile.writeFileSync.callCount).eq(1);
+                    expect(err).eq(undefined);
+                    done();
+                });
+            });
+
+            it('| successfully lists profiles', (done) => {
+                // setup
+                sinon.stub(ui, 'displayProfiles');
+
+                // call
+                instance.handle(TEST_CMD_LIST_PROFILES, (err) => {
+                    expect(infoStub.args[0][0]).eq(messages.PROFILES_HEADER);
+                    expect(ui.displayProfiles.callCount).eq(1);
                     expect(err).eq(undefined);
                     done();
                 });

@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const CONSTANTS = require('@src/utils/constants');
 const ui = require('@src/commands/configure/ui');
 const messages = require('@src/commands/configure/messages');
-const profileHelper = require('@src/utils/profile-helper');
 const stringUtils = require('@src/utils/string-utils');
 
 function validateInquirerConfig(stub, expectedConfig) {
@@ -517,6 +516,55 @@ describe('Command: Configure - UI test', () => {
 
         afterEach(() => {
             sinon.restore();
+        });
+    });
+
+    describe('# displayProfiles', () => {
+        beforeEach(() => {
+            sinon.stub(console, 'info');
+        });
+
+        it('| Displays nothing when null profile list', () => {
+            ui.displayProfiles(null);
+
+            expect(console.info.args[0]).eq(undefined);
+        });
+
+        it('| Displays nothing when empty profile list', () => {
+            ui.displayProfiles([]);
+
+            expect(console.info.args[0]).eq(undefined);
+        });
+
+        it('| Displays lines equal to profile list (1)', () => {
+            const profiles = [{
+                askProfile: 'default',
+                awsProfile: 'awsProfile1'
+            }];
+
+            ui.displayProfiles(profiles);
+
+            expect(console.info.args[0][0]).eq('[default]                 "awsProfile1"');
+        });
+
+        it('| Displays lines equal to profile list (2)', () => {
+            const profiles = [{
+                askProfile: 'default',
+                awsProfile: 'awsProfile1'
+            },
+            {
+                askProfile: 'another',
+                awsProfile: 'awsProfile2'
+            }];
+
+            ui.displayProfiles(profiles);
+
+            expect(console.info.args[0][0]).eq('[default]                 "awsProfile1"');
+            expect(console.info.args[1][0]).eq('[another]                 "awsProfile2"');
+        });
+
+        afterEach(() => {
+            console.info.restore();
         });
     });
 });
