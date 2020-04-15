@@ -5,6 +5,9 @@
     "vendorId": {
         "skip": true
     },
+    "version": {
+        "name": "vers"
+    },
     "createSkillRequest": {
         "skipUnwrap": true,
         "name": "manifest"
