@@ -69,6 +69,21 @@ describe('Commands git-credentials-helper test - command class test', () => {
         });
 
         describe('command handle - before get git credentials', () => {
+            it('| when called from git and operation is not get, expect error out', (done) => {
+                // setup
+                const remaining = ['cache'];
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    const expectedErr = `The ask-cli git credentials helper only supports "get". Operation "${remaining[0]}" is not supported.`;
+                    expect(err).equal(expectedErr);
+                    expect(errorStub.args[0][0]).equal(expectedErr);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                }, remaining);
+            });
+
             it('| when profile is not correct, expect throw error', (done) => {
                 // setup
                 profileHelper.runtimeProfile.throws(new Error('error'));
