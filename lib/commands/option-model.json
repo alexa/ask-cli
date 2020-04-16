@@ -1,25 +1,25 @@
 {
   "profile": {
     "name": "profile",
-    "description": "the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.",
+    "description": "Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.",
     "alias": "p",
     "stringInput": "REQUIRED"
   },
   "debug": {
     "name": "debug",
-    "description": "when you include this option, ASK CLI shows debug messages in the output of the command.",
+    "description": "Enables the ASK CLI  to show debug messages in the output of the command.",
     "alias": null,
     "stringInput": "NONE"
   },
   "no-browser": {
     "name": "no-browser",
-    "description": "ask cli displays a URL that you can use to sign in with your Amazon developer account from anywhere",
+    "description": "ASK CLI displays a URL that you can use to sign in with your Amazon developer account from anywhere",
     "alias": null,
     "stringInput": "NONE"
   },
   "skill-id": {
     "name": "skill-id",
-    "description": "the skill ID.",
+    "description": "The skill ID.",
     "alias": "s",
     "stringInput": "REQUIRED"
   },
@@ -41,7 +41,7 @@
   },
   "stage": {
     "name": "stage",
-    "description": "stage for skill.",
+    "description": "Stage for skill.",
     "alias": "g",
     "stringInput": "REQUIRED",
     "rule": [{
@@ -51,7 +51,7 @@
   },
   "locale": {
     "name": "locale",
-    "description": "locale value for the resource",
+    "description": "Locale value for the resource",
     "alias": "l",
     "stringInput": "REQUIRED",
     "rule": [{
@@ -61,13 +61,13 @@
   },
   "templateUrl": {
     "name": "template-url",
-    "description": "url for the template to be used with",
+    "description": "Url for the template to be used with",
     "alias": null,
     "stringInput": "REQUIRED"
   },
   "file": {
     "name": "file",
-    "description": "path to the target file input",
+    "description": "Path to the target file input",
     "alias": "f",
     "stringInput": "REQUIRED",
     "rule": [{
@@ -76,7 +76,7 @@
   },
   "max-results": {
     "name": "max-results",
-    "description": "max results returned by the request",
+    "description": "Max results returned by the request",
     "alias": null,
     "stringInput": "REQUIRED",
     "rule": [{
@@ -85,13 +85,13 @@
   },
   "next-token": {
     "name": "next-token",
-    "description": "next token if the result is paginated",
+    "description": "Next token if the result is paginated",
     "alias": null,
     "stringInput": "REQUIRED"
   },
   "etag": {
     "name": "etag",
-    "description": "the eTag from the resource's last update",
+    "description": "The eTag from the resource's last update",
     "alias": null,
     "stringInput": "REQUIRED"
   },
@@ -103,19 +103,19 @@
   },
   "scopes": {
     "name": "scopes",
-    "description": "request with particular scope(s) from Login with Amazon, delimited by space",
+    "description": "Request with particular scope(s) from Login with Amazon, delimited by space",
     "alias": null,
     "stringInput": "REQUIRED"
   },
   "client-confirmation": {
     "name": "client-confirmation",
-    "description": "the client-secret when registering LWA application, uses CLI's default if not set",
+    "description": "The client-secret when registering LWA application, uses CLI's default if not set",
     "alias": null,
     "stringInput": "REQUIRED"
   },
   "client-id": {
     "name": "client-id",
-    "description": "the client-id when registering LWA application, uses CLI's default if not set",
+    "description": "The client-id when registering LWA application, uses CLI's default if not set",
     "alias": null,
     "stringInput": "REQUIRED"
   }
