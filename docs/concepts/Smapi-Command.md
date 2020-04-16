@@ -1,6 +1,6 @@
 # SMAPI COMMAND
 
-The `smapi` command provides a number of subcommandsthat map 1:1 to the underlying API operations in Alexa Skill Management API (SMAPI).The commands allow detailed control of API inputs and expose raw outputs. There are subcommands for creating and updating the skill, interaction model, and account linking information as well as starting the skill certification process.
+Provides a number of subcommands that map 1:1 to the underlying API operations in Alexa Skill Management API (SMAPI).The commands allow detailed control of API inputs and expose raw outputs. There are subcommands for creating and updating the skill, interaction model, and account linking information as well as starting the skill certification process.
 
 `smapi` command format:
 
@@ -140,9 +140,9 @@ Lists catalogs associated with a vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-catalog
@@ -167,9 +167,9 @@ Creates a new catalog based on information provided in the request.
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[REQUIRED] ID of the vendor owning the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-catalog
@@ -186,9 +186,9 @@ Returns information about a particular catalog.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-catalogs-for-skill
@@ -209,9 +209,9 @@ Lists all the catalogs associated with a skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### associate-catalog-with-skill
@@ -230,9 +230,9 @@ Associate skill with catalog.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-uploads-for-catalog
@@ -253,9 +253,9 @@ Lists all the uploads for a particular catalog.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-content-upload
@@ -274,9 +274,9 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
     <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-content-upload-by-id
@@ -295,9 +295,9 @@ Gets detailed information about an upload which was created for a specific catal
     <dt>--upload-id <upload-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### complete-catalog-upload
@@ -317,12 +317,11 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
     <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-subscribers-for-development-events
@@ -341,9 +340,9 @@ Lists the subscribers for a particular vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-subscriber-for-development-events
@@ -361,9 +360,9 @@ Creates a new subscriber resource for a vendor.
     <dd markdown="span">[OPTIONAL] Defines the request body for createSubscriber API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-subscriber-for-development-events
@@ -380,9 +379,9 @@ Returns information about specified subscriber.
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-subscriber-for-development-events
@@ -402,9 +401,9 @@ Updates the properties of a subscriber.
     <dd markdown="span">[OPTIONAL] Defines the request body for updateSubscriber API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-subscriber-for-development-events
@@ -421,9 +420,9 @@ Deletes a specified subscriber.
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-subscriptions-for-development-events
@@ -444,9 +443,9 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[OPTIONAL] Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-subscription-for-development-events
@@ -464,16 +463,15 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
     <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-subscription-for-development-events
@@ -490,9 +488,9 @@ Returns information about a particular subscription. Both, the vendor who create
     <dt>--subscription-id <subscription-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-subscription-for-development-events
@@ -512,12 +510,11 @@ Updates the mutable properties of a subscription. This needs to be authorized by
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
     <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-subscription-for-development-events
@@ -534,9 +531,9 @@ Deletes a particular subscription. Both, the vendor who created the subscriber a
     <dt>--subscription-id <subscription-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### generate-catalog-upload-url
@@ -555,9 +552,9 @@ Generate preSigned urls to upload data.
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
     <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-catalog-upload
@@ -577,9 +574,9 @@ Create a new upload for a catalog and returns location to track the upload proce
     <dd markdown="span">[REQUIRED] Request body for create content upload 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-list-for-vendor
@@ -615,9 +612,9 @@ Get the list of in-skill products for the vendor.
     <dd markdown="span">[OPTIONAL] Filter in-skill products by whether or not they are associated to a skill. 
 [ENUM]: ASSOCIATED_WITH_SKILL,NO_SKILL_ASSOCIATIONS.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-isp-for-vendor
@@ -635,9 +632,9 @@ Creates a new in-skill product for given vendorId.
     <dd markdown="span">[REQUIRED] defines the request body for createInSkillProduct API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-list-for-skill-id
@@ -660,9 +657,9 @@ Get the list of in-skill products for the skillId.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-definition
@@ -681,9 +678,9 @@ Returns the in-skill product definition for given productId.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-isp-for-product
@@ -707,9 +704,9 @@ Updates in-skill product definition for given productId. Only development stage 
     <dd markdown="span">[REQUIRED] defines the request body for updateInSkillProduct API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-isp-for-product
@@ -730,9 +727,9 @@ Deletes the in-skill product for given productId. Only development stage support
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-summary
@@ -751,9 +748,9 @@ Get the summary information for an in-skill product.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-associated-skills
@@ -776,9 +773,9 @@ Get the associated skills for the in-skill product.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### associate-isp-with-skill
@@ -797,9 +794,9 @@ Associates an in-skill product with a skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### disassociate-isp-with-skill
@@ -818,9 +815,9 @@ Disassociates an in-skill product from a skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### reset-entitlement-for-product
@@ -839,9 +836,9 @@ Resets the entitlement(s) of the Product for the current user.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-account-linking-info
@@ -864,9 +861,9 @@ Get AccountLinking information for the skill.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-account-linking-info
@@ -894,9 +891,9 @@ Create AccountLinking information for the skill.
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-account-linking-info
@@ -919,9 +916,9 @@ Delete AccountLinking information of a skill for the given stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### generate-credentials-for-alexa-hosted-skill
@@ -943,9 +940,9 @@ Generates hosted skill repository credentials to access the hosted skill reposit
     <dd markdown="span">[OPTIONAL] Alexa Hosted Skill's Repository Information 
 [ENUM]: GIT.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-alexa-hosted-skill-metadata
@@ -962,9 +959,9 @@ Get Alexa hosted skill&#39;s metadata.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-alexa-hosted-skill-user-permissions
@@ -981,9 +978,9 @@ Get the current user permissions about Alexa hosted skill features.
     <dt>--permission <permission></dt>
     <dd markdown="span">[REQUIRED] The permission of a hosted skill feature that customer needs to check.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-beta-test
@@ -1000,9 +997,9 @@ Get beta test for a given Alexa skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-beta-test
@@ -1021,9 +1018,9 @@ Create a beta test for a given Alexa skill.
     <dt>--feedback-email <feedback-email></dt>
     <dd markdown="span">[OPTIONAL] Email address for providing feedback.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-beta-test
@@ -1042,9 +1039,9 @@ Update a beta test for a given Alexa skill.
     <dt>--feedback-email <feedback-email></dt>
     <dd markdown="span">[OPTIONAL] Email address for providing feedback.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### start-beta-test
@@ -1061,9 +1058,9 @@ Start a beta test for a given Alexa skill. System will send invitation emails to
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### end-beta-test
@@ -1080,9 +1077,9 @@ End a beta test for a given Alexa skill. System will revoke the entitlement of e
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-list-of-testers
@@ -1103,9 +1100,9 @@ List all testers in a beta test for the given Alexa skill.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### add-testers-to-beta-test
@@ -1125,9 +1122,9 @@ Add testers to a beta test for the given Alexa skill.  System will send invitati
     <dd markdown="span">[REQUIRED] List of email address of beta testers. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### remove-testers-from-beta-test
@@ -1147,9 +1144,9 @@ Remove testers from a beta test for the given Alexa skill.  System will send acc
     <dd markdown="span">[REQUIRED] List of email address of beta testers. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### send-reminder-to-testers
@@ -1169,9 +1166,9 @@ Send reminder to the testers in a beta test for the given Alexa skill.  System w
     <dd markdown="span">[REQUIRED] List of email address of beta testers. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### request-feedback-from-testers
@@ -1191,9 +1188,9 @@ Request feedback from the testers in a beta test for the given Alexa skill.  Sys
     <dd markdown="span">[REQUIRED] List of email address of beta testers. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-certifications-list
@@ -1214,9 +1211,9 @@ Get list of all certifications available for a skill, including information abou
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-certification-review
@@ -1237,9 +1234,9 @@ Gets a specific certification resource. The response contains the review trackin
     <dt>-c,--certification-id <certification-id></dt>
     <dd markdown="span">[REQUIRED] Id of the certification. Reserved word identifier of mostRecent can be used to get the most recent certification for the skill. Note that the behavior of the API in this case would be the same as when the actual certification id of the most recent certification is used in the request.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-enablement-status
@@ -1258,9 +1255,9 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-skill-enablement
@@ -1279,9 +1276,9 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-skill-enablement
@@ -1300,9 +1297,9 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### profile-nlu
@@ -1327,9 +1324,9 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-utterance-data
@@ -1398,9 +1395,9 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dd markdown="span">[OPTIONAL] A filter used to retrieve items where the utterance text contains the given phrase. Each filter value can be at-least 1 character and at-most 100 characters long. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model
@@ -1427,9 +1424,9 @@ The path params
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-metadata
@@ -1454,9 +1451,9 @@ Get the latest metadata for the interaction model resource for the given stage.
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-interaction-model
@@ -1486,9 +1483,9 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-catalogs
@@ -1509,9 +1506,9 @@ List all catalogs for the vendor.
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-catalog
@@ -1532,9 +1529,9 @@ Create a new version of catalog within the given catalogId.
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[REQUIRED] The vendorId that the catalog should belong to.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-definition
@@ -1551,9 +1548,9 @@ get the catalog definition.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-catalog
@@ -1570,9 +1567,9 @@ Delete the catalog.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-update-status
@@ -1591,9 +1588,9 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
     <dt>--update-request-id <update-request-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for slotType version creation process.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-catalog
@@ -1612,9 +1609,9 @@ update description and vendorGuidance string for certain version of a catalog.
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-catalog-version
@@ -1637,9 +1634,9 @@ Create a new version of catalog entity for the given catalogId.
     <dt>--description <description></dt>
     <dd markdown="span">[REQUIRED] Description string for specific catalog version.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-version
@@ -1658,9 +1655,9 @@ Get catalog version data of given catalog version.
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-catalog-version
@@ -1679,9 +1676,9 @@ Delete catalog version.
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-catalog-version
@@ -1702,9 +1699,9 @@ Update description and vendorGuidance string for certain version of a catalog.
     <dt>--description <description></dt>
     <dd markdown="span">[OPTIONAL] The catalog description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-values
@@ -1727,9 +1724,9 @@ Get catalog values from the given catalogId &amp; version.
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-version
@@ -1756,9 +1753,9 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-versions
@@ -1791,9 +1788,9 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dt>--sort-field <sort-field></dt>
     <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-slot-types
@@ -1814,9 +1811,9 @@ List all slot types for the vendor.
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-slot-type
@@ -1834,9 +1831,9 @@ Create a new version of slot type within the given slotTypeId.
     <dd markdown="span">[REQUIRED]  
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-definition
@@ -1853,9 +1850,9 @@ Get the slot type definition.
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-slot-type
@@ -1872,9 +1869,9 @@ Delete the slot type.
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-build-status
@@ -1893,9 +1890,9 @@ Get the status of slot type resource and its sub-resources for a given slotTypeI
     <dt>--update-request-id <update-request-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for slotType version creation process.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-slot-type
@@ -1914,9 +1911,9 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-slot-type-versions
@@ -1939,9 +1936,9 @@ List all slot type versions for the slot type id.
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-slot-type-version
@@ -1961,9 +1958,9 @@ Create a new version of slot type entity for the given slotTypeId.
     <dd markdown="span">[REQUIRED]  
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-version
@@ -1982,9 +1979,9 @@ Get slot type version data of given slot type version.
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-slot-type-version
@@ -2003,9 +2000,9 @@ Delete slot type version.
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-slot-type-version
@@ -2026,9 +2023,9 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-manifest
@@ -2051,9 +2048,9 @@ Returns the skill manifest for given skillId and stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-skill-manifest
@@ -2081,9 +2078,9 @@ Updates skill manifest for given skillId and stage.
     <dd markdown="span">[REQUIRED] Defines the request body for updateSkill API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-metrics
@@ -2120,9 +2117,9 @@ Get analytic metrics report of skill usage.
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-private-distribution-account-id
@@ -2143,9 +2140,9 @@ Add an id to the private distribution accounts.
     <dt>--id <id></dt>
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-private-distribution-account-id
@@ -2166,9 +2163,9 @@ Remove an id from the private distribution accounts.
     <dt>--id <id></dt>
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-private-distribution-accounts
@@ -2191,9 +2188,9 @@ List private distribution accounts.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### simulate-skill
@@ -2219,9 +2216,9 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
     <dd markdown="span">[OPTIONAL] Indicate the session mode of the current simulation is using. 
 [ENUM]: DEFAULT,FORCE_NEW_SESSION.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-simulation
@@ -2242,9 +2239,9 @@ This API gets the result of a previously executed simulation. A successful respo
     <dt>-i,--simulation-id <simulation-id></dt>
     <dd markdown="span">[REQUIRED] Id of the simulation.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### submit-skill-validation
@@ -2266,9 +2263,9 @@ This is an asynchronous API which allows a skill developer to execute various va
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-validations
@@ -2291,9 +2288,9 @@ This API gets the result of a previously executed validation. A successful respo
     <dt>--accept-language <accept-language></dt>
     <dd markdown="span">[OPTIONAL] User's locale/language in context.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-skills-for-vendor
@@ -2315,9 +2312,9 @@ Get the list of skills for the vendor.
     <dd markdown="span">[OPTIONAL] the list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with 'nextToken' or/and 'maxResults' parameter. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-skill-for-vendor
@@ -2335,9 +2332,9 @@ Creates a new skill for given vendorId.
     <dd markdown="span">[REQUIRED] Defines the request body for createSkill API. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-skill
@@ -2354,9 +2351,9 @@ Delete the skill and model for given skillId.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-status
@@ -2377,9 +2374,9 @@ Get the status of skill resource and its sub-resources for a given skillId.
 It is an optional, filtering parameter and can be used more than once, to retrieve status for all the desired (sub)resources only, in single API call.
 If this parameter is not specified, status for all the resources/sub-resources will be returned.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-ssl-certificates
@@ -2396,9 +2393,9 @@ Returns the ssl certificate sets currently associated with this skill. Sets cons
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-ssl-certificates
@@ -2418,9 +2415,9 @@ Updates the ssl certificates associated with this skill.
     <dd markdown="span">[REQUIRED] Defines the input/output of the ssl certificates api for a skill. 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### submit-skill-for-certification
@@ -2440,9 +2437,9 @@ Submit the skill for certification.
     <dd markdown="span">[OPTIONAL] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
 [ENUM]: MANUAL_PUBLISHING,AUTO_PUBLISHING.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### withdraw-skill-from-certification
@@ -2464,9 +2461,9 @@ Withdraws the skill from certification.
     <dt>--message <message></dt>
     <dd markdown="span">[REQUIRED] The message only in case the reason in OTHER.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-export-request-for-skill
@@ -2485,9 +2482,9 @@ Creates a new export for a skill with given skillId and stage.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-status-of-export-request
@@ -2504,9 +2501,9 @@ Get status for given exportId.
     <dt>--export-id <export-id></dt>
     <dd markdown="span">[REQUIRED] The Export ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-skill-package
@@ -2525,9 +2522,9 @@ Creates a new import for a skill.
     <dt>--location <location></dt>
     <dd markdown="span">[REQUIRED] Location of the package.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### import-skill-package
@@ -2548,9 +2545,9 @@ Creates a new import for a skill with given skillId.
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-import-status
@@ -2567,9 +2564,9 @@ Get status for given importId.
     <dt>--import-id <import-id></dt>
     <dd markdown="span">[REQUIRED] The Import ID.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-upload-url
@@ -2584,9 +2581,9 @@ Creates a new uploadUrl.
 
 <dl>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-vendor-list
@@ -2601,9 +2598,9 @@ Get the list of Vendor information.
 
 <dl>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### query-development-audit-logs
@@ -2621,19 +2618,15 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dd markdown="span">[REQUIRED] Vendor Id. See developer.amazon.com/mycid.html.</dd>
     <dt>--request-filters-clients <request-filters-clients></dt>
     <dd markdown="span">[OPTIONAL] List of Client IDs for filtering. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>--request-filters-operations <request-filters-operations></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>--request-filters-resources <request-filters-resources></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>--request-filters-requesters <request-filters-requesters></dt>
     <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs. 
-[MULTIPLE]: Values can be separated by comma.
 [JSON].</dd>
     <dt>--request-filters-start-time <request-filters-start-time></dt>
     <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
@@ -2653,9 +2646,9 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dt>--pagination-context-max-results <pagination-context-max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve more or less than the default of 50 results, you can add this parameter to your request. maxResults can exceed the upper limit of 250 but we will not return more items than that. The response might contain fewer results than maxResults for purpose of keeping SLA or because there are not enough items, but it will never contain more.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### invoke-skill-end-point
@@ -2680,9 +2673,9 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">The ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">When you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### upload-catalog
@@ -2699,11 +2692,11 @@ upload a file for the catalog.
     <dt>-c, --catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
     <dt>-f, --file <file></dt>
-    <dd markdown="span">[REQUIRED] path to the target file input.</dd>
+    <dd markdown="span">[REQUIRED] Path to the target file input.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 ### export-package
@@ -2718,13 +2711,13 @@ download the skill package to &quot;skill-package&quot; folder in current direct
 
 <dl>
     <dt>-s, --skill-id <skill-id></dt>
-    <dd markdown="span">[REQUIRED] the skill ID.</dd>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g, --stage <stage></dt>
-    <dd markdown="span">[REQUIRED] stage for skill.</dd>
+    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
-    <dd markdown="span">[OPTIONAL] the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] when you include this option, ASK CLI shows debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
 
