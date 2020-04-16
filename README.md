@@ -4,7 +4,7 @@
   <h1 align="center">Alexa Skills Kit Command Line interface</h1>
   <p align="center">
     <a href="https://www.npmjs.com/package/ask-cli"><img src="https://badge.fury.io/js/ask-cli.svg"></a>
-    <a href="https://travis-ci.org/alexa/ask-cli"><img src="https://travis-ci.org/alexa/ask-cli.svg?branch=master"></a>
+    <a href="https://github.com/alexa/ask-cli/actions?query=workflow%3A%22Unit+Test%22"><img src="https://github.com/alexa/ask-cli/workflows/Unit%20Test/badge.svg?branch=master"></a>
   </p>
   <p align="center">
     <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"></a>
