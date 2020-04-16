@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/alexa/ask-cli/compare/v2.0.1...v2.1.0) (2020-04-16)
+
+
+### Features
+
+* add new ask util command "generate-lwa-tokens" ([d74332f](https://github.com/alexa/ask-cli/commit/d74332f9ef9a5e276badd2ef0d0b7e4e5c2969a0))
+
+
+### Bug Fixes
+
+* add logic to handle the param which isArray and isJson for smapi commands ([ebbc2fe](https://github.com/alexa/ask-cli/commit/ebbc2fe76e934dbef10456b9ce781cd6f5c27058))
+* creating a new self-hosted skill fails with TypeError ([#121](https://github.com/alexa/ask-cli/issues/121)) ([b1560dc](https://github.com/alexa/ask-cli/commit/b1560dc04c1df5d2c83d89576f3bd4d5401dc29d))
+* lock package version with ask-smapi-model's version ([56bdb16](https://github.com/alexa/ask-cli/commit/56bdb165ce090b1200b93824cc7feb8347c26f6f))
+* parse to correct data type for nested body parameter ([#122](https://github.com/alexa/ask-cli/issues/122)) ([6998837](https://github.com/alexa/ask-cli/commit/6998837c0d8a7595e490b24f5375fae07204f408))
+* rename smapi commands version parameter since it was conflicting with global version parameter ([#125](https://github.com/alexa/ask-cli/issues/125)) ([11f808a](https://github.com/alexa/ask-cli/commit/11f808a89e50aaf8cb25655b1d360b5da1a0eb1c))
+* update python-pip build-flow's build powershell script ([efa62b2](https://github.com/alexa/ask-cli/commit/efa62b206f87756e500bf7aee6f40ef44529e85f))
+
 ### [2.0.1](https://github.com/alexa/ask-cli/compare/v0.13.0...v2.0.1) (2020-04-10)
 
 
