@@ -69,6 +69,47 @@ describe('Commands git-credentials-helper test - command class test', () => {
         });
 
         describe('command handle - before get git credentials', () => {
+            it('| when called from git and operation is not get, expect error out', (done) => {
+                // setup
+                const remaining = ['not supported operation'];
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    const expectedErr = `The ask-cli git credentials helper doesn't support operation "${remaining[0]}".`;
+                    expect(err).equal(expectedErr);
+                    expect(errorStub.args[0][0]).equal(expectedErr);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                }, remaining);
+            });
+
+            it('| when called from git and operation is store, expect do nothing', (done) => {
+                // setup
+                const remaining = ['store'];
+                // call
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.callCount).equal(0);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                }, remaining);
+            });
+
+            it('| when called from git and operation is erase, expect do nothing', (done) => {
+                // setup
+                const remaining = ['erase'];
+                // call
+                instance.handle(TEST_CMD, () => {
+                    // verify
+                    expect(errorStub.callCount).equal(0);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                }, remaining);
+            });
+
             it('| when profile is not correct, expect throw error', (done) => {
                 // setup
                 profileHelper.runtimeProfile.throws(new Error('error'));
