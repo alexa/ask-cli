@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/alexa/ask-cli/compare/v2.1.0...v2.1.1) (2020-04-17)
+
+
+### Bug Fixes
+
+* treat unrecognized command separately from command.handle method ([#130](https://github.com/alexa/ask-cli/issues/130)) ([3e2698a](https://github.com/alexa/ask-cli/commit/3e2698a626f6607c818d697d9ce987823462576c))
+* update parameters description and smapi command description ([db65526](https://github.com/alexa/ask-cli/commit/db65526e6e66ec8e6d4372ed0a0969f0c0afda29))
+
 ## [2.1.0](https://github.com/alexa/ask-cli/compare/v2.0.1...v2.1.0) (2020-04-16)
 
 
