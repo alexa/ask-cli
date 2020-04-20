@@ -109,7 +109,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
 
             processor.processParameter(parameter, parentOperation, definitions);
 
-            expect(parameter.skip).eql(true);
+            expect(parentOperation.customizationMetadata.flatParamsMap.size).eql(0);
         });
 
 
