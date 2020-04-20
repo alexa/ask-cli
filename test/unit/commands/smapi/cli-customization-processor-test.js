@@ -35,7 +35,8 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
     const nestedPropertyName = 'nestedProperty';
     const nestedEnumPropertyName = 'nestedEnumProperty';
     const bodyProperty = { type: 'number' };
-    const bodyPropertyWithArray = { type: 'array', items: { $ref: 'test' } };
+    const bodyPropertyWithSimpleArray = { type: 'array', items: { $ref: '#/definitions/SomeEnumType' } };
+    const bodyPropertyWithComplexArray = { type: 'array', items: { $ref: '#/definitions/SomeSimpleObjectType' } };
     const bodyPropertyWithDescription = { description: 'property description', type: 'boolean' };
     const nestedProperty = { $ref: 'SomeObjectType' };
     const nestedEnumProperty = { $ref: 'SomeEnumTypeWithDescription' };
@@ -57,12 +58,15 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             ['SomeEnumType', { enum: enumValues }],
             ['SomeEnumTypeWithDescription', { enum: enumValues, description: enumDescription }],
             ['SomeTypeWithDescription', { enum: enumValues, description: refObjectDescription }],
+            ['SomeSimpleObjectType', { type: 'object', properties: {} }],
             ['SomeObjectType', { description: parentDescription,
                 properties: { propertyOne: bodyProperty,
                     propertyTwo: bodyPropertyWithDescription,
                     propertyThree: { $ref: 'SomeEnumType' },
                     propertyFour: { $ref: 'SomeEnumTypeWithDescription' },
-                    propertyFive: bodyPropertyWithArray } }],
+                    propertyFive: bodyPropertyWithSimpleArray,
+                    propertySix: bodyPropertyWithComplexArray,
+                    propertySeven: { type: 'object', properties: { } } } }],
             ['SomeNestedType', { required: [nestedPropertyName],
                 properties: { nestedProperty } }],
             ['SomeTooManyPropertiesType', { properties: { ...objectWithTooManyProperties } }],
