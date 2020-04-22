@@ -151,7 +151,7 @@ Creates a new catalog based on information provided in the request.
 
 `create-catalog` command format:
 
-`$ ask smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -164,8 +164,6 @@ Creates a new catalog based on information provided in the request.
     <dt>--usage <usage></dt>
     <dd markdown="span">[REQUIRED] Usage of the catalog. 
 [ENUM]: AlexaMusic.Catalog.BroadcastChannel,AlexaMusic.Catalog.Genre,AlexaMusic.Catalog.MusicAlbum,AlexaMusic.Catalog.MusicGroup,AlexaMusic.Catalog.MusicPlaylist,AlexaMusic.Catalog.MusicRecording,AlexaMusic.Catalog.TerrestrialRadioChannel,AlexaTest.Catalog.AudioRecording.</dd>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] ID of the vendor owning the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -454,7 +452,7 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
 
 `create-subscription-for-development-events` command format:
 
-`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--vendor-id <vendor-id>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -464,8 +462,6 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dt>--events <events></dt>
     <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
 [MULTIPLE]: Values can be separated by comma.</dd>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1517,7 +1513,7 @@ Create a new version of catalog within the given catalogId.
 
 `create-interaction-model-catalog` command format:
 
-`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] <--vendor-id <vendor-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1526,8 +1522,6 @@ Create a new version of catalog within the given catalogId.
     <dd markdown="span">[OPTIONAL] Name of the catalog.</dd>
     <dt>--catalog-description <catalog-description></dt>
     <dd markdown="span">[OPTIONAL] Description string about the catalog.</dd>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] The vendorId that the catalog should belong to.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2512,13 +2506,11 @@ Creates a new import for a skill.
 
 `create-skill-package` command format:
 
-`$ ask smapi create-skill-package <--vendor-id <vendor-id>> <--location <location>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-package <--location <location>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] ID of the vendor owning the skill.</dd>
     <dt>--location <location></dt>
     <dd markdown="span">[REQUIRED] Location of the package.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2609,13 +2601,11 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
 
 `query-development-audit-logs` command format:
 
-`$ ask smapi query-development-audit-logs <--vendor-id <vendor-id>> [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi query-development-audit-logs [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--vendor-id <vendor-id></dt>
-    <dd markdown="span">[REQUIRED] Vendor Id. See developer.amazon.com/mycid.html.</dd>
     <dt>--request-filters-clients <request-filters-clients></dt>
     <dd markdown="span">[OPTIONAL] List of Client IDs for filtering. 
 [JSON].</dd>
