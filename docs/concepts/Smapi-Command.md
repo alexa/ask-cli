@@ -463,7 +463,7 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
     <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
-[JSON].</dd>
+[MULTIPLE]: Values can be separated by comma.</dd>
     <dt>--vendor-id <vendor-id></dt>
     <dd markdown="span">[OPTIONAL] The vendorId of the event publisher.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
@@ -510,7 +510,7 @@ Updates the mutable properties of a subscription. This needs to be authorized by
     <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
     <dt>--events <events></dt>
     <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
-[JSON].</dd>
+[MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>

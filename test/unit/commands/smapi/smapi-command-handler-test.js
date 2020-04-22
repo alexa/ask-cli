@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { StandardSmapiClientBuilder } = require('ask-smapi-sdk');
+const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
 const AppConfig = require('@src/model/app-config');
 const { ARRAY_SPLIT_DELIMITER } = require('@src/commands/smapi/cli-customization-processor');
 const Messenger = require('@src/view/messenger');
@@ -59,8 +59,8 @@ describe('Smapi test - smapiCommandHandler function', () => {
         clientStub[apiOperationName] = sinon.stub().resolves();
         clientStub[apiOperationName].toString = () => 'function (someJson, skillId, '
             + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
-        sinon.stub(StandardSmapiClientBuilder.prototype, 'client').returns(clientStub);
         sinon.stub(BeforeSendProcessor.prototype, 'processAll');
+        sinon.stub(CustomSmapiClientBuilder.prototype, 'client').returns(clientStub);
     });
 
     it('| should send smapi command with correct parameter mapping', async () => {
