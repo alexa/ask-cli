@@ -29,8 +29,8 @@ Provides a number of subcommands that map 1:1 to the underlying API operations i
 | Returns information about a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can retrieve this resource with appropriate authorization. | [get-subscription-for-development-events](#get-subscription-for-development-events) |
 | Updates the mutable properties of a subscription. This needs to be authorized by the client/vendor who created the subscriber and the vendor who publishes the event. The subscriberId cannot be updated. | [set-subscription-for-development-events](#set-subscription-for-development-events) |
 | Deletes a particular subscription. Both, the vendor who created the subscriber and the vendor who publishes the event can delete this resource with appropriate authorization. | [delete-subscription-for-development-events](#delete-subscription-for-development-events) |
-| Generate preSigned urls to upload data. | [generate-catalog-upload-url](#generate-catalog-upload-url) |
-| Create a new upload for a catalog and returns location to track the upload process. | [create-catalog-upload](#create-catalog-upload) |
+| Generates preSigned urls to upload data. | [generate-catalog-upload-url](#generate-catalog-upload-url) |
+| Creates a new upload for a catalog and returns location to track the upload process. | [create-catalog-upload](#create-catalog-upload) |
 | Get the list of in-skill products for the vendor. | [get-isp-list-for-vendor](#get-isp-list-for-vendor) |
 | Creates a new in-skill product for given vendorId. | [create-isp-for-vendor](#create-isp-for-vendor) |
 | Get the list of in-skill products for the skillId. | [get-isp-list-for-skill-id](#get-isp-list-for-skill-id) |
@@ -182,7 +182,7 @@ Returns information about a particular catalog.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -226,7 +226,7 @@ Associate skill with catalog.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -249,7 +249,7 @@ Lists all the uploads for a particular catalog.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -268,9 +268,9 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
-    <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
+    <dd markdown="span">[REQUIRED] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -289,7 +289,7 @@ Gets detailed information about an upload which was created for a specific catal
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--upload-id <upload-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>-p, --profile <profile></dt>
@@ -310,7 +310,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--upload-id <upload-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
@@ -534,7 +534,7 @@ Deletes a particular subscription. Both, the vendor who created the subscriber a
 
 ### generate-catalog-upload-url
 
-Generate preSigned urls to upload data.
+Generates preSigned urls to upload data.
 
 `generate-catalog-upload-url` command format:
 
@@ -544,9 +544,9 @@ Generate preSigned urls to upload data.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
-    <dd markdown="span">[REQUIRED] The number of parts the file will be split into. An equal number of presigned upload urls will be generated in response to facilitate each part's upload.</dd>
+    <dd markdown="span">[REQUIRED] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -555,7 +555,7 @@ Generate preSigned urls to upload data.
 
 ### create-catalog-upload
 
-Create a new upload for a catalog and returns location to track the upload process.
+Creates a new upload for a catalog and returns location to track the upload process.
 
 `create-catalog-upload` command format:
 
@@ -565,9 +565,9 @@ Create a new upload for a catalog and returns location to track the upload proce
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--catalog-upload-request-body <catalog-upload-request-body></dt>
-    <dd markdown="span">[REQUIRED] Request body for create content upload 
+    <dd markdown="span">[REQUIRED] Provides the request body for create content upload 
 [JSON].</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1540,7 +1540,7 @@ get the catalog definition.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1559,7 +1559,7 @@ Delete the catalog.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1578,7 +1578,7 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--update-request-id <update-request-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for slotType version creation process.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1599,7 +1599,7 @@ update description and vendorGuidance string for certain version of a catalog.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1620,7 +1620,7 @@ Create a new version of catalog entity for the given catalogId.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--source-type <source-type></dt>
     <dd markdown="span">[OPTIONAL] Type of catalog.</dd>
     <dt>--source-url <source-url></dt>
@@ -1645,7 +1645,7 @@ Get catalog version data of given catalog version.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1666,7 +1666,7 @@ Delete catalog version.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1687,7 +1687,7 @@ Update description and vendorGuidance string for certain version of a catalog.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>--description <description></dt>
@@ -1710,7 +1710,7 @@ Get catalog values from the given catalogId &amp; version.
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
-    <dd markdown="span">[REQUIRED] Unique identifier of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>--max-results <max-results></dt>
