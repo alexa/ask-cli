@@ -883,10 +883,6 @@ parallel('smapi command test', () => {
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
-        // display summary
-        if (untestedCommands.size > 0) {
-            console.warn(`\tNot Covered ${untestedCommands.size} commands:`);
-            console.warn(`\t${Array.from(untestedCommands).join('\n\t')}`);
-        }
+        expect(untestedCommands.size, 'should have 0 untested commands').eql(0);
     });
 });
