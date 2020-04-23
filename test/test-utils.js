@@ -14,7 +14,7 @@ const MockServerPort = {
     LWA: 4011
 };
 
-const tempDirectory = path.join(process.cwd(), 'test/integration/temp');
+const tempDirectory = path.join(process.cwd(), 'test/temp');
 
 const resetTempDirectory = () => {
     fs.ensureDirSync(tempDirectory);

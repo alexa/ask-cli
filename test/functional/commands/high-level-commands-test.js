@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const parallel = require('mocha.parallel');
-const { run, KeySymbol, resetTempDirectory, getPathInTempDirectory, makeFolderInTempDirectory } = require('./test-utils');
+const { run, KeySymbol, resetTempDirectory, getPathInTempDirectory, makeFolderInTempDirectory } = require('@test/test-utils');
 
 parallel('high level commands test', () => {
     let cmd;

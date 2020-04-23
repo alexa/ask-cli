@@ -28,8 +28,8 @@
     "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
-    "integration-test:high-level": "mocha -t 180000 test/integration/high-level-commands-test.js",
-    "integration-test:smapi": "mocha -t 180000 test/integration/smapi-commands-test.js",
+    "integration-test": "mocha -t 180000 test/integration/run-test.js",
+    "functional-test": "mocha -t 180000 test/functional/run-test.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
     "pre-release": "standard-version",
     "prism": "prism"

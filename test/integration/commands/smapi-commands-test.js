@@ -1,15 +1,14 @@
 const { expect } = require('chai');
 const { ModelIntrospector } = require('ask-smapi-sdk');
 const parallel = require('mocha.parallel');
-require('module-alias/register');
 
 const { CliCustomizationProcessor } = require('@src/commands/smapi/cli-customization-processor');
-const { run, startMockSmapiServer, startMockLwaServer, MockServerPort } = require('./test-utils');
-const skillManifest = require('./fixtures/skill-manifest.json');
-const catalogUploadBody = require('./fixtures/catalog-upload.json');
-const inSkillProductRequestBody = require('./fixtures/create-in-skill-product-request.json');
-const accountLinkingRequest = require('./fixtures/account-linking-request.json');
-const interactionModel = require('./fixtures/interaction-model.json');
+const { run, startMockSmapiServer, startMockLwaServer, MockServerPort } = require('@test/test-utils');
+const skillManifest = require('@test/integration/fixtures/skill-manifest.json');
+const catalogUploadBody = require('@test/integration/fixtures/catalog-upload.json');
+const inSkillProductRequestBody = require('@test/integration/fixtures/create-in-skill-product-request.json');
+const accountLinkingRequest = require('@test/integration/fixtures/account-linking-request.json');
+const interactionModel = require('@test/integration/fixtures/interaction-model.json');
 
 parallel.limit(8);
 
