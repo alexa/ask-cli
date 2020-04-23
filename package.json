@@ -28,14 +28,16 @@
     "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
-    "functional-test": "node ./node_modules/mocha/bin/_mocha test/functional/**/*-test.js",
+    "integration-test": "mocha -t 180000 test/integration/run-test.js",
+    "functional-test": "mocha -t 180000 test/functional/run-test.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
-    "pre-release": "standard-version"
+    "pre-release": "standard-version",
+    "prism": "prism"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "ask-smapi-model": "1.6.0",
+    "ask-smapi-model": "1.6.1",
     "ask-smapi-sdk": "^1.2.0",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",
@@ -70,6 +72,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@stoplight/prism-cli": "^3.3.3",
     "chai": "^3.5.0",
     "chai-json-schema": "^1.5.1",
     "chai-uuid": "^1.0.6",
@@ -80,6 +83,7 @@
     "gulp": "^3.9.1",
     "husky": "^4.2.3",
     "mocha": "^3.2.0",
+    "mocha.parallel": "^0.15.6",
     "nyc": "^13.3.0",
     "proxyquire": "^1.7.11",
     "sinon": "^6.0.0",

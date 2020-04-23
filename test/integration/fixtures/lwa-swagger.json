@@ -1,0 +1,96 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "LWA"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/O2/token": {
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "tokenForm",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TokenForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token request sent.",
+            "schema": {
+              "$ref": "#/definitions/TokenResponse"
+            }
+          },
+          "400": {
+            "description": "Server cannot process the request due to a client error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "TokenForm": {
+      "type": "object",
+      "required": [
+        "grant_type",
+        "client_secret",
+        "client_id"
+      ],
+      "properties": {
+        "grant_type": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "TokenResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "example": "Atza|rwerwrwe"
+        },
+        "expires_in": {
+          "type": "integer",
+          "example": 3600
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token_type": {
+          "type": "string",
+          "example": "bearer"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Readable description of error."
+        }
+      }
+    }
+  }
+}

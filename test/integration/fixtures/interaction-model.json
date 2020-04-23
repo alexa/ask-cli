@@ -1,0 +1,93 @@
+{
+    "version": "string",
+    "description": "string",
+    "interactionModel": {
+      "languageModel": {
+        "invocationName": "string",
+        "types": [
+          {
+            "name": "string",
+            "values": [
+              {
+                "id": "string",
+                "name": {
+                  "value": "string",
+                  "synonyms": [
+                    "string"
+                  ]
+                }
+              }
+            ],
+            "valueSupplier": {
+              "type": "string"
+            }
+          }
+        ],
+        "intents": [
+          {
+            "name": "string",
+            "slots": [
+              {
+                "name": "string",
+                "type": "string",
+                "samples": [
+                  "string"
+                ]
+              }
+            ],
+            "samples": [
+              "string"
+            ]
+          }
+        ],
+        "modelConfiguration": {
+          "fallbackIntentSensitivity": {
+            "level": "HIGH"
+          }
+        }
+      },
+      "dialog": {
+        "delegationStrategy": "ALWAYS",
+        "intents": [
+          {
+            "name": "string",
+            "delegationStrategy": "ALWAYS",
+            "slots": [
+              {
+                "name": "string",
+                "type": "string",
+                "elicitationRequired": true,
+                "confirmationRequired": true,
+                "prompts": {
+                  "elicitation": "string",
+                  "confirmation": "string"
+                },
+                "validations": [
+                  {
+                    "type": "string",
+                    "prompt": "string"
+                  }
+                ]
+              }
+            ],
+            "confirmationRequired": true,
+            "prompts": {
+              "elicitation": "string",
+              "confirmation": "string"
+            }
+          }
+        ]
+      },
+      "prompts": [
+        {
+          "id": "string",
+          "variations": [
+            {
+              "type": "SSML",
+              "value": "string"
+            }
+          ]
+        }
+      ]
+    }
+  }
