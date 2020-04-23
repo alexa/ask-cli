@@ -883,6 +883,6 @@ parallel('smapi command test', () => {
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
-        expect(untestedCommands.size, 'should have 0 untested commands').eql(0);
+        expect(Array.from(untestedCommands), 'should not have untested commands').eql([]);
     });
 });
