@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const aws = require('aws-sdk');
 const path = require('path');
+const proxyquire = require('proxyquire');
 const fs = require('fs');
 
 const S3Client = require('@src/clients/aws-client/s3-client');
@@ -55,6 +56,60 @@ describe('Clients test - s3 client test', () => {
             } catch (e) {
                 expect(e.message).equal('Invalid awsProfile or Invalid awsRegion');
             }
+        });
+    });
+
+    describe('# function preSignedPutObject tests', () => {
+        let proxyClient;
+        let stubRequest;
+        let putStub;
+        const TEST_OPTION = {};
+        beforeEach(() => {
+            putStub = sinon.stub();
+            stubRequest = {
+                put: putStub
+            };
+            proxyClient = proxyquire('@src/clients/aws-client/s3-client', {
+                request: stubRequest
+            });
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| input pre-signed S3 url is not string, expect error thrown ', (done) => {
+            // setup
+            const TEST_URL = {};
+            // call
+            proxyClient.preSignedPutObject(TEST_URL, TEST_OPTION, (err) => {
+                // verify
+                expect(err).equal('[Error]: The url for the S3 presigned URL upload must not be blank.');
+                done();
+            });
+        });
+
+        it('| input pre-signed S3 url is empty sting, expect error thrown ', (done) => {
+            // setup
+            const TEST_URL = '';
+            // call
+            proxyClient.preSignedPutObject(TEST_URL, TEST_OPTION, (err) => {
+                // verify
+                expect(err).equal('[Error]: The url for the S3 presigned URL upload must not be blank.');
+                done();
+            });
+        });
+
+        it('| input pre-signed S3 url is empty, expect error thrown ', (done) => {
+            // setup
+            const TEST_URL = 'pre-signed_S3_url';
+            putStub.callsArgWith(2, null);
+            // call
+            proxyClient.preSignedPutObject(TEST_URL, TEST_OPTION, (err) => {
+                // verify
+                expect(err).equal(null);
+                done();
+            });
         });
     });
 
