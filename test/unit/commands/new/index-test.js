@@ -228,25 +228,6 @@ describe('Commands new test - command class test', () => {
                 });
             });
 
-            it('| load skill project model succeeds, with custom template, expect no error thrown', (done) => {
-                // setup
-                const TEST_CMD_TEMPLATE = {
-                    profile: TEST_PROFILE,
-                    templateUrl: 'templateUrl'
-                };
-                const TEST_USER_INPUT = {};
-                wizardHelper.collectUserCreationProjectInfo.callsArgWith(1, null, TEST_USER_INPUT);
-                helper.downloadTemplateFromGit.callsArgWith(2, null);
-                // call
-                instance.handle(TEST_CMD_TEMPLATE, (err) => {
-                    // verify
-                    expect(err).equal(undefined);
-                    expect(errorStub.callCount).equal(0);
-                    expect(infoStub.callCount).equal(2);
-                    done();
-                });
-            });
-
             it('| load skill project model fails, expect error thrown', (done) => {
                 // setup
                 const TEST_USER_INPUT = {};
