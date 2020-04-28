@@ -13,6 +13,7 @@ const smapiCommandHandler = require('@src/commands/smapi/smapi-command-handler')
 
 describe('Smapi test - smapiCommandHandler function', () => {
     const apiOperationName = 'someApiOperation';
+    const sdkFunctionName = 'callSomeApiOperation';
     const commandName = 'some-api-operation';
     const skillId = 'some skill id';
     const someNumber = '20';
@@ -20,6 +21,18 @@ describe('Smapi test - smapiCommandHandler function', () => {
     const jsonValue = { test: 'test' };
     const arrayValue = ['test', 'test1', 'test2'];
     const arrayValueStr = arrayValue.join(ARRAY_SPLIT_DELIMITER);
+    const fakeResponse = {
+        body: { someProperty: 'x' },
+        headers: [{
+            key: 'x',
+            value: 'y'
+        },
+        {
+            key: 'z',
+            value: 'b'
+        }],
+        statusCode: 200
+    };
 
     const flatParamsMap = new Map([
         ['skillId', { name: 'skillId' }],
@@ -56,8 +69,8 @@ describe('Smapi test - smapiCommandHandler function', () => {
                 return { refresh_token: 'test' };
             }
         });
-        clientStub[apiOperationName] = sinon.stub().resolves();
-        clientStub[apiOperationName].toString = () => 'function (someJson, skillId, '
+        clientStub[sdkFunctionName] = sinon.stub().resolves({ ...fakeResponse });
+        clientStub[sdkFunctionName].toString = () => 'function (someJson, skillId, '
             + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
         sinon.stub(BeforeSendProcessor.prototype, 'processAll');
         sinon.stub(CustomSmapiClientBuilder.prototype, 'client').returns(clientStub);
@@ -68,7 +81,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
         const expectedParams = [jsonValue, skillId, null, arrayValue,
             { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
-        const calledParams = clientStub[apiOperationName].args[0];
+        const calledParams = clientStub[sdkFunctionName].args[0];
 
         expect(calledParams).eql(expectedParams);
     });
@@ -87,7 +100,10 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
         expect(messengerStub.args[0]).eql(['INFO', 'Operation: someApiOperation']);
         expect(messengerStub.args[1]).eql(['INFO', 'Payload:']);
-        expect(messengerStub.args[2]).eql(['INFO', jsonView.toString({ skillId })]);
+        expect(messengerStub.args[2]).eql(['INFO', `${jsonView.toString({ skillId })}\n`]);
+        expect(messengerStub.args[3]).eql(['INFO', `Status code: ${fakeResponse.statusCode}`]);
+        expect(messengerStub.args[4]).eql(['INFO', `Response headers: ${jsonView.toString(fakeResponse.headers)}`]);
+        expect(messengerStub.args[5]).eql(['INFO', `Response body: ${jsonView.toString(fakeResponse.body)}`]);
     });
 
     afterEach(() => {
