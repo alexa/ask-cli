@@ -50,6 +50,11 @@ require('module-alias/register');
     // command - smapi - export-package
     '@test/unit/commands/smapi/appended-commands/export-package/index-test.js',
     '@test/unit/commands/smapi/appended-commands/export-package/helper-test.js',
+    // command - smapi - get-task
+    '@test/unit/commands/smapi/appended-commands/get-task/index-test.js',
+    // command - smapi - search-task
+    '@test/unit/commands/smapi/appended-commands/search-task/index-test.js',
+
     // command - util
     '@test/unit/commands/util/upgrade-project/index-test',
     '@test/unit/commands/util/upgrade-project/ui-test',
