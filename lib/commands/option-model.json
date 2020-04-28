@@ -118,5 +118,25 @@
     "description": "The client-id when registering LWA application, uses CLI's default if not set",
     "alias": null,
     "stringInput": "REQUIRED"
+  },
+  "task-name": {
+    "name": "task-name",
+    "description": "Name of a task.",
+    "stringInput": "REQUIRED"
+  },
+  "task-version": {
+    "name": "task-version",
+    "description": "Version of a task. For example: 1, 2, 3 and so on.",
+    "stringInput": "REQUIRED"
+  },
+  "provider-skill-id": {
+    "name": "provider-skill-id",
+    "description": "Task provider skill id. When this is specified, we will only fetch the tasks from this given skill ID.",
+    "stringInput": "OPTIONAL"
+  },
+  "keywords": {
+    "name": "keywords",
+    "description": "Keywords can be description of tasks, task name or tags in task definition.\n[MULTIPLE]: Values can be separated by comma.",
+    "stringInput": "OPTIONAL"
   }
 }
