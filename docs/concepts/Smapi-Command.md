@@ -315,7 +315,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
     <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -356,7 +356,7 @@ Creates a new subscriber resource for a vendor.
 <dl>
     <dt>--create-subscriber-request <create-subscriber-request></dt>
     <dd markdown="span">[OPTIONAL] Defines the request body for createSubscriber API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -397,7 +397,7 @@ Updates the properties of a subscriber.
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>--update-subscriber-request <update-subscriber-request></dt>
     <dd markdown="span">[OPTIONAL] Defines the request body for updateSubscriber API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -568,7 +568,7 @@ Creates a new upload for a catalog and returns location to track the upload proc
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--catalog-upload-request-body <catalog-upload-request-body></dt>
     <dd markdown="span">[REQUIRED] Provides the request body for create content upload 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -626,7 +626,7 @@ Creates a new in-skill product for given vendorId.
 <dl>
     <dt>--create-in-skill-product-request <create-in-skill-product-request></dt>
     <dd markdown="span">[REQUIRED] defines the request body for createInSkillProduct API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -698,7 +698,7 @@ Updates in-skill product definition for given productId. Only development stage 
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--in-skill-product <in-skill-product></dt>
     <dd markdown="span">[REQUIRED] defines the request body for updateInSkillProduct API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -883,7 +883,7 @@ Create AccountLinking information for the skill.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>--account-linking-request <account-linking-request></dt>
     <dd markdown="span">[REQUIRED] The fields required to create accountLinking partner. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1475,7 +1475,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>--interaction-model <interaction-model></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1823,7 +1823,7 @@ Create a new version of slot type within the given slotTypeId.
 <dl>
     <dt>--slot-type <slot-type></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1950,7 +1950,7 @@ Create a new version of slot type entity for the given slotTypeId.
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>--slot-type <slot-type></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2070,7 +2070,7 @@ Updates skill manifest for given skillId and stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>--manifest <manifest></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for updateSkill API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2324,7 +2324,7 @@ Creates a new skill for given vendorId.
 <dl>
     <dt>--manifest <manifest></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for createSkill API. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2407,7 +2407,7 @@ Updates the ssl certificates associated with this skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--ssl-certificate-payload <ssl-certificate-payload></dt>
     <dd markdown="span">[REQUIRED] Defines the input/output of the ssl certificates api for a skill. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2608,16 +2608,16 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
 <dl>
     <dt>--request-filters-clients <request-filters-clients></dt>
     <dd markdown="span">[OPTIONAL] List of Client IDs for filtering. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--request-filters-operations <request-filters-operations></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--request-filters-resources <request-filters-resources></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--request-filters-requesters <request-filters-requesters></dt>
     <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs. 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>--request-filters-start-time <request-filters-start-time></dt>
     <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
     <dt>--request-filters-end-time <request-filters-end-time></dt>
@@ -2661,7 +2661,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 [ENUM]: NA,EU,FE.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
     <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
-[JSON].</dd>
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
