@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const fs = require('fs-extra');
 const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
 const AppConfig = require('@src/model/app-config');
 const { ARRAY_SPLIT_DELIMITER } = require('@src/commands/smapi/cli-customization-processor');
@@ -43,12 +44,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
         ['sessionMode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
 
     const commanderToApiCustomizationMap = new Map();
-    const cmdObj = {
-        opts() {
-            return { skillId, someNumber, someBoolean, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
-        },
-        _name: commandName
-    };
+    let cmdObj;
 
     const clientStub = { apiConfiguration: { apiEndpoint: null } };
 
@@ -58,6 +54,12 @@ describe('Smapi test - smapiCommandHandler function', () => {
     };
 
     beforeEach(() => {
+        cmdObj = {
+            opts() {
+                return { skillId, someNumber, someBoolean, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
+            },
+            _name: commandName
+        };
         sinon.stub(AuthorizationController.prototype, '_getAuthClientInstance').returns(
             { config: {} }
         );
@@ -77,6 +79,20 @@ describe('Smapi test - smapiCommandHandler function', () => {
     });
 
     it('| should send smapi command with correct parameter mapping', async () => {
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
+
+        const expectedParams = [jsonValue, skillId, null, arrayValue,
+            { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
+        const calledParams = clientStub[sdkFunctionName].args[0];
+
+        expect(calledParams).eql(expectedParams);
+    });
+
+    it('| should read parameter from json file amd send smapi command', async () => {
+        const jsonFilePath = 'file:some-file.json';
+        sinon.stub(fs, 'readJSONSync').returns(jsonValue);
+        cmdObj.opts = () => ({ skillId, someNumber, someBoolean, someJson: jsonFilePath, someArray: arrayValueStr });
+
         await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
 
         const expectedParams = [jsonValue, skillId, null, arrayValue,
