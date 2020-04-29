@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/alexa/ask-cli/compare/v2.1.1...v2.2.0) (2020-04-29)
+
+
+### Features
+
+* add option to read json from file path ([#151](https://github.com/alexa/ask-cli/issues/151)) ([b8e001e](https://github.com/alexa/ask-cli/commit/b8e001eeb7f21f155ddc041d9bb89ebf1c6f2afc))
+* support custom smapi and lwa endpoint based on env variables ([45dbdf2](https://github.com/alexa/ask-cli/commit/45dbdf2fff37d1e5441fa3c12d1f0c0b79c28ca7))
+
+
+### Bug Fixes
+
+* add additional debug output to smapi commands ([#149](https://github.com/alexa/ask-cli/issues/149)) ([30b63ea](https://github.com/alexa/ask-cli/commit/30b63eaca77f21d9739901ae4330d1398f945ed4))
+* add missing subscriptions lwa scope ([49ccf5c](https://github.com/alexa/ask-cli/commit/49ccf5cc6767921a4250541151346926dddc85d2))
+* change implementation of before send logic to handle more cases ([#135](https://github.com/alexa/ask-cli/issues/135)) ([8fa9e76](https://github.com/alexa/ask-cli/commit/8fa9e767597cae5e4ef12b82c49f113bab4c8faf))
+* fix when array property was displayed as json property ([c9e16ac](https://github.com/alexa/ask-cli/commit/c9e16ac7b88d5b49ee1ec85d55a4f1df5845f40c))
+* unable to deploy new project with custom template by lambda deployer ([#148](https://github.com/alexa/ask-cli/issues/148)) ([2a00ff6](https://github.com/alexa/ask-cli/commit/2a00ff68da80d813eb4a3bf15ee01fdf676dbba2))
+
 ### [2.1.1](https://github.com/alexa/ask-cli/compare/v2.1.0...v2.1.1) (2020-04-17)
 
 
