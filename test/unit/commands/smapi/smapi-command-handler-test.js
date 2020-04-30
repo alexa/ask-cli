@@ -36,12 +36,12 @@ describe('Smapi test - smapiCommandHandler function', () => {
     };
 
     const flatParamsMap = new Map([
-        ['skillId', { name: 'skillId' }],
-        ['someJson', { name: 'someJson', json: true }],
-        ['someArray', { name: 'someArray', isArray: true }],
-        ['someNumber', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someNumber', isNumber: true }],
-        ['someBoolean', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someBoolean', isBoolean: true }],
-        ['sessionMode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
+        ['skillid', { name: 'skillId' }],
+        ['somejson', { name: 'someJson', json: true }],
+        ['somearray', { name: 'someArray', isArray: true }],
+        ['somenumber', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someNumber', isNumber: true }],
+        ['someboolean', { rootName: 'simulationsApiRequest', bodyPath: 'input>>>someBoolean', isBoolean: true }],
+        ['sessionmode', { rootName: 'simulationsApiRequest', bodyPath: 'session>>>mode' }]]);
 
     const commanderToApiCustomizationMap = new Map();
     let cmdObj;
