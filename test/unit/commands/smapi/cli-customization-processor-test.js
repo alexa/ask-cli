@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { camelCase } = require('@src/utils/string-utils');
+const { camelCase, standardize } = require('@src/utils/string-utils');
 const CliError = require('@src/exceptions/cli-error');
 const { customizationMap } = require('@src/commands/smapi/customizations/parameters-map');
 const { CliCustomizationProcessor, BODY_PATH_DELIMITER, MAX_NESTED_PROPERTIES } = require('@src/commands/smapi/cli-customization-processor');
@@ -102,7 +102,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
             const expected = { ...parameter, enum: undefined };
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
         });
 
         it('| should skip processing of parameter', () => {
@@ -126,7 +126,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
             const expected = { ...parameter, enum: undefined, isArray: true };
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
         });
 
         it('| should add reference enum of non body paramter', () => {
@@ -138,7 +138,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
             const expected = { ...parameter, enum: enumValues, isArray: true };
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
         });
 
         it('| should add reference items of non body paramter and use reference item description if not defined', () => {
@@ -150,7 +150,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
             const expected = { ...parameter, enum: enumValues, description: refObjectDescription, isArray: true };
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
         });
 
         it('| should add body parameter', () => {
@@ -168,7 +168,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
                 name: bodyPropertyTwoName,
                 json: false,
                 isBoolean: true };
-            expect(flatParamsMap.get(bodyPropertyTwoName)).eql(expected);
+            expect(flatParamsMap.get(standardize(bodyPropertyTwoName))).eql(expected);
         });
 
         it('| should add customized body parameter', () => {
@@ -182,7 +182,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
             const { name, required, description } = parameter;
             const expected = { name, required, description, json: true };
-            expect(flatParamsMap.get(parameter.name)).eql(expected);
+            expect(flatParamsMap.get(standardize(parameter.name))).eql(expected);
         });
 
         it('| should add customized body parameter with custom properties', () => {
@@ -199,7 +199,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
             const expected = { name, required, description };
-            expect(flatParamsMap.get(name)).eql(expected);
+            expect(flatParamsMap.get(standardize(name))).eql(expected);
         });
 
         it('| should add one level deep body parameter', () => {
@@ -220,7 +220,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
                 json: false,
                 isNumber: true,
                 type: 'number' };
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
 
             const expectedParams = mapExpectedParams(nestedPropertyName, bodyPropertyTwoName);
             name = expectedParams.name;
@@ -228,7 +228,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             key = expectedParams.key;
             expected = { ...bodyPropertyWithDescription, name, rootName, bodyPath, required: true, enum: null, json: false, isBoolean: true };
 
-            expect(flatParamsMap.get(key)).eql(expected);
+            expect(flatParamsMap.get(standardize(key))).eql(expected);
         });
 
         it('| should fail since the body parameter is nested too deep', () => {
@@ -257,8 +257,15 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const name = nestedEnumPropertyName;
             const bodyPath = nestedEnumPropertyName;
 
-            const expected = { ...bodyProperty, name, rootName, bodyPath, required: false, enum: enumValues, description: enumDescription, type: undefined };
-            expect(flatParamsMap.get(nestedEnumPropertyName)).eql(expected);
+            const expected = { ...bodyProperty,
+                name,
+                rootName,
+                bodyPath,
+                required: false,
+                enum: enumValues,
+                description: enumDescription,
+                type: undefined };
+            expect(flatParamsMap.get(standardize(nestedEnumPropertyName))).eql(expected);
         });
     });
 
