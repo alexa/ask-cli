@@ -115,6 +115,23 @@ describe('Commands new test - helper test', () => {
                 done();
             });
         });
+        it('| git clone with custom branch, expect return folder path', (done) => {
+            // setup
+            const TEST_FOLDER_PATH = 'TEST_FOLDER_PATH';
+            const TEST_TEMPLATE_BRANCH = 'test-branch';
+            TEST_USER_INPUT.templateInfo.templateBranch = TEST_TEMPLATE_BRANCH;
+            sinon.stub(path, 'join').returns(TEST_FOLDER_PATH);
+            sinon.stub(GitClient.prototype, 'clone');
+            // call
+            helper.downloadTemplateFromGit(TEST_USER_INPUT, TEST_DO_DEBUG, (err, res) => {
+                // verify
+                expect(GitClient.prototype.clone.args[0][0]).equal(TEST_TEMPLATE_URL);
+                expect(GitClient.prototype.clone.args[0][1]).equal(TEST_TEMPLATE_BRANCH);
+                expect(res).equal(TEST_FOLDER_PATH);
+                expect(err).equal(null);
+                done();
+            });
+        });
     });
 
     describe('# test helper method - loadSkillProjectModel', () => {
