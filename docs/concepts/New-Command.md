@@ -5,7 +5,8 @@
 
 **STRUCTURE OF NEW COMMAND:**
 
-`ask new [--template-url <template name>]
+`ask new [--template-url <template url>]
+        [--template-branch <template branch>]
         [-p | --profile <profile>]
         [--debug]
         [-h | --help]`

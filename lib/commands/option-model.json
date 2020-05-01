@@ -69,7 +69,7 @@
     "name": "template-branch",
     "description": "Git branch used with the template url",
     "alias": null,
-    "stringInput": "OPTIONAL"
+    "stringInput": "REQUIRED"
   },
   "file": {
     "name": "file",
