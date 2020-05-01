@@ -65,6 +65,12 @@
     "alias": null,
     "stringInput": "REQUIRED"
   },
+  "templateBranch": {
+    "name": "template-branch",
+    "description": "Git branch used with the template url",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
   "file": {
     "name": "file",
     "description": "Path to the target file input",

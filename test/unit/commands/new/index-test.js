@@ -53,7 +53,7 @@ describe('Commands new test - command class test', () => {
         expect(instance.name()).equal('new');
         expect(instance.description()).equal('create a new skill project from Alexa skill templates');
         expect(instance.requiredOptions()).deep.equal([]);
-        expect(instance.optionalOptions()).deep.equal(['templateUrl', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.equal(['templateUrl', 'templateBranch', 'profile', 'debug']);
     });
 
     describe('validate command handle', () => {

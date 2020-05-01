@@ -5,7 +5,8 @@
 
 **STRUCTURE OF NEW COMMAND:**
 
-`ask new [--template-url <template name>]
+`ask new [--template-url <template url>]
+        [--template-branch <template branch>]
         [-p | --profile <profile>]
         [--debug]
         [-h | --help]`
@@ -13,6 +14,8 @@
 **OPTIONS DESCRIPTION:**
 
 **template-url**: Optional. Specify the URL of a Git repository that contains a skill template.
+
+**template-branch**: Optional. Specify the branch for a Git repository that contains a skill template.
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
