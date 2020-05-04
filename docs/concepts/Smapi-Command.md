@@ -123,6 +123,8 @@ The path params
 | This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
 | upload a file for the catalog. | [upload-catalog](#upload-catalog) |
 | download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
+| Get the task definition details specified by the taskName and version. | [get-task](#get-task) |
+| List the tasks summary information based on keywords or provider skillId. If both keywords and provider skillId are not specified, will list all the tasks summary information accessible by the skillId. | [search-task](#search-task) |
 
 ### list-catalogs-for-vendor
 
@@ -2704,6 +2706,57 @@ download the skill package to &quot;skill-package&quot; folder in current direct
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g, --stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-task
+
+Get the task definition details specified by the taskName and version.
+
+`get-task` command format:
+
+`$ ask smapi get-task [-s| --skill-id <skill-id>] [--task-name <task-name>] [--task-version <task-version>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s, --skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--task-name <task-name></dt>
+    <dd markdown="span">[REQUIRED] Name of a task.</dd>
+    <dt>--task-version <task-version></dt>
+    <dd markdown="span">[REQUIRED] Version of a task. For example: 1, 2, 3 and so on.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### search-task
+
+List the tasks summary information based on keywords or provider skillId. If both keywords and provider skillId are not specified, will list all the tasks summary information accessible by the skillId.
+
+`search-task` command format:
+
+`$ ask smapi search-task [-s| --skill-id <skill-id>] [--next-token <next-token>] [--max-results <max-results>] [--provider-skill-id [provider-skill-id]] [--keywords [keywords]] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s, --skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] Next token if the result is paginated.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Max results returned by the request.</dd>
+    <dt>--provider-skill-id [provider-skill-id]</dt>
+    <dd markdown="span">[OPTIONAL] Task provider skill id. When this is specified, we will only fetch the tasks from this given skill ID.</dd>
+    <dt>--keywords [keywords]</dt>
+    <dd markdown="span">[OPTIONAL] Keywords can be description of tasks, task name or tags in task definition.
+[MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>

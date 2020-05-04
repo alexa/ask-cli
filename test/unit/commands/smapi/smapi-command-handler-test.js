@@ -116,7 +116,12 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
         expect(messengerStub.args[0]).eql(['INFO', 'Operation: someApiOperation']);
         expect(messengerStub.args[1]).eql(['INFO', 'Payload:']);
-        expect(messengerStub.args[2]).eql(['INFO', `${jsonView.toString({ skillId })}\n`]);
+        expect(messengerStub.args[2])
+            .eql(['INFO', `${jsonView.toString({ someJson: null,
+                skillId,
+                someNonPopulatedProperty: null,
+                someArray: null,
+                simulationsApiRequest: null })}\n`]);
         expect(messengerStub.args[3]).eql(['INFO', `Status code: ${fakeResponse.statusCode}`]);
         expect(messengerStub.args[4]).eql(['INFO', `Response headers: ${jsonView.toString(fakeResponse.headers)}`]);
         expect(messengerStub.args[5]).eql(['INFO', `Response body: ${jsonView.toString(fakeResponse.body)}`]);

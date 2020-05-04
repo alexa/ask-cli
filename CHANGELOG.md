@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/alexa/ask-cli/compare/v2.2.0...v2.3.0) (2020-05-01)
+
+
+### Features
+
+* add get and search task smapi commands ([fb881d6](https://github.com/alexa/ask-cli/commit/fb881d69506f17e2a0a314c29999c07edc394b5d))
+
+
+### Bug Fixes
+
+* standardize keys for smapi auto gen logic to prevent mismatch due to case discrepancies ([069b219](https://github.com/alexa/ask-cli/commit/069b2196984e17c9caf91dd9718fd7ea814c147e))
+
 ## [2.2.0](https://github.com/alexa/ask-cli/compare/v2.1.1...v2.2.0) (2020-04-29)
 
 
