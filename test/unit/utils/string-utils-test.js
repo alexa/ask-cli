@@ -45,6 +45,33 @@ describe('Utils test - string utility', () => {
         });
     });
 
+    describe('# test function standardize', () => {
+        [
+            {
+                testCase: 'camel case to lower',
+                str: 'testTest',
+                expectation: 'testtest'
+            },
+            {
+                testCase: 'capital case to lower',
+                str: 'TestTest',
+                expectation: 'testtest'
+            },
+            {
+                testCase: 'non alphanumeric',
+                str: 'test.test',
+                expectation: 'testtest'
+            },
+        ].forEach(({ testCase, str, expectation }) => {
+            it(`| ${testCase}, expect standardize ${str}`, () => {
+                // call
+                const callResult = stringUtils.standardize(str);
+                // verify
+                expect(callResult).equal(expectation);
+            });
+        });
+    });
+
     describe('# test function isNonBlankString', () => {
         [
             {
