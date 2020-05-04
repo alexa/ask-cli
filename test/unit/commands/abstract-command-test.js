@@ -60,7 +60,7 @@ describe('Command test - AbstractCommand class', () => {
             mockProcessExit = sinon.stub(process, 'exit');
             mockConsoleError = sinon.stub(console, 'error');
             sinon.stub(metricClient, 'sendData').resolves();
-            sinon.stub(AbstractCommand.prototype, '_remindsIfNewVersion').callsArgWith(1);
+            sinon.stub(AbstractCommand.prototype, '_remindsIfNewVersion').callsArgWith(2);
         });
 
         it('| should be able to register command', async () => {
@@ -311,11 +311,22 @@ describe('Command test - AbstractCommand class', () => {
             sinon.restore();
         });
 
+        it('| skip is set, should skip version check', (done) => {
+            // setup
+            const skip = true;
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, skip, () => {
+                // verify
+                expect(httpClient.request.called).equal(false);
+                done();
+            });
+        });
+
         it('| http client request error, should warn it out and pass the process', (done) => {
             // setup
             httpClient.request.callsArgWith(3, TEST_HTTP_ERROR);
             // call
-            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
@@ -334,7 +345,7 @@ describe('Command test - AbstractCommand class', () => {
             const latestVersion = `${currentMajor + 1}.0.0`;
             httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(latestVersion));
             // call
-            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
@@ -355,7 +366,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             const latestVersion = `${currentMajor}.${currentMinor + 1}.0`;
             httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(latestVersion));
             // call
-            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
@@ -375,7 +386,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             // setup
             httpClient.request.callsArgWith(3, null, TEST_NPM_REGISTRY_DATA(`${currentMajor}.${currentMinor}.0`));
             // call
-            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, (err) => {
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
