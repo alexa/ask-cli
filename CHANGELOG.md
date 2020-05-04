@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/alexa/ask-cli/compare/v2.3.0...v2.4.0) (2020-05-04)
+
+
+### Features
+
+* add ASK_SKIP_NEW_VERSION_REMINDER to enable skipping version check at the beginning of each command ([#160](https://github.com/alexa/ask-cli/issues/160)) ([59544e3](https://github.com/alexa/ask-cli/commit/59544e359ae6692715e56a5c6dfc955f83af88b4))
+* add support for template-branch parameter in new command ([#155](https://github.com/alexa/ask-cli/issues/155)) ([426edfb](https://github.com/alexa/ask-cli/commit/426edfb52f2789ea22187633922870994d3aa178))
+
+
+### Bug Fixes
+
+* added logic to handle non alphanumeric characters in smapi swagg… ([#159](https://github.com/alexa/ask-cli/issues/159)) ([768d56f](https://github.com/alexa/ask-cli/commit/768d56f54ebcf0c0e965b630e35de06d0e25f1a4))
+
 ## [2.3.0](https://github.com/alexa/ask-cli/compare/v2.2.0...v2.3.0) (2020-05-01)
 
 
