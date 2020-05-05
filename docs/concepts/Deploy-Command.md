@@ -6,11 +6,11 @@ This document focuses on explaining the deploy command in details for each type 
 
 **Structure of Deploy command:**
 
-`ask deploy [--force-deploy] [-p|--profile <profile>] [--debug]`
+`ask deploy [--ignore-hash] [-p|--profile <profile>] [--debug]`
 
 **Options Description:**
 
-**force-deploy**: Optional. Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.
+**ignore-hash**: Optional. Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
