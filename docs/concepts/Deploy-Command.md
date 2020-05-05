@@ -4,6 +4,18 @@
 
 This document focuses on explaining the deploy command in details for each type of resource that CLI deploys. If you are looking for references of the ask-resources config file, please check [here](./Alexa-Skill-Project-Definition.md).
 
+**Structure of Deploy command:**
+
+`ask deploy [--force-deploy] [-p|--profile <profile>] [--debug]`
+
+**Options Description:**
+
+**force-deploy**: Optional. Forces ASK CLI deploy even if the hash of current skill package folder does not change.
+
+**profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
+
+**debug**: Optional. Appends a debug message to the standard error.
+
 ## Skill Metadata
 CLI relies on the [Skill Package service](https://developer.amazon.com/en-US/docs/alexa/smapi/skill-package-api-reference.html) to deploy the skill metadata component. To control the deployment of skillMetadata:
 

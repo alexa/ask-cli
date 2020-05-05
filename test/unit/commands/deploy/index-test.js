@@ -44,7 +44,7 @@ describe('Commands deploy test - command class test', () => {
         expect(instance.name()).equal('deploy');
         expect(instance.description()).equal('deploy the skill project');
         expect(instance.requiredOptions()).deep.equal([]);
-        expect(instance.optionalOptions()).deep.equal(['profile', 'debug']);
+        expect(instance.optionalOptions()).deep.equal(['force-deploy', 'profile', 'debug']);
     });
 
     describe('validate command handle', () => {
@@ -165,7 +165,7 @@ describe('Commands deploy test - command class test', () => {
 
             it('| helper deploy skill metadata fails, expect throw error', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2, 'error');
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1, 'error');
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -179,7 +179,7 @@ describe('Commands deploy test - command class test', () => {
 
             it('| helper deploy skill metadata with same hash skip result, expect display the message and continue', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2,
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1,
                     'The hash of current skill package folder does not change compared to the last deploy hash result, '
                     + 'CLI will skip the deploy of skill package.');
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, 'error');
@@ -203,7 +203,7 @@ describe('Commands deploy test - command class test', () => {
 
             it('| helper build skill code fails, expect throw error', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, 'error');
                 // call
                 instance.handle(TEST_CMD, (err) => {
@@ -238,7 +238,7 @@ describe('Commands deploy test - command class test', () => {
 
             it('| helper deploy skill infra without infraType, expect skip the flow by calling back', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2, 'error');
                 sinon.stub(helper, 'enableSkill').callsArgWith(2);
@@ -268,7 +268,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
 
             it('| helper deploy skill infra fails, expect throw error', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2, 'error');
                 sinon.stub(helper, 'enableSkill').callsArgWith(2);
@@ -297,7 +297,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
 
             it('| deploy skill all pass, expect deploy succeeds and enbalSkill get called', (done) => {
                 // setup
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
                 sinon.stub(helper, 'enableSkill').callsArgWith(2);
@@ -346,7 +346,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
             it('| can callbcak error when enable fails', (done) => {
                 // setup
                 const TEST_ERROR = 'error';
-                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
                 sinon.stub(helper, 'enableSkill').callsArgWith(2, 'error');
