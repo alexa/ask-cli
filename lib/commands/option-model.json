@@ -11,8 +11,8 @@
     "alias": null,
     "stringInput": "NONE"
   },
-  "force-deploy": {
-    "name": "force-deploy",
+  "ignore-hash": {
+    "name": "ignore-hash",
     "description": "Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.",
     "alias": null,
     "stringInput": "NONE"

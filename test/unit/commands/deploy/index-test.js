@@ -44,7 +44,7 @@ describe('Commands deploy test - command class test', () => {
         expect(instance.name()).equal('deploy');
         expect(instance.description()).equal('deploy the skill project');
         expect(instance.requiredOptions()).deep.equal([]);
-        expect(instance.optionalOptions()).deep.equal(['force-deploy', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.equal(['ignore-hash', 'profile', 'debug']);
     });
 
     describe('validate command handle', () => {

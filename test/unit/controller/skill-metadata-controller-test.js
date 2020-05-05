@@ -21,7 +21,7 @@ describe('Controller test - skill metadata controller test', () => {
     const TEST_PROFILE = 'default'; // test file contains 'default' profile
     const TEST_ROOT_PATH = 'root';
     const TEST_VENDOR_ID = 'vendorId';
-    const TEST_FORCE_DEPLOY = false;
+    const TEST_IGNORE_HASH = false;
     const TEST_SKILL_ID = 'skillId';
     const TEST_STAGE = 'stage';
     const TEST_PATH = 'path';
@@ -61,7 +61,7 @@ describe('Controller test - skill metadata controller test', () => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, null);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('Skill package src is not found in ask-resources.json.');
@@ -74,7 +74,7 @@ describe('Controller test - skill metadata controller test', () => {
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(fs, 'existsSync').withArgs(TEST_PATH).returns(false);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(`File ${TEST_PATH} does not exist.`);
@@ -88,7 +88,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(fs, 'existsSync').withArgs(TEST_PATH).returns(true);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, 'hashError', null);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('hashError');
@@ -104,7 +104,7 @@ describe('Controller test - skill metadata controller test', () => {
             ResourcesConfig.getInstance().setSkillMetaLastDeployHash(TEST_PROFILE, LAST_DEPLOY);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, LAST_DEPLOY);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(err).equal('The hash of current skill package folder does not change compared to the '
                 + 'last deploy hash result, CLI will skip the deploy of skill package.');
@@ -116,7 +116,7 @@ describe('Controller test - skill metadata controller test', () => {
         it('| hash did not change and force flag passed, expect resourcesConfig updated correctly', (done) => {
             // setup
             const LAST_DEPLOY = 'lastDeploy';
-            const FORCE_DEPLOY = true;
+            const IGNORE_HASH = true;
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(fs, 'existsSync').withArgs(TEST_PATH).returns(true);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, LAST_DEPLOY);
@@ -124,7 +124,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, 'putSkillPackage').callsArgWith(2, null, TEST_SKILL_ID);
             ResourcesConfig.getInstance().setSkillId(TEST_PROFILE, TEST_SKILL_ID);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, IGNORE_HASH, (err, res) => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);
@@ -140,7 +140,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, 'putSkillPackage').callsArgWith(2, null, TEST_SKILL_ID);
             ResourcesConfig.getInstance().setSkillId(TEST_PROFILE, TEST_SKILL_ID);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal(TEST_CURRENT_HASH);
                 expect(err).equal(undefined);
@@ -157,7 +157,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, 'putSkillPackage').callsArgWith(2, null, TEST_SKILL_ID);
             ResourcesConfig.getInstance().setSkillId(TEST_PROFILE, '');
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal(TEST_CURRENT_HASH);
                 expect(ResourcesConfig.getInstance().getSkillId(TEST_PROFILE)).equal(TEST_SKILL_ID);
@@ -175,7 +175,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, 'putSkillPackage').callsArgWith(2, 'putErr');
             ResourcesConfig.getInstance().setSkillId(TEST_PROFILE, TEST_SKILL_ID);
             // call
-            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_FORCE_DEPLOY, (err, res) => {
+            skillMetaController.deploySkillPackage(TEST_VENDOR_ID, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(err).equal('putErr');
                 expect(res).equal(undefined);
