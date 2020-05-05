@@ -113,7 +113,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| hash did not change and force flag passed, expect resourcesConfig updated correctly', (done) => {
+        it('| hash did not change and ignore hash flag passed, expect resourcesConfig updated correctly', (done) => {
             // setup
             const LAST_DEPLOY = 'lastDeploy';
             const IGNORE_HASH = true;
