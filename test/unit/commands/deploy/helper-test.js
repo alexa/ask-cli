@@ -12,6 +12,7 @@ describe('Commands deploy test - helper test', () => {
     const TEST_PROFILE = 'default';
     const TEST_VENDOR_ID = 'vendor';
     const TEST_DO_DEBUG = false;
+    const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG };
 
     describe('# test helper method - deploySkillMetadata', () => {
         afterEach(() => {
@@ -22,7 +23,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(profileHelper, 'resolveVendorId').throws(new Error('error'));
             // call
-            helper.deploySkillMetadata(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.deploySkillMetadata(TEST_OPTIONS, (err, res) => {
                 // verify
                 expect(err.message).equal('error');
                 expect(res).equal(undefined);
@@ -33,9 +34,9 @@ describe('Commands deploy test - helper test', () => {
         it('| skillMetaController deploySkillPackage fails, expect callback error', (done) => {
             // setup
             sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_VENDOR_ID);
-            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(1, 'error');
+            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(2, 'error');
             // call
-            helper.deploySkillMetadata(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.deploySkillMetadata(TEST_OPTIONS, (err, res) => {
                 // verify
                 expect(err).equal('error');
                 expect(res).equal(undefined);
@@ -46,9 +47,9 @@ describe('Commands deploy test - helper test', () => {
         it('| skillMetaController deploySkillPackage passes, expect no error callback', (done) => {
             // setup
             sinon.stub(profileHelper, 'resolveVendorId').returns(TEST_VENDOR_ID);
-            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(1);
+            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').callsArgWith(2);
             // call
-            helper.deploySkillMetadata(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.deploySkillMetadata(TEST_OPTIONS, (err, res) => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);

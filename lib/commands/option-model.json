@@ -11,6 +11,12 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "ignore-hash": {
+    "name": "ignore-hash",
+    "description": "Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.",
+    "alias": null,
+    "stringInput": "NONE"
+  },
   "no-browser": {
     "name": "no-browser",
     "description": "ASK CLI displays a URL that you can use to sign in with your Amazon developer account from anywhere",
