@@ -7,6 +7,7 @@ const proxyquire = require('proxyquire');
 const httpClient = require('@src/clients/http-client');
 const LWAClient = require('@src/clients/lwa-auth-code-client');
 const CONSTANTS = require('@src/utils/constants');
+const jsonView = require('@src/view/json-view');
 
 describe('# Clients test - LWA OAuth2 client test', () => {
     const TEST_BASIC_CONFIGURATION = {
@@ -32,7 +33,10 @@ describe('# Clients test - LWA OAuth2 client test', () => {
     };
     const TEST_REQUEST_RESPONSE_ACCESS_TOKEN = {
         statusCode: 200,
-        body: { token: 'BODY' },
+        body: {
+            access_token: 'BODY',
+            expires_in: 3600
+        },
         headers: {}
     };
     const VALID_AUTH_CODE = 'authCode';
@@ -130,10 +134,59 @@ describe('# Clients test - LWA OAuth2 client test', () => {
             sinon.stub(LWAClient.prototype, '_getExpiresAt');
         });
 
+        it('| httpClient request fails while refreshing access token', (done) => {
+            // setup
+            const TEST_ERROR = 'error';
+            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
+            httpClient.request.callsArgWith(3, TEST_ERROR);
+            // call
+            lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| httpClient response contains failure message, expect process fails with correct message', (done) => {
+            // setup
+            const TEST_ERROR = 'error';
+            const TEST_ERROR_RESPONSE = {
+                body: { error: TEST_ERROR }
+            };
+            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
+            httpClient.request.callsArgWith(3, undefined, TEST_ERROR_RESPONSE);
+            // call
+            lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
+                // verify
+                expect(err).equal(`Refresh LWA tokens failed, please run "ask configure" to manually update your tokens. Error: ${TEST_ERROR}.`);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
+        it('| httpClient response is invalid, expect process fails with correct message', (done) => {
+            // setup
+            const TEST_INVALID_RESPONSE = {
+                body: {
+                    access_token: 'token'
+                }
+            };
+            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
+            httpClient.request.callsArgWith(3, undefined, TEST_INVALID_RESPONSE);
+            // call
+            lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
+                // verify
+                expect(err).equal(`Received invalid response body from LWA without "expires_in":\n${jsonView.toString(TEST_INVALID_RESPONSE.body)}`);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
         it('| refreshing access token successful', (done) => {
             // setup
             const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
-            httpClient.request.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ACCESS_TOKEN);
+            httpClient.request.callsArgWith(3, undefined, TEST_REQUEST_RESPONSE_ACCESS_TOKEN);
             LWAClient.prototype._getExpiresAt.returns(TEST_EXPIRES_AT);
             // call
             lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
@@ -153,23 +206,10 @@ describe('# Clients test - LWA OAuth2 client test', () => {
                 expect(httpClient.request.args[0][2]).equal(false);
                 expect(err).equal(null);
                 expect(res).deep.equal({
-                    token: 'BODY',
+                    access_token: 'BODY',
+                    expires_in: 3600,
                     expires_at: 'expires_at'
                 });
-                done();
-            });
-        });
-
-        it('| Failure while refreshing access token', (done) => {
-            // setup
-            const TEST_ERROR = 'error';
-            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
-            httpClient.request.callsArgWith(3, TEST_ERROR);
-            // call
-            lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
-                // verify
-                expect(err).equal(TEST_ERROR);
-                expect(res).equal(undefined);
                 done();
             });
         });
@@ -209,7 +249,8 @@ describe('# Clients test - LWA OAuth2 client test', () => {
                 expect(httpClient.request.args[0][2]).equal(false);
                 expect(err).equal(null);
                 expect(res).deep.equal({
-                    token: 'BODY',
+                    access_token: 'BODY',
+                    expires_in: 3600,
                     expires_at: 'expires_at'
                 });
                 done();
