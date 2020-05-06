@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/alexa/ask-cli/compare/v2.4.0...v2.5.0) (2020-05-06)
+
+
+### Features
+
+* add ignore-hash flag to deploy command ([#163](https://github.com/alexa/ask-cli/issues/163)) ([057860e](https://github.com/alexa/ask-cli/commit/057860ec28209358d22d0cbdec6da5e21678dfd4))
+
+
+### Bug Fixes
+
+* add error handling when refresh lwa token fails, pass in debug flag to all the authorizationController ([#165](https://github.com/alexa/ask-cli/issues/165)) ([87c8350](https://github.com/alexa/ask-cli/commit/87c8350555dc427a60ba7335ec22fe96deee58ee))
+
 ## [2.4.0](https://github.com/alexa/ask-cli/compare/v2.3.0...v2.4.0) (2020-05-04)
 
 
