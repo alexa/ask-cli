@@ -66,6 +66,7 @@ require('module-alias/register');
     '@test/unit/clients/smapi-client-test',
     '@test/unit/clients/git-client-test',
     '@test/unit/clients/lwa-auth-code-client-test',
+    '@test/unit/clients/aws-client/abstract-client-test',
     '@test/unit/clients/aws-client/s3-client-test',
     '@test/unit/clients/aws-client/cloudformation-client-test',
     '@test/unit/clients/aws-client/aws-util-test',
