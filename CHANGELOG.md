@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.1](https://github.com/alexa/ask-cli/compare/v2.5.0...v2.5.1) (2020-05-06)
+
+
+### Bug Fixes
+
+* fix to respect ask env variables for commands ([#167](https://github.com/alexa/ask-cli/issues/167)) ([d63c955](https://github.com/alexa/ask-cli/commit/d63c95503add871bc611b25d18d1bd59f27710ce))
+
 ## [2.5.0](https://github.com/alexa/ask-cli/compare/v2.4.0...v2.5.0) (2020-05-06)
 
 
