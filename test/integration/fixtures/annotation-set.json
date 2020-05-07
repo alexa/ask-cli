@@ -1,0 +1,98 @@
+{
+    "data": [
+      {
+        "inputs": {
+          "utterance": "plan a trip"
+        },
+        "expected": [
+          {
+            "intent": {
+              "name": "PlanMyTripIntent"
+            }
+          }
+        ]
+      },
+      {
+        "inputs": {
+          "utterance": "book me a flight to seattle"
+        },
+        "expected": [
+          {
+            "intent": {
+              "name": "BookFlightIntent",
+              "slots": {
+                "destination": {
+                  "value": "seattle"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "inputs": {
+          "utterance": "I'm going to chicago on Friday",
+          "referenceTimestamp": "2019-08-29T00:00:00.000Z"
+        },
+        "expected": [
+          {
+            "intent": {
+              "name": "PlanMyTripIntent",
+              "slots": {
+                "toCity": {
+                  "value": "chicago"
+                },
+                "travelDate": {
+                  "value": "2019-08-30"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "inputs": {
+          "utterance": "plan a trip from seattle to boston"
+        },
+        "expected": [
+          {
+            "intent": {
+              "name": "PlanMyTripIntent",
+              "slots": {
+                "toCity": {
+                  "value": "boston"
+                },
+                "fromCity": {
+                  "value": "seattle"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "inputs": {
+          "utterance": "plan a trip from chicago to denver on Monday",
+          "referenceTimestamp": "2019-08-29T00:00:00.000Z"
+        },
+        "expected": [
+          {
+            "intent": {
+              "name": "PlanMyTripIntent",
+              "slots": {
+                "toCity": {
+                  "value": "denver"
+                },
+                "fromCity": {
+                  "value": "chicago"
+                },
+                "travelDate": {
+                  "value": "2019-09-02"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
