@@ -9,6 +9,7 @@ const catalogUploadBody = require('@test/integration/fixtures/catalog-upload.jso
 const inSkillProductRequestBody = require('@test/integration/fixtures/create-in-skill-product-request.json');
 const accountLinkingRequest = require('@test/integration/fixtures/account-linking-request.json');
 const interactionModel = require('@test/integration/fixtures/interaction-model.json');
+const annotationSet = require('@test/integration/fixtures/annotation-set.json');
 
 parallel.limit(8);
 
@@ -36,6 +37,7 @@ parallel('smapi command test', () => {
             ASK_SMAPI_SERVER_BASE_URL: `http://127.0.0.1:${MockServerPort.SMAPI}`,
             ASK_LWA_TOKEN_HOST: `http://127.0.0.1:${MockServerPort.LWA}`
         } };
+    const name = 'test';
     const catalogId = 'someCatalogId';
     const skillId = 'someSkillId';
     const productId = 'someProductId';
@@ -49,6 +51,12 @@ parallel('smapi command test', () => {
     const version = '2.0.0';
     const simulationId = 'someSimulationId';
     const slotTypeId = 'someSlotTypeId';
+    const sourceAnnotationId = 'someSourceAnnotationId';
+    const evaluationId = 'someEvaluationId';
+    const annotationId = 'soemAnnotationId';
+    const accept = 'application/json';
+    const contentType = 'application/json';
+    const updateNluAnnotationSetAnnotationsRequest = JSON.stringify(annotationSet);
     const slotType = JSON.stringify({
         slotType: {
             name: 'string',
@@ -877,6 +885,85 @@ parallel('smapi command test', () => {
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
+    });
+
+    it('| should list nlu evaluations', async () => {
+        const args = [subCmd, 'list-nlu-evaluations', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get nlu evaluation', async () => {
+        const args = [subCmd, 'get-nlu-evaluation', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get result for nlu evaluations', async () => {
+        const args = [subCmd, 'get-result-for-nlu-evaluations', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should list nlu annotation sets', async () => {
+        const args = [subCmd, 'list-nlu-annotation-sets', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create nlu annotation set', async () => {
+        const args = [subCmd, 'create-nlu-annotation-set', '-s', skillId, '-l', locale, '--name', name];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create nlu evaluations', async () => {
+        const args = [subCmd, 'create-nlu-evaluations', '-g', stage, '-l', locale, '--source-annotation-id', sourceAnnotationId, '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get properties for nlu annotation sets', async () => {
+        const args = [subCmd, 'get-properties-for-nlu-annotation-sets', '-s', skillId, '--annotation-id', annotationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should update properties for nlu annotation sets', async () => {
+        const args = [subCmd, 'update-properties-for-nlu-annotation-sets', '-s', skillId, '--annotation-id', annotationId, '--name', name];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should delete properties for nlu annotation sets', async () => {
+        const args = [subCmd, 'delete-properties-for-nlu-annotation-sets', '-s', skillId, '--annotation-id', annotationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should get annotations for nlu annotation sets', async () => {
+        const args = [subCmd, 'get-annotations-for-nlu-annotation-sets', '-s', skillId, '--annotation-id', annotationId, '--accept', accept];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should update annotations for nlu annotation sets', async () => {
+        const args = [subCmd, 'update-annotations-for-nlu-annotation-sets', '-s', skillId,
+            '--annotation-id', annotationId, '--content-type', contentType,
+            '--update-nlu-annotation-set-annotations-request', updateNluAnnotationSetAnnotationsRequest];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     after(() => {
