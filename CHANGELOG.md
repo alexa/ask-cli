@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/alexa/ask-cli/compare/v2.5.1...v2.6.0) (2020-05-07)
+
+
+### Features
+
+* add annotation sets and evaluations commands ([#170](https://github.com/alexa/ask-cli/issues/170)) ([f00e630](https://github.com/alexa/ask-cli/commit/f00e6308f463f7ce551b37a4c7b810e1ad889e75))
+
 ### [2.5.1](https://github.com/alexa/ask-cli/compare/v2.5.0...v2.5.1) (2020-05-06)
 
 
