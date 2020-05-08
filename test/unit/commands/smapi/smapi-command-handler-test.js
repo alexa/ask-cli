@@ -150,4 +150,12 @@ describe('Smapi test - parseSmapiResponse function', () => {
 
         expect(result).eql(jsonView.toString(content));
     });
+
+    it('| should return command executed successfully if not response body', () => {
+        const response = { headers: [] };
+
+        const result = parseSmapiResponse(response);
+
+        expect(result).eql('Command executed successfully!');
+    });
 });
