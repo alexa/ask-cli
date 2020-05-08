@@ -120,6 +120,18 @@ The path params
 | Creates a new uploadUrl. | [create-upload-url](#create-upload-url) |
 | Get the list of Vendor information. | [get-vendor-list](#get-vendor-list) |
 | The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account. | [query-development-audit-logs](#query-development-audit-logs) |
+| API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results. | [list-nlu-evaluations](#list-nlu-evaluations) |
+| This is an asynchronous API that starts an evaluation against the NLU model built by the skill's interaction model.
+The operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it evaluate NLU models. | [create-nlu-evaluations](#create-nlu-evaluations) |
+| API which requests top level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns data used to start the job, like the number of test cases, stage, locale, and start time. This should be considered the 'cheap' operation while getResultForNLUEvaluations is 'expensive'. | [get-nlu-evaluation](#get-nlu-evaluation) |
+| Paginated API which returns the test case results of an evaluation. This should be considered the 'expensive' operation while getNluEvaluation is 'cheap'. | [get-result-for-nlu-evaluations](#get-result-for-nlu-evaluations) |
+| API which requests all the NLU annotation sets for a skill. Returns the annotationId and properties for each NLU annotation set. Developers can filter the results using locale. Supports paging of results. | [list-nlu-annotation-sets](#list-nlu-annotation-sets) |
+| This is an API that creates a new NLU annotation set with properties and returns the annotationId. | [create-nlu-annotation-set](#create-nlu-annotation-set) |
+| Return the properties for an NLU annotation set. | [get-properties-for-nlu-annotation-sets](#get-properties-for-nlu-annotation-sets) |
+| API which updates the NLU annotation set properties. Currently, the only data can be updated is annotation set name. | [update-properties-for-nlu-annotation-sets](#update-properties-for-nlu-annotation-sets) |
+| API which deletes the NLU annotation set. Developers cannot get/list the deleted annotation set. | [delete-properties-for-nlu-annotation-sets](#delete-properties-for-nlu-annotation-sets) |
+|  | [get-annotations-for-nlu-annotation-sets](#get-annotations-for-nlu-annotation-sets) |
+| API which replaces the annotations in NLU annotation set. | [update-annotations-for-nlu-annotation-sets](#update-annotations-for-nlu-annotation-sets) |
 | This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
 | upload a file for the catalog. | [upload-catalog](#upload-catalog) |
 | download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
@@ -351,13 +363,13 @@ Creates a new subscriber resource for a vendor.
 
 `create-subscriber-for-development-events` command format:
 
-`$ ask smapi create-subscriber-for-development-events [--create-subscriber-request <create-subscriber-request>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-subscriber-for-development-events <--create-subscriber-request <create-subscriber-request>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--create-subscriber-request <create-subscriber-request></dt>
-    <dd markdown="span">[OPTIONAL] Defines the request body for createSubscriber API. 
+    <dd markdown="span">[REQUIRED] Defines the request body for createSubscriber API. 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -390,7 +402,7 @@ Updates the properties of a subscriber.
 
 `set-subscriber-for-development-events` command format:
 
-`$ ask smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> [--update-subscriber-request <update-subscriber-request>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> <--update-subscriber-request <update-subscriber-request>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -398,7 +410,7 @@ Updates the properties of a subscriber.
     <dt>--subscriber-id <subscriber-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>--update-subscriber-request <update-subscriber-request></dt>
-    <dd markdown="span">[OPTIONAL] Defines the request body for updateSubscriber API. 
+    <dd markdown="span">[REQUIRED] Defines the request body for updateSubscriber API. 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -2422,7 +2434,7 @@ Submit the skill for certification.
 
 `submit-skill-for-certification` command format:
 
-`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> <--publication-method <publication-method>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2430,7 +2442,7 @@ Submit the skill for certification.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--publication-method <publication-method></dt>
-    <dd markdown="span">[OPTIONAL] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
+    <dd markdown="span">[REQUIRED] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
 [ENUM]: MANUAL_PUBLISHING,AUTO_PUBLISHING.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -2514,7 +2526,7 @@ Creates a new import for a skill.
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[REQUIRED] Location of the package.</dd>
+    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2533,7 +2545,7 @@ Creates a new import for a skill with given skillId.
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[REQUIRED] Location of the package.</dd>
+    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--if-match <if-match></dt>
@@ -2637,6 +2649,279 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dd markdown="span">[OPTIONAL] When the response to this API call is truncated, the response includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that this API understands. Token has expiry of 1 hour.</dd>
     <dt>--pagination-context-max-results <pagination-context-max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve more or less than the default of 50 results, you can add this parameter to your request. maxResults can exceed the upper limit of 250 but we will not return more items than that. The response might contain fewer results than maxResults for purpose of keeping SLA or because there are not enough items, but it will never contain more.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-nlu-evaluations
+
+API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results.
+
+`list-nlu-evaluations` command format:
+
+`$ ask smapi list-nlu-evaluations <-s|--skill-id <skill-id>> [-l|--locale <locale>] [-g|--stage <stage>] [--annotation-id <annotation-id>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[OPTIONAL] filter to evaluations started using this locale.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL] filter to evaluations started using this stage.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[OPTIONAL] filter to evaluations started using this annotationId.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-nlu-evaluations
+
+This is an asynchronous API that starts an evaluation against the NLU model built by the skill&#39;s interaction model.
+The operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it evaluate NLU models.
+
+`create-nlu-evaluations` command format:
+
+`$ ask smapi create-nlu-evaluations <-g|--stage <stage>> <-l|--locale <locale>> <--source-annotation-id <source-annotation-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED].</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[REQUIRED].</dd>
+    <dt>--source-annotation-id <source-annotation-id></dt>
+    <dd markdown="span">[REQUIRED] ID of the annotation set.</dd>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-nlu-evaluation
+
+API which requests top level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns data used to start the job, like the number of test cases, stage, locale, and start time. This should be considered the &#39;cheap&#39; operation while getResultForNLUEvaluations is &#39;expensive&#39;.
+
+`get-nlu-evaluation` command format:
+
+`$ ask smapi get-nlu-evaluation <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-result-for-nlu-evaluations
+
+Paginated API which returns the test case results of an evaluation. This should be considered the &#39;expensive&#39; operation while getNluEvaluation is &#39;cheap&#39;.
+
+`get-result-for-nlu-evaluations` command format:
+
+`$ ask smapi get-result-for-nlu-evaluations <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [--sort-field <sort-field>] [--test-case-status <test-case-status>] [--actual-intent-name <actual-intent-name>] [--expected-intent-name <expected-intent-name>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
+    <dt>--sort-field <sort-field></dt>
+    <dd markdown="span">[OPTIONAL]  
+[ENUM]: STATUS,ACTUAL_INTENT,EXPECTED_INTENT.</dd>
+    <dt>--test-case-status <test-case-status></dt>
+    <dd markdown="span">[OPTIONAL] only returns test cases with this status 
+[ENUM]: PASSED,FAILED.</dd>
+    <dt>--actual-intent-name <actual-intent-name></dt>
+    <dd markdown="span">[OPTIONAL] only returns test cases with intents which resolve to this intent.</dd>
+    <dt>--expected-intent-name <expected-intent-name></dt>
+    <dd markdown="span">[OPTIONAL] only returns test cases with intents which are expected to be this intent.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-nlu-annotation-sets
+
+API which requests all the NLU annotation sets for a skill. Returns the annotationId and properties for each NLU annotation set. Developers can filter the results using locale. Supports paging of results.
+
+`list-nlu-annotation-sets` command format:
+
+`$ ask smapi list-nlu-annotation-sets <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[OPTIONAL] filter to NLU annotation set created using this locale.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-nlu-annotation-set
+
+This is an API that creates a new NLU annotation set with properties and returns the annotationId.
+
+`create-nlu-annotation-set` command format:
+
+`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> <-l|--locale <locale>> <--name <name>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[REQUIRED] The locale of the NLU annotation set.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-properties-for-nlu-annotation-sets
+
+Return the properties for an NLU annotation set.
+
+`get-properties-for-nlu-annotation-sets` command format:
+
+`$ ask smapi get-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### update-properties-for-nlu-annotation-sets
+
+API which updates the NLU annotation set properties. Currently, the only data can be updated is annotation set name.
+
+`update-properties-for-nlu-annotation-sets` command format:
+
+`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--name <name>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### delete-properties-for-nlu-annotation-sets
+
+API which deletes the NLU annotation set. Developers cannot get&#x2F;list the deleted annotation set.
+
+`delete-properties-for-nlu-annotation-sets` command format:
+
+`$ ask smapi delete-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-annotations-for-nlu-annotation-sets
+
+
+
+`get-annotations-for-nlu-annotation-sets` command format:
+
+`$ ask smapi get-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--accept <accept>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
+    <dt>--accept <accept></dt>
+    <dd markdown="span">[REQUIRED] Standard HTTP. Pass `application/json` or `test/csv` for GET calls.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### update-annotations-for-nlu-annotation-sets
+
+API which replaces the annotations in NLU annotation set.
+
+`update-annotations-for-nlu-annotation-sets` command format:
+
+`$ ask smapi update-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--content-type <content-type>> <--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-id <annotation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
+    <dt>--content-type <content-type></dt>
+    <dd markdown="span">[REQUIRED] Standard HTTP. Pass `application/json` or `test/csv` for POST calls with a json/csv body.</dd>
+    <dt>--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request></dt>
+    <dd markdown="span">[REQUIRED] Payload sent to the update NLU annotation set API. 
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
