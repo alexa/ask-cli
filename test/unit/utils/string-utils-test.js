@@ -3,6 +3,60 @@ const { expect } = require('chai');
 const stringUtils = require('@src/utils/string-utils');
 
 describe('Utils test - string utility', () => {
+    describe('# test function kebabCase', () => {
+        [
+            {
+                input: 'hello',
+                expectation: 'hello'
+            },
+            {
+                input: 'hello-world',
+                expectation: 'hello-world'
+            },
+            {
+                input: 'Hello World',
+                expectation: 'hello-world'
+            },
+            {
+                input: 'HelloWorld',
+                expectation: 'hello-world'
+            }
+        ].forEach(({input, expectation}) => {
+            it(`| input is ${input}, expect kebabCase ${expectation}`, () => {
+                // call
+                const callResult = stringUtils.kebabCase(input)
+                // verify
+                expect(callResult).equal(expectation)
+            })
+        })
+    })
+    describe('# test function camelCase', () => {
+        [
+            {
+                input: 'hello',
+                expectation: 'hello'
+            },
+            {
+                input: 'hello-world',
+                expectation: 'helloWorld'
+            },
+            {
+                input: 'Hello World',
+                expectation: 'helloWorld'
+            },
+            {
+                input: 'HelloWorld',
+                expectation: 'helloWorld'
+            }
+        ].forEach(({input, expectation}) => {
+            it(`| input is ${input}, expect camelCase ${expectation}`, () => {
+                // call
+                const callResult = stringUtils.camelCase(input)
+                // verify
+                expect(callResult).equal(expectation)
+            })
+        })
+    })
     describe('# test function isNonEmptyString', () => {
         [
             {
