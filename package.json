@@ -31,6 +31,7 @@
     "integration-test": "mocha -t 180000 test/integration/run-test.js",
     "functional-test": "mocha -t 180000 test/functional/run-test.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
+    "lint:fix": "npm run lint -- --fix",
     "pre-release": "standard-version",
     "prism": "prism"
   },
@@ -91,7 +92,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
+      "pre-commit": "npm run lint:fix",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-push": "npm run test:report"
     }
