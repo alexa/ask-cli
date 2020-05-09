@@ -1,9 +1,4 @@
-/*
-====== start
-{"awsProfile":"hide-dev","alexaRegion":"default","userConfig":{"runtime":"nodejs10.x","handler":"index.handler","templatePath":"./infrastructure/cfn-deployer/skill-stack.yaml","awsRegion":"us-east-1"},"deployState":{}}
-{"awsRegion":"us-east-1","templatePath":"./infrastructure/cfn-deployer/skill-stack.yaml","bucketName":"ask-withrouter-hide-dev-useast1-1587380830650"}
-====== end
-*/
+
 const { expect } = require('chai');
 const helpers = require('@src/builtins/deploy-delegates/cfn-deployer/helper')
 
