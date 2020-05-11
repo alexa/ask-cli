@@ -194,6 +194,25 @@ describe('Commands deploy test - command class test', () => {
                     done();
                 });
             });
+
+            it('| helper deploy skill metadata and no skillCode portion of work, expect quit with no error', (done) => {
+                // setup
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1,
+                    'The hash of current skill package folder does not change compared to the last deploy hash result, '
+                    + 'CLI will skip the deploy of skill package.');
+                sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns([]);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err).equal(undefined);
+                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[1][0].startsWith('Skill ID:')).equal(true);
+                    expect(errorStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(1);
+                    done();
+                });
+            });
         });
 
         describe('command handle - build skill code', () => {

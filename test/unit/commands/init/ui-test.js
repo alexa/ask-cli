@@ -211,7 +211,7 @@ describe('Commands init - UI test', () => {
             ui.getCodeSrcForRegion(TEST_REGION, (err, response) => {
                 // verify
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
-                    message: `Lambda code path (for ${TEST_REGION} region): `,
+                    message: `Lambda code path for ${TEST_REGION} region (leave empty to not deploy Lambda): `,
                     type: 'input',
                     default: './lambda',
                 });

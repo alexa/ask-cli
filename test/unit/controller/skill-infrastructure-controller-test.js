@@ -228,7 +228,7 @@ describe('Controller test - skill infrastructure controller test', () => {
 
         it('| code does not have any region, expect error called back', (done) => {
             // setup
-            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns(null);
+            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns([]);
             // call
             skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
                 // verify
