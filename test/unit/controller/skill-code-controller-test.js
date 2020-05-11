@@ -101,7 +101,7 @@ describe('Controller test - skill code controller test', () => {
 
         it('| codeResources does not exist, expect error throws', () => {
             // setup
-            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns(null);
+            sinon.stub(ResourcesConfig.prototype, 'getCodeRegions').returns([]);
             // call
             try {
                 skillCodeController._resolveUniqueCodeList();
