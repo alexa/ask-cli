@@ -13,7 +13,7 @@ if (!process.argv.slice(2).length) {
     commander.parseAsync(process.argv)
         .then(result => Messenger.getInstance().info(result))
         .catch(err => {
-            Messenger.getInstance().error(jsonView.toString(err.response));
+            Messenger.getInstance().error(jsonView.toString(err));
             process.exit(1);
         });
 }
