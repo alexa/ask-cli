@@ -276,7 +276,7 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
 
 `create-content-upload` command format:
 
-`$ ask smapi create-content-upload <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-content-upload <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -284,7 +284,7 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
-    <dd markdown="span">[REQUIRED] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
+    <dd markdown="span">[OPTIONAL] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -318,7 +318,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
 
 `complete-catalog-upload` command format:
 
-`$ ask smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> <--part-e-tags <part-e-tags>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [--part-e-tags <part-e-tags>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -328,7 +328,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dt>--upload-id <upload-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
-    <dd markdown="span">[REQUIRED] List of (eTag, part number) pairs for each part of the file uploaded. 
+    <dd markdown="span">[OPTIONAL] List of (eTag, part number) pairs for each part of the file uploaded. 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -552,7 +552,7 @@ Generates preSigned urls to upload data.
 
 `generate-catalog-upload-url` command format:
 
-`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -560,7 +560,7 @@ Generates preSigned urls to upload data.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
-    <dd markdown="span">[REQUIRED] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
+    <dd markdown="span">[OPTIONAL] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -1318,7 +1318,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `profile-nlu` command format:
 
-`$ ask smapi profile-nlu <-u|--utterance <utterance>> <--multi-turn-token <multi-turn-token>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi profile-nlu <-u|--utterance <utterance>> [--multi-turn-token <multi-turn-token>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1326,7 +1326,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>-u,--utterance <utterance></dt>
     <dd markdown="span">[REQUIRED] Actual representation of user input to Alexa.</dd>
     <dt>--multi-turn-token <multi-turn-token></dt>
-    <dd markdown="span">[REQUIRED] Opaque string which contains multi-turn related context.</dd>
+    <dd markdown="span">[OPTIONAL] Opaque string which contains multi-turn related context.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
@@ -1628,7 +1628,7 @@ Create a new version of catalog entity for the given catalogId.
 
 `create-interaction-model-catalog-version` command format:
 
-`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] <--description <description>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] [--description <description>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -1640,7 +1640,7 @@ Create a new version of catalog entity for the given catalogId.
     <dt>--source-url <source-url></dt>
     <dd markdown="span">[OPTIONAL] Url to the catalog reference.</dd>
     <dt>--description <description></dt>
-    <dd markdown="span">[REQUIRED] Description string for specific catalog version.</dd>
+    <dd markdown="span">[OPTIONAL] Description string for specific catalog version.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2258,13 +2258,13 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 `submit-skill-validation` command format:
 
-`$ ask smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-validation [-l|--locales <locales>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-l,--locales <locales></dt>
-    <dd markdown="span">[REQUIRED]  
+    <dd markdown="span">[OPTIONAL]  
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
@@ -2456,7 +2456,7 @@ Withdraws the skill from certification.
 
 `withdraw-skill-from-certification` command format:
 
-`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] <--message <message>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] [--message <message>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2467,7 +2467,7 @@ Withdraws the skill from certification.
     <dd markdown="span">[OPTIONAL] The reason to withdraw. 
 [ENUM]: TEST_SKILL,MORE_FEATURES,DISCOVERED_ISSUE,NOT_RECEIVED_CERTIFICATION_FEEDBACK,NOT_INTEND_TO_PUBLISH,OTHER.</dd>
     <dt>--message <message></dt>
-    <dd markdown="span">[REQUIRED] The message only in case the reason in OTHER.</dd>
+    <dd markdown="span">[OPTIONAL] The message only in case the reason in OTHER.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2520,13 +2520,13 @@ Creates a new import for a skill.
 
 `create-skill-package` command format:
 
-`$ ask smapi create-skill-package <--location <location>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-package [--location <location>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
+    <dd markdown="span">[OPTIONAL] The URL for the skill package.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2539,13 +2539,13 @@ Creates a new import for a skill with given skillId.
 
 `import-skill-package` command format:
 
-`$ ask smapi import-skill-package <--location <location>> <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi import-skill-package [--location <location>] <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
+    <dd markdown="span">[OPTIONAL] The URL for the skill package.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--if-match <if-match></dt>
@@ -2797,7 +2797,7 @@ This is an API that creates a new NLU annotation set with properties and returns
 
 `create-nlu-annotation-set` command format:
 
-`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> <-l|--locale <locale>> <--name <name>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--name <name>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2805,9 +2805,9 @@ This is an API that creates a new NLU annotation set with properties and returns
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-l,--locale <locale></dt>
-    <dd markdown="span">[REQUIRED] The locale of the NLU annotation set.</dd>
+    <dd markdown="span">[OPTIONAL] The locale of the NLU annotation set.</dd>
     <dt>--name <name></dt>
-    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
+    <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -2841,7 +2841,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
 
 `update-properties-for-nlu-annotation-sets` command format:
 
-`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--name <name>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [--name <name>] [-p| --profile <profile>] [--debug]`
 
 **Options**
 
@@ -2851,7 +2851,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
     <dt>--annotation-id <annotation-id></dt>
     <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
     <dt>--name <name></dt>
-    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
+    <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
