@@ -1,8 +1,47 @@
 const { expect } = require('chai');
-
 const stringUtils = require('@src/utils/string-utils');
 
 describe('Utils test - string utility', () => {
+    describe('# test function getParamNames', () => {
+        [{
+            testCase: 'provide a no param function',
+            input: function test() {
+                return true;
+            },
+            expectation: []
+        }, {
+            testCase: 'provide a single param function',
+            input: function test(param1) {
+                return param1;
+            },
+            expectation: ['param1']
+        }, {
+            testCase: 'provide a single param with a default value function',
+            input: function test(param1 = true) {
+                return param1;
+            },
+            expectation: ['param1', '=', 'true']
+        }, {
+            testCase: 'provide a multiple param with a several default value function',
+            input: function test(param1, param2, param3 = 0, param4 = true) {
+                return { param1, param2, param3, param4 };
+            },
+            expectation: ['param1', 'param2', 'param3', '=', '0', 'param4', '=', 'true']
+
+        }, {
+            testCase: 'provide a spreded params function',
+            input: function test(...params) {
+                return params;
+            },
+            expectation: ['...params']
+
+        }].forEach(({ testCase, input, expectation }) => {
+            it(`| ${testCase}, expect returns ${JSON.stringify(expectation)}`, () => {
+                const callResult = stringUtils.getParamNames(input);
+                expect(callResult).deep.equal(expectation);
+            });
+        });
+    });
     describe('# test function kebabCase', () => {
         [
             {
@@ -21,15 +60,15 @@ describe('Utils test - string utility', () => {
                 input: 'HelloWorld',
                 expectation: 'hello-world'
             }
-        ].forEach(({input, expectation}) => {
+        ].forEach(({ input, expectation }) => {
             it(`| input is ${input}, expect kebabCase ${expectation}`, () => {
                 // call
-                const callResult = stringUtils.kebabCase(input)
+                const callResult = stringUtils.kebabCase(input);
                 // verify
-                expect(callResult).equal(expectation)
-            })
-        })
-    })
+                expect(callResult).equal(expectation);
+            });
+        });
+    });
     describe('# test function camelCase', () => {
         [
             {
@@ -48,15 +87,15 @@ describe('Utils test - string utility', () => {
                 input: 'HelloWorld',
                 expectation: 'helloWorld'
             }
-        ].forEach(({input, expectation}) => {
+        ].forEach(({ input, expectation }) => {
             it(`| input is ${input}, expect camelCase ${expectation}`, () => {
                 // call
-                const callResult = stringUtils.camelCase(input)
+                const callResult = stringUtils.camelCase(input);
                 // verify
-                expect(callResult).equal(expectation)
-            })
-        })
-    })
+                expect(callResult).equal(expectation);
+            });
+        });
+    });
     describe('# test function isNonEmptyString', () => {
         [
             {
