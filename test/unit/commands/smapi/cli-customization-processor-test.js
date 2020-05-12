@@ -60,6 +60,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             ['SomeTypeWithDescription', { enum: enumValues, description: refObjectDescription }],
             ['SomeSimpleObjectType', { type: 'object', properties: {} }],
             ['SomeObjectType', { description: parentDescription,
+                required: ['propertyTwo'],
                 properties: { propertyOne: bodyProperty,
                     propertyTwo: bodyPropertyWithDescription,
                     propertyThree: { $ref: 'SomeEnumType' },
@@ -161,14 +162,24 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
             const rootName = camelCase(parameter.name);
             const { flatParamsMap } = parentOperation.customizationMetadata;
 
-            const expected = { ...bodyPropertyWithDescription,
-                required: parameter.required,
+            const expectedOne = { ...bodyProperty,
+                description: undefined,
+                required: false,
+                rootName,
+                bodyPath: bodyPropertyOneName,
+                name: bodyPropertyOneName,
+                json: false,
+                isNumber: true };
+            expect(flatParamsMap.get(standardize(bodyPropertyOneName))).eql(expectedOne);
+
+            const expectedTwo = { ...bodyPropertyWithDescription,
+                required: true,
                 rootName,
                 bodyPath: bodyPropertyTwoName,
                 name: bodyPropertyTwoName,
                 json: false,
                 isBoolean: true };
-            expect(flatParamsMap.get(standardize(bodyPropertyTwoName))).eql(expected);
+            expect(flatParamsMap.get(standardize(bodyPropertyTwoName))).eql(expectedTwo);
         });
 
         it('| should add customized body parameter', () => {
