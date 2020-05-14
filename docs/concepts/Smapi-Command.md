@@ -76,6 +76,8 @@ The path params
 | Delete the catalog. | [delete-interaction-model-catalog](#delete-interaction-model-catalog) |
 | Get the status of catalog resource and its sub-resources for a given catalogId. | [get-interaction-model-catalog-update-status](#get-interaction-model-catalog-update-status) |
 | update description and vendorGuidance string for certain version of a catalog. | [update-interaction-model-catalog](#update-interaction-model-catalog) |
+| This API returns the job status of conflict detection job for a specified interaction model. | [get-conflict-detection-job-status-for-interaction-model](#get-conflict-detection-job-status-for-interaction-model) |
+| This is a paginated API that retrieves results of conflict detection job for a specified interaction model. | [get-conflicts-for-interaction-model](#get-conflicts-for-interaction-model) |
 | Create a new version of catalog entity for the given catalogId. | [create-interaction-model-catalog-version](#create-interaction-model-catalog-version) |
 | Get catalog version data of given catalog version. | [get-interaction-model-catalog-version](#get-interaction-model-catalog-version) |
 | Delete catalog version. | [delete-interaction-model-catalog-version](#delete-interaction-model-catalog-version) |
@@ -108,6 +110,7 @@ The path params
 | Creates a new skill for given vendorId. | [create-skill-for-vendor](#create-skill-for-vendor) |
 | Delete the skill and model for given skillId. | [delete-skill](#delete-skill) |
 | Get the status of skill resource and its sub-resources for a given skillId. | [get-skill-status](#get-skill-status) |
+| Get the client credentials for the skill. | [get-skill-credentials](#get-skill-credentials) |
 | Returns the ssl certificate sets currently associated with this skill. Sets consist of one ssl certificate blob associated with a region as well as the default certificate for the skill. | [get-ssl-certificates](#get-ssl-certificates) |
 | Updates the ssl certificates associated with this skill. | [set-ssl-certificates](#set-ssl-certificates) |
 | Submit the skill for certification. | [submit-skill-for-certification](#submit-skill-for-certification) |
@@ -1622,6 +1625,62 @@ update description and vendorGuidance string for certain version of a catalog.
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
+### get-conflict-detection-job-status-for-interaction-model
+
+This API returns the job status of conflict detection job for a specified interaction model.
+
+`get-conflict-detection-job-status-for-interaction-model` command format:
+
+`$ ask smapi get-conflict-detection-job-status-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage of the interaction model. 
+[ENUM]: development.</dd>
+    <dt>--vers <vers></dt>
+    <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-conflicts-for-interaction-model
+
+This is a paginated API that retrieves results of conflict detection job for a specified interaction model.
+
+`get-conflicts-for-interaction-model` command format:
+
+`$ ask smapi get-conflicts-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED] Stage of the interaction model. 
+[ENUM]: development.</dd>
+    <dt>--vers <vers></dt>
+    <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
 ### create-interaction-model-catalog-version
 
 Create a new version of catalog entity for the given catalogId.
@@ -2381,6 +2440,25 @@ Get the status of skill resource and its sub-resources for a given skillId.
     <dd markdown="span">[OPTIONAL] Resource name for which status information is desired.
 It is an optional, filtering parameter and can be used more than once, to retrieve status for all the desired (sub)resources only, in single API call.
 If this parameter is not specified, status for all the resources/sub-resources will be returned.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-skill-credentials
+
+Get the client credentials for the skill.
+
+`get-skill-credentials` command format:
+
+`$ ask smapi get-skill-credentials <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
