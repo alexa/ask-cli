@@ -966,6 +966,28 @@ parallel('smapi command test', () => {
         expect(result).include('Command executed successfully!');
     });
 
+    it('| should get conflicts for interaction model conflict detection', async () => {
+        const args = [subCmd, 'get-conflicts-for-interaction-model', '-s', skillId, '-l', locale, '-g', stage, '--vers', '1'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get job status for interaction model conflict detection', async () => {
+        const args = [subCmd, 'get-conflict-detection-job-status-for-interaction-model', '-s', skillId, '-l', locale, '-g', stage, '--vers', '1'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get skill credential', async () => {
+        const args = [subCmd, 'get-skill-credentials', '-s', skillId];
+        addCoveredCommand(args);
+        // TODO return type should be object. fix with the next update of ask-smapi-model
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
