@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/alexa/ask-cli/compare/v2.6.0...v2.7.0) (2020-05-14)
+
+
+### Features
+
+* bump the version of ask-smapi-model to v1.8.0 ([#190](https://github.com/alexa/ask-cli/issues/190)) ([d699e04](https://github.com/alexa/ask-cli/commit/d699e04b6ac88773d7f93496d3453a8812dd9e87))
+
+
+### Bug Fixes
+
+* add ability to read with file: option for nested json params for smapi ([#182](https://github.com/alexa/ask-cli/issues/182)) ([1fbe762](https://github.com/alexa/ask-cli/commit/1fbe762cde14ab22905f6165332bc085198f4cd8))
+* add the missed profile variable into the runtimeProfile method ([#188](https://github.com/alexa/ask-cli/issues/188)) ([c38f41f](https://github.com/alexa/ask-cli/commit/c38f41fe147ae43734fdac86b62c28b462353fa9))
+* allow ask init with only skillMetadata and fix NPEs during the flow ([c9f89cd](https://github.com/alexa/ask-cli/commit/c9f89cdc5d24aa0a7af69842fc56292d942b8155))
+* correct the decision of a required field in smapi command generation ([#184](https://github.com/alexa/ask-cli/issues/184)) ([b047b2c](https://github.com/alexa/ask-cli/commit/b047b2c943e71d4330c822af734d2ed432407e69))
+* improve error message when skip unwrap is required for body parameter ([34d7db8](https://github.com/alexa/ask-cli/commit/34d7db871eef050a1b3b3f75c0a7a6404d04dfb5))
+* show full context if error happens, and don't fail smapi-sdk's error response ([e1580e4](https://github.com/alexa/ask-cli/commit/e1580e457a99483b909d68b2f67f733d0bd5675c))
+
 ## [2.6.0](https://github.com/alexa/ask-cli/compare/v2.5.1...v2.6.0) (2020-05-07)
 
 
