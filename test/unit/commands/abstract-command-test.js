@@ -16,6 +16,7 @@ const packageJson = require('@root/package.json');
 describe('Command test - AbstractCommand class', () => {
     const TEST_DO_DEBUG_FALSE = 'false';
     const TEST_HTTP_ERROR = 'http error';
+    const TEST_PROFILE = 'profile';
     const TEST_NPM_REGISTRY_DATA = inputVersion => {
         const result = {
             body: JSON.stringify({ version: inputVersion })
@@ -427,6 +428,12 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
                 description: 'baz option',
                 alias: 'z',
                 stringInput: 'NONE'
+            },
+            profile: {
+                name: 'profile',
+                description: 'profile option',
+                alias: 'p',
+                stringInput: 'REQUIRED'
             }
         };
 
@@ -436,7 +443,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             sinon.stub(metricClient, 'sendData').resolves();
         });
 
-        it('| should not be null for other commands', async () => {
+        it('| should not be null for non-configure commands', async () => {
             sinon.stub(profileHelper, 'runtimeProfile');
             class NonConfigureCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
@@ -448,6 +455,10 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
                     return 'random';
                 }
 
+                optionalOptions() {
+                    return ['profile'];
+                }
+
                 description() {
                     return 'random description';
                 }
@@ -456,13 +467,13 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             const mockCommand = new NonConfigureCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('random');
                 expect(options._description).eq('random description');
-                expect(options.options).deep.eq([]);
+                expect(profileHelper.runtimeProfile.args[0][0]).equal(TEST_PROFILE);
                 expect(AppConfig.getInstance().getProfilesList().length).eq(0);
                 cb();
             });
 
             mockCommand.createCommand()(commander);
-            await commander.parseAsync(['node', 'mock', 'random']);
+            await commander.parseAsync(['node', 'mock', 'random', '--profile', TEST_PROFILE]);
         });
 
         it('| should be null for configure command', async () => {
