@@ -57,6 +57,31 @@ describe('Controller test - Authorization controller test', () => {
         state: TEST_STATE,
     };
 
+    describe('# test constructor', () => {
+        it('| initialise AppConfig', () => {
+            // setup
+            var appConfigSpy = sinon.spy(AuthorizationController.prototype, '_initiateAppConfig');
+
+            // call and verify
+            new AuthorizationController({ auth_client_type: 'UNKNOWN' });
+            expect(appConfigSpy.called).to.eq(true);
+        });
+
+        it('| failure to initialise AppConfig does not fail constructor', () => {
+            // setup
+            var appConfigStub = sinon.stub(AuthorizationController.prototype, '_initiateAppConfig');
+            appConfigStub.throws("blah");
+
+            // call and verify
+            var authorizationController = new AuthorizationController({ auth_client_type: 'UNKNOWN' });
+            expect(authorizationController).not.to.eq(null);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        })
+    });
+
     describe('# test _getAuthClientInstance', () => {
         it('| returns undefined', () => {
             // setup
