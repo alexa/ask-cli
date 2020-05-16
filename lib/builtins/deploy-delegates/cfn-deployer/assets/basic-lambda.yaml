@@ -54,6 +54,11 @@ Resources:
       FunctionName: !GetAtt AlexaSkillFunction.Arn
       Principal: alexa-appkit.amazon.com
       EventSourceToken: !Ref SkillId
+  AlexaSkillFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AlexaSkillFunction}
+      RetentionInDays: 14
 Outputs:
   SkillEndpoint:
     Description: LambdaARN for the regional endpoint
