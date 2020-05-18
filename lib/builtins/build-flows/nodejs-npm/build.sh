@@ -55,9 +55,9 @@ install_dependencies() {
 zip_node_modules() {
   if [[ $DO_DEBUG = true ]]; then
     display_debug "Zipping source files and dependencies to $OUT_FILE."
-    zip -vr $OUT_FILE ./*
+    zip -vr "$OUT_FILE" ./*
   else
-    zip -qr $OUT_FILE ./*
+    zip -qr "$OUT_FILE" ./*
   fi
   return $?
 }

@@ -76,9 +76,9 @@ install_dependencies() {
 zip_site_packages() {
   if [[ $DO_DEBUG = true ]]; then
     display_debug "Zipping source files and dependencies to $OUT_FILE."
-    zip -vr $OUT_FILE ./* -x venv/\*
+    zip -vr "$OUT_FILE" ./* -x venv/\*
   else
-    zip -qr $OUT_FILE ./* -x venv/\*
+    zip -qr "$OUT_FILE" ./* -x venv/\*
   fi
   return $?
 }

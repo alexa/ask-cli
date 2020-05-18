@@ -109,7 +109,7 @@ function Compress-Dependencies() {
         Show-Log "Zipping source files and dependencies to $OutFile."
     }
     process {
-        Compress-Archive -Path ./* -DestinationPath $OutFile
+        Compress-Archive -Path ./* -DestinationPath "$OutFile"
         return $?
     }
     end {}
