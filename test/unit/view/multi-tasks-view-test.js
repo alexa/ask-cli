@@ -203,7 +203,7 @@ describe('View test - ListReactiveTask test', () => {
         it('| when "error" event emit with error.message, expect subscriber to call "error"', () => {
             // setup
             const TEST_ERROR_OBJ = {
-                message: 'error'
+                resultMessage: 'error'
             };
             const subscribeStub = {
                 error: sinon.stub()
@@ -215,14 +215,14 @@ describe('View test - ListReactiveTask test', () => {
             obsv._subscribe(subscribeStub);
             // verify
             expect(subscribeStub.error.args[0][0]).equal('error');
-            expect(TEST_CONTEXT).deep.equal({});
+            expect(TEST_CONTEXT[TEST_TASK_ID]).deep.equal(TEST_ERROR_OBJ);
         });
 
         it('| when "error" event emit with error object structure, expect subscriber to call "error" and set context', () => {
             // setup
             const TEST_ERROR_OBJ = {
-                message: 'error',
-                context: 'context'
+                resultMessage: 'error',
+                deployState: 'state'
             };
             const subscribeStub = {
                 error: sinon.stub()
@@ -234,7 +234,7 @@ describe('View test - ListReactiveTask test', () => {
             obsv._subscribe(subscribeStub);
             // verify
             expect(subscribeStub.error.args[0][0]).equal('error');
-            expect(TEST_CONTEXT[TEST_TASK_ID]).equal('context');
+            expect(TEST_CONTEXT[TEST_TASK_ID]).deep.equal(TEST_ERROR_OBJ);
         });
 
         it('| when "title" event emit, expect subscriber to call "title"', () => {

@@ -455,15 +455,20 @@ describe('Controller test - skill infrastructure controller test', () => {
             });
         });
 
-        it('| deploy delegate invoke passes without deployState, expect invoke result called back', (done) => {
+        it('| deploy delegate invoke passes with isCodeDeployed true, expect invoke result called back with currentHash', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, { invoke: 'result' });
+            ddStub.callsArgWith(2, null, {
+                isCodeDeployed: true,
+                isAllStepSuccess: true
+            });
             // call
             skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
                 // verify
                 expect(res).deep.equal({
-                    invoke: 'result'
+                    isCodeDeployed: true,
+                    isAllStepSuccess: true,
+                    lastDeployHash: TEST_HASH
                 });
                 expect(err).equal(null);
                 done();
@@ -473,13 +478,20 @@ describe('Controller test - skill infrastructure controller test', () => {
         it('| deploy delegate invoke passes, expect invoke result called back', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, { deployState: { s3: { invoke: 'test' } } });
+            ddStub.callsArgWith(2, null, {
+                isCodeDeployed: false,
+                isAllStepSuccess: true,
+                resultMessage: 'success',
+                deployState: {}
+            });
             // call
             skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
                 // verify
                 expect(res).deep.equal({
-                    deployState: { s3: { invoke: 'test' } },
-                    lastDeployHash: TEST_HASH
+                    isCodeDeployed: false,
+                    isAllStepSuccess: true,
+                    resultMessage: 'success',
+                    deployState: {}
                 });
                 expect(err).equal(null);
                 done();
@@ -489,17 +501,22 @@ describe('Controller test - skill infrastructure controller test', () => {
         it('| deploy delegate invoke partial succeed with reasons called back, expect invoke result called back along with the message', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, { reasons: 'reasons', message: 'message', deployState: { s3: 'test' } });
+            ddStub.callsArgWith(2, null, {
+                isCodeDeployed: true,
+                isAllStepSuccess: false,
+                resultMessage: 'partial fail',
+                deployState: {}
+            });
             // call
             skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).deep.equal({
-                    message: 'message',
-                    context: {
-                        deployState: { s3: 'test' },
-                        lastDeployHash: TEST_HASH
-                    }
+                    isCodeDeployed: true,
+                    isAllStepSuccess: false,
+                    lastDeployHash: TEST_HASH,
+                    resultMessage: 'partial fail',
+                    deployState: {}
                 });
                 done();
             });
