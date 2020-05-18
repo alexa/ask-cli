@@ -390,9 +390,19 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
             sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(4, TEST_UPDATE_CONGIF_ERROR);
             // call
-            helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err) => {
+            helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
                 // verify
-                expect(err).equal(TEST_UPDATE_CONGIF_ERROR);
+                expect(err).equal(null);
+                expect(res).deep.equal({
+                    isAllStepSuccess: false,
+                    isCodeDeployed: true,
+                    lambdaResponse: {
+                        arn: undefined,
+                        lastModified: undefined,
+                        revisionId: TEST_REVISION_ID
+                    },
+                    resultMessage: TEST_UPDATE_CONGIF_ERROR
+                });
                 done();
             });
         });
@@ -411,9 +421,15 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             // call
             helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, data) => {
                 // verify
-                expect(data.arn).equal(TEST_LAMBDA_ARN);
-                expect(data.lastModified).equal(TEST_LAST_MODIFIED);
-                expect(data.revisionId).equal(TEST_REVISION_ID);
+                expect(data).deep.equal({
+                    isAllStepSuccess: true,
+                    isCodeDeployed: true,
+                    lambdaResponse: {
+                        arn: TEST_LAMBDA_ARN,
+                        lastModified: TEST_LAST_MODIFIED,
+                        revisionId: TEST_REVISION_ID
+                    }
+                });
                 done();
             });
         });
