@@ -11,6 +11,12 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "full-response": {
+    "name": "full-response",
+    "description": "Returns body, headers and status code of the response as one object.",
+    "alias": null,
+    "stringInput": "NONE"
+  },
   "ignore-hash": {
     "name": "ignore-hash",
     "description": "Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.",

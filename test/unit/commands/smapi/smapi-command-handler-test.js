@@ -127,6 +127,19 @@ describe('Smapi test - smapiCommandHandler function', () => {
         expect(messengerStub.args[5]).eql(['INFO', `Response body: ${jsonView.toString(fakeResponse.body)}`]);
     });
 
+    it('| should display body, headers and status code when full response flag is passed', async () => {
+        const cmdObjDebug = {
+            opts() {
+                return { fullResponse: true, skillId };
+            },
+            _name: commandName
+        };
+
+        const result = await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug, modelInterceptor);
+
+        expect(result).eql(jsonView.toString(fakeResponse));
+    });
+
     afterEach(() => {
         sinon.restore();
     });
