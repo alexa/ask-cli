@@ -135,7 +135,7 @@ function Compress-Dependencies() {
     }
     process {
         $Files = Get-ChildItem -Path .\ -Exclude venv
-        Compress-Archive -Path $Files -DestinationPath $OutFile
+        Compress-Archive -Path $Files -DestinationPath "$OutFile"
         return $?
     }
     end {}
