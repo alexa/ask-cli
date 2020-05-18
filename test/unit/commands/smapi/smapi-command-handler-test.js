@@ -122,9 +122,8 @@ describe('Smapi test - smapiCommandHandler function', () => {
                 someNonPopulatedProperty: null,
                 someArray: null,
                 simulationsApiRequest: null })}\n`]);
-        expect(messengerStub.args[3]).eql(['INFO', `Status code: ${fakeResponse.statusCode}`]);
-        expect(messengerStub.args[4]).eql(['INFO', `Response headers: ${jsonView.toString(fakeResponse.headers)}`]);
-        expect(messengerStub.args[5]).eql(['INFO', `Response body: ${jsonView.toString(fakeResponse.body)}`]);
+        expect(messengerStub.args[3]).eql(['INFO', 'Response:']);
+        expect(messengerStub.args[4]).eql(['INFO', jsonView.toString(fakeResponse)]);
     });
 
     it('| should display body, headers and status code when full response flag is passed', async () => {
