@@ -147,7 +147,7 @@ Lists catalogs associated with a vendor.
 
 `list-catalogs-for-vendor` command format:
 
-`$ ask smapi list-catalogs-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-catalogs-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -158,6 +158,8 @@ Lists catalogs associated with a vendor.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -168,7 +170,7 @@ Creates a new catalog based on information provided in the request.
 
 `create-catalog` command format:
 
-`$ ask smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-catalog <--title <title>> <--type <type>> <--usage <usage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -183,6 +185,8 @@ Creates a new catalog based on information provided in the request.
 [ENUM]: AlexaMusic.Catalog.BroadcastChannel,AlexaMusic.Catalog.Genre,AlexaMusic.Catalog.MusicAlbum,AlexaMusic.Catalog.MusicGroup,AlexaMusic.Catalog.MusicPlaylist,AlexaMusic.Catalog.MusicRecording,AlexaMusic.Catalog.TerrestrialRadioChannel,AlexaTest.Catalog.AudioRecording.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -193,7 +197,7 @@ Returns information about a particular catalog.
 
 `get-catalog` command format:
 
-`$ ask smapi get-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -202,6 +206,8 @@ Returns information about a particular catalog.
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -212,7 +218,7 @@ Lists all the catalogs associated with a skill.
 
 `list-catalogs-for-skill` command format:
 
-`$ ask smapi list-catalogs-for-skill [--next-token <next-token>] [--max-results <max-results>] <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-catalogs-for-skill [--next-token <next-token>] [--max-results <max-results>] <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -225,6 +231,8 @@ Lists all the catalogs associated with a skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -235,7 +243,7 @@ Associate skill with catalog.
 
 `associate-catalog-with-skill` command format:
 
-`$ ask smapi associate-catalog-with-skill <-s|--skill-id <skill-id>> <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi associate-catalog-with-skill <-s|--skill-id <skill-id>> <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -246,6 +254,8 @@ Associate skill with catalog.
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -256,7 +266,7 @@ Lists all the uploads for a particular catalog.
 
 `list-uploads-for-catalog` command format:
 
-`$ ask smapi list-uploads-for-catalog [--next-token <next-token>] [--max-results <max-results>] <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-uploads-for-catalog [--next-token <next-token>] [--max-results <max-results>] <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -269,6 +279,8 @@ Lists all the uploads for a particular catalog.
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -279,7 +291,7 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
 
 `create-content-upload` command format:
 
-`$ ask smapi create-content-upload <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-content-upload <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -290,6 +302,8 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
     <dd markdown="span">[OPTIONAL] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -300,7 +314,7 @@ Gets detailed information about an upload which was created for a specific catal
 
 `get-content-upload-by-id` command format:
 
-`$ ask smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-content-upload-by-id <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -311,6 +325,8 @@ Gets detailed information about an upload which was created for a specific catal
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -321,7 +337,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
 
 `complete-catalog-upload` command format:
 
-`$ ask smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [--part-e-tags <part-e-tags>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi complete-catalog-upload <-c|--catalog-id <catalog-id>> <--upload-id <upload-id>> [--part-e-tags <part-e-tags>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -335,6 +351,8 @@ Completes an upload. To be called after the file is uploaded to the backend data
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -345,7 +363,7 @@ Lists the subscribers for a particular vendor.
 
 `list-subscribers-for-development-events` command format:
 
-`$ ask smapi list-subscribers-for-development-events [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-subscribers-for-development-events [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -356,6 +374,8 @@ Lists the subscribers for a particular vendor.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -366,7 +386,7 @@ Creates a new subscriber resource for a vendor.
 
 `create-subscriber-for-development-events` command format:
 
-`$ ask smapi create-subscriber-for-development-events <--create-subscriber-request <create-subscriber-request>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-subscriber-for-development-events <--create-subscriber-request <create-subscriber-request>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -376,6 +396,8 @@ Creates a new subscriber resource for a vendor.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -386,7 +408,7 @@ Returns information about specified subscriber.
 
 `get-subscriber-for-development-events` command format:
 
-`$ ask smapi get-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -395,6 +417,8 @@ Returns information about specified subscriber.
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -405,7 +429,7 @@ Updates the properties of a subscriber.
 
 `set-subscriber-for-development-events` command format:
 
-`$ ask smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> <--update-subscriber-request <update-subscriber-request>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-subscriber-for-development-events <--subscriber-id <subscriber-id>> <--update-subscriber-request <update-subscriber-request>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -417,6 +441,8 @@ Updates the properties of a subscriber.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -427,7 +453,7 @@ Deletes a specified subscriber.
 
 `delete-subscriber-for-development-events` command format:
 
-`$ ask smapi delete-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-subscriber-for-development-events <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -436,6 +462,8 @@ Deletes a specified subscriber.
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -446,7 +474,7 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
 
 `list-subscriptions-for-development-events` command format:
 
-`$ ask smapi list-subscriptions-for-development-events [--next-token <next-token>] [--max-results <max-results>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-subscriptions-for-development-events [--next-token <next-token>] [--max-results <max-results>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -459,6 +487,8 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
     <dd markdown="span">[OPTIONAL] Unique identifier of the subscriber. If this query parameter is provided, the list would be filtered by the owning subscriberId.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -469,7 +499,7 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
 
 `create-subscription-for-development-events` command format:
 
-`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -483,6 +513,8 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -493,7 +525,7 @@ Returns information about a particular subscription. Both, the vendor who create
 
 `get-subscription-for-development-events` command format:
 
-`$ ask smapi get-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -502,6 +534,8 @@ Returns information about a particular subscription. Both, the vendor who create
     <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -512,7 +546,7 @@ Updates the mutable properties of a subscription. This needs to be authorized by
 
 `set-subscription-for-development-events` command format:
 
-`$ ask smapi set-subscription-for-development-events <--subscription-id <subscription-id>> [--name <name>] [--events <events>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-subscription-for-development-events <--subscription-id <subscription-id>> [--name <name>] [--events <events>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -526,6 +560,8 @@ Updates the mutable properties of a subscription. This needs to be authorized by
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -536,7 +572,7 @@ Deletes a particular subscription. Both, the vendor who created the subscriber a
 
 `delete-subscription-for-development-events` command format:
 
-`$ ask smapi delete-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-subscription-for-development-events <--subscription-id <subscription-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -545,6 +581,8 @@ Deletes a particular subscription. Both, the vendor who created the subscriber a
     <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -555,7 +593,7 @@ Generates preSigned urls to upload data.
 
 `generate-catalog-upload-url` command format:
 
-`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -566,6 +604,8 @@ Generates preSigned urls to upload data.
     <dd markdown="span">[OPTIONAL] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -576,7 +616,7 @@ Creates a new upload for a catalog and returns location to track the upload proc
 
 `create-catalog-upload` command format:
 
-`$ ask smapi create-catalog-upload <-c|--catalog-id <catalog-id>> <--catalog-upload-request-body <catalog-upload-request-body>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-catalog-upload <-c|--catalog-id <catalog-id>> <--catalog-upload-request-body <catalog-upload-request-body>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -588,6 +628,8 @@ Creates a new upload for a catalog and returns location to track the upload proc
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -598,7 +640,7 @@ Get the list of in-skill products for the vendor.
 
 `get-isp-list-for-vendor` command format:
 
-`$ ask smapi get-isp-list-for-vendor [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-list-for-vendor [--next-token <next-token>] [--max-results <max-results>] [--product-id <product-id>] [-g|--stage <stage>] [--type <type>] [--reference-name <reference-name>] [--status <status>] [--is-associated-with-skill <is-associated-with-skill>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -626,6 +668,8 @@ Get the list of in-skill products for the vendor.
 [ENUM]: ASSOCIATED_WITH_SKILL,NO_SKILL_ASSOCIATIONS.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -636,7 +680,7 @@ Creates a new in-skill product for given vendorId.
 
 `create-isp-for-vendor` command format:
 
-`$ ask smapi create-isp-for-vendor <--create-in-skill-product-request <create-in-skill-product-request>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-isp-for-vendor <--create-in-skill-product-request <create-in-skill-product-request>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -646,6 +690,8 @@ Creates a new in-skill product for given vendorId.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -656,7 +702,7 @@ Get the list of in-skill products for the skillId.
 
 `get-isp-list-for-skill-id` command format:
 
-`$ ask smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -671,6 +717,8 @@ Get the list of in-skill products for the skillId.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -681,7 +729,7 @@ Returns the in-skill product definition for given productId.
 
 `get-isp-definition` command format:
 
-`$ ask smapi get-isp-definition <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-definition <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -692,6 +740,8 @@ Returns the in-skill product definition for given productId.
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -702,7 +752,7 @@ Updates in-skill product definition for given productId. Only development stage 
 
 `update-isp-for-product` command format:
 
-`$ ask smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> <-g|--stage <stage>> <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> <-g|--stage <stage>> <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -718,6 +768,8 @@ Updates in-skill product definition for given productId. Only development stage 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -728,7 +780,7 @@ Deletes the in-skill product for given productId. Only development stage support
 
 `delete-isp-for-product` command format:
 
-`$ ask smapi delete-isp-for-product <--product-id <product-id>> <-g|--stage <stage>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-isp-for-product <--product-id <product-id>> <-g|--stage <stage>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -741,6 +793,8 @@ Deletes the in-skill product for given productId. Only development stage support
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -751,7 +805,7 @@ Get the summary information for an in-skill product.
 
 `get-isp-summary` command format:
 
-`$ ask smapi get-isp-summary <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-summary <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -762,6 +816,8 @@ Get the summary information for an in-skill product.
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -772,7 +828,7 @@ Get the associated skills for the in-skill product.
 
 `get-isp-associated-skills` command format:
 
-`$ ask smapi get-isp-associated-skills <--product-id <product-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-isp-associated-skills <--product-id <product-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -787,6 +843,8 @@ Get the associated skills for the in-skill product.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -797,7 +855,7 @@ Associates an in-skill product with a skill.
 
 `associate-isp-with-skill` command format:
 
-`$ ask smapi associate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi associate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -808,6 +866,8 @@ Associates an in-skill product with a skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -818,7 +878,7 @@ Disassociates an in-skill product from a skill.
 
 `disassociate-isp-with-skill` command format:
 
-`$ ask smapi disassociate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi disassociate-isp-with-skill <--product-id <product-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -829,6 +889,8 @@ Disassociates an in-skill product from a skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -839,7 +901,7 @@ Resets the entitlement(s) of the Product for the current user.
 
 `reset-entitlement-for-product` command format:
 
-`$ ask smapi reset-entitlement-for-product <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi reset-entitlement-for-product <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -850,6 +912,8 @@ Resets the entitlement(s) of the Product for the current user.
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -860,7 +924,7 @@ Get AccountLinking information for the skill.
 
 `get-account-linking-info` command format:
 
-`$ ask smapi get-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -875,6 +939,8 @@ Get AccountLinking information for the skill.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -885,7 +951,7 @@ Create AccountLinking information for the skill.
 
 `update-account-linking-info` command format:
 
-`$ ask smapi update-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -905,6 +971,8 @@ Create AccountLinking information for the skill.
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -915,7 +983,7 @@ Delete AccountLinking information of a skill for the given stage.
 
 `delete-account-linking-info` command format:
 
-`$ ask smapi delete-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -930,6 +998,8 @@ Delete AccountLinking information of a skill for the given stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -940,7 +1010,7 @@ Generates hosted skill repository credentials to access the hosted skill reposit
 
 `generate-credentials-for-alexa-hosted-skill` command format:
 
-`$ ask smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> [--repository-url <repository-url>] [--repository-type <repository-type>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> [--repository-url <repository-url>] [--repository-type <repository-type>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -954,6 +1024,8 @@ Generates hosted skill repository credentials to access the hosted skill reposit
 [ENUM]: GIT.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -964,7 +1036,7 @@ Get Alexa hosted skill&#39;s metadata.
 
 `get-alexa-hosted-skill-metadata` command format:
 
-`$ ask smapi get-alexa-hosted-skill-metadata <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-alexa-hosted-skill-metadata <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -973,6 +1045,8 @@ Get Alexa hosted skill&#39;s metadata.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -983,7 +1057,7 @@ Get the current user permissions about Alexa hosted skill features.
 
 `get-alexa-hosted-skill-user-permissions` command format:
 
-`$ ask smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -992,6 +1066,8 @@ Get the current user permissions about Alexa hosted skill features.
     <dd markdown="span">[REQUIRED] The permission of a hosted skill feature that customer needs to check.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1002,7 +1078,7 @@ Get beta test for a given Alexa skill.
 
 `get-beta-test` command format:
 
-`$ ask smapi get-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1011,6 +1087,8 @@ Get beta test for a given Alexa skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1021,7 +1099,7 @@ Create a beta test for a given Alexa skill.
 
 `create-beta-test` command format:
 
-`$ ask smapi create-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1032,6 +1110,8 @@ Create a beta test for a given Alexa skill.
     <dd markdown="span">[OPTIONAL] Email address for providing feedback.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1042,7 +1122,7 @@ Update a beta test for a given Alexa skill.
 
 `update-beta-test` command format:
 
-`$ ask smapi update-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-beta-test <-s|--skill-id <skill-id>> [--feedback-email <feedback-email>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1053,6 +1133,8 @@ Update a beta test for a given Alexa skill.
     <dd markdown="span">[OPTIONAL] Email address for providing feedback.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1063,7 +1145,7 @@ Start a beta test for a given Alexa skill. System will send invitation emails to
 
 `start-beta-test` command format:
 
-`$ ask smapi start-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi start-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1072,6 +1154,8 @@ Start a beta test for a given Alexa skill. System will send invitation emails to
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1082,7 +1166,7 @@ End a beta test for a given Alexa skill. System will revoke the entitlement of e
 
 `end-beta-test` command format:
 
-`$ ask smapi end-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi end-beta-test <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1091,6 +1175,8 @@ End a beta test for a given Alexa skill. System will revoke the entitlement of e
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1101,7 +1187,7 @@ List all testers in a beta test for the given Alexa skill.
 
 `get-list-of-testers` command format:
 
-`$ ask smapi get-list-of-testers <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-list-of-testers <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1114,6 +1200,8 @@ List all testers in a beta test for the given Alexa skill.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1124,7 +1212,7 @@ Add testers to a beta test for the given Alexa skill.  System will send invitati
 
 `add-testers-to-beta-test` command format:
 
-`$ ask smapi add-testers-to-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi add-testers-to-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1136,6 +1224,8 @@ Add testers to a beta test for the given Alexa skill.  System will send invitati
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1146,7 +1236,7 @@ Remove testers from a beta test for the given Alexa skill.  System will send acc
 
 `remove-testers-from-beta-test` command format:
 
-`$ ask smapi remove-testers-from-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi remove-testers-from-beta-test <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1158,6 +1248,8 @@ Remove testers from a beta test for the given Alexa skill.  System will send acc
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1168,7 +1260,7 @@ Send reminder to the testers in a beta test for the given Alexa skill.  System w
 
 `send-reminder-to-testers` command format:
 
-`$ ask smapi send-reminder-to-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi send-reminder-to-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1180,6 +1272,8 @@ Send reminder to the testers in a beta test for the given Alexa skill.  System w
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1190,7 +1284,7 @@ Request feedback from the testers in a beta test for the given Alexa skill.  Sys
 
 `request-feedback-from-testers` command format:
 
-`$ ask smapi request-feedback-from-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi request-feedback-from-testers <-s|--skill-id <skill-id>> <--testers-emails <testers-emails>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1202,6 +1296,8 @@ Request feedback from the testers in a beta test for the given Alexa skill.  Sys
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1212,7 +1308,7 @@ Get list of all certifications available for a skill, including information abou
 
 `get-certifications-list` command format:
 
-`$ ask smapi get-certifications-list <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-certifications-list <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1225,6 +1321,8 @@ Get list of all certifications available for a skill, including information abou
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1235,7 +1333,7 @@ Gets a specific certification resource. The response contains the review trackin
 
 `get-certification-review` command format:
 
-`$ ask smapi get-certification-review [--accept-language <accept-language>] <-s|--skill-id <skill-id>> <-c|--certification-id <certification-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-certification-review [--accept-language <accept-language>] <-s|--skill-id <skill-id>> <-c|--certification-id <certification-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1248,6 +1346,8 @@ Gets a specific certification resource. The response contains the review trackin
     <dd markdown="span">[REQUIRED] Id of the certification. Reserved word identifier of mostRecent can be used to get the most recent certification for the skill. Note that the behavior of the API in this case would be the same as when the actual certification id of the most recent certification is used in the request.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1258,7 +1358,7 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
 
 `get-skill-enablement-status` command format:
 
-`$ ask smapi get-skill-enablement-status <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-enablement-status <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1269,6 +1369,8 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1279,7 +1381,7 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
 
 `set-skill-enablement` command format:
 
-`$ ask smapi set-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1290,6 +1392,8 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1300,7 +1404,7 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
 
 `delete-skill-enablement` command format:
 
-`$ ask smapi delete-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1311,6 +1415,8 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1321,7 +1427,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `profile-nlu` command format:
 
-`$ ask smapi profile-nlu <-u|--utterance <utterance>> [--multi-turn-token <multi-turn-token>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi profile-nlu <-u|--utterance <utterance>> [--multi-turn-token <multi-turn-token>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1338,6 +1444,8 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1348,7 +1456,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `get-utterance-data` command format:
 
-`$ ask smapi get-utterance-data <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-g|--stage <stage>] [-l|--locale <locale>] [--dialog-act-name <dialog-act-name>] [--intent-confidence-bin <intent-confidence-bin>] [--intent-name <intent-name>] [--intent-slots-name <intent-slots-name>] [--interaction-type <interaction-type>] [--publication-status <publication-status>] [--utterance-text <utterance-text>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-utterance-data <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-g|--stage <stage>] [-l|--locale <locale>] [--dialog-act-name <dialog-act-name>] [--intent-confidence-bin <intent-confidence-bin>] [--intent-name <intent-name>] [--intent-slots-name <intent-slots-name>] [--interaction-type <interaction-type>] [--publication-status <publication-status>] [--utterance-text <utterance-text>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1409,6 +1517,8 @@ This is a synchronous API that profiles an utterance against interaction model.
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1421,7 +1531,7 @@ The path params
 
 `get-interaction-model` command format:
 
-`$ ask smapi get-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1438,6 +1548,8 @@ The path params
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1448,7 +1560,7 @@ Get the latest metadata for the interaction model resource for the given stage.
 
 `get-interaction-model-metadata` command format:
 
-`$ ask smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1465,6 +1577,8 @@ Get the latest metadata for the interaction model resource for the given stage.
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1475,7 +1589,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
 
 `set-interaction-model` command format:
 
-`$ ask smapi set-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1497,6 +1611,8 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1507,7 +1623,7 @@ List all catalogs for the vendor.
 
 `list-interaction-model-catalogs` command format:
 
-`$ ask smapi list-interaction-model-catalogs [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-catalogs [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1520,6 +1636,8 @@ List all catalogs for the vendor.
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1530,7 +1648,7 @@ Create a new version of catalog within the given catalogId.
 
 `create-interaction-model-catalog` command format:
 
-`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1541,6 +1659,8 @@ Create a new version of catalog within the given catalogId.
     <dd markdown="span">[OPTIONAL] Description string about the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1551,7 +1671,7 @@ get the catalog definition.
 
 `get-interaction-model-catalog-definition` command format:
 
-`$ ask smapi get-interaction-model-catalog-definition <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-definition <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1560,6 +1680,8 @@ get the catalog definition.
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1570,7 +1692,7 @@ Delete the catalog.
 
 `delete-interaction-model-catalog` command format:
 
-`$ ask smapi delete-interaction-model-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-catalog <-c|--catalog-id <catalog-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1579,6 +1701,8 @@ Delete the catalog.
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1589,7 +1713,7 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
 
 `get-interaction-model-catalog-update-status` command format:
 
-`$ ask smapi get-interaction-model-catalog-update-status <-c|--catalog-id <catalog-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-update-status <-c|--catalog-id <catalog-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1600,6 +1724,8 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
     <dd markdown="span">[REQUIRED] The identifier for slotType version creation process.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1610,7 +1736,7 @@ update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog` command format:
 
-`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1621,6 +1747,8 @@ update description and vendorGuidance string for certain version of a catalog.
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1631,7 +1759,7 @@ This API returns the job status of conflict detection job for a specified intera
 
 `get-conflict-detection-job-status-for-interaction-model` command format:
 
-`$ ask smapi get-conflict-detection-job-status-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-conflict-detection-job-status-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1647,6 +1775,8 @@ This API returns the job status of conflict detection job for a specified intera
     <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1657,7 +1787,7 @@ This is a paginated API that retrieves results of conflict detection job for a s
 
 `get-conflicts-for-interaction-model` command format:
 
-`$ ask smapi get-conflicts-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-conflicts-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1677,6 +1807,8 @@ This is a paginated API that retrieves results of conflict detection job for a s
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1687,7 +1819,7 @@ Create a new version of catalog entity for the given catalogId.
 
 `create-interaction-model-catalog-version` command format:
 
-`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] [--description <description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] [--description <description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1702,6 +1834,8 @@ Create a new version of catalog entity for the given catalogId.
     <dd markdown="span">[OPTIONAL] Description string for specific catalog version.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1712,7 +1846,7 @@ Get catalog version data of given catalog version.
 
 `get-interaction-model-catalog-version` command format:
 
-`$ ask smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1723,6 +1857,8 @@ Get catalog version data of given catalog version.
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1733,7 +1869,7 @@ Delete catalog version.
 
 `delete-interaction-model-catalog-version` command format:
 
-`$ ask smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1744,6 +1880,8 @@ Delete catalog version.
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1754,7 +1892,7 @@ Update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog-version` command format:
 
-`$ ask smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [--description <description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--vers <vers>> [--description <description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1767,6 +1905,8 @@ Update description and vendorGuidance string for certain version of a catalog.
     <dd markdown="span">[OPTIONAL] The catalog description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1777,7 +1917,7 @@ Get catalog values from the given catalogId &amp; version.
 
 `get-interaction-model-catalog-values` command format:
 
-`$ ask smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--vers <vers>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-catalog-values <-c|--catalog-id <catalog-id>> <--vers <vers>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1792,6 +1932,8 @@ Get catalog values from the given catalogId &amp; version.
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1802,7 +1944,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
 
 `get-interaction-model-version` command format:
 
-`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1821,6 +1963,8 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1831,7 +1975,7 @@ Get the list of interactionModel versions of a skill for the vendor.
 
 `list-interaction-model-versions` command format:
 
-`$ ask smapi list-interaction-model-versions <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-versions <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1856,6 +2000,8 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1866,7 +2012,7 @@ List all slot types for the vendor.
 
 `list-interaction-model-slot-types` command format:
 
-`$ ask smapi list-interaction-model-slot-types [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-slot-types [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1879,6 +2025,8 @@ List all slot types for the vendor.
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1889,7 +2037,7 @@ Create a new version of slot type within the given slotTypeId.
 
 `create-interaction-model-slot-type` command format:
 
-`$ ask smapi create-interaction-model-slot-type <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-slot-type <--slot-type <slot-type>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1899,6 +2047,8 @@ Create a new version of slot type within the given slotTypeId.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1909,7 +2059,7 @@ Get the slot type definition.
 
 `get-interaction-model-slot-type-definition` command format:
 
-`$ ask smapi get-interaction-model-slot-type-definition <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-definition <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1918,6 +2068,8 @@ Get the slot type definition.
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1928,7 +2080,7 @@ Delete the slot type.
 
 `delete-interaction-model-slot-type` command format:
 
-`$ ask smapi delete-interaction-model-slot-type <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-slot-type <--slot-type-id <slot-type-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1937,6 +2089,8 @@ Delete the slot type.
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1947,7 +2101,7 @@ Get the status of slot type resource and its sub-resources for a given slotTypeI
 
 `get-interaction-model-slot-type-build-status` command format:
 
-`$ ask smapi get-interaction-model-slot-type-build-status <--slot-type-id <slot-type-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-build-status <--slot-type-id <slot-type-id>> <--update-request-id <update-request-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1958,6 +2112,8 @@ Get the status of slot type resource and its sub-resources for a given slotTypeI
     <dd markdown="span">[REQUIRED] The identifier for slotType version creation process.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1968,7 +2124,7 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type` command format:
 
-`$ ask smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1979,6 +2135,8 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -1989,7 +2147,7 @@ List all slot type versions for the slot type id.
 
 `list-interaction-model-slot-type-versions` command format:
 
-`$ ask smapi list-interaction-model-slot-type-versions <--slot-type-id <slot-type-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-interaction-model-slot-type-versions <--slot-type-id <slot-type-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2004,6 +2162,8 @@ List all slot type versions for the slot type id.
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2014,7 +2174,7 @@ Create a new version of slot type entity for the given slotTypeId.
 
 `create-interaction-model-slot-type-version` command format:
 
-`$ ask smapi create-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--slot-type <slot-type>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--slot-type <slot-type>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2026,6 +2186,8 @@ Create a new version of slot type entity for the given slotTypeId.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2036,7 +2198,7 @@ Get slot type version data of given slot type version.
 
 `get-interaction-model-slot-type-version` command format:
 
-`$ ask smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2047,6 +2209,8 @@ Get slot type version data of given slot type version.
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2057,7 +2221,7 @@ Delete slot type version.
 
 `delete-interaction-model-slot-type-version` command format:
 
-`$ ask smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2068,6 +2232,8 @@ Delete slot type version.
     <dd markdown="span">[REQUIRED] Version for interaction model.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2078,7 +2244,7 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type-version` command format:
 
-`$ ask smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-interaction-model-slot-type-version <--slot-type-id <slot-type-id>> <--vers <vers>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2091,6 +2257,8 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2101,7 +2269,7 @@ Returns the skill manifest for given skillId and stage.
 
 `get-skill-manifest` command format:
 
-`$ ask smapi get-skill-manifest <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-manifest <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2116,6 +2284,8 @@ Returns the skill manifest for given skillId and stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2126,7 +2296,7 @@ Updates skill manifest for given skillId and stage.
 
 `update-skill-manifest` command format:
 
-`$ ask smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--manifest <manifest>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2146,6 +2316,8 @@ Updates skill manifest for given skillId and stage.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2156,7 +2328,7 @@ Get analytic metrics report of skill usage.
 
 `get-skill-metrics` command format:
 
-`$ ask smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> <-g|--stage <stage>> <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> <-g|--stage <stage>> <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2185,6 +2357,8 @@ Get analytic metrics report of skill usage.
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2195,7 +2369,7 @@ Add an id to the private distribution accounts.
 
 `set-private-distribution-account-id` command format:
 
-`$ ask smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2208,6 +2382,8 @@ Add an id to the private distribution accounts.
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2218,7 +2394,7 @@ Remove an id from the private distribution accounts.
 
 `delete-private-distribution-account-id` command format:
 
-`$ ask smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2231,6 +2407,8 @@ Remove an id from the private distribution accounts.
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2241,7 +2419,7 @@ List private distribution accounts.
 
 `list-private-distribution-accounts` command format:
 
-`$ ask smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2256,6 +2434,8 @@ List private distribution accounts.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2266,7 +2446,7 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
 
 `simulate-skill` command format:
 
-`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2284,6 +2464,8 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
 [ENUM]: DEFAULT,FORCE_NEW_SESSION.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2294,7 +2476,7 @@ This API gets the result of a previously executed simulation. A successful respo
 
 `get-skill-simulation` command format:
 
-`$ ask smapi get-skill-simulation <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-simulation <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2307,6 +2489,8 @@ This API gets the result of a previously executed simulation. A successful respo
     <dd markdown="span">[REQUIRED] Id of the simulation.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2317,7 +2501,7 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 `submit-skill-validation` command format:
 
-`$ ask smapi submit-skill-validation [-l|--locales <locales>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-validation [-l|--locales <locales>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2331,6 +2515,8 @@ This is an asynchronous API which allows a skill developer to execute various va
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2341,7 +2527,7 @@ This API gets the result of a previously executed validation. A successful respo
 
 `get-skill-validations` command format:
 
-`$ ask smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> <-g|--stage <stage>> [--accept-language <accept-language>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> <-g|--stage <stage>> [--accept-language <accept-language>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2356,6 +2542,8 @@ This API gets the result of a previously executed validation. A successful respo
     <dd markdown="span">[OPTIONAL] User's locale/language in context.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2366,7 +2554,7 @@ Get the list of skills for the vendor.
 
 `list-skills-for-vendor` command format:
 
-`$ ask smapi list-skills-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-skills-for-vendor [--next-token <next-token>] [--max-results <max-results>] [-s|--skill-id <skill-id>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2380,6 +2568,8 @@ Get the list of skills for the vendor.
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2390,7 +2580,7 @@ Creates a new skill for given vendorId.
 
 `create-skill-for-vendor` command format:
 
-`$ ask smapi create-skill-for-vendor <--manifest <manifest>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-for-vendor <--manifest <manifest>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2400,6 +2590,8 @@ Creates a new skill for given vendorId.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2410,7 +2602,7 @@ Delete the skill and model for given skillId.
 
 `delete-skill` command format:
 
-`$ ask smapi delete-skill <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-skill <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2419,6 +2611,8 @@ Delete the skill and model for given skillId.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2429,7 +2623,7 @@ Get the status of skill resource and its sub-resources for a given skillId.
 
 `get-skill-status` command format:
 
-`$ ask smapi get-skill-status <-s|--skill-id <skill-id>> [--resource <resource>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-status <-s|--skill-id <skill-id>> [--resource <resource>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2442,6 +2636,8 @@ It is an optional, filtering parameter and can be used more than once, to retrie
 If this parameter is not specified, status for all the resources/sub-resources will be returned.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2452,7 +2648,7 @@ Get the client credentials for the skill.
 
 `get-skill-credentials` command format:
 
-`$ ask smapi get-skill-credentials <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-skill-credentials <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2461,6 +2657,8 @@ Get the client credentials for the skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2471,7 +2669,7 @@ Returns the ssl certificate sets currently associated with this skill. Sets cons
 
 `get-ssl-certificates` command format:
 
-`$ ask smapi get-ssl-certificates <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-ssl-certificates <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2480,6 +2678,8 @@ Returns the ssl certificate sets currently associated with this skill. Sets cons
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2490,7 +2690,7 @@ Updates the ssl certificates associated with this skill.
 
 `set-ssl-certificates` command format:
 
-`$ ask smapi set-ssl-certificates <-s|--skill-id <skill-id>> <--ssl-certificate-payload <ssl-certificate-payload>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi set-ssl-certificates <-s|--skill-id <skill-id>> <--ssl-certificate-payload <ssl-certificate-payload>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2502,6 +2702,8 @@ Updates the ssl certificates associated with this skill.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2512,7 +2714,7 @@ Submit the skill for certification.
 
 `submit-skill-for-certification` command format:
 
-`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> <--publication-method <publication-method>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> <--publication-method <publication-method>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2524,6 +2726,8 @@ Submit the skill for certification.
 [ENUM]: MANUAL_PUBLISHING,AUTO_PUBLISHING.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2534,7 +2738,7 @@ Withdraws the skill from certification.
 
 `withdraw-skill-from-certification` command format:
 
-`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] [--message <message>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] [--message <message>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2548,6 +2752,8 @@ Withdraws the skill from certification.
     <dd markdown="span">[OPTIONAL] The message only in case the reason in OTHER.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2558,7 +2764,7 @@ Creates a new export for a skill with given skillId and stage.
 
 `create-export-request-for-skill` command format:
 
-`$ ask smapi create-export-request-for-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-export-request-for-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2569,6 +2775,8 @@ Creates a new export for a skill with given skillId and stage.
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2579,7 +2787,7 @@ Get status for given exportId.
 
 `get-status-of-export-request` command format:
 
-`$ ask smapi get-status-of-export-request <--export-id <export-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-status-of-export-request <--export-id <export-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2588,6 +2796,8 @@ Get status for given exportId.
     <dd markdown="span">[REQUIRED] The Export ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2598,7 +2808,7 @@ Creates a new import for a skill.
 
 `create-skill-package` command format:
 
-`$ ask smapi create-skill-package [--location <location>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-skill-package [--location <location>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2607,6 +2817,8 @@ Creates a new import for a skill.
     <dd markdown="span">[OPTIONAL] The URL for the skill package.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2617,7 +2829,7 @@ Creates a new import for a skill with given skillId.
 
 `import-skill-package` command format:
 
-`$ ask smapi import-skill-package [--location <location>] <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi import-skill-package [--location <location>] <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2630,6 +2842,8 @@ Creates a new import for a skill with given skillId.
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2640,7 +2854,7 @@ Get status for given importId.
 
 `get-import-status` command format:
 
-`$ ask smapi get-import-status <--import-id <import-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-import-status <--import-id <import-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2649,6 +2863,8 @@ Get status for given importId.
     <dd markdown="span">[REQUIRED] The Import ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2659,13 +2875,15 @@ Creates a new uploadUrl.
 
 `create-upload-url` command format:
 
-`$ ask smapi create-upload-url [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-upload-url [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2676,13 +2894,15 @@ Get the list of Vendor information.
 
 `get-vendor-list` command format:
 
-`$ ask smapi get-vendor-list [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-vendor-list [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2693,7 +2913,7 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
 
 `query-development-audit-logs` command format:
 
-`$ ask smapi query-development-audit-logs [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi query-development-audit-logs [--request-filters-clients <request-filters-clients>] [--request-filters-operations <request-filters-operations>] [--request-filters-resources <request-filters-resources>] [--request-filters-requesters <request-filters-requesters>] [--request-filters-start-time <request-filters-start-time>] [--request-filters-end-time <request-filters-end-time>] [--request-filters-http-response-codes <request-filters-http-response-codes>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [--pagination-context-next-token <pagination-context-next-token>] [--pagination-context-max-results <pagination-context-max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2729,6 +2949,8 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve more or less than the default of 50 results, you can add this parameter to your request. maxResults can exceed the upper limit of 250 but we will not return more items than that. The response might contain fewer results than maxResults for purpose of keeping SLA or because there are not enough items, but it will never contain more.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2739,7 +2961,7 @@ API which requests recently run nlu evaluations started by a vendor for a skill.
 
 `list-nlu-evaluations` command format:
 
-`$ ask smapi list-nlu-evaluations <-s|--skill-id <skill-id>> [-l|--locale <locale>] [-g|--stage <stage>] [--annotation-id <annotation-id>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-nlu-evaluations <-s|--skill-id <skill-id>> [-l|--locale <locale>] [-g|--stage <stage>] [--annotation-id <annotation-id>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2758,6 +2980,8 @@ API which requests recently run nlu evaluations started by a vendor for a skill.
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2769,7 +2993,7 @@ The operation outputs an evaluationId which allows the retrieval of the current 
 
 `create-nlu-evaluations` command format:
 
-`$ ask smapi create-nlu-evaluations <-g|--stage <stage>> <-l|--locale <locale>> <--source-annotation-id <source-annotation-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-nlu-evaluations <-g|--stage <stage>> <-l|--locale <locale>> <--source-annotation-id <source-annotation-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2784,6 +3008,8 @@ The operation outputs an evaluationId which allows the retrieval of the current 
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2794,7 +3020,7 @@ API which requests top level information about the evaluation like the current s
 
 `get-nlu-evaluation` command format:
 
-`$ ask smapi get-nlu-evaluation <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-nlu-evaluation <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2805,6 +3031,8 @@ API which requests top level information about the evaluation like the current s
     <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2815,7 +3043,7 @@ Paginated API which returns the test case results of an evaluation. This should 
 
 `get-result-for-nlu-evaluations` command format:
 
-`$ ask smapi get-result-for-nlu-evaluations <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [--sort-field <sort-field>] [--test-case-status <test-case-status>] [--actual-intent-name <actual-intent-name>] [--expected-intent-name <expected-intent-name>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-result-for-nlu-evaluations <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [--sort-field <sort-field>] [--test-case-status <test-case-status>] [--actual-intent-name <actual-intent-name>] [--expected-intent-name <expected-intent-name>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2840,6 +3068,8 @@ Paginated API which returns the test case results of an evaluation. This should 
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2850,7 +3080,7 @@ API which requests all the NLU annotation sets for a skill. Returns the annotati
 
 `list-nlu-annotation-sets` command format:
 
-`$ ask smapi list-nlu-annotation-sets <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi list-nlu-annotation-sets <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2865,6 +3095,8 @@ API which requests all the NLU annotation sets for a skill. Returns the annotati
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 10. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2875,7 +3107,7 @@ This is an API that creates a new NLU annotation set with properties and returns
 
 `create-nlu-annotation-set` command format:
 
-`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--name <name>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--name <name>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2888,6 +3120,8 @@ This is an API that creates a new NLU annotation set with properties and returns
     <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2898,7 +3132,7 @@ Return the properties for an NLU annotation set.
 
 `get-properties-for-nlu-annotation-sets` command format:
 
-`$ ask smapi get-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2909,6 +3143,8 @@ Return the properties for an NLU annotation set.
     <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2919,7 +3155,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
 
 `update-properties-for-nlu-annotation-sets` command format:
 
-`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [--name <name>] [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [--name <name>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2932,6 +3168,8 @@ API which updates the NLU annotation set properties. Currently, the only data ca
     <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2942,7 +3180,7 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
 
 `delete-properties-for-nlu-annotation-sets` command format:
 
-`$ ask smapi delete-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi delete-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2953,6 +3191,8 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
     <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2963,7 +3203,7 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
 
 `get-annotations-for-nlu-annotation-sets` command format:
 
-`$ ask smapi get-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--accept <accept>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi get-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--accept <accept>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2976,6 +3216,8 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
     <dd markdown="span">[REQUIRED] Standard HTTP. Pass `application/json` or `test/csv` for GET calls.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -2986,7 +3228,7 @@ API which replaces the annotations in NLU annotation set.
 
 `update-annotations-for-nlu-annotation-sets` command format:
 
-`$ ask smapi update-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--content-type <content-type>> <--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi update-annotations-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--content-type <content-type>> <--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -3002,6 +3244,8 @@ API which replaces the annotations in NLU annotation set.
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
@@ -3012,7 +3256,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 
 `invoke-skill-end-point` command format:
 
-`$ ask smapi invoke-skill-end-point <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--debug]`
+`$ ask smapi invoke-skill-end-point <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -3029,6 +3273,8 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
