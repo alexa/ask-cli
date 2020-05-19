@@ -226,7 +226,7 @@ describe('Smapi test - CliCustomizationProcessor class', () => {
                 name,
                 rootName,
                 bodyPath,
-                required: true,
+                required: false,
                 enum: null,
                 json: false,
                 isNumber: true,
