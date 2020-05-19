@@ -56,7 +56,18 @@ parallel('smapi command test', () => {
     const annotationId = 'soemAnnotationId';
     const accept = 'application/json';
     const contentType = 'application/json';
+    const annotationSetId = 'someAnnotationSetId';
     const updateNluAnnotationSetAnnotationsRequest = JSON.stringify(annotationSet);
+    const annotations = JSON.stringify(
+        [
+            {
+                uploadId: 'string',
+                filePathInUpload: 'string',
+                evaluationWeight: 1,
+                expectedTranscription: 'string'
+            }
+        ]
+    );
     const slotType = JSON.stringify({
         slotType: {
             name: 'string',
@@ -576,7 +587,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should create interaction model catalog', async () => {
-        const args = [subCmd, 'create-interaction-model-catalog'];
+        const args = [subCmd, 'create-interaction-model-catalog', '--catalog-name', 'name', '--catalog-description', 'someDescription'];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
@@ -604,7 +615,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should update interaction model catalog', async () => {
-        const args = [subCmd, 'update-interaction-model-catalog', '-c', catalogId, '--slot-type-description', 'someDescription'];
+        const args = [subCmd, 'update-interaction-model-catalog', '-c', catalogId, '--name', 'name', '--description', 'someDescription'];
         addCoveredCommand(args);
         const result = await run(cmd, args, { ...options, parse: false });
         expect(result).include('Command executed successfully!');
@@ -824,7 +835,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should withdraw skill from certification', async () => {
-        const args = [subCmd, 'withdraw-skill-from-certification', '-s', skillId, '--message', 'someMessage'];
+        const args = [subCmd, 'withdraw-skill-from-certification', '-s', skillId, '--reason', 'TEST_SKILL'];
         addCoveredCommand(args);
         const result = await run(cmd, args, { ...options, parse: false });
         expect(result).include('Command executed successfully!');
@@ -874,6 +885,14 @@ parallel('smapi command test', () => {
 
     it('| should query development audit logs', async () => {
         const args = [subCmd, 'query-development-audit-logs'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should invoke skill end point', async () => {
+        const args = [subCmd, 'invoke-skill', '-s', skillId,
+            '--endpoint-region', 'someRegion', '--skill-request-body', JSON.stringify({})];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
@@ -983,9 +1002,94 @@ parallel('smapi command test', () => {
     it('| should get skill credential', async () => {
         const args = [subCmd, 'get-skill-credentials', '-s', skillId];
         addCoveredCommand(args);
-        // TODO return type should be object. fix with the next update of ask-smapi-model
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should list asr annotation sets', async () => {
+        const args = [subCmd, 'list-asr-annotation-sets', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create asr annotation set', async () => {
+        const args = [subCmd, 'create-asr-annotation-set', '-s', skillId, '--name', name];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get asr annotation set', async () => {
+        const args = [subCmd, 'get-asr-annotation-set', '-s', skillId, '--annotation-set-id', annotationSetId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should set asr annotation set', async () => {
+        const args = [subCmd, 'set-asr-annotation-set', '-s', skillId, '--annotation-set-id', annotationSetId, '--name', name];
+        addCoveredCommand(args);
         const result = await run(cmd, args, { ...options, parse: false });
         expect(result).include('Command executed successfully!');
+    });
+
+    it('| should delete asr annotation set', async () => {
+        const args = [subCmd, 'delete-asr-annotation-set', '-s', skillId, '--annotation-set-id', annotationSetId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should get annotations for asr annotation set', async () => {
+        const args = [subCmd, 'get-annotations-for-asr-annotation-set', '-s', skillId, '--annotation-set-id', annotationSetId, '--accept', accept];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should set annotations for asr annotation set', async () => {
+        const args = [subCmd, 'set-annotations-for-asr-annotation-set', '-s', skillId, '--annotation-set-id',
+            annotationSetId, '--annotations', annotations];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should list asr evaluations', async () => {
+        const args = [subCmd, 'list-asr-evaluations', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create asr evaluation', async () => {
+        const args = [subCmd, 'create-asr-evaluation', '--stage', stage, '--locale',
+            locale, '--annotation-set-id', annotationSetId, '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get asr evaluation status', async () => {
+        const args = [subCmd, 'get-asr-evaluation-status', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should delete asr evaluation', async () => {
+        const args = [subCmd, 'delete-asr-evaluation', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should list asr evaluations results', async () => {
+        const args = [subCmd, 'list-asr-evaluations-results', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
     });
 
     after(() => {

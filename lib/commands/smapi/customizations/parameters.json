@@ -2,6 +2,12 @@
     "stageV2": {
         "name": "stage"
     },
+    "skill stage": {
+        "name": "stage"
+    },
+    "skill locale": {
+        "name": "locale"
+    },
     "vendorId": {
         "skip": true
     },
