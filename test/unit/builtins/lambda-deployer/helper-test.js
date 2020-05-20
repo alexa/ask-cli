@@ -346,11 +346,12 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
         it('| no Lambda found, create Lambda function, add Alexa Permission and get Function revisionId pass, expect Lambda data return.', (done) => {
             // setup
             const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN
+                FunctionArn: TEST_FUNCTION_ARN,
+                LastModified: TEST_LAST_MODIFIED
             };
             const TEST_GET_FUNCTION_RESPONSE = {
                 Configuration: {
-                    RevisionId: TEST_UPDATED_REVISION_ID
+                    RevisionId: TEST_UPDATED_REVISION_ID,
                 }
             };
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
@@ -362,8 +363,15 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
                 // verify
-                expect(res.arn).equal(TEST_FUNCTION_ARN);
-                expect(res.revisionId).equal(TEST_UPDATED_REVISION_ID);
+                expect(res).deep.equal({
+                    isAllStepSuccess: true,
+                    isCodeDeployed: true,
+                    lambdaResponse: {
+                        arn: TEST_FUNCTION_ARN,
+                        lastModified: TEST_LAST_MODIFIED,
+                        revisionId: TEST_UPDATED_REVISION_ID
+                    }
+                });
                 done();
             });
         });
