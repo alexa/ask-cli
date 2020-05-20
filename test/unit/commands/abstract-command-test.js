@@ -342,6 +342,24 @@ describe('Command test - AbstractCommand class', () => {
             });
         });
 
+        it('| http client request error status code , should warn it out and pass the process', (done) => {
+            // setup
+            httpClient.request.yields(undefined, { statusCode: 400 });
+            // call
+            AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined, (err) => {
+                // verify
+                expect(httpClient.request.args[0][0].url).equal(
+                    `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
+                );
+                expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
+                expect(errorStub.args[0][0]).equal(
+                    `Failed to get the latest version for ${CONSTANTS.APPLICATION_NAME} from NPM registry.\nHttp Status Code: 400.\n`
+                );
+                expect(err).equal(undefined);
+                done();
+            });
+        });
+
         it('| new major version released, should error out and pass the process', (done) => {
             // setup
             const latestVersion = `${currentMajor + 1}.0.0`;
