@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/alexa/ask-cli/compare/v2.7.0...v2.8.0) (2020-05-20)
+
+
+### Features
+
+* add a AWS:Logs:LogGroup Resource in cfn-deployer template ([c775d0c](https://github.com/alexa/ask-cli/commit/c775d0c5b7c32dcec86cebedf0adc9e8e4544b6f))
+* add full-response flag to smapi commands ([919ce9e](https://github.com/alexa/ask-cli/commit/919ce9e0a65fa7e63b179e7dd7e1d91fb7911ac1))
+
+
+### Bug Fixes
+
+* add handling for error http status code for version check ([8fd9b54](https://github.com/alexa/ask-cli/commit/8fd9b54f851b923c2ffdfce8bd7fbeee844fd9e9))
+* adding qoutes to fix issue of zipping folder with spaces ([09b293e](https://github.com/alexa/ask-cli/commit/09b293e65b768de898c78b50dbb3d59c61beef01))
+* smapi - improve logic to determine required for nested body params ([#202](https://github.com/alexa/ask-cli/issues/202)) ([965ba2c](https://github.com/alexa/ask-cli/commit/965ba2cb7a1058e8212fb56605b52a9d198737bf))
+* update output of debug message ([f333eab](https://github.com/alexa/ask-cli/commit/f333eab55d57d73b902665d3d0378bb1d1297b4a))
+
 ## [2.7.0](https://github.com/alexa/ask-cli/compare/v2.6.0...v2.7.0) (2020-05-14)
 
 
