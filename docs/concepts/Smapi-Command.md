@@ -499,18 +499,18 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
 
 `create-subscription-for-development-events` command format:
 
-`$ ask smapi create-subscription-for-development-events [--name <name>] [--events <events>] [--subscriber-id <subscriber-id>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-subscription-for-development-events <--name <name>> <--events <events>> <--subscriber-id <subscriber-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--name <name></dt>
-    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dd markdown="span">[REQUIRED] Name of the subscription.</dd>
     <dt>--events <events></dt>
-    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
+    <dd markdown="span">[REQUIRED] The list of events that the subscriber should be notified for. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
-    <dd markdown="span">[OPTIONAL] The id of the subscriber that would receive the events.</dd>
+    <dd markdown="span">[REQUIRED] The id of the subscriber that would receive the events.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -546,7 +546,7 @@ Updates the mutable properties of a subscription. This needs to be authorized by
 
 `set-subscription-for-development-events` command format:
 
-`$ ask smapi set-subscription-for-development-events <--subscription-id <subscription-id>> [--name <name>] [--events <events>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi set-subscription-for-development-events <--subscription-id <subscription-id>> <--name <name>> <--events <events>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -554,9 +554,9 @@ Updates the mutable properties of a subscription. This needs to be authorized by
     <dt>--subscription-id <subscription-id></dt>
     <dd markdown="span">[REQUIRED] Unique identifier of the subscription.</dd>
     <dt>--name <name></dt>
-    <dd markdown="span">[OPTIONAL] Name of the subscription.</dd>
+    <dd markdown="span">[REQUIRED] Name of the subscription.</dd>
     <dt>--events <events></dt>
-    <dd markdown="span">[OPTIONAL] The list of events that the subscriber should be notified for. 
+    <dd markdown="span">[REQUIRED] The list of events that the subscriber should be notified for. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1736,7 +1736,7 @@ update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog` command format:
 
-`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> <--slot-type-description <slot-type-description>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1744,7 +1744,7 @@ update description and vendorGuidance string for certain version of a catalog.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--slot-type-description <slot-type-description></dt>
-    <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
+    <dd markdown="span">[REQUIRED] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2124,7 +2124,7 @@ Update description and vendorGuidance string for certain version of a slot type.
 
 `update-interaction-model-slot-type` command format:
 
-`$ ask smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> [--slot-type-description <slot-type-description>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-interaction-model-slot-type <--slot-type-id <slot-type-id>> <--slot-type-description <slot-type-description>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2132,7 +2132,7 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dt>--slot-type-id <slot-type-id></dt>
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>--slot-type-description <slot-type-description></dt>
-    <dd markdown="span">[OPTIONAL] The slot type description with a 255 character maximum.</dd>
+    <dd markdown="span">[REQUIRED] The slot type description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
