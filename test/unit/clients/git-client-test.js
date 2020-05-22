@@ -63,10 +63,11 @@ describe('Clients test - cli git client', () => {
 
     describe('# test configureCredentialHelper', () => {
         const TEST_CREDENTIAL_HELPER_PATH = 'TEST_CREDENTIAL_HELPER_PATH';
+        const TEST_GIT_HOST_URL = 'SOME_URL';
         const TEST_COMMAND = [
-            'git config --local credential.helper ""',
-            `git config --local --add credential.helper "!${TEST_CREDENTIAL_HELPER_PATH}"`,
-            'git config --local credential.UseHttpPath true'];
+            `git config --local credential.${TEST_GIT_HOST_URL}.helper ""`,
+            `git config --local --add credential.${TEST_GIT_HOST_URL}.helper "!${TEST_CREDENTIAL_HELPER_PATH}"`,
+            `git config --local credential.${TEST_GIT_HOST_URL}.UseHttpPath true`];
 
         afterEach(() => {
             sinon.restore();
@@ -77,7 +78,7 @@ describe('Clients test - cli git client', () => {
             const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
             sinon.stub(gitClient, '_execChildProcessSync');
             // call
-            gitClient.configureCredentialHelper(TEST_CREDENTIAL_HELPER_PATH);
+            gitClient.configureCredentialHelper(TEST_CREDENTIAL_HELPER_PATH, TEST_GIT_HOST_URL);
             // verify
             expect(gitClient._execChildProcessSync.callCount).eq(3);
             expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
