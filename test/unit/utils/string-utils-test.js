@@ -165,6 +165,28 @@ describe('Utils test - string utility', () => {
         });
     });
 
+    describe('# test function canParseAsJson', () => {
+        [
+            {
+                testCase: 'parse non json',
+                str: 'some non json string',
+                expectation: false
+            },
+            {
+                testCase: 'parse json string',
+                str: JSON.stringify({ x: 'x' }),
+                expectation: true
+            },
+        ].forEach(({ testCase, str, expectation }) => {
+            it(`| ${testCase}, expect standardize ${str}`, () => {
+                // call
+                const callResult = stringUtils.canParseAsJson(str);
+                // verify
+                expect(callResult).equal(expectation);
+            });
+        });
+    });
+
     describe('# test function isNonBlankString', () => {
         [
             {

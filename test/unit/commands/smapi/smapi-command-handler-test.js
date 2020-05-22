@@ -71,7 +71,8 @@ describe('Smapi test - smapiCommandHandler function', () => {
                 return { refresh_token: 'test' };
             }
         });
-        clientStub[sdkFunctionName] = sinon.stub().resolves({ ...fakeResponse });
+        clientStub[sdkFunctionName] = sinon.stub();
+        clientStub[sdkFunctionName].resolves({ ...fakeResponse });
         clientStub[sdkFunctionName].toString = () => 'function (someJson, skillId, '
             + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
         sinon.stub(BeforeSendProcessor.prototype, 'processAll');
@@ -88,14 +89,52 @@ describe('Smapi test - smapiCommandHandler function', () => {
         expect(calledParams).eql(expectedParams);
     });
 
+    it('| should return command executed successfully when no response body', async () => {
+        const { headers, statusCode } = fakeResponse;
+        clientStub[sdkFunctionName].resolves({ headers, statusCode });
+
+        const result = await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
+
+        expect(result).eql('Command executed successfully!');
+    });
+
     it('| should read parameter from json file amd send smapi command', async () => {
         const jsonFilePath = 'file:some-file.json';
-        sinon.stub(fs, 'readJSONSync').returns(jsonValue);
+        sinon.stub(fs, 'readFileSync').returns(JSON.stringify(jsonValue));
         cmdObj.opts = () => ({ skillId, someNumber, someBoolean, someJson: jsonFilePath, someArray: arrayValueStr });
 
         await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
 
         const expectedParams = [jsonValue, skillId, null, arrayValue,
+            { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
+        const calledParams = clientStub[sdkFunctionName].args[0];
+
+        expect(calledParams).eql(expectedParams);
+    });
+
+    it('| should read parameter from text file amd send smapi command', async () => {
+        const textFilePath = 'file:some-file.txt';
+        const textValue = 'some text';
+        sinon.stub(fs, 'readFileSync').returns(textValue);
+        cmdObj.opts = () => ({ skillId, someNumber, someBoolean, someJson: textFilePath, someArray: arrayValueStr });
+
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
+
+        const expectedParams = [textValue, skillId, null, arrayValue,
+            { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
+        const calledParams = clientStub[sdkFunctionName].args[0];
+
+        expect(calledParams).eql(expectedParams);
+    });
+
+    it('| should parse parameter as text if not able to parse to json amd send smapi command', async () => {
+        const textValue = 'some text';
+        sinon.stub(fs, 'readFileSync').returns(textValue);
+        cmdObj.opts = () => ({ skillId, someNumber, someBoolean, someJson: textValue, someArray: arrayValueStr });
+
+        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
+
+        const expectedParams = [textValue, skillId, null, arrayValue,
             { input: { someNumber: Number(someNumber), someBoolean: Boolean(someBoolean) } }];
         const calledParams = clientStub[sdkFunctionName].args[0];
 
