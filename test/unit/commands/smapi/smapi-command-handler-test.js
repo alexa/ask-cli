@@ -9,7 +9,7 @@ const jsonView = require('@src/view/json-view');
 const BeforeSendProcessor = require('@src/commands/smapi/before-send-processor');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const profileHelper = require('@src/utils/profile-helper');
-const smapiCommandHandler = require('@src/commands/smapi/smapi-command-handler');
+const { smapiCommandHandler, parseSmapiResponse } = require('@src/commands/smapi/smapi-command-handler');
 
 
 describe('Smapi test - smapiCommandHandler function', () => {
@@ -180,5 +180,33 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
     afterEach(() => {
         sinon.restore();
+    });
+});
+
+describe('Smapi test - parseSmapiResponse function', () => {
+    it('| should parse text/csv response', () => {
+        const content = 'foo bar\n foo';
+        const response = { headers: [{ key: 'content-type', value: 'text/csv' }], body: content };
+
+        const result = parseSmapiResponse(response);
+
+        expect(result).eql(content);
+    });
+
+    it('| should parse application/json response', () => {
+        const content = { foo: 'bar' };
+        const response = { headers: [{ key: 'content-type', value: 'application/json' }], body: content };
+
+        const result = parseSmapiResponse(response);
+
+        expect(result).eql(jsonView.toString(content));
+    });
+
+    it('| should return command executed successfully if not response body', () => {
+        const response = { headers: [] };
+
+        const result = parseSmapiResponse(response);
+
+        expect(result).eql('Command executed successfully!');
     });
 });
