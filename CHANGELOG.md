@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/alexa/ask-cli/compare/v2.8.0...v2.9.0) (2020-05-28)
+
+
+### Features
+
+* add new smapi commands for asr evaluations ([894cbc5](https://github.com/alexa/ask-cli/commit/894cbc543c20aa58f6908b97910e925630454e25))
+* add support for csv content type body param in smapi ([11ccb61](https://github.com/alexa/ask-cli/commit/11ccb6100a64cbd919f572021a10b66a90e2f37c))
+* support partial deploy for lambda-deployer and revisit the protocol for deployer response ([6a6f04b](https://github.com/alexa/ask-cli/commit/6a6f04b2e8684019bc83a224f00ee9646a351800))
+
+
+### Bug Fixes
+
+* add host url to apply credential helper to hosted skill repo only ([#206](https://github.com/alexa/ask-cli/issues/206)) ([3ebbc00](https://github.com/alexa/ask-cli/commit/3ebbc00bf7da11339396761ed618677d38cfa75a))
+* add logic to handle non json response from smapi ([#171](https://github.com/alexa/ask-cli/issues/171)) ([aa55fc2](https://github.com/alexa/ask-cli/commit/aa55fc23c84810fa531b1743182d6426967886b5))
+* address comment ([d02590d](https://github.com/alexa/ask-cli/commit/d02590dcd21c0dcf4e4b557544e6a781410ccb91))
+* update the response object of create Lambda function ([a84f091](https://github.com/alexa/ask-cli/commit/a84f091de8cb08d9324ca12f8919d7f24e827cfb))
+
 ## [2.8.0](https://github.com/alexa/ask-cli/compare/v2.7.0...v2.8.0) (2020-05-20)
 
 
