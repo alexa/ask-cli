@@ -78,6 +78,7 @@ The path params
 | update description and vendorGuidance string for certain version of a catalog. | [update-interaction-model-catalog](#update-interaction-model-catalog) |
 | This API returns the job status of conflict detection job for a specified interaction model. | [get-conflict-detection-job-status-for-interaction-model](#get-conflict-detection-job-status-for-interaction-model) |
 | This is a paginated API that retrieves results of conflict detection job for a specified interaction model. | [get-conflicts-for-interaction-model](#get-conflicts-for-interaction-model) |
+| List all the historical versions of the given catalogId. | [list-interaction-model-catalog-versions](#list-interaction-model-catalog-versions) |
 | Create a new version of catalog entity for the given catalogId. | [create-interaction-model-catalog-version](#create-interaction-model-catalog-version) |
 | Get catalog version data of given catalog version. | [get-interaction-model-catalog-version](#get-interaction-model-catalog-version) |
 | Delete catalog version. | [delete-interaction-model-catalog-version](#delete-interaction-model-catalog-version) |
@@ -96,6 +97,7 @@ The path params
 | Get slot type version data of given slot type version. | [get-interaction-model-slot-type-version](#get-interaction-model-slot-type-version) |
 | Delete slot type version. | [delete-interaction-model-slot-type-version](#delete-interaction-model-slot-type-version) |
 | Update description and vendorGuidance string for certain version of a slot type. | [update-interaction-model-slot-type-version](#update-interaction-model-slot-type-version) |
+| This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also, note that calls to the skill endpoint will timeout after 10 seconds. | [invoke-skill](#invoke-skill) |
 | Returns the skill manifest for given skillId and stage. | [get-skill-manifest](#get-skill-manifest) |
 | Updates skill manifest for given skillId and stage. | [update-skill-manifest](#update-skill-manifest) |
 | Get analytic metrics report of skill usage. | [get-skill-metrics](#get-skill-metrics) |
@@ -135,6 +137,18 @@ The operation outputs an evaluationId which allows the retrieval of the current 
 | API which deletes the NLU annotation set. Developers cannot get/list the deleted annotation set. | [delete-properties-for-nlu-annotation-sets](#delete-properties-for-nlu-annotation-sets) |
 |  | [get-annotations-for-nlu-annotation-sets](#get-annotations-for-nlu-annotation-sets) |
 | API which replaces the annotations in NLU annotation set. | [update-annotations-for-nlu-annotation-sets](#update-annotations-for-nlu-annotation-sets) |
+| API which requests all the ASR annotation sets for a skill. Returns the annotation set id and properties for each ASR annotation set. Supports paging of results. | [list-asr-annotation-sets](#list-asr-annotation-sets) |
+| This is an API that creates a new ASR annotation set with a name and returns the annotationSetId which can later be used to retrieve or reference the annotation set. | [create-asr-annotation-set](#create-asr-annotation-set) |
+| Return the metadata for an ASR annotation set. | [get-asr-annotation-set](#get-asr-annotation-set) |
+| API which updates the ASR annotation set properties. Currently, the only data can be updated is annotation set name. | [set-asr-annotation-set](#set-asr-annotation-set) |
+| API which deletes the ASR annotation set. Developers cannot get/list the deleted annotation set. | [delete-asr-annotation-set](#delete-asr-annotation-set) |
+|  | [get-annotations-for-asr-annotation-set](#get-annotations-for-asr-annotation-set) |
+| API that updates the annotaions in the annotation set. | [set-annotations-for-asr-annotation-set](#set-annotations-for-asr-annotation-set) |
+| API that allows developers to get historical ASR evaluations they run before. | [list-asr-evaluations](#list-asr-evaluations) |
+| This is an asynchronous API that starts an evaluation against the ASR model built by the skill's interaction model. The operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it to evaluate ASR models. | [create-asr-evaluation](#create-asr-evaluation) |
+| API which requests high level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns the request used to start the job, like the number of total evaluations, number of completed evaluations, and start time. This should be considered the "cheap" operation while GetAsrEvaluationsResults is "expensive". | [get-asr-evaluation-status](#get-asr-evaluation-status) |
+| API which enables the deletion of an evaluation. | [delete-asr-evaluation](#delete-asr-evaluation) |
+| Paginated API which returns the test case results of an evaluation. This should be considered the "expensive" operation while GetAsrEvaluationsStatus is "cheap". | [list-asr-evaluations-results](#list-asr-evaluations-results) |
 | This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
 | upload a file for the catalog. | [upload-catalog](#upload-catalog) |
 | download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
@@ -153,7 +167,7 @@ Lists catalogs associated with a vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -224,7 +238,7 @@ Lists all the catalogs associated with a skill.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-s,--skill-id <skill-id></dt>
@@ -272,7 +286,7 @@ Lists all the uploads for a particular catalog.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-c,--catalog-id <catalog-id></dt>
@@ -369,7 +383,7 @@ Lists the subscribers for a particular vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -480,7 +494,7 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
@@ -593,7 +607,7 @@ Generates preSigned urls to upload data.
 
 `generate-catalog-upload-url` command format:
 
-`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> [--number-of-upload-parts <number-of-upload-parts>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi generate-catalog-upload-url <-c|--catalog-id <catalog-id>> <--number-of-upload-parts <number-of-upload-parts>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -601,7 +615,7 @@ Generates preSigned urls to upload data.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--number-of-upload-parts <number-of-upload-parts></dt>
-    <dd markdown="span">[OPTIONAL] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
+    <dd markdown="span">[REQUIRED] Provides the number of parts the file will be split into. An equal number of presigned upload urls are generated in response to facilitate each part's upload.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -646,7 +660,7 @@ Get the list of in-skill products for the vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--product-id <product-id></dt>
@@ -712,7 +726,7 @@ Get the list of in-skill products for the skillId.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -838,7 +852,7 @@ Get the associated skills for the in-skill product.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1010,7 +1024,7 @@ Generates hosted skill repository credentials to access the hosted skill reposit
 
 `generate-credentials-for-alexa-hosted-skill` command format:
 
-`$ ask smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> [--repository-url <repository-url>] [--repository-type <repository-type>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi generate-credentials-for-alexa-hosted-skill <-s|--skill-id <skill-id>> <--repository-url <repository-url>> <--repository-type <repository-type>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1018,9 +1032,9 @@ Generates hosted skill repository credentials to access the hosted skill reposit
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--repository-url <repository-url></dt>
-    <dd markdown="span">[OPTIONAL] Alexa Hosted Skill's Repository Information.</dd>
+    <dd markdown="span">[REQUIRED] Alexa Hosted Skill's Repository Information.</dd>
     <dt>--repository-type <repository-type></dt>
-    <dd markdown="span">[OPTIONAL] Alexa Hosted Skill's Repository Information 
+    <dd markdown="span">[REQUIRED] Alexa Hosted Skill's Repository Information 
 [ENUM]: GIT.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1195,7 +1209,7 @@ List all testers in a beta test for the given Alexa skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1316,7 +1330,7 @@ Get list of all certifications available for a skill, including information abou
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1464,7 +1478,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--sort-direction <sort-direction></dt>
@@ -1631,7 +1645,7 @@ List all catalogs for the vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1648,13 +1662,13 @@ Create a new version of catalog within the given catalogId.
 
 `create-interaction-model-catalog` command format:
 
-`$ ask smapi create-interaction-model-catalog [--catalog-name <catalog-name>] [--catalog-description <catalog-description>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-interaction-model-catalog <--catalog-name <catalog-name>> [--catalog-description <catalog-description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--catalog-name <catalog-name></dt>
-    <dd markdown="span">[OPTIONAL] Name of the catalog.</dd>
+    <dd markdown="span">[REQUIRED] Name of the catalog.</dd>
     <dt>--catalog-description <catalog-description></dt>
     <dd markdown="span">[OPTIONAL] Description string about the catalog.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1736,15 +1750,17 @@ update description and vendorGuidance string for certain version of a catalog.
 
 `update-interaction-model-catalog` command format:
 
-`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> <--slot-type-description <slot-type-description>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-interaction-model-catalog <-c|--catalog-id <catalog-id>> <--name <name>> <--description <description>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
-    <dt>--slot-type-description <slot-type-description></dt>
-    <dd markdown="span">[REQUIRED] The slot type description with a 255 character maximum.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[REQUIRED] The catalog name.</dd>
+    <dt>--description <description></dt>
+    <dd markdown="span">[REQUIRED] The catalog description with a 255 character maximum.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1802,9 +1818,38 @@ This is a paginated API that retrieves results of conflict detection job for a s
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-interaction-model-catalog-versions
+
+List all the historical versions of the given catalogId.
+
+`list-interaction-model-catalog-versions` command format:
+
+`$ ask smapi list-interaction-model-catalog-versions <-c|--catalog-id <catalog-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-c,--catalog-id <catalog-id></dt>
+    <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dt>--sort-direction <sort-direction></dt>
+    <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
+    <dt>--sort-field <sort-field></dt>
+    <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1929,7 +1974,7 @@ Get catalog values from the given catalogId &amp; version.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1991,7 +2036,7 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--sort-direction <sort-direction></dt>
@@ -2020,7 +2065,7 @@ List all slot types for the vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2157,7 +2202,7 @@ List all slot type versions for the slot type id.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2263,6 +2308,33 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
+### invoke-skill
+
+This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also, note that calls to the skill endpoint will timeout after 10 seconds.
+
+`invoke-skill` command format:
+
+`$ ask smapi invoke-skill <-s|--skill-id <skill-id>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--endpoint-region <endpoint-region></dt>
+    <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
+[ENUM]: NA,EU,FE.</dd>
+    <dt>--skill-request-body <skill-request-body></dt>
+    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
 ### get-skill-manifest
 
 Returns the skill manifest for given skillId and stage.
@@ -2354,7 +2426,7 @@ Get analytic metrics report of skill usage.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2429,7 +2501,7 @@ List private distribution accounts.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2501,13 +2573,13 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 `submit-skill-validation` command format:
 
-`$ ask smapi submit-skill-validation [-l|--locales <locales>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-l,--locales <locales></dt>
-    <dd markdown="span">[OPTIONAL]  
+    <dd markdown="span">[REQUIRED]  
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
@@ -2560,11 +2632,11 @@ Get the list of skills for the vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-s,--skill-id <skill-id></dt>
-    <dd markdown="span">[OPTIONAL] the list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with 'nextToken' or/and 'maxResults' parameter. 
+    <dd markdown="span">[OPTIONAL] The list of skillIds that you wish to get the summary for. A maximum of 10 skillIds can be specified to get the skill summary in single listSkills call. Please note that this parameter must not be used with 'nextToken' or/and 'maxResults' parameter. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -2714,7 +2786,7 @@ Submit the skill for certification.
 
 `submit-skill-for-certification` command format:
 
-`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> <--publication-method <publication-method>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2722,7 +2794,7 @@ Submit the skill for certification.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--publication-method <publication-method></dt>
-    <dd markdown="span">[REQUIRED] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
+    <dd markdown="span">[OPTIONAL] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
 [ENUM]: MANUAL_PUBLISHING,AUTO_PUBLISHING.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -2738,7 +2810,7 @@ Withdraws the skill from certification.
 
 `withdraw-skill-from-certification` command format:
 
-`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> [--reason <reason>] [--message <message>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi withdraw-skill-from-certification <-s|--skill-id <skill-id>> <--reason <reason>> [--message <message>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2746,7 +2818,7 @@ Withdraws the skill from certification.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--reason <reason></dt>
-    <dd markdown="span">[OPTIONAL] The reason to withdraw. 
+    <dd markdown="span">[REQUIRED] The reason to withdraw. 
 [ENUM]: TEST_SKILL,MORE_FEATURES,DISCOVERED_ISSUE,NOT_RECEIVED_CERTIFICATION_FEEDBACK,NOT_INTEND_TO_PUBLISH,OTHER.</dd>
     <dt>--message <message></dt>
     <dd markdown="span">[OPTIONAL] The message only in case the reason in OTHER.</dd>
@@ -2808,13 +2880,13 @@ Creates a new import for a skill.
 
 `create-skill-package` command format:
 
-`$ ask smapi create-skill-package [--location <location>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-skill-package <--location <location>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[OPTIONAL] The URL for the skill package.</dd>
+    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2829,13 +2901,13 @@ Creates a new import for a skill with given skillId.
 
 `import-skill-package` command format:
 
-`$ ask smapi import-skill-package [--location <location>] <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi import-skill-package <--location <location>> <-s|--skill-id <skill-id>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>--location <location></dt>
-    <dd markdown="span">[OPTIONAL] The URL for the skill package.</dd>
+    <dd markdown="span">[REQUIRED] The URL for the skill package.</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--if-match <if-match></dt>
@@ -3107,7 +3179,7 @@ This is an API that creates a new NLU annotation set with properties and returns
 
 `create-nlu-annotation-set` command format:
 
-`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> [-l|--locale <locale>] [--name <name>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-nlu-annotation-set <-s|--skill-id <skill-id>> <-l|--locale <locale>> <--name <name>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -3115,9 +3187,9 @@ This is an API that creates a new NLU annotation set with properties and returns
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-l,--locale <locale></dt>
-    <dd markdown="span">[OPTIONAL] The locale of the NLU annotation set.</dd>
+    <dd markdown="span">[REQUIRED] The locale of the NLU annotation set.</dd>
     <dt>--name <name></dt>
-    <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
+    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3155,7 +3227,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
 
 `update-properties-for-nlu-annotation-sets` command format:
 
-`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> [--name <name>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-properties-for-nlu-annotation-sets <-s|--skill-id <skill-id>> <--annotation-id <annotation-id>> <--name <name>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -3165,7 +3237,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
     <dt>--annotation-id <annotation-id></dt>
     <dd markdown="span">[REQUIRED] Identifier of the NLU annotation set.</dd>
     <dt>--name <name></dt>
-    <dd markdown="span">[OPTIONAL] The name of NLU annotation set provided by customer.</dd>
+    <dd markdown="span">[REQUIRED] The name of NLU annotation set provided by customer.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3242,6 +3314,323 @@ API which replaces the annotations in NLU annotation set.
     <dt>--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request></dt>
     <dd markdown="span">[REQUIRED] Payload sent to the update NLU annotation set API. 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-asr-annotation-sets
+
+API which requests all the ASR annotation sets for a skill. Returns the annotation set id and properties for each ASR annotation set. Supports paging of results.
+
+`list-asr-annotation-sets` command format:
+
+`$ ask smapi list-asr-annotation-sets <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-asr-annotation-set
+
+This is an API that creates a new ASR annotation set with a name and returns the annotationSetId which can later be used to retrieve or reference the annotation set.
+
+`create-asr-annotation-set` command format:
+
+`$ ask smapi create-asr-annotation-set <-s|--skill-id <skill-id>> <--name <name>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[REQUIRED] The name of ASR annotation set. The length of the name cannot exceed 170 chars. Only alphanumeric characters are accepted.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-asr-annotation-set
+
+Return the metadata for an ASR annotation set.
+
+`get-asr-annotation-set` command format:
+
+`$ ask smapi get-asr-annotation-set <-s|--skill-id <skill-id>> <--annotation-set-id <annotation-set-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### set-asr-annotation-set
+
+API which updates the ASR annotation set properties. Currently, the only data can be updated is annotation set name.
+
+`set-asr-annotation-set` command format:
+
+`$ ask smapi set-asr-annotation-set <-s|--skill-id <skill-id>> <--annotation-set-id <annotation-set-id>> <--name <name>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
+    <dt>--name <name></dt>
+    <dd markdown="span">[REQUIRED] The name of ASR annotation set. The length of the name cannot exceed 170 chars. Only alphanumeric characters are accepted.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### delete-asr-annotation-set
+
+API which deletes the ASR annotation set. Developers cannot get&#x2F;list the deleted annotation set.
+
+`delete-asr-annotation-set` command format:
+
+`$ ask smapi delete-asr-annotation-set <-s|--skill-id <skill-id>> <--annotation-set-id <annotation-set-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-annotations-for-asr-annotation-set
+
+
+
+`get-annotations-for-asr-annotation-set` command format:
+
+`$ ask smapi get-annotations-for-asr-annotation-set <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] <--annotation-set-id <annotation-set-id>> <--accept <accept>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
+    <dt>--accept <accept></dt>
+    <dd markdown="span">[REQUIRED] - `application/json`: indicate to download annotation set contents in JSON format - `text/csv`: indicate to download annotation set contents in CSV format 
+[ENUM]: application/json,text/csv.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### set-annotations-for-asr-annotation-set
+
+API that updates the annotaions in the annotation set.
+
+`set-annotations-for-asr-annotation-set` command format:
+
+`$ ask smapi set-annotations-for-asr-annotation-set <-s|--skill-id <skill-id>> <--annotation-set-id <annotation-set-id>> <--annotations <annotations>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
+    <dt>--annotations <annotations></dt>
+    <dd markdown="span">[REQUIRED]  
+[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-asr-evaluations
+
+API that allows developers to get historical ASR evaluations they run before.
+
+`list-asr-evaluations` command format:
+
+`$ ask smapi list-asr-evaluations <-s|--skill-id <skill-id>> [--next-token <next-token>] [-l|--locale <locale>] [-g|--stage <stage>] [--annotation-set-id <annotation-set-id>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[OPTIONAL] locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL] Query parameter used to filter evaluations with specified skill stage.
+  
+* `development` - skill in `development` stage
+  * `live` - skill in `live` stage 
+[ENUM]: development,live.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[OPTIONAL] filter to evaluations started using this annotationSetId.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-asr-evaluation
+
+This is an asynchronous API that starts an evaluation against the ASR model built by the skill&#39;s interaction model. The operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it to evaluate ASR models.
+
+`create-asr-evaluation` command format:
+
+`$ ask smapi create-asr-evaluation <-g|--stage <stage>> <-l|--locale <locale>> <--annotation-set-id <annotation-set-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[REQUIRED]  
+[ENUM]: development,live.</dd>
+    <dt>-l,--locale <locale></dt>
+    <dd markdown="span">[REQUIRED] skill locale in bcp 47 format.</dd>
+    <dt>--annotation-set-id <annotation-set-id></dt>
+    <dd markdown="span">[REQUIRED] ID for annotation set.</dd>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-asr-evaluation-status
+
+API which requests high level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns the request used to start the job, like the number of total evaluations, number of completed evaluations, and start time. This should be considered the &quot;cheap&quot; operation while GetAsrEvaluationsResults is &quot;expensive&quot;.
+
+`get-asr-evaluation-status` command format:
+
+`$ ask smapi get-asr-evaluation-status <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### delete-asr-evaluation
+
+API which enables the deletion of an evaluation.
+
+`delete-asr-evaluation` command format:
+
+`$ ask smapi delete-asr-evaluation <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-asr-evaluations-results
+
+Paginated API which returns the test case results of an evaluation. This should be considered the &quot;expensive&quot; operation while GetAsrEvaluationsStatus is &quot;cheap&quot;.
+
+`list-asr-evaluations-results` command format:
+
+`$ ask smapi list-asr-evaluations-results <-s|--skill-id <skill-id>> [--next-token <next-token>] <--evaluation-id <evaluation-id>> [--max-results <max-results>] [--status <status>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a nextToken.</dd>
+    <dt>--status <status></dt>
+    <dd markdown="span">[OPTIONAL] query parameter used to filter evaluation result status.
+  
+* `PASSED` - filter evaluation result status of `PASSED`
+  * `FAILED` - filter evaluation result status of `FAILED` 
+[ENUM]: PASSED,FAILED.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
