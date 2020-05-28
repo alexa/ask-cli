@@ -1092,6 +1092,13 @@ parallel('smapi command test', () => {
         expect(result).be.an('object');
     });
 
+    it('| should list interaction model catalog versions', async () => {
+        const args = [subCmd, 'list-interaction-model-catalog-versions', '-c', catalogId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
