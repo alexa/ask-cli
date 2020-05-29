@@ -8,12 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up
-      env:
-        CLI_CONFIG: ${{ secrets.cliConfig }}
-      run: |
-        mkdir $HOME/.ask
-        echo "$CLI_CONFIG" > $HOME/.ask/cli_config
     - uses: actions/checkout@v2
     - name: Use Node.js
       uses: actions/setup-node@v1
@@ -22,3 +16,8 @@ jobs:
     - run: npm install
     - run: npm link
     - run: npm run integration-test
+      env:
+        ASK_VENDOR_ID: test
+        ASK_REFRESH_TOKEN: test
+        AWS_ACCESS_KEY_ID: test
+        AWS_SECRET_ACCESS_KEY: test
