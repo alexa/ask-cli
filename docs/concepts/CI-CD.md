@@ -1,6 +1,6 @@
 # CI/CD - Continuous integration and continuous delivery
 
-The following guide provides instructions how to use `ask cli` in CI/CD environment (Jenkins, Travis, Github Actions, etc);
+The following guide provides instructions how to use `ask cli` in CI/CD environment (Jenkins, Travis, Github Actions, etc).
 
 1) Set up the following environment variables:
  - AWS_ACCESS_KEY_ID
