@@ -7,6 +7,7 @@ const helper = require('@src/commands/dialog/helper');
 const InteractiveMode = require('@src/commands/dialog/interactive-mode');
 const optionModel = require('@src/commands/option-model');
 const ResourcesConfig = require('@src/model/resources-config');
+const Manifest = require('@src/model/manifest');
 const CONSTANTS = require('@src/utils/constants');
 const profileHelper = require('@src/utils/profile-helper');
 const stringUtils = require('@src/utils/string-utils');
@@ -22,6 +23,7 @@ describe('Commands Dialog test - command class test', () => {
     const INVALID_DIALOG_REPLAY_FILE_JSON_PATH = path.join(DIALOG_FIXTURE_PATH, 'invalid-dialog-replay-file.json');
     const INVALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'random-json-config.json');
     const VALID_RESOURCES_CONFIG_JSON_PATH = path.join(RESOURCE_CONFIG_FIXTURE_PATH, 'ask-resources.json');
+    const VALID_MANIFEST_JSON_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default';
     const TEST_CMD = {
         profile: TEST_PROFILE
@@ -217,6 +219,12 @@ describe('Commands Dialog test - command class test', () => {
                     skillId: 'skillId'
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                const getSkillMetaSrc = () => {};
+                sinon.stub(ResourcesConfig, 'getInstance').returns({ getSkillMetaSrc });
+
+                const getPublishingLocales = () => ({});
+                sinon.stub(Manifest, 'getInstance').returns({ getPublishingLocales });
+                sinon.stub(path, 'join').returns(VALID_MANIFEST_JSON_PATH);
                 // call
                 instance.handle(TEST_CMD_WITH_VALUES, (err) => {
                     // verify
@@ -256,9 +264,13 @@ describe('Commands Dialog test - command class test', () => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {};
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
-                sinon.stub(path, 'join').withArgs(
+                const pathJoinStub = sinon.stub(path, 'join');
+                pathJoinStub.withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
                 ).returns(VALID_RESOURCES_CONFIG_JSON_PATH);
+                pathJoinStub.withArgs(
+                    './skillPackage', CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST
+                ).returns(VALID_MANIFEST_JSON_PATH);
                 path.join.callThrough();
                 process.env.ASK_DEFAULT_DEVICE_LOCALE = 'en-US';
                 // call
