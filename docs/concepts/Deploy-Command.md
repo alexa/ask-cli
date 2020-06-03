@@ -55,7 +55,7 @@ To provision the backend services which are used to execute customized logics fo
 * This step is skippable when you remove the entire `skillInfrastructure` field from ask-resources config file.
 
 ### Deploy only skill package 
-ASK CLI v1 had option --target to deploy only skill package and not infrastructure. Similar behavior can be achieved in ASK CLI v2 by removing "skillInfrastructure" property from ask-resources.json. 
+ASK CLI v1 had option '--target' to deploy only skill package and not the infrastructure. Similar behavior can be achieved in ASK CLI v2 by removing "skillInfrastructure" property from ask-resources.json. 
 
 ### Deployer
 Deployer is the module that serve for any unique serverless deploy mechanism. Deployer can be triggered in two scenarios, which are also the interfaces a deployer has to be implemented:
