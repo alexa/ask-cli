@@ -25,6 +25,7 @@ describe('Model test - abstract config file test', () => {
             try {
                 // call
                 configContent = new ConfigFile(CONFIG_FILE);
+                configContent.read();
                 jsonContent = jsonfile.readFileSync(CONFIG_FILE);
             } catch (err) {
                 expect(err).equal(null);
@@ -40,6 +41,7 @@ describe('Model test - abstract config file test', () => {
             try {
                 // call
                 configContent = new ConfigFile(JSON_CONFIG_PATH);
+                configContent.read();
                 jsonContent = jsonfile.readFileSync(JSON_CONFIG_PATH);
             } catch (err) {
                 expect(err).equal(null);
@@ -55,6 +57,7 @@ describe('Model test - abstract config file test', () => {
             try {
                 // call
                 yamlContent = new ConfigFile(YAML_CONFIG_PATH);
+                yamlContent.read();
                 jsonContent = jsonfile.readFileSync(JSON_CONFIG_PATH);
             } catch (err) {
                 expect(err).equal(null);
@@ -68,7 +71,8 @@ describe('Model test - abstract config file test', () => {
         it('| init with a file path not existing, expect correct error message thrown', () => {
             try {
                 // call
-                new ConfigFile(NOT_EXISTING_CONFIG_PATH);
+                const config = new ConfigFile(NOT_EXISTING_CONFIG_PATH);
+                config.read();
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 // verify
@@ -82,7 +86,8 @@ describe('Model test - abstract config file test', () => {
             fs.chmodSync(JSON_CONFIG_PATH, 0o111);
             try {
                 // call
-                new ConfigFile(JSON_CONFIG_PATH);
+                const config = new ConfigFile(JSON_CONFIG_PATH);
+                config.read();
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 // verify
@@ -96,7 +101,8 @@ describe('Model test - abstract config file test', () => {
 
         it('| init with an invalid json file, expect correct error message thrown', () => {
             try {
-                new ConfigFile(INVALID_JSON_CONFIG_PATH);
+                const config = new ConfigFile(INVALID_JSON_CONFIG_PATH);
+                config.read();
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `Failed to parse JSON file ${INVALID_JSON_CONFIG_PATH}.`;
@@ -106,7 +112,8 @@ describe('Model test - abstract config file test', () => {
 
         it('| init with an invalid yaml file, expect correct error message thrown', () => {
             try {
-                new ConfigFile(INVALID_YAML_CONFIG_PATH);
+                const config = new ConfigFile(INVALID_YAML_CONFIG_PATH);
+                config.read();
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 const expectedError = `Failed to parse YAML file ${INVALID_YAML_CONFIG_PATH}.`;
@@ -116,7 +123,8 @@ describe('Model test - abstract config file test', () => {
 
         it('| init with a non-supported file type, expect correct error message thrown', () => {
             try {
-                new ConfigFile(NOT_SUPPORTED_FILE_PATH);
+                const config = new ConfigFile(NOT_SUPPORTED_FILE_PATH);
+                config.read();
                 throw new Error('No error caught but supposed to throw an error when new.');
             } catch (err) {
                 expect(err.message).to.equal(`File type for ${NOT_SUPPORTED_FILE_PATH} is not supported. Only JSON and YAML files are supported.`);
@@ -171,6 +179,7 @@ describe('Model test - abstract config file test', () => {
 
     describe('# inspect correctness for getProperty method', () => {
         const json = new ConfigFile(JSON_CONFIG_PATH);
+        json.read();
 
         [
             {
@@ -207,7 +216,7 @@ describe('Model test - abstract config file test', () => {
 
     describe('# inspect correctness for setProperty method', () => {
         const json = new ConfigFile(JSON_CONFIG_PATH);
-
+        json.read();
         [
             {
                 testCase: 'set value for property correctly',
@@ -249,6 +258,7 @@ describe('Model test - abstract config file test', () => {
         it('| write to JSON file successfully', () => {
             // setup
             const jsonConfig = new ConfigFile(JSON_CONFIG_PATH);
+            jsonConfig.read();
             const propertyPath = ['simpleKey'];
             const copy = jsonConfig.getProperty(propertyPath);
             jsonConfig.setProperty(propertyPath, 'notSimpleValue');
@@ -256,6 +266,7 @@ describe('Model test - abstract config file test', () => {
             jsonConfig.write();
             // verify
             const verifyConfig = new ConfigFile(JSON_CONFIG_PATH);
+            verifyConfig.read();
             expect(verifyConfig.getProperty(propertyPath)).equal('notSimpleValue');
             // clear
             jsonConfig.setProperty(propertyPath, copy);
@@ -265,6 +276,7 @@ describe('Model test - abstract config file test', () => {
         it('| write to YAML file successfully', () => {
             // setup
             const yamlConfig = new ConfigFile(YAML_CONFIG_PATH);
+            yamlConfig.read();
             const propertyPath = ['simpleKey'];
             const copy = yamlConfig.getProperty(propertyPath);
             yamlConfig.setProperty(propertyPath, 'notSimpleValue');
@@ -272,6 +284,7 @@ describe('Model test - abstract config file test', () => {
             yamlConfig.write();
             // verify
             const verifyConfig = new ConfigFile(YAML_CONFIG_PATH);
+            verifyConfig.read();
             expect(verifyConfig.getProperty(propertyPath)).equal('notSimpleValue');
             // clear
             yamlConfig.setProperty(propertyPath, copy);
@@ -285,6 +298,7 @@ describe('Model test - abstract config file test', () => {
             try {
                 // call
                 const json = new ConfigFile(JSON_CONFIG_PATH);
+                json.read();
                 json.write();
             } catch (err) {
                 // verify
@@ -302,6 +316,7 @@ describe('Model test - abstract config file test', () => {
             try {
                 // call
                 const yamlConfig = new ConfigFile(YAML_CONFIG_PATH);
+                yamlConfig.read();
                 yamlConfig.write();
             } catch (err) {
                 // verify
