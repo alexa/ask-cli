@@ -60,7 +60,11 @@ Below shows an example config JSON file, using `@ask-cli/cfn-deployer` deployer 
         "userConfig": {                     // tracks settings for the deployer, deployer-specific
           "runtime": "{lambdaRuntime}",
           "handler": "{lambdaHandler}",
-          "templatePath": "stack.yaml"
+          "templatePath": "stack.yaml",
+          "templateParameters": { // custom parameters to pass to the deployer. Supported for CloudFormation deployer only
+            "ParamOne": "foo",
+            "ParamTwo": "bar"
+          }
         },
         "deployState": {                    // tracks states for the deployer to continuously deploy, deployer-specific
           "default": {
