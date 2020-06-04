@@ -16,6 +16,7 @@ describe('Commands upgrade project test - command class test', () => {
     const TEST_PROFILE = 'default';
     const TEST_ERROR = 'upgrade project error';
     const TEST_SKILL_ID = 'skillId';
+    const TEST_V1_CONFIG = {};
     let infoStub;
     let errorStub;
     let warnStub;
@@ -54,6 +55,11 @@ describe('Commands upgrade project test - command class test', () => {
             beforeEach(() => {
                 instance = new UpgradeProjectCommand(optionModel);
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(helper, 'loadV1ProjConfig').returns({
+                    isDeployed: true,
+                    v1Config: TEST_V1_CONFIG
+                });
+                sinon.stub(helper, 'attemptUpgradeUndeployedProject');
             });
 
             afterEach(() => {
@@ -62,13 +68,56 @@ describe('Commands upgrade project test - command class test', () => {
 
             it('| when profile is not correct, expect throw error', (done) => {
                 // setup
-                profileHelper.runtimeProfile.throws(new Error('error'));
+                profileHelper.runtimeProfile.throws(new Error(TEST_ERROR));
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
-                    expect(err.message).equal('error');
-                    expect(errorStub.args[0][0]).equal('error');
+                    expect(err.message).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
                     expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| when loadV1ProjConfig throws, expect error displayed', (done) => {
+                // setup
+                helper.loadV1ProjConfig.throws(new Error(TEST_ERROR));
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err.message).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| when attemptUpgradeUndeployedProject throws, expect error displayed', (done) => {
+                // setup
+                helper.loadV1ProjConfig.returns({ isDeployed: false });
+                helper.attemptUpgradeUndeployedProject.throws(new Error(TEST_ERROR));
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err.message).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
+                    expect(infoStub.callCount).equal(0);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| when project is undeployed project, expect project will get updated directly', (done) => {
+                // setup
+                helper.loadV1ProjConfig.returns({ isDeployed: false });
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(err).equal(undefined);
+                    expect(infoStub.args[0][0]).equal('Template project migration finished.');
+                    expect(errorStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -81,7 +130,7 @@ describe('Commands upgrade project test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal(TEST_ERROR);
-                    expect(errorStub.args[0][0]).equal(TEST_ERROR);
+                    expect(errorStub.args[0][0].message).equal(TEST_ERROR);
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(0);
                     done();
@@ -125,6 +174,10 @@ describe('Commands upgrade project test - command class test', () => {
             beforeEach(() => {
                 instance = new UpgradeProjectCommand(optionModel);
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(helper, 'loadV1ProjConfig').returns({
+                    isDeployed: true,
+                    v1Config: TEST_V1_CONFIG
+                });
             });
 
             afterEach(() => {
@@ -312,6 +365,10 @@ describe('Commands upgrade project test - command class test', () => {
             beforeEach(() => {
                 instance = new UpgradeProjectCommand(optionModel);
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(helper, 'loadV1ProjConfig').returns({
+                    isDeployed: true,
+                    v1Config: TEST_V1_CONFIG
+                });
             });
 
             afterEach(() => {
