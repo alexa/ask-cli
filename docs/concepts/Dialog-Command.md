@@ -31,7 +31,7 @@
 
 ### INTERACTIVE MODE
 
-This mode allows developers to simulate a multi-turn conversation with Alexa. If `skill-id` is not specified, the command must be executed in the skill project root directory. If the environment variable with key `ASK_DEFAULT_DEVICE_LOCALE` or `-l|--locale <locale>` option is not specified, then the locale will default to the first value from the skill manifest.
+This mode allows developers to simulate a multi-turn conversation with Alexa. If `skill-id` is not specified, the command must be executed in the skill project root directory. If the environment variable with key `ASK_DEFAULT_DEVICE_LOCALE` or `-l|--locale <locale>` option is not specified, then the locale defaults to the first value from the skill manifest.
 Note that end of a skill session will not quit the Interactive mode. User is expected to run `.quit` sub-command to exit the Interactive mode.
 
 User experience in Interactive mode will be,
