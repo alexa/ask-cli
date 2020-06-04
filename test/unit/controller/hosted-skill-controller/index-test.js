@@ -184,7 +184,7 @@ describe('Controller test - hosted skill controller test', () => {
             };
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_RESPONSE); // stub getAlexaHostedSkillMetadata smapi request
-            // sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, TEST_SKILL_PACKAGE_ERROR);
@@ -199,7 +199,7 @@ describe('Controller test - hosted skill controller test', () => {
         it('| skill package exists, expect skill-package generated ', (done) => {
             // setup
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
-            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, true);
@@ -217,7 +217,7 @@ describe('Controller test - hosted skill controller test', () => {
             // setup
             const TEST_EXPORT_ERROR = 'TEST_EXPORT_ERROR';
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
-            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, false);
@@ -232,7 +232,7 @@ describe('Controller test - hosted skill controller test', () => {
         it('| skill package do NOT exist, export skill-package succeed, expect skill-package generated ', (done) => {
             // setup
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
-            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null);

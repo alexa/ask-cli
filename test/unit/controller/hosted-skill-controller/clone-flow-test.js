@@ -52,7 +52,6 @@ describe('Controller test - CloneFlow test', () => {
             // verify
             expect(ResourcesConfig.getInstance().getSkillId(TEST_PROFILE)).equal(TEST_SKILL_ID);
             expect(ResourcesConfig.getInstance().getSkillInfraType(TEST_PROFILE)).equal(TEST_DEPLOYER_TYPE);
-            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE).repository.url).equal(TEST_REPO_URL);
             expect(Messenger.getInstance().info.args[0][0]).equal(`\nProject directory for ${TEST_SKILL_NAME} created at\n\t${TEST_PROJECT_PATH}`);
         });
     });
@@ -98,7 +97,7 @@ describe('Controller test - CloneFlow test', () => {
             sinon.stub(GitClient.prototype, 'setupGitIgnore');
             sinon.stub(GitClient.prototype, 'add');
             // call
-            cloneFlow.cloneProjectFromGit(TEST_PROJECT_PATH, TEST_SKILL_NAME, TEST_PROFILE, TEST_DO_DEBUG);
+            cloneFlow.cloneProjectFromGit(TEST_PROJECT_PATH, TEST_SKILL_NAME, TEST_PROFILE, TEST_REPO_URL, TEST_DO_DEBUG);
             // verify
             expect(Messenger.getInstance().info.args[0][0]).equal('- Setting up git repo...');
             expect(Messenger.getInstance().info.args[1][0]).equal('- Fetching git repo...');
