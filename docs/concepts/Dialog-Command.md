@@ -17,7 +17,7 @@
 
 **skill-id**: Optional. Represents the Id associated with the skill the user is expecting to simulate. It should be in the format `amzn1.ask.skill.12345678-1234-1234-123456789123`. If skill-id is not specified, and if the `--replay` option is not specified, this command must be run from the skill project root directory. Do not specify the skill-id if you use the --replay option.
 
-**locale**: Optional if ASK_DEFAULT_DEVICE_LOCALE environment variable is set, otherwise, required if the `--replay` option is not used.
+**locale**: Optional. If ASK_DEFAULT_DEVICE_LOCALE environment variable is set, the value from the variable is  used. If ASK_DEFAULT_DEVICE_LOCALE is not set and the command is executed from the skill project root directory, the locale defaults to the first locale in the skill manifest. Otherwise, it is required.
 
 **stage**: Optional. Indicates stage of the skill. Use development or live as values. Defaults to development.
 
@@ -31,7 +31,7 @@
 
 ### INTERACTIVE MODE
 
-This mode allows developers to simulate a multi-turn conversation with Alexa. If `skill-id` is not specified, the command must be executed in the skill project root directory. If the environment variable with key `ASK_DEFAULT_DEVICE_LOCALE` is not specified, then locale must be provided as part of arguments.
+This mode allows developers to simulate a multi-turn conversation with Alexa. If `skill-id` is not specified, the command must be executed in the skill project root directory. If the environment variable with key `ASK_DEFAULT_DEVICE_LOCALE` or `-l|--locale <locale>` option is not specified, then the locale will default to the first value from the skill manifest.
 Note that end of a skill session will not quit the Interactive mode. User is expected to run `.quit` sub-command to exit the Interactive mode.
 
 User experience in Interactive mode will be,
