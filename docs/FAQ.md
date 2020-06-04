@@ -22,3 +22,8 @@ This issue is related to CLI's deploy command to build code using Powershell scr
   Install-Module Microsoft.PowerShell.Archive -MinimumVersion 1.2.3.0 -Repository PSGallery -Force
 ```
 Related issues: https://github.com/alexa/ask-cli/issues/38, https://github.com/alexa/ask-cli/issues/59, https://github.com/alexa/ask-cli/issues/117. Thanks for your effort for reporting this issue.
+
+
+### Q: How to deploy only skill package and ignore skillInfrastructure?
+
+ASK CLI v1 had option '--target' to deploy only skill package and not the infrastructure. Similar behavior can be achieved in ASK CLI v2 by removing "skillInfrastructure" property from ask-resources.json. 
