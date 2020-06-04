@@ -454,8 +454,9 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             }
         };
 
+        let AppConfigReadStub;
         beforeEach(() => {
-            sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+            AppConfigReadStub = sinon.stub(AppConfig.prototype, 'read');
             sinon.stub(process, 'exit');
             sinon.stub(metricClient, 'sendData').resolves();
         });
@@ -483,7 +484,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             const mockCommand = new NonConfigureCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('random');
                 expect(options._description).eq('random description');
-                expect(AppConfig.getInstance().getProfilesList().length).eq(0);
+                expect(AppConfigReadStub.called).eql(true);
                 cb();
             });
 
@@ -511,7 +512,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
                 expect(options._name).eq('configure');
                 expect(options._description).eq('configure description');
                 expect(options.options).deep.eq([]);
-                expect(AppConfig.getInstance()).eq(null);
+                expect(AppConfigReadStub.called).eql(false);
                 cb();
             });
 
