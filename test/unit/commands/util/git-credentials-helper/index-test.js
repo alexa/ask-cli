@@ -122,22 +122,6 @@ describe('Commands git-credentials-helper test - command class test', () => {
                     done();
                 });
             });
-
-            it('| Failed to get the git repository, expect throw error', (done) => {
-                // setup
-                const errorMessage = 'Failed to get the git repository from ask-cli project. '
-                + 'Please verify the completeness of your skill project.';
-                sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, {});
-                // call
-                instance.handle(TEST_CMD, () => {
-                    // verify
-                    expect(errorStub.args[0][0]).equal(errorMessage);
-                    expect(infoStub.callCount).equal(0);
-                    expect(warnStub.callCount).equal(0);
-                    done();
-                });
-            });
         });
 
         describe('command handle - request to get git credentials', () => {
@@ -182,6 +166,17 @@ describe('Commands git-credentials-helper test - command class test', () => {
                 const TEST_STATUS_CODE = 200;
                 const TEST_USERNAME = 'TEST_USERNAME';
                 const TEST_PASSWORD = 'TEST_PASSWORD';
+                const GET_METADATA_RESPONSE = {
+                    statusCode: TEST_STATUS_CODE,
+                    headers: {},
+                    body: {
+                        alexaHosted: {
+                            repository: {
+                                url: 'test'
+                            }
+                        }
+                    }
+                };
                 const GET_STATUS_RESPONSE = {
                     statusCode: TEST_STATUS_CODE,
                     headers: {},
@@ -193,7 +188,13 @@ describe('Commands git-credentials-helper test - command class test', () => {
                     }
                 };
                 sinon.stub(path, 'join').returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-                sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_STATUS_RESPONSE); // stub getGitCredentials request
+
+                sinon.stub(httpClient, 'request')
+                    .onFirstCall()
+                    .yields(null, GET_METADATA_RESPONSE)
+                    .onSecondCall()
+                    .yields(null, GET_STATUS_RESPONSE);
+
                 // call
                 instance.handle(TEST_CMD, () => {
                     // verify
