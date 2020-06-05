@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/alexa/ask-cli/compare/v2.9.0...v2.10.0) (2020-06-05)
+
+
+### Features
+
+* support upgrade-project command with un-deployed project ([#223](https://github.com/alexa/ask-cli/issues/223)) ([0aea890](https://github.com/alexa/ask-cli/commit/0aea890e0a24d32fe09b63a373e3c7a355faf44f))
+
+
+### Bug Fixes
+
+* add support to run smapi command using env settings ([#216](https://github.com/alexa/ask-cli/issues/216)) ([fbb92f2](https://github.com/alexa/ask-cli/commit/fbb92f2c0a46e6d6e92c7459127ceb24ad867640))
+* fix integration test ([8f11aea](https://github.com/alexa/ask-cli/commit/8f11aea634230a8eb3da689ec19dfb0b838ae265))
+* read first locale from skill.json if not provided by user ([#221](https://github.com/alexa/ask-cli/issues/221)) ([8f6b031](https://github.com/alexa/ask-cli/commit/8f6b031c4c30e1bddc80b5ce1546dcf7ceff4aec))
+
 ## [2.9.0](https://github.com/alexa/ask-cli/compare/v2.8.0...v2.9.0) (2020-05-28)
 
 
