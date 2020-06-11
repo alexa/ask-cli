@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.10.2](https://github.com/alexa/ask-cli/compare/v2.10.1...v2.10.2) (2020-06-11)
+
+
+### Bug Fixes
+
+* add qoutes around folder path to fix issue when path has space ([#234](https://github.com/alexa/ask-cli/issues/234)) ([3c73020](https://github.com/alexa/ask-cli/commit/3c73020e3d9d3bbdd8c51e5f477186b2fe5ba7d5))
+
 ### [2.10.1](https://github.com/alexa/ask-cli/compare/v2.10.0...v2.10.1) (2020-06-05)
 
 ## [2.10.0](https://github.com/alexa/ask-cli/compare/v2.9.0...v2.10.0) (2020-06-05)
