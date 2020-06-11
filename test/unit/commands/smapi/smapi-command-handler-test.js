@@ -11,7 +11,6 @@ const AuthorizationController = require('@src/controllers/authorization-controll
 const profileHelper = require('@src/utils/profile-helper');
 const { smapiCommandHandler, parseSmapiResponse } = require('@src/commands/smapi/smapi-command-handler');
 
-
 describe('Smapi test - smapiCommandHandler function', () => {
     const apiOperationName = 'someApiOperation';
     const sdkFunctionName = 'callSomeApiOperation';
@@ -208,5 +207,30 @@ describe('Smapi test - parseSmapiResponse function', () => {
         const result = parseSmapiResponse(response);
 
         expect(result).eql('Command executed successfully!');
+    });
+
+    it('| should return result parsed from location header that includes parameters and status hint command', () => {
+        const skillId = 'someSkillId';
+        const resource = 'someResource';
+        const url = `/v1/skills/${skillId}/status?resource=${resource}`;
+        const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
+
+        const result = parseSmapiResponse(response);
+
+        const expected = { skillId,
+            resource,
+            statusCheckHintCommand: `ask smapi get-skill-status --skill-id ${skillId} --resource ${resource}`,
+            locationHeaderValue: url };
+        expect(result).eql(jsonView.toString(expected));
+    });
+
+    it('| should return result parsed from location header that only includes location header property', () => {
+        const url = '/some-random-non-smapi-url';
+        const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
+
+        const result = parseSmapiResponse(response);
+
+        const expected = { locationHeaderValue: url };
+        expect(result).eql(jsonView.toString(expected));
     });
 });
