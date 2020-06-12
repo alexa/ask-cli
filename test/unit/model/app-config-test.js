@@ -1,8 +1,10 @@
 const { expect } = require('chai');
+const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 
+const profileHelper = require('@src/utils/profile-helper');
 const AppConfig = require('@src/model/app-config');
 
 describe('Model test - app config test', () => {
@@ -12,6 +14,10 @@ describe('Model test - app config test', () => {
     const YAML_APP_CONFIG_PATH = path.join(FIXTURE_PATH, 'app-config.yaml');
 
     describe('# inspect correctness for constructor, getInstance and dispose', () => {
+        beforeEach(() => {
+            sinon.stub(profileHelper, 'isEnvProfile').returns(false);
+        });
+
         const NOT_EXISTING_PROJECT_CONFIG_PATH = path.join(FIXTURE_PATH, 'out-of-noWhere.json');
         const INVALID_JSON_PROJECT_CONFIG_PATH = path.join(FIXTURE_PATH, 'invalid-json.json');
 
@@ -82,6 +88,7 @@ describe('Model test - app config test', () => {
 
         afterEach(() => {
             AppConfig.dispose();
+            sinon.restore();
         });
     });
 
@@ -89,6 +96,7 @@ describe('Model test - app config test', () => {
         const TEST_PROFILE = 'testProfile';
 
         beforeEach(() => {
+            sinon.stub(profileHelper, 'isEnvProfile').returns(false);
             new AppConfig(APP_CONFIG_PATH);
         });
 
@@ -135,6 +143,38 @@ describe('Model test - app config test', () => {
 
         afterEach(() => {
             AppConfig.dispose();
+            sinon.restore();
+        });
+    });
+
+    describe('# inspect getter when using profile from env', () => {
+        const TEST_PROFILE = 'testProfile';
+
+        beforeEach(() => {
+            process.env.ASK_ACCESS_TOKEN = 'testAccessTokenFromEnv';
+            process.env.ASK_REFRESH_TOKEN = 'testRefreshTokenFromEnv';
+            process.env.ASK_VENDOR_ID = 'testVendorIdFromEnv';
+            sinon.stub(profileHelper, 'isEnvProfile').returns(true);
+            new AppConfig();
+        });
+
+        it('| should get tokens with values from env variables', () => {
+            const token = AppConfig.getInstance().getToken(TEST_PROFILE);
+            expect(token.access_token).eql(process.env.ASK_ACCESS_TOKEN);
+            expect(token.refresh_token).eql(process.env.ASK_REFRESH_TOKEN);
+        });
+
+        it('| should get vendor id from env variable', () => {
+            const vendorId = AppConfig.getInstance().getVendorId(TEST_PROFILE);
+            expect(vendorId).eql(process.env.ASK_VENDOR_ID);
+        });
+
+        afterEach(() => {
+            delete process.env.ASK_ACCESS_TOKEN;
+            delete process.env.ASK_REFRESH_TOKEN;
+            delete process.env.ASK_VENDOR_ID;
+            AppConfig.dispose();
+            sinon.restore();
         });
     });
 

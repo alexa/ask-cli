@@ -9,7 +9,6 @@ const AppConfig = require('@src/model/app-config');
 const CONSTANTS = require('@src/utils/constants');
 const metricClient = require('@src/utils/metrics');
 const Messenger = require('@src/view/messenger');
-const profileHelper = require('@src/utils/profile-helper');
 
 const packageJson = require('@root/package.json');
 
@@ -455,14 +454,14 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             }
         };
 
+        let AppConfigReadStub;
         beforeEach(() => {
-            sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
+            AppConfigReadStub = sinon.stub(AppConfig.prototype, 'read');
             sinon.stub(process, 'exit');
             sinon.stub(metricClient, 'sendData').resolves();
         });
 
         it('| should not be null for non-configure commands', async () => {
-            sinon.stub(profileHelper, 'runtimeProfile');
             class NonConfigureCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -485,8 +484,7 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
             const mockCommand = new NonConfigureCommand(mockOptionModel, (options, cb) => {
                 expect(options._name).eq('random');
                 expect(options._description).eq('random description');
-                expect(profileHelper.runtimeProfile.args[0][0]).equal(TEST_PROFILE);
-                expect(AppConfig.getInstance().getProfilesList().length).eq(0);
+                expect(AppConfigReadStub.called).eql(true);
                 cb();
             });
 
@@ -495,7 +493,6 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
         });
 
         it('| should be null for configure command', async () => {
-            sinon.stub(profileHelper, 'runtimeProfile');
             class ConfigureCommand extends AbstractCommand {
                 constructor(optionModel, handle) {
                     super(optionModel);
@@ -515,38 +512,12 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
                 expect(options._name).eq('configure');
                 expect(options._description).eq('configure description');
                 expect(options.options).deep.eq([]);
-                expect(AppConfig.getInstance()).eq(null);
+                expect(AppConfigReadStub.called).eql(false);
                 cb();
             });
 
             mockCommand.createCommand()(commander);
             await commander.parseAsync(['node', 'mock', 'configure']);
-        });
-
-        it('| should be null when profile from env variables', async () => {
-            sinon.stub(profileHelper, 'runtimeProfile').returns(CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME);
-            class SomeCommand extends AbstractCommand {
-                constructor(optionModel, handle) {
-                    super(optionModel);
-                    this.handle = handle;
-                }
-
-                name() {
-                    return 'test';
-                }
-
-                description() {
-                    return 'test description';
-                }
-            }
-
-            const mockCommand = new SomeCommand(mockOptionModel, (options, cb) => {
-                expect(AppConfig.getInstance()).eq(null);
-                cb();
-            });
-
-            mockCommand.createCommand()(commander);
-            await commander.parseAsync(['node', 'mock', 'test']);
         });
 
         afterEach(() => {

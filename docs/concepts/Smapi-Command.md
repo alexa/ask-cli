@@ -3656,7 +3656,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dd markdown="span">[REQUIRED] Stage for skill.</dd>
     <dt>--endpoint-region <endpoint-region></dt>
     <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
-[ENUM]: NA,EU,FE.</dd>
+[ENUM]: NA,EU,FE,default.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
     <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
