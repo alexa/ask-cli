@@ -24,7 +24,7 @@
     "deploy"
   ],
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha -u exports -R spec test/unit/run-test.js",
+    "test": "node ./node_modules/mocha/bin/_mocha -t 10000 -u exports -R spec test/unit/run-test.js",
     "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
