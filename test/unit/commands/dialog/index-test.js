@@ -137,9 +137,11 @@ describe('Commands Dialog test - command class test', () => {
 
     describe('# test _getDialogConfig', () => {
         let instance;
+        let manifest;
 
         beforeEach(() => {
             instance = new DialogCommand(optionModel);
+            manifest = { publishingInformation: { locales: { us: {} } } };
         });
 
         describe('# test with replay option', () => {
@@ -150,6 +152,7 @@ describe('Commands Dialog test - command class test', () => {
                     replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 // call
                 instance.handle(TEST_CMD_WITH_VALUES, (err) => {
                     // verify
@@ -165,6 +168,7 @@ describe('Commands Dialog test - command class test', () => {
                     replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 const stringUtilsStub = sinon.stub(stringUtils, 'isNonBlankString');
                 stringUtilsStub.onCall(0).returns('skillId');
                 // call
@@ -182,6 +186,7 @@ describe('Commands Dialog test - command class test', () => {
                     replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 const stringUtilsStub = sinon.stub(stringUtils, 'isNonBlankString');
                 stringUtilsStub.onCall(0).returns('skillId');
                 stringUtilsStub.onCall(1).returns('locale');
@@ -193,13 +198,14 @@ describe('Commands Dialog test - command class test', () => {
                 });
             });
 
-            it('| returns valid config', () => {
+            it('| returns valid config', (done) => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
                     stage: '',
                     replay: DIALOG_REPLAY_FILE_JSON_PATH
                 };
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 // call
                 instance._getDialogConfig(TEST_CMD_WITH_VALUES, (err, config) => {
                     // verify
@@ -210,10 +216,11 @@ describe('Commands Dialog test - command class test', () => {
                     expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                     expect(config.stage).equal('development');
                     expect(config.userInputs).deep.equal(['hello', 'world']);
+                    done();
                 });
             });
 
-            it('| returns return error when smapi get manifest call fails', () => {
+            it('| returns return error when smapi get manifest call fails', (done) => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
                     stage: '',
@@ -226,10 +233,11 @@ describe('Commands Dialog test - command class test', () => {
                 instance._getDialogConfig(TEST_CMD_WITH_VALUES, (err) => {
                     // verify
                     expect(err).eq(smapiError);
+                    done();
                 });
             });
 
-            it('| returns return error when smapi get manifest call returns failure http status code', () => {
+            it('| returns return error when smapi get manifest call returns failure http status code', (done) => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {
                     stage: '',
@@ -242,16 +250,12 @@ describe('Commands Dialog test - command class test', () => {
                 instance._getDialogConfig(TEST_CMD_WITH_VALUES, (err) => {
                     // verify
                     expect(err).eq(jsonView.toString({ message: smapiError }));
+                    done();
                 });
             });
         });
 
         describe('# test with default (interactive) option', () => {
-            let manifest;
-            beforeEach(() => {
-                manifest = { publishingInformation: { locales: { us: {} } } };
-                sinon.stub(httpClient, 'request').yields(null, { statusCode: 20, body: { manifest } });
-            });
 
             it('| no resources config file found', (done) => {
                 // setup
@@ -284,6 +288,7 @@ describe('Commands Dialog test - command class test', () => {
                 // setup
                 const TEST_CMD_WITH_VALUES = {};
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 const pathJoinStub = sinon.stub(path, 'join');
                 pathJoinStub.withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
@@ -307,11 +312,12 @@ describe('Commands Dialog test - command class test', () => {
                 });
             });
 
-            it('| check locale defaults to first value from manifest', () => {
+            it('| check locale defaults to first value from manifest', (done) => {
                 // setup
                 const [expectedLocale] = Object.keys(manifest.publishingInformation.locales);
                 const TEST_CMD_WITH_VALUES = {};
                 sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(httpClient, 'request').yields(null, { statusCode: 200, body: { manifest } });
                 const pathJoinStub = sinon.stub(path, 'join');
                 pathJoinStub.withArgs(
                     process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG
@@ -329,6 +335,7 @@ describe('Commands Dialog test - command class test', () => {
                     expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                     expect(config.stage).equal('development');
                     expect(config.userInputs).equal(undefined);
+                    done();
                 });
             });
 
@@ -336,6 +343,10 @@ describe('Commands Dialog test - command class test', () => {
                 sinon.restore();
                 delete process.env.ASK_DEFAULT_DEVICE_LOCALE;
             });
+        });
+
+        afterEach(() => {
+            sinon.restore();
         });
     });
 
