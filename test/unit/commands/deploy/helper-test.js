@@ -10,9 +10,10 @@ const profileHelper = require('@src/utils/profile-helper');
 
 describe('Commands deploy test - helper test', () => {
     const TEST_PROFILE = 'default';
+    const TEST_IGNORE_HASH = false;
     const TEST_VENDOR_ID = 'vendor';
     const TEST_DO_DEBUG = false;
-    const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG };
+    const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH };
 
     describe('# test helper method - deploySkillMetadata', () => {
         afterEach(() => {
@@ -97,7 +98,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillInfrastructureController.prototype, 'deployInfrastructure').callsArgWith(0, 'error');
             // call
-            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(err).equal('error');
                 expect(res).equal(undefined);
@@ -109,7 +110,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillInfrastructureController.prototype, 'deployInfrastructure').callsArgWith(0);
             // call
-            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, TEST_IGNORE_HASH, (err, res) => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);

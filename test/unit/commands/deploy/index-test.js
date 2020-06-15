@@ -19,6 +19,7 @@ describe('Commands deploy test - command class test', () => {
     const FIXTURE_MANIFEST_FILE = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default';
     const TEST_DEBUG = false;
+    const TEST_IGNORE_HASH = false;
 
     let infoStub;
     let errorStub;
@@ -50,7 +51,8 @@ describe('Commands deploy test - command class test', () => {
     describe('validate command handle', () => {
         const TEST_CMD = {
             profile: TEST_PROFILE,
-            debug: TEST_DEBUG
+            debug: TEST_DEBUG,
+            ignoreHash: TEST_IGNORE_HASH
         };
         const TEST_SKILL_METADATA_SRC = './skillPackage';
         let instance;
@@ -289,7 +291,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
-                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2, 'error');
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3, 'error');
                 sinon.stub(helper, 'enableSkill').callsArgWith(2);
                 sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
                 sinon.stub(fs, 'statSync').returns({
@@ -318,7 +320,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
-                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3);
                 sinon.stub(helper, 'enableSkill').callsArgWith(2);
                 sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
                 sinon.stub(fs, 'statSync').returns({
@@ -367,7 +369,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 const TEST_ERROR = 'error';
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
-                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(2);
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3);
                 sinon.stub(helper, 'enableSkill').callsArgWith(2, 'error');
                 instance.handle(TEST_CMD, (err) => {
                     expect(errorStub.args[0][0]).equal(TEST_ERROR);
