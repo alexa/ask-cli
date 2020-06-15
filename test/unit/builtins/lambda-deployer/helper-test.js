@@ -112,6 +112,25 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             });
         });
 
+        it('| an existing lambda arn found, getFunction request passes, the local revisionId and remote revisionId compare is ignored'
+        + 'expect updated deploy state return', (done) => {
+            // setup
+            const TEST_REMOTE_DEPLOY_STATE = {
+                Configuration: {
+                    Role: TEST_LOCAL_IAM_ROLE,
+                    RevisionId: TEST_REMOTE_REVISION_ID
+                }
+            };
+            const IGNORE_HASH = true;
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+            // call
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, IGNORE_HASH, (err, data) => {
+                // verify
+                expect(data.updatedDeployState.iamRole).equal(TEST_LOCAL_IAM_ROLE);
+                done();
+            });
+        });
+
         it('| an existing lambda arn found, getFunction request passes, expect updated deploy state return', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
