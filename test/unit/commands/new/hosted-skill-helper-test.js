@@ -428,12 +428,12 @@ describe('Commands new test - hosted skill helper test', () => {
             });
         });
 
-        it('| hostedSkillController clone succeed, downloadGitHooksTemplate fails, expect error thrown', (done) => {
+        it('| hostedSkillController clone succeed, downloadGitHelperFile fails, expect error thrown', (done) => {
             // setup
             sinon.stub(HostedSkillController.prototype, 'createSkill').callsArgWith(1, null, TEST_SKILL_ID);
             sinon.stub(process, 'cwd').returns('root/');
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').callsArgWith(2, TEST_ERROR);
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
@@ -449,7 +449,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(HostedSkillController.prototype, 'createSkill').callsArgWith(1, null, TEST_SKILL_ID);
             sinon.stub(process, 'cwd').returns('root/');
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').callsArgWith(2, null);
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {

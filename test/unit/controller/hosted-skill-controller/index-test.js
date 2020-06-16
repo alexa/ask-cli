@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const fs = require('fs');
+const path = require('path');
 const sinon = require('sinon');
 
 const httpClient = require('@src/clients/http-client');
@@ -125,6 +126,8 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(Messenger, 'getInstance').returns({
                 info: infoStub,
             });
+            sinon.stub(fs, 'mkdirSync');
+            sinon.stub(path, 'join');
         });
 
         afterEach(() => {
@@ -185,6 +188,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_RESPONSE); // stub getAlexaHostedSkillMetadata smapi request
             sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').yields();
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, TEST_SKILL_PACKAGE_ERROR);
@@ -196,10 +200,31 @@ describe('Controller test - hosted skill controller test', () => {
             });
         });
 
+        it('| download of credential helper fails, expect error thrown ', (done) => {
+            // setup
+            const TEST_DOWNLOAD_CREDENTIAL_HELPER_ERROR = 'TEST_DOWNLOAD_CREDENTIAL_HELPER_ERROR';
+            const TEST_STATUS_RESPONSE = {
+                statusCode: 200,
+                body: {}
+            };
+            sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_RESPONSE); // stub getAlexaHostedSkillMetadata smapi request
+            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').yields(TEST_DOWNLOAD_CREDENTIAL_HELPER_ERROR);
+            sinon.stub(CloneFlow, 'generateProject');
+            // call
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, (err, res) => {
+                expect(err).equal(TEST_DOWNLOAD_CREDENTIAL_HELPER_ERROR);
+                expect(res).equal(undefined);
+                done();
+            });
+        });
+
         it('| skill package exists, expect skill-package generated ', (done) => {
             // setup
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').yields();
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, true);
@@ -218,6 +243,7 @@ describe('Controller test - hosted skill controller test', () => {
             const TEST_EXPORT_ERROR = 'TEST_EXPORT_ERROR';
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').yields();
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, false);
@@ -233,6 +259,7 @@ describe('Controller test - hosted skill controller test', () => {
             // setup
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHelperFile').yields();
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null);
@@ -247,7 +274,6 @@ describe('Controller test - hosted skill controller test', () => {
             });
         });
     });
-
 
     describe('# test class method: getHostedSkillPermission', () => {
         let hostedSkillController;
