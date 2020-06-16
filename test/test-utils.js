@@ -36,7 +36,7 @@ const run = (cmd, args, options = {}) => {
 
     fs.ensureDirSync(cwd);
 
-    const childProcess = spawn(cmd, args, { cwd, env, stdio: [null, null, null, 'ipc'] });
+    const childProcess = spawn(cmd, args, { shell: true, cwd, env });
 
     return new Promise((resolve, reject) => {
         let output = '';

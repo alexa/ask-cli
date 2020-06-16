@@ -31,7 +31,7 @@
       },
       {
         "inputs": {
-          "utterance": "I'm going to chicago on Friday",
+          "utterance": "I am going to chicago on Friday",
           "referenceTimestamp": "2019-08-29T00:00:00.000Z"
         },
         "expected": [

@@ -57,8 +57,8 @@ parallel('smapi command test', () => {
     const accept = 'application/json';
     const contentType = 'application/json';
     const annotationSetId = 'someAnnotationSetId';
-    const updateNluAnnotationSetAnnotationsRequest = JSON.stringify(annotationSet);
-    const annotations = JSON.stringify(
+    const updateNluAnnotationSetAnnotationsRequest = `'${JSON.stringify(annotationSet)}'`;
+    const annotations = `'${JSON.stringify(
         [
             {
                 uploadId: 'string',
@@ -67,15 +67,15 @@ parallel('smapi command test', () => {
                 expectedTranscription: 'string'
             }
         ]
-    );
-    const slotType = JSON.stringify({
+    )}'`;
+    const slotType = `'${JSON.stringify({
         slotType: {
             name: 'string',
             description: 'string'
         },
         vendorId: 'string'
-    });
-    const createSubscriptionRequest = JSON.stringify(
+    })}'`;
+    const createSubscriptionRequest = `'${JSON.stringify(
         {
             name: 'string',
             vendorId: 'string',
@@ -86,8 +86,8 @@ parallel('smapi command test', () => {
                 }
             }
         }
-    );
-    const updateSubscriptionRequest = JSON.stringify({
+    )}'`;
+    const updateSubscriptionRequest = `'${JSON.stringify({
         name: 'string',
         endpoint: {
             uri: 'string',
@@ -95,8 +95,8 @@ parallel('smapi command test', () => {
                 type: 'string'
             }
         }
-    });
-    const sslCertificatePayload = JSON.stringify({
+    })}'`;
+    const sslCertificatePayload = `'${JSON.stringify({
         sslCertificate: 'string',
         regions: {
             additionalProp1: {
@@ -109,8 +109,8 @@ parallel('smapi command test', () => {
                 sslCertificate: 'string'
             }
         }
-    });
-    const partETags = JSON.stringify([{ eTag: 'someEtag', partNumber: 1 }]);
+    })}'`;
+    const partETags = `'${JSON.stringify([{ eTag: 'someEtag', partNumber: 1 }])}'`;
     const testersEmails = 'user1@gmail.com,user2@gmail.com';
 
     before(async () => {
@@ -133,7 +133,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should create skill for vendor', async () => {
-        const args = [subCmd, 'create-skill-for-vendor', '--manifest', JSON.stringify(skillManifest)];
+        const args = [subCmd, 'create-skill-for-vendor', '--manifest', `'${JSON.stringify(skillManifest)}'`];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
@@ -319,7 +319,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should create isp', async () => {
-        const args = [subCmd, 'create-isp-for-vendor', '--create-in-skill-product-request', JSON.stringify(inSkillProductRequestBody)];
+        const args = [subCmd, 'create-isp-for-vendor', '--create-in-skill-product-request', `'${JSON.stringify(inSkillProductRequestBody)}'`];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
