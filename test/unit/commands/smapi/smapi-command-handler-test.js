@@ -11,7 +11,6 @@ const AuthorizationController = require('@src/controllers/authorization-controll
 const profileHelper = require('@src/utils/profile-helper');
 const { smapiCommandHandler, parseSmapiResponse } = require('@src/commands/smapi/smapi-command-handler');
 
-
 describe('Smapi test - smapiCommandHandler function', () => {
     const apiOperationName = 'someApiOperation';
     const sdkFunctionName = 'callSomeApiOperation';
@@ -184,6 +183,13 @@ describe('Smapi test - smapiCommandHandler function', () => {
 });
 
 describe('Smapi test - parseSmapiResponse function', () => {
+    let warnStub;
+    beforeEach(() => {
+        warnStub = sinon.stub();
+        sinon.stub(Messenger, 'getInstance').returns({
+            warn: warnStub
+        });
+    });
     it('| should parse text/csv response', () => {
         const content = 'foo bar\n foo';
         const response = { headers: [{ key: 'content-type', value: 'text/csv' }], body: content };
@@ -208,5 +214,29 @@ describe('Smapi test - parseSmapiResponse function', () => {
         const result = parseSmapiResponse(response);
 
         expect(result).eql('Command executed successfully!');
+    });
+
+    it('| should show warning with status hint command when able to find one', () => {
+        const skillId = 'someSkillId';
+        const resource = 'someResource';
+        const url = `/v1/skills/${skillId}/status?resource=${resource}`;
+        const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
+
+        parseSmapiResponse(response);
+        expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
+        + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --resource ${resource}`);
+    });
+
+    it('| should not show warning with status hint command when not able to find one', () => {
+        const url = '/some-random-non-smapi-url';
+        const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
+
+        parseSmapiResponse(response);
+
+        expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
+        + `using the following url: ${url}`);
+    });
+    afterEach(() => {
+        sinon.restore();
     });
 });
