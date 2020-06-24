@@ -233,7 +233,8 @@ describe('Smapi test - parseSmapiResponse function', () => {
 
         parseSmapiResponse(response);
 
-        expect(warnStub.callCount).eql(0);
+        expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
+        + `using the following url: ${url}`);
     });
     afterEach(() => {
         sinon.restore();
