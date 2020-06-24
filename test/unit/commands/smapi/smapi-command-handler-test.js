@@ -223,7 +223,7 @@ describe('Smapi test - parseSmapiResponse function', () => {
         const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
 
         parseSmapiResponse(response);
-        expect(warnStub.firstCall.lastArg).eql('This is asynchronous operation. Check the progress '
+        expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
         + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --resource ${resource}`);
     });
 
