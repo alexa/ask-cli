@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const aws = require('aws-sdk');
 
 const CloudformationClient = require('@src/clients/aws-client/cloudformation-client');
+
 const noop = () => {};
 
 describe('Clients test - cloudformation client test', () => {
@@ -14,6 +15,12 @@ describe('Clients test - cloudformation client test', () => {
         awsProfile: TEST_AWS_PROFILE,
         awsRegion: TEST_AWS_REGION
     };
+    const TEST_CREATE_RESPONSE = {
+        StackId: 'someId'
+    };
+    const TEST_UPDATE_RESPONSE = {
+        StackId: 'someId'
+    };
     let createStackStub,
         updateStackStub,
         describeStackStub,
@@ -21,8 +28,8 @@ describe('Clients test - cloudformation client test', () => {
         describeStackResourcesStub;
 
     beforeEach(() => {
-        createStackStub = sinon.stub();
-        updateStackStub = sinon.stub();
+        createStackStub = sinon.stub().returns({ promise: sinon.stub().resolves({ ...TEST_CREATE_RESPONSE }) });
+        updateStackStub = sinon.stub().returns({ promise: sinon.stub().resolves({ ...TEST_UPDATE_RESPONSE }) });
         describeStackStub = sinon.stub();
         describeStackResourceStub = sinon.stub();
         describeStackResourcesStub = sinon.stub();
@@ -68,7 +75,7 @@ describe('Clients test - cloudformation client test', () => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
             // call
-            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, noop);
+            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS);
             // verify
             expect(createStackStub.args[0][0].StackName).equal(TEST_STACK_NAME);
             expect(createStackStub.args[0][0].TemplateBody).equal(TEST_TEMPLATE);
@@ -80,7 +87,7 @@ describe('Clients test - cloudformation client test', () => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
             // call
-            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, {}, noop);
+            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, {});
             // verify
             expect(createStackStub.args[0][0].StackName).equal(TEST_STACK_NAME);
             expect(createStackStub.args[0][0].TemplateBody).equal(TEST_TEMPLATE);
@@ -88,34 +95,15 @@ describe('Clients test - cloudformation client test', () => {
             expect(createStackStub.args[0][0].Parameters).equal(undefined);
         });
 
-        it('| createStack method callback with error when client request fails', (done) => {
-            // setup
-            const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            createStackStub.callsArgWith(1, TEST_CLIENT_ERROR, null);
-            // call
-            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, (err, res) => {
-                // verify
-                expect(err).equal(TEST_CLIENT_ERROR);
-                expect(res).equal(null);
-                done();
-            });
-        });
 
-        it('| createStack method callback with error when client request succeeds', (done) => {
+        it('| createStack returns response when client request succeeds', async () => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            const TEST_CREATE_RESPONSE = {
-                StackId: TEST_STACK_NAME
-            };
-            createStackStub.callsArgWith(1, null, TEST_CREATE_RESPONSE);
-            
+
             // call
-            cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, (err, res) => {
-                // verify
-                expect(err).equal(null);
-                expect(res).equal(TEST_STACK_NAME);
-                done();
-            });
+            const res = await cfnClient.createStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS);
+
+            expect(res).eql(TEST_CREATE_RESPONSE);
         });
     });
 
@@ -150,50 +138,76 @@ describe('Clients test - cloudformation client test', () => {
             expect(updateStackStub.args[0][0].Parameters).equal(undefined);
         });
 
-        it('| updateStack method callback with error when client request fails', (done) => {
+        it('| updateStack method returns error when client request fails', () => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            updateStackStub.callsArgWith(1, TEST_CLIENT_ERROR, null);
+            updateStackStub.returns({ promise: sinon.stub().rejects(TEST_CLIENT_ERROR) });
             // call
-            cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, (err, res) => {
-                // verify
-                expect(err).equal(TEST_CLIENT_ERROR);
-                expect(res).equal(null);
-                done();
+            return cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS).catch(err => {
+                expect(err.name).eql(TEST_CLIENT_ERROR);
             });
         });
 
-        it('| updateStack method callback with response string when no update to be performed', (done) => {
+        it('| updateStack returns with response string when no update to be performed', async () => {
             // setup
             const NO_UPDATE_ERROR = {
                 code: 'ValidationError',
                 message: 'No updates are to be performed.'
             };
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            updateStackStub.callsArgWith(1, NO_UPDATE_ERROR, null);
+            updateStackStub.returns({ promise: sinon.stub().rejects(NO_UPDATE_ERROR) });
             // call
-            cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, (err, res) => {
-                // verify
-                expect(err).equal(null);
-                expect(res).equal('No updates are to be performed.');
-                done();
-            });
+            const res = await cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS);
+            // verify
+            expect(res).eql('No updates are to be performed.');
         });
 
-        it('| updateStack method callback with response when client request succeeds', (done) => {
+        it('| updateStack returns response when client request succeeds', async () => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            updateStackStub.callsArgWith(1, null, TEST_CLIENT_RESPONSE);
             // call
-            cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS, (err, res) => {
-                // verify
-                expect(err).equal(null);
-                expect(res).equal(TEST_CLIENT_RESPONSE);
-                done();
-            });
+            const res = await cfnClient.updateStack(TEST_STACK_NAME, TEST_TEMPLATE, TEST_PARAMETERS);
+
+            expect(res).eql(TEST_UPDATE_RESPONSE);
         });
     });
 
+    describe('Test client method - stackExists()', () => {
+        it('| returns false when stack id is undefined', async () => {
+            const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
+
+            const exists = await cfnClient.stackExists();
+
+            expect(exists).eql(false);
+        });
+
+        it('| returns false when stack status is delete complete', async () => {
+            const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
+            describeStackStub.returns({ promise: sinon.stub().resolves({ Stacks: [{ StackStatus: 'DELETE_COMPLETE' }] }) });
+
+            const exists = await cfnClient.stackExists('someId');
+
+            expect(exists).eql(false);
+        });
+
+        it('| returns false when when getting stack status fails', async () => {
+            const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
+            describeStackStub.returns({ promise: sinon.stub().rejects() });
+
+            const exists = await cfnClient.stackExists('someId');
+
+            expect(exists).eql(false);
+        });
+
+        it('| returns true when request succeeds', async () => {
+            const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
+            describeStackStub.returns({ promise: sinon.stub().resolves({ Stacks: [{ StackStatus: 'test' }] }) });
+
+            const exists = await cfnClient.stackExists('someId');
+
+            expect(exists).eql(true);
+        });
+    });
     describe('Test client method - describeStack()', () => {
         const TEST_STACK_NAME = 'STACK';
 
@@ -221,7 +235,7 @@ describe('Clients test - cloudformation client test', () => {
         it('| describeStack method callback with error when client request fails', (done) => {
             // setup
             const cfnClient = new CloudformationClient(TEST_CONFIGURATION);
-            describeStackStub.callsArgWith(1, TEST_CLIENT_ERROR, null)
+            describeStackStub.callsArgWith(1, TEST_CLIENT_ERROR, null);
             // call
             cfnClient.describeStack(TEST_STACK_NAME, (err, res) => {
                 // verify
