@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](https://github.com/alexa/ask-cli/compare/v2.10.2...v2.11.0) (2020-06-24)
+
+
+### Features
+
+* add default value development when stage is required ([f656de5](https://github.com/alexa/ask-cli/commit/f656de5a26e318593090755232d9ebfde526acfa))
+* add support of ignore-hash in lambda deployer ([a6ea7fd](https://github.com/alexa/ask-cli/commit/a6ea7fdf0549912a626780a40dee23dc2f153cf0))
+* add to show hint to check status for async smapi commands ([8d8d840](https://github.com/alexa/ask-cli/commit/8d8d84061b91d16b97294870001e785dd8a8e006))
+
+
+### Bug Fixes
+
+* add logic to create stack if old stack in delete complete status ([#224](https://github.com/alexa/ask-cli/issues/224)) ([ec32913](https://github.com/alexa/ask-cli/commit/ec32913ceb3e4468c45c7ddd1d6e8468c700cd5f))
+* fix to allow dialog without providing skill id for hosted skills ([#236](https://github.com/alexa/ask-cli/issues/236)) ([13fa8db](https://github.com/alexa/ask-cli/commit/13fa8db0e043049813a7513f1730253ebe31fdb6))
+
 ### [2.10.2](https://github.com/alexa/ask-cli/compare/v2.10.1...v2.10.2) (2020-06-11)
 
 
