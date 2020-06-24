@@ -41,14 +41,21 @@ const run = (cmd, args, options = {}) => {
     return new Promise((resolve, reject) => {
         let output = '';
         let errorMessage = '';
-        const processData = (data) => {
+        const processStream = (data, isError = false) => {
             const dataStr = data.toString();
-            output += dataStr;
+            if (isError) {
+                errorMessage += dataStr;
+            } else {
+                output += dataStr;
+            }
             if (process.env.DEBUG) {
                 console.log(dataStr);
             }
             return dataStr;
         };
+        const processData = (data) => processStream(data);
+        const processError = (data) => processStream(data, true);
+
         childProcess.stdout.on('data', (data) => {
             const dataStr = processData(data);
 
@@ -65,12 +72,12 @@ const run = (cmd, args, options = {}) => {
         });
 
         childProcess.stderr.on('data', (data) => {
-            errorMessage = processData(data);
+            errorMessage = processError(data);
         });
 
         childProcess.on('close', (code) => {
             if (code) {
-                reject(errorMessage);
+                reject(new Error(`${output}${errorMessage}`));
             } else {
                 output = parse ? JSON.parse(output) : output;
                 resolve(output);
