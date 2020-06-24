@@ -6,9 +6,9 @@ const CONSTANTS = require('@src/utils/constants');
 const helper = require('@src/builtins/deploy-delegates/lambda-deployer/helper');
 const lambdaDeployer = require('@src/builtins/deploy-delegates/lambda-deployer/index');
 
-
 describe('Builtins test - lambda-deployer index.js test', () => {
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
+    const TEST_IGNORE_HASH = false;
     const TEST_ALEXA_REGION_DEFAULT = 'default';
     const TEST_AWS_REGION_DEFAULT = 'us-east-1';
     const TEST_SKILL_NAME = 'skill_name';
@@ -44,6 +44,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
         const REPORTER = {};
         const TEST_OPTIONS = {
             profile: TEST_PROFILE,
+            ignoreHash: TEST_IGNORE_HASH,
             alexaRegion: TEST_ALEXA_REGION_DEFAULT,
             skillId: '',
             skillName: TEST_SKILL_NAME,
@@ -102,7 +103,7 @@ Please run "ask configure" to re-configure your porfile.`;
             // setup
             const TEST_ERROR = 'validateLambdaDeployState error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, TEST_ERROR);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err) => {
                 // verify
@@ -115,7 +116,7 @@ Please run "ask configure" to re-configure your porfile.`;
             // setup
             const TEST_ERROR = 'IAMRole error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err) => {
@@ -130,7 +131,7 @@ Please run "ask configure" to re-configure your porfile.`;
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, TEST_ERROR);
             // call
@@ -147,7 +148,7 @@ Please run "ask configure" to re-configure your porfile.`;
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, TEST_ERROR);
             // call
@@ -177,7 +178,7 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
                 lambdaResponse: LAMDBA_RESPONSE
             };
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, TEST_LAMBDA_RESULT);
             // call
@@ -212,7 +213,7 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
                 lambdaResponse: {}
             };
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, TEST_LAMBDA_RESULT);
             // call
@@ -239,7 +240,7 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
@@ -273,7 +274,7 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
@@ -302,7 +303,7 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(4, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
             sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call

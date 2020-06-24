@@ -12,6 +12,7 @@ const Manifest = require('@src/model/manifest');
 describe('Builtins test - lambda-deployer helper.js test', () => {
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
+    const TEST_IGNORE_HASH = false;
     const TEST_AWS_PROFILE = 'default';
     const TEST_AWS_REGION = 'us-east-1';
     const TEST_ALEXA_REGION = 'default';
@@ -52,7 +53,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
             // setup
             const TEST_DEPLOY_STATE_NO_LAMBDA = {};
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_DEPLOY_STATE_NO_LAMBDA, (err, data) => {
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_DEPLOY_STATE_NO_LAMBDA, TEST_IGNORE_HASH, (err, data) => {
                 // verify
                 expect(data.updatedDeployState).equal(TEST_DEPLOY_STATE_NO_LAMBDA);
                 done();
@@ -64,7 +65,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
             const TEST_GET_FUNCTION_ERROR = 'get_function_error';
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, TEST_GET_FUNCTION_ERROR);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, (err) => {
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
                 // verify
                 expect(err).equal(TEST_GET_FUNCTION_ERROR);
                 done();
@@ -84,7 +85,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
 but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-deploy again.`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, (err) => {
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
                 // verify
                 expect(err).equal(TEST_IAM_ROLE_ERROR);
                 done();
@@ -104,9 +105,28 @@ but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-dep
 ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve this revision mismatch and re-deploy again.`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, (err) => {
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
                 // verify
                 expect(err).equal(TEST_REVISION_ID_ERROR);
+                done();
+            });
+        });
+
+        it('| an existing lambda arn found, getFunction request passes, the local revisionId and remote revisionId compare is ignored'
+        + 'expect updated deploy state return', (done) => {
+            // setup
+            const TEST_REMOTE_DEPLOY_STATE = {
+                Configuration: {
+                    Role: TEST_LOCAL_IAM_ROLE,
+                    RevisionId: TEST_REMOTE_REVISION_ID
+                }
+            };
+            const IGNORE_HASH = true;
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+            // call
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, IGNORE_HASH, (err, data) => {
+                // verify
+                expect(data.updatedDeployState.iamRole).equal(TEST_LOCAL_IAM_ROLE);
                 done();
             });
         });
@@ -121,7 +141,7 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             };
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, (err, data) => {
+            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err, data) => {
                 // verify
                 expect(data.updatedDeployState.iamRole).equal(TEST_LOCAL_IAM_ROLE);
                 expect(data.updatedDeployState.lambda.revisionId).equal(TEST_LOCAL_REVISION_ID);
