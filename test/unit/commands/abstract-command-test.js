@@ -370,9 +370,9 @@ describe('Command test - AbstractCommand class', () => {
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
                 );
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
-                expect(infoStub.args[0][0]).equal(`\
+                expect(warnStub.args[0][0]).equal(`\
 ##########################################################################
-[Info]: New MAJOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+New MAJOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
 It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
 ##########################################################################\n`);
                 expect(err).equal(undefined);
@@ -391,9 +391,9 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
                     `${CONSTANTS.NPM_REGISTRY_URL_BASE}/${CONSTANTS.APPLICATION_NAME}/latest`
                 );
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
-                expect(infoStub.args[0][0]).equal(`\
+                expect(warnStub.args[0][0]).equal(`\
 ##########################################################################
-[Info]: New MINOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
+New MINOR version (v${latestVersion}) of ${CONSTANTS.APPLICATION_NAME} is available now. Current version v${packageJson.version}.
 It is recommended to use the latest version. Please update using "npm upgrade -g ${CONSTANTS.APPLICATION_NAME}".
 ##########################################################################\n`);
                 expect(err).equal(undefined);
