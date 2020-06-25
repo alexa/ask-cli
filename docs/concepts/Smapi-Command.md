@@ -716,7 +716,7 @@ Get the list of in-skill products for the skillId.
 
 `get-isp-list-for-skill-id` command format:
 
-`$ ask smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-isp-list-for-skill-id <-s|--skill-id <skill-id>> [-g|--stage <stage>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -724,7 +724,7 @@ Get the list of in-skill products for the skillId.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
@@ -743,7 +743,7 @@ Returns the in-skill product definition for given productId.
 
 `get-isp-definition` command format:
 
-`$ ask smapi get-isp-definition <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-isp-definition <--product-id <product-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -751,7 +751,7 @@ Returns the in-skill product definition for given productId.
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -766,7 +766,7 @@ Updates in-skill product definition for given productId. Only development stage 
 
 `update-isp-for-product` command format:
 
-`$ ask smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> <-g|--stage <stage>> <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-isp-for-product [--if-match <if-match>] <--product-id <product-id>> [-g|--stage <stage>] <--in-skill-product <in-skill-product>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -776,7 +776,7 @@ Updates in-skill product definition for given productId. Only development stage 
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--in-skill-product <in-skill-product></dt>
     <dd markdown="span">[REQUIRED] defines the request body for updateInSkillProduct API. 
 [JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
@@ -794,7 +794,7 @@ Deletes the in-skill product for given productId. Only development stage support
 
 `delete-isp-for-product` command format:
 
-`$ ask smapi delete-isp-for-product <--product-id <product-id>> <-g|--stage <stage>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi delete-isp-for-product <--product-id <product-id>> [-g|--stage <stage>] [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -802,7 +802,7 @@ Deletes the in-skill product for given productId. Only development stage support
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
@@ -819,7 +819,7 @@ Get the summary information for an in-skill product.
 
 `get-isp-summary` command format:
 
-`$ ask smapi get-isp-summary <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-isp-summary <--product-id <product-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -827,7 +827,7 @@ Get the summary information for an in-skill product.
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -842,7 +842,7 @@ Get the associated skills for the in-skill product.
 
 `get-isp-associated-skills` command format:
 
-`$ ask smapi get-isp-associated-skills <--product-id <product-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-isp-associated-skills <--product-id <product-id>> [-g|--stage <stage>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -850,7 +850,7 @@ Get the associated skills for the in-skill product.
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
@@ -915,7 +915,7 @@ Resets the entitlement(s) of the Product for the current user.
 
 `reset-entitlement-for-product` command format:
 
-`$ ask smapi reset-entitlement-for-product <--product-id <product-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi reset-entitlement-for-product <--product-id <product-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -923,7 +923,7 @@ Resets the entitlement(s) of the Product for the current user.
     <dt>--product-id <product-id></dt>
     <dd markdown="span">[REQUIRED] The in-skill product ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -938,7 +938,7 @@ Get AccountLinking information for the skill.
 
 `get-account-linking-info` command format:
 
-`$ ask smapi get-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-account-linking-info <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -946,7 +946,7 @@ Get AccountLinking information for the skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -965,7 +965,7 @@ Create AccountLinking information for the skill.
 
 `update-account-linking-info` command format:
 
-`$ ask smapi update-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-account-linking-info <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--account-linking-request <account-linking-request>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -973,7 +973,7 @@ Create AccountLinking information for the skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -997,7 +997,7 @@ Delete AccountLinking information of a skill for the given stage.
 
 `delete-account-linking-info` command format:
 
-`$ ask smapi delete-account-linking-info <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi delete-account-linking-info <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1005,7 +1005,7 @@ Delete AccountLinking information of a skill for the given stage.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -1372,7 +1372,7 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
 
 `get-skill-enablement-status` command format:
 
-`$ ask smapi get-skill-enablement-status <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-skill-enablement-status <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1380,7 +1380,7 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1395,7 +1395,7 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
 
 `set-skill-enablement` command format:
 
-`$ ask smapi set-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi set-skill-enablement <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1403,7 +1403,7 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1418,7 +1418,7 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
 
 `delete-skill-enablement` command format:
 
-`$ ask smapi delete-skill-enablement <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi delete-skill-enablement <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1426,7 +1426,7 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1441,7 +1441,7 @@ This is a synchronous API that profiles an utterance against interaction model.
 
 `profile-nlu` command format:
 
-`$ ask smapi profile-nlu <-u|--utterance <utterance>> [--multi-turn-token <multi-turn-token>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi profile-nlu <-u|--utterance <utterance>> [--multi-turn-token <multi-turn-token>] <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1453,7 +1453,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1545,7 +1545,7 @@ The path params
 
 `get-interaction-model` command format:
 
-`$ ask smapi get-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-interaction-model <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1553,7 +1553,7 @@ The path params
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -1574,7 +1574,7 @@ Get the latest metadata for the interaction model resource for the given stage.
 
 `get-interaction-model-metadata` command format:
 
-`$ ask smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-interaction-model-metadata <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1582,7 +1582,7 @@ Get the latest metadata for the interaction model resource for the given stage.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -1603,7 +1603,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
 
 `set-interaction-model` command format:
 
-`$ ask smapi set-interaction-model <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi set-interaction-model <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> <--interaction-model <interaction-model>> [--if-match <if-match>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1611,7 +1611,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -1775,7 +1775,7 @@ This API returns the job status of conflict detection job for a specified intera
 
 `get-conflict-detection-job-status-for-interaction-model` command format:
 
-`$ ask smapi get-conflict-detection-job-status-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-conflict-detection-job-status-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> [-g|--stage <stage>] <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1785,7 +1785,7 @@ This API returns the job status of conflict detection job for a specified intera
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage of the interaction model. 
+    <dd markdown="span">[OPTIONAL] Stage of the interaction model. 
 [ENUM]: development.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
@@ -1803,7 +1803,7 @@ This is a paginated API that retrieves results of conflict detection job for a s
 
 `get-conflicts-for-interaction-model` command format:
 
-`$ ask smapi get-conflicts-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> <-g|--stage <stage>> <--vers <vers>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-conflicts-for-interaction-model <-s|--skill-id <skill-id>> <-l|--locale <locale>> [-g|--stage <stage>] <--vers <vers>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1813,7 +1813,7 @@ This is a paginated API that retrieves results of conflict detection job for a s
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage of the interaction model. 
+    <dd markdown="span">[OPTIONAL] Stage of the interaction model. 
 [ENUM]: development.</dd>
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
@@ -1989,7 +1989,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
 
 `get-interaction-model-version` command format:
 
-`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-interaction-model-version <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> <--vers <vers>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1997,7 +1997,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -2020,7 +2020,7 @@ Get the list of interactionModel versions of a skill for the vendor.
 
 `list-interaction-model-versions` command format:
 
-`$ ask smapi list-interaction-model-versions <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi list-interaction-model-versions <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-l|--locale <locale>> [--next-token <next-token>] [--max-results <max-results>] [--sort-direction <sort-direction>] [--sort-field <sort-field>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2028,7 +2028,7 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -2341,7 +2341,7 @@ Returns the skill manifest for given skillId and stage.
 
 `get-skill-manifest` command format:
 
-`$ ask smapi get-skill-manifest <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-skill-manifest <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2349,7 +2349,7 @@ Returns the skill manifest for given skillId and stage.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -2368,7 +2368,7 @@ Updates skill manifest for given skillId and stage.
 
 `update-skill-manifest` command format:
 
-`$ ask smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--manifest <manifest>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi update-skill-manifest [--if-match <if-match>] <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--manifest <manifest>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2378,7 +2378,7 @@ Updates skill manifest for given skillId and stage.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stages of a skill including the new certified stage.
+    <dd markdown="span">[OPTIONAL] Stages of a skill including the new certified stage.
 
 * `development` - skills which are currently in development corresponds to this stage.
 * `certified` -  skills which have completed certification and ready for publishing corresponds to this stage.
@@ -2400,7 +2400,7 @@ Get analytic metrics report of skill usage.
 
 `get-skill-metrics` command format:
 
-`$ ask smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> <-g|--stage <stage>> <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-skill-metrics <-s|--skill-id <skill-id>> <--start-time <start-time>> <--end-time <end-time>> <--period <period>> <--metric <metric>> [-g|--stage <stage>] <--skill-type <skill-type>> [--intent <intent>] [-l|--locale <locale>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2416,7 +2416,7 @@ Get analytic metrics report of skill usage.
     <dt>--metric <metric></dt>
     <dd markdown="span">[REQUIRED] A distinct set of logic which predictably returns a set of data.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] The stage of the skill (live, development).</dd>
+    <dd markdown="span">[OPTIONAL] The stage of the skill (live, development).</dd>
     <dt>--skill-type <skill-type></dt>
     <dd markdown="span">[REQUIRED] The type of the skill (custom, smartHome and flashBriefing).</dd>
     <dt>--intent <intent></dt>
@@ -2441,7 +2441,7 @@ Add an id to the private distribution accounts.
 
 `set-private-distribution-account-id` command format:
 
-`$ ask smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi set-private-distribution-account-id <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2449,7 +2449,7 @@ Add an id to the private distribution accounts.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--id <id></dt>
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2466,7 +2466,7 @@ Remove an id from the private distribution accounts.
 
 `delete-private-distribution-account-id` command format:
 
-`$ ask smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi delete-private-distribution-account-id <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--id <id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2474,7 +2474,7 @@ Remove an id from the private distribution accounts.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--id <id></dt>
     <dd markdown="span">[REQUIRED] ARN that a skill can be privately distributed to.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2491,7 +2491,7 @@ List private distribution accounts.
 
 `list-private-distribution-accounts` command format:
 
-`$ ask smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> <-g|--stage <stage>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi list-private-distribution-accounts <-s|--skill-id <skill-id>> [-g|--stage <stage>] [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2499,7 +2499,7 @@ List private distribution accounts.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
     <dt>--max-results <max-results></dt>
@@ -2518,7 +2518,7 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
 
 `simulate-skill` command format:
 
-`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2526,7 +2526,7 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--input-content <input-content></dt>
     <dd markdown="span">[REQUIRED] A string corresponding to the utterance text of what a customer would say to Alexa.</dd>
     <dt>--device-locale <device-locale></dt>
@@ -2548,7 +2548,7 @@ This API gets the result of a previously executed simulation. A successful respo
 
 `get-skill-simulation` command format:
 
-`$ ask smapi get-skill-simulation <-s|--skill-id <skill-id>> <-g|--stage <stage>> <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-skill-simulation <-s|--skill-id <skill-id>> [-g|--stage <stage>] <-i|--simulation-id <simulation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2556,7 +2556,7 @@ This API gets the result of a previously executed simulation. A successful respo
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-i,--simulation-id <simulation-id></dt>
     <dd markdown="span">[REQUIRED] Id of the simulation.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2573,7 +2573,7 @@ This is an asynchronous API which allows a skill developer to execute various va
 
 `submit-skill-validation` command format:
 
-`$ ask smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi submit-skill-validation <-l|--locales <locales>> <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2584,7 +2584,7 @@ This is an asynchronous API which allows a skill developer to execute various va
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2599,7 +2599,7 @@ This API gets the result of a previously executed validation. A successful respo
 
 `get-skill-validations` command format:
 
-`$ ask smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> <-g|--stage <stage>> [--accept-language <accept-language>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-skill-validations <-s|--skill-id <skill-id>> <-i|--validation-id <validation-id>> [-g|--stage <stage>] [--accept-language <accept-language>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2609,7 +2609,7 @@ This API gets the result of a previously executed validation. A successful respo
     <dt>-i,--validation-id <validation-id></dt>
     <dd markdown="span">[REQUIRED] Id of the validation. Reserved word identifier of mostRecent can be used to get the most recent validation for the skill and stage. Note that the behavior of the API in this case would be the same as when the actual validation id of the most recent validation is used in the request.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--accept-language <accept-language></dt>
     <dd markdown="span">[OPTIONAL] User's locale/language in context.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2836,7 +2836,7 @@ Creates a new export for a skill with given skillId and stage.
 
 `create-export-request-for-skill` command format:
 
-`$ ask smapi create-export-request-for-skill <-s|--skill-id <skill-id>> <-g|--stage <stage>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-export-request-for-skill <-s|--skill-id <skill-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2844,7 +2844,7 @@ Creates a new export for a skill with given skillId and stage.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3065,13 +3065,13 @@ The operation outputs an evaluationId which allows the retrieval of the current 
 
 `create-nlu-evaluations` command format:
 
-`$ ask smapi create-nlu-evaluations <-g|--stage <stage>> <-l|--locale <locale>> <--source-annotation-id <source-annotation-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-nlu-evaluations [-g|--stage <stage>] <-l|--locale <locale>> <--source-annotation-id <source-annotation-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED].</dd>
+    <dd markdown="span">[OPTIONAL].</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED].</dd>
     <dt>--source-annotation-id <source-annotation-id></dt>
@@ -3538,13 +3538,13 @@ This is an asynchronous API that starts an evaluation against the ASR model buil
 
 `create-asr-evaluation` command format:
 
-`$ ask smapi create-asr-evaluation <-g|--stage <stage>> <-l|--locale <locale>> <--annotation-set-id <annotation-set-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-asr-evaluation [-g|--stage <stage>] <-l|--locale <locale>> <--annotation-set-id <annotation-set-id>> <-s|--skill-id <skill-id>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED]  
+    <dd markdown="span">[OPTIONAL]  
 [ENUM]: development,live.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] skill locale in bcp 47 format.</dd>
@@ -3645,7 +3645,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 
 `invoke-skill-end-point` command format:
 
-`$ ask smapi invoke-skill-end-point <-s|--skill-id <skill-id>> <-g|--stage <stage>> <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi invoke-skill-end-point <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--endpoint-region <endpoint-region>> <--skill-request-body <skill-request-body>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -3653,7 +3653,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--endpoint-region <endpoint-region></dt>
     <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
 [ENUM]: NA,EU,FE,default.</dd>
