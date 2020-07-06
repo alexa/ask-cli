@@ -183,7 +183,6 @@ parallel('smapi command test', () => {
         expect(result).include('Command executed successfully!');
     });
 
-
     it('| should display catalog list for skill', async () => {
         const args = [subCmd, 'list-catalogs-for-skill', '-s', skillId, '--max-results', 1];
         addCoveredCommand(args);
@@ -390,7 +389,6 @@ parallel('smapi command test', () => {
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
     });
-
 
     it('| should get content upload by id', async () => {
         const args = [subCmd, 'get-content-upload-by-id', '-c', catalogId, '--upload-id', uploadId];
@@ -1094,6 +1092,20 @@ parallel('smapi command test', () => {
 
     it('| should list interaction model catalog versions', async () => {
         const args = [subCmd, 'list-interaction-model-catalog-versions', '-c', catalogId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should clone locale', async () => {
+        const args = [subCmd, 'clone-locale', '-s', skillId, '--source-locale', 'sourceLocale', '--target-locales', 'targetLocales'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should get clone locale status', async () => {
+        const args = [subCmd, 'get-clone-locale-status', '-s', skillId, '--clone-locale-request-id', 'x'];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');

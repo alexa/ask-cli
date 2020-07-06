@@ -219,12 +219,25 @@ describe('Smapi test - parseSmapiResponse function', () => {
     it('| should show warning with status hint command when able to find one', () => {
         const skillId = 'someSkillId';
         const resource = 'someResource';
+        const profile = 'test';
+        const url = `/v1/skills/${skillId}/status?resource=${resource}`;
+        const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
+
+        parseSmapiResponse(response, profile);
+        expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
+        + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --resource ${resource} --profile ${profile}`);
+    });
+
+    it('| should show warning with status hint that has parameter with customized name', () => {
+        const skillId = 'someSkillId';
+        const resource = 'someResource';
+        sinon.stub(Map.prototype, 'get').withArgs('resource').returns('someCustomName');
         const url = `/v1/skills/${skillId}/status?resource=${resource}`;
         const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
 
         parseSmapiResponse(response);
         expect(warnStub.firstCall.lastArg).eql('This is an asynchronous operation. Check the progress '
-        + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --resource ${resource}`);
+        + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --some-custom-name ${resource}`);
     });
 
     it('| should not show warning with status hint command when not able to find one', () => {
