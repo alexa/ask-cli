@@ -183,7 +183,6 @@ parallel('smapi command test', () => {
         expect(result).include('Command executed successfully!');
     });
 
-
     it('| should display catalog list for skill', async () => {
         const args = [subCmd, 'list-catalogs-for-skill', '-s', skillId, '--max-results', 1];
         addCoveredCommand(args);
@@ -390,7 +389,6 @@ parallel('smapi command test', () => {
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
     });
-
 
     it('| should get content upload by id', async () => {
         const args = [subCmd, 'get-content-upload-by-id', '-c', catalogId, '--upload-id', uploadId];
