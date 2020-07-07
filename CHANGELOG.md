@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.11.2](https://github.com/alexa/ask-cli/compare/v2.11.1...v2.11.2) (2020-07-07)
+
+
+### Bug Fixes
+
+* pass profile to status hint; handle customized param names ([#250](https://github.com/alexa/ask-cli/issues/250)) ([a7e8d0d](https://github.com/alexa/ask-cli/commit/a7e8d0dd5af09f1e14d35e2e57403c316d3faabb))
+
 ### [2.11.1](https://github.com/alexa/ask-cli/compare/v2.11.0...v2.11.1) (2020-06-25)
 
 
