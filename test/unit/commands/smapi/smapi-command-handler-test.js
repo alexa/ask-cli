@@ -228,11 +228,17 @@ describe('Smapi test - parseSmapiResponse function', () => {
         + `using the following command: ask smapi get-skill-status --skill-id ${skillId} --resource ${resource} --profile ${profile}`);
     });
 
-    it('| should show warning with status hint that has parameter with customized name', () => {
+    it('| should show warning with status hint for customized parameters', () => {
         const skillId = 'someSkillId';
         const resource = 'someResource';
-        sinon.stub(Map.prototype, 'get').withArgs('resource').returns('someCustomName');
-        const url = `/v1/skills/${skillId}/status?resource=${resource}`;
+        const vendorId = 'someVendorId';
+        sinon.stub(Map.prototype, 'get')
+            .withArgs('vendorId')
+            .returns({ skip: true })
+            .withArgs('resource')
+            .returns('someCustomName');
+
+        const url = `/v1/skills/${skillId}/status?resource=${resource}&vendorId=${vendorId}`;
         const response = { headers: [{ key: 'location', value: url }], statusCode: 202 };
 
         parseSmapiResponse(response);
