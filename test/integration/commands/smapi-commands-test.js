@@ -1097,20 +1097,6 @@ parallel('smapi command test', () => {
         expect(result).be.an('object');
     });
 
-    it('| should clone locale', async () => {
-        const args = [subCmd, 'clone-locale', '-s', skillId, '--source-locale', 'sourceLocale', '--target-locales', 'targetLocales'];
-        addCoveredCommand(args);
-        const result = await run(cmd, args, { ...options, parse: false });
-        expect(result).include('Command executed successfully!');
-    });
-
-    it('| should get clone locale status', async () => {
-        const args = [subCmd, 'get-clone-locale-status', '-s', skillId, '--clone-locale-request-id', 'x'];
-        addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
-    });
-
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
