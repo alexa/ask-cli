@@ -44,11 +44,16 @@ parallel('smapi command test', () => {
     const stage = 'development';
     const locale = 'en-US';
     const location = 'US';
+    const sourceLocale = 'en-US';
+    const targetLocales = 'en-GB';
+    const cloneLocaleRequestId = 'someCloneLocaleRequestId';
     const uploadId = 'someUploadId';
     const subscriberId = 'someSubscriberId';
     const subscriptionId = 'someSubscriptionId';
     const updateRequestId = 'someUpdateRequestId';
     const version = '2.0.0';
+    const targetVersion = '7';
+    const rollbackRequestId = 'someRollbackRequestId';
     const simulationId = 'someSimulationId';
     const slotTypeId = 'someSlotTypeId';
     const sourceAnnotationId = 'someSourceAnnotationId';
@@ -1092,6 +1097,41 @@ parallel('smapi command test', () => {
 
     it('| should list interaction model catalog versions', async () => {
         const args = [subCmd, 'list-interaction-model-catalog-versions', '-c', catalogId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should clone locale', async () => {
+        const args = [subCmd, 'clone-locale', '-s', skillId, '--source-locale', sourceLocale, '--target-locales', targetLocales];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should get clone locale status', async () => {
+        const args = [subCmd, 'get-clone-locale-status', '-s', skillId, '--clone-locale-request-id', cloneLocaleRequestId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should list versions for skill', async () => {
+        const args = [subCmd, 'list-versions-for-skill', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should rollback skill', async () => {
+        const args = [subCmd, 'rollback-skill', '-s', skillId, '--target-version', targetVersion];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get rollback for skill', async () => {
+        const args = [subCmd, 'get-rollback-for-skill', '-s', skillId, '--rollback-request-id', rollbackRequestId];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
