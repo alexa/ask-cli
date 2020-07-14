@@ -232,6 +232,19 @@ describe('Commands deploy test - command class test', () => {
                     done();
                 });
             });
+
+            it('| helper deploy skill, expect error if non supported value provided for the target flag', (done) => {
+                // setup
+                const target = 'some-non-supported-target';
+                const cmd = { ...TEST_CMD, target };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err.message).equal(`Target ${target} is not supported. Supported targets: ${Object.values(CONSTANTS.DEPLOY_TARGET)}.`);
+                    done();
+                });
+            });
         });
 
         describe('command handle - build skill code', () => {
