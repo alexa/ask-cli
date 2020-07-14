@@ -1,6 +1,6 @@
 {
   "name": "ask-cli",
-  "version": "2.10.1",
+  "version": "2.11.2",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
     "ask": "bin/ask.js"
@@ -24,7 +24,7 @@
     "deploy"
   ],
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha -u exports -R spec test/unit/run-test.js",
+    "test": "node ./node_modules/mocha/bin/_mocha -t 10000 -u exports -R spec test/unit/run-test.js",
     "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
@@ -87,7 +87,7 @@
     "nyc": "^13.3.0",
     "proxyquire": "^1.7.11",
     "sinon": "^6.0.0",
-    "standard-version": "^7.0.0"
+    "standard-version": "^8.0.1"
   },
   "husky": {
     "hooks": {

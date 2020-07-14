@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.11.2](https://github.com/alexa/ask-cli/compare/v2.11.1...v2.11.2) (2020-07-07)
+
+
+### Bug Fixes
+
+* pass profile to status hint; handle customized param names ([#250](https://github.com/alexa/ask-cli/issues/250)) ([a7e8d0d](https://github.com/alexa/ask-cli/commit/a7e8d0dd5af09f1e14d35e2e57403c316d3faabb))
+
+### [2.11.1](https://github.com/alexa/ask-cli/compare/v2.11.0...v2.11.1) (2020-06-25)
+
+
+### Bug Fixes
+
+* ingoring version check for credential helper ([b8fd184](https://github.com/alexa/ask-cli/commit/b8fd1847c775bb540d19ce6c50517228f5e5d4c1))
+
+## [2.11.0](https://github.com/alexa/ask-cli/compare/v2.10.2...v2.11.0) (2020-06-24)
+
+
+### Features
+
+* add default value development when stage is required ([f656de5](https://github.com/alexa/ask-cli/commit/f656de5a26e318593090755232d9ebfde526acfa))
+* add support of ignore-hash in lambda deployer ([a6ea7fd](https://github.com/alexa/ask-cli/commit/a6ea7fdf0549912a626780a40dee23dc2f153cf0))
+* add to show hint to check status for async smapi commands ([8d8d840](https://github.com/alexa/ask-cli/commit/8d8d84061b91d16b97294870001e785dd8a8e006))
+
+
+### Bug Fixes
+
+* add logic to create stack if old stack in delete complete status ([#224](https://github.com/alexa/ask-cli/issues/224)) ([ec32913](https://github.com/alexa/ask-cli/commit/ec32913ceb3e4468c45c7ddd1d6e8468c700cd5f))
+* fix to allow dialog without providing skill id for hosted skills ([#236](https://github.com/alexa/ask-cli/issues/236)) ([13fa8db](https://github.com/alexa/ask-cli/commit/13fa8db0e043049813a7513f1730253ebe31fdb6))
+
+### [2.10.2](https://github.com/alexa/ask-cli/compare/v2.10.1...v2.10.2) (2020-06-11)
+
+
+### Bug Fixes
+
+* add qoutes around folder path to fix issue when path has space ([#234](https://github.com/alexa/ask-cli/issues/234)) ([3c73020](https://github.com/alexa/ask-cli/commit/3c73020e3d9d3bbdd8c51e5f477186b2fe5ba7d5))
+
 ### [2.10.1](https://github.com/alexa/ask-cli/compare/v2.10.0...v2.10.1) (2020-06-05)
 
 ## [2.10.0](https://github.com/alexa/ask-cli/compare/v2.9.0...v2.10.0) (2020-06-05)
