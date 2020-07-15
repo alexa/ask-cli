@@ -11,7 +11,7 @@
 
 **STRUCTURE OF DIALOG COMMAND:**
 
-`ask dialog [-s|--skill-id <skill-id>] [-l|--locale <locale>] [-g|--stage <stage>] [-r|--replay <file-path>] [-p|--profile <profile>] [--debug]`
+`ask dialog [-s|--skill-id <skill-id>] [-l|--locale <locale>] [-g|--stage <stage>] [-r|--replay <file-path>] [--save-skill-io <file-path>] [-p|--profile <profile>] [--debug]`
 
 **OPTIONS DESCRIPTION:**
 
@@ -22,6 +22,8 @@
 **stage**: Optional. Indicates stage of the skill. Use development or live as values. Defaults to development.
 
 **replay**: Optional. Specify a replay file to simulate a conversation with your skill. Specifying this option will run the command in Replay Mode.
+
+**save-skill-io**: Optional. Specify an output file to write simulation invocation requests and responses.
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 

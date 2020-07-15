@@ -45,6 +45,11 @@
       "regex": "^[./]?[\\w\\-. /]+\\.(json)"
     }]
   },
+  "save-skill-io": {
+    "name": "save-skill-io",
+    "description": "Specify an output file to write simulation invocation requests and responses.",
+    "stringInput": "REQUIRED"
+  },
   "hosted-skill-id": {
     "name": "hosted-skill-id",
     "description": "skill-id for the Alexa hosted skill",

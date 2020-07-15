@@ -51,7 +51,7 @@ describe('Commands Dialog test - command class test', () => {
         expect(instance.name()).eq('dialog');
         expect(instance.description()).eq('simulate your skill via an interactive dialog with Alexa');
         expect(instance.requiredOptions()).deep.eq([]);
-        expect(instance.optionalOptions()).deep.eq(['skill-id', 'locale', 'stage', 'replay', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.eq(['skill-id', 'locale', 'stage', 'replay', 'save-skill-io', 'profile', 'debug']);
     });
 
     describe('# validate command handle', () => {
