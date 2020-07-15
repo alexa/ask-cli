@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.12.0](https://github.com/alexa/ask-cli/compare/v2.11.2...v2.12.0) (2020-07-15)
+
+
+### Features
+
+* add output option to dialog command ([#252](https://github.com/alexa/ask-cli/issues/252)) ([4ce263e](https://github.com/alexa/ask-cli/commit/4ce263e5c41d0fe0ea4795d8689d3ccb28bc12db))
+* add target flag to deploy command ([#232](https://github.com/alexa/ask-cli/issues/232)) ([1594c24](https://github.com/alexa/ask-cli/commit/1594c244f1b255ee778384ad4230d60bb3031560))
+
 ### [2.11.2](https://github.com/alexa/ask-cli/compare/v2.11.1...v2.11.2) (2020-07-07)
 
 
