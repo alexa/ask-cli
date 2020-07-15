@@ -45,7 +45,7 @@ describe('Commands deploy test - command class test', () => {
         expect(instance.name()).equal('deploy');
         expect(instance.description()).equal('deploy the skill project');
         expect(instance.requiredOptions()).deep.equal([]);
-        expect(instance.optionalOptions()).deep.equal(['ignore-hash', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.equal(['ignore-hash', 'target', 'profile', 'debug']);
     });
 
     describe('validate command handle', () => {
@@ -215,6 +215,38 @@ describe('Commands deploy test - command class test', () => {
                     done();
                 });
             });
+
+            it('| helper deploy skill with skill metadata target, expect skip deploy metadata and skip build and infra deploy', (done) => {
+                // setup
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
+                const cmd = { ...TEST_CMD, target: CONSTANTS.DEPLOY_TARGET.SKILL_METADATA };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err).equal(undefined);
+                    expect(infoStub.callCount).equal(3);
+                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
+                    expect(warnStub.callCount).equal(0);
+                    done();
+                });
+            });
+
+            it('| helper deploy skill, expect error if non supported value provided for the target flag', (done) => {
+                // setup
+                const target = 'some-non-supported-target';
+                const cmd = { ...TEST_CMD, target };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err.message).equal(`Target ${target} is not supported. Supported targets: ${Object.values(CONSTANTS.DEPLOY_TARGET)}.`);
+                    done();
+                });
+            });
         });
 
         describe('command handle - build skill code', () => {
@@ -287,6 +319,50 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 });
             });
 
+            it('| helper deploy skill with infrastructure target, expect skip skill metadata; build code and deploy infrastructure', (done) => {
+                // setup
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2);
+                sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3);
+                sinon.stub(path, 'resolve').returns(TEST_CODE_SRC_BASENAME);
+                sinon.stub(fs, 'statSync').returns({
+                    isDirectory: () => true
+                });
+                path.join.withArgs(TEST_CODE_SRC_BASENAME).returns(TEST_CODE_SRC_BASENAME);
+                const cmd = { ...TEST_CMD, target: CONSTANTS.DEPLOY_TARGET.SKILL_INFRASTRUCTURE };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err).equal(undefined);
+                    expect(errorStub.callCount).equal(0);
+                    expect(infoStub.callCount).equal(5);
+                    expect(infoStub.args[0][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[1][0]).equal('Skill code built successfully.');
+                    expect(infoStub.args[2][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
+with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
+                    expect(infoStub.args[3][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
+                    expect(infoStub.args[4][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
+                    expect(warnStub.callCount).equal(0);
+                    expect(helper.enableSkill.calledOnce).equal(false);
+                    done();
+                });
+            });
+
+            it('| helper deploy skill with infrastructure target, expect throw error when skill id does not exist', (done) => {
+                // setup
+                sinon.stub(ResourcesConfig.prototype, 'getSkillId').returns(undefined);
+                const cmd = { ...TEST_CMD, target: CONSTANTS.DEPLOY_TARGET.SKILL_INFRASTRUCTURE };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err.message).include('the skillId has not been created yet. Please deploy your skillMetadata first');
+                    done();
+                });
+            });
+
             it('| helper deploy skill infra fails, expect throw error', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
@@ -316,7 +392,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 });
             });
 
-            it('| deploy skill all pass, expect deploy succeeds and enbalSkill get called', (done) => {
+            it('| deploy skill all pass, expect deploy succeeds and enableSkill get called', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
