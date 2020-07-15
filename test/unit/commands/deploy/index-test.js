@@ -345,10 +345,24 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     expect(infoStub.args[3][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
                     expect(infoStub.args[4][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
                     expect(warnStub.callCount).equal(0);
-                    expect(helper.enableSkill.calledOnce).equal(true);
+                    expect(helper.enableSkill.calledOnce).equal(false);
                     done();
                 });
             });
+
+            it('| helper deploy skill with infrastructure target, expect throw error when skill id does not exist', (done) => {
+                // setup
+                sinon.stub(ResourcesConfig.prototype, 'getSkillId').returns(undefined);
+                const cmd = { ...TEST_CMD, target: CONSTANTS.DEPLOY_TARGET.SKILL_INFRASTRUCTURE };
+
+                // call
+                instance.handle(cmd, (err) => {
+                    // verify
+                    expect(err.message).include('the skillId has not been created yet. Please deploy your skillMetadata first');
+                    done();
+                });
+            });
+
             it('| helper deploy skill infra fails, expect throw error', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
@@ -378,7 +392,7 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 });
             });
 
-            it('| deploy skill all pass, expect deploy succeeds and enbalSkill get called', (done) => {
+            it('| deploy skill all pass, expect deploy succeeds and enableSkill get called', (done) => {
                 // setup
                 sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
