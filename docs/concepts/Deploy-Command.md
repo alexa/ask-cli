@@ -12,7 +12,7 @@ This document focuses on explaining the deploy command in details for each type 
 
 **ignore-hash**: Optional. Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.
 
-**target**: Optional. Specify which skill project resource to deploy. Available options: kill-metadata,skill-infrastructure. 
+**target**: Optional. Specify which skill project resource to deploy. Available options: skill-metadata,skill-infrastructure. 
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
