@@ -45,10 +45,9 @@
       "regex": "^[./]?[\\w\\-. /]+\\.(json)"
     }]
   },
-  "output": {
-    "name": "output",
-    "description": "Specify a output file to write simulation invocations",
-    "alias": "r",
+  "save-skill-io": {
+    "name": "save-skill-io",
+    "description": "Specify an output file to write simulation invocation requests and responses.",
     "stringInput": "REQUIRED"
   },
   "hosted-skill-id": {

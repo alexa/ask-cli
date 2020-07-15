@@ -75,7 +75,7 @@ require('module-alias/register');
     // model
     '@test/unit/model/abstract-config-file-test',
     '@test/unit/model/app-config-test',
-    '@test/unit/model/dialog-output-file-test',
+    '@test/unit/model/dialog-save-skill-io-file-test',
     '@test/unit/model/metric-config-test',
     '@test/unit/model/manifest-test',
     '@test/unit/model/resources-config/resources-config-test',
