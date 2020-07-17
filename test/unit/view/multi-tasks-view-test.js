@@ -214,8 +214,7 @@ describe('View test - ListReactiveTask test', () => {
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
             // verify
-            expect(subscribeStub.error.args[0][0]).equal('error');
-            expect(TEST_CONTEXT[TEST_TASK_ID]).deep.equal(TEST_ERROR_OBJ);
+            expect(subscribeStub.error.args[0][0]).deep.equal(TEST_ERROR_OBJ);
         });
 
         it('| when "error" event emit with error object structure, expect subscriber to call "error" and set context', () => {
@@ -233,8 +232,7 @@ describe('View test - ListReactiveTask test', () => {
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
             // verify
-            expect(subscribeStub.error.args[0][0]).equal('error');
-            expect(TEST_CONTEXT[TEST_TASK_ID]).deep.equal(TEST_ERROR_OBJ);
+            expect(subscribeStub.error.args[0][0]).deep.equal(TEST_ERROR_OBJ);
         });
 
         it('| when "title" event emit, expect subscriber to call "title"', () => {
