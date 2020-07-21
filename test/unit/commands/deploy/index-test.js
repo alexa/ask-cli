@@ -440,6 +440,22 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 sinon.stub(fse, 'existsSync').returns(true);
             });
 
+            it('| can callbcak warn when enable fails with CliWarn class', (done) => {
+                // setup
+                const TEST_WARN = new CliWarn('warn');
+                sinon.stub(helper, 'deploySkillMetadata').callsArgWith(1);
+                sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
+                sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3);
+                sinon.stub(helper, 'enableSkill').callsArgWith(2, TEST_WARN);
+                // call
+                instance.handle(TEST_CMD, (err) => {
+                    // verify
+                    expect(warnStub.args[0][0]).equal(TEST_WARN);
+                    expect(err).equal(undefined);
+                    done();
+                });
+            });
+
             it('| can callbcak error when enable fails', (done) => {
                 // setup
                 const TEST_ERROR = 'error';
@@ -447,7 +463,9 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                 sinon.stub(helper, 'buildSkillCode').callsArgWith(2, null, TEST_CODE_BUILD_RESULT);
                 sinon.stub(helper, 'deploySkillInfrastructure').callsArgWith(3);
                 sinon.stub(helper, 'enableSkill').callsArgWith(2, 'error');
+                // call
                 instance.handle(TEST_CMD, (err) => {
+                    // verify
                     expect(errorStub.args[0][0]).equal(TEST_ERROR);
                     expect(err).equal(TEST_ERROR);
                     done();
