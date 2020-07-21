@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.13.0](https://github.com/alexa/ask-cli/compare/v2.12.1...v2.13.0) (2020-07-21)
+
+
+### Features
+
+* add clone locale and rollback smapi commands ([a0ce145](https://github.com/alexa/ask-cli/commit/a0ce14535f54fa5ae9a002ee77dbce74b58e6d38))
+* add the scope of alexa::ask:skills:debug into LWA flow ([f8e2d0f](https://github.com/alexa/ask-cli/commit/f8e2d0f30b477ea6d0fc02532e568627a2071f9c))
+
 ### [2.12.1](https://github.com/alexa/ask-cli/compare/v2.12.0...v2.12.1) (2020-07-21)
 
 
