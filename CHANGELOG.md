@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.12.1](https://github.com/alexa/ask-cli/compare/v2.12.0...v2.12.1) (2020-07-21)
+
+
+### Bug Fixes
+
+* add pageSize to avoid the description of the template gets too long and breaks the line ([#261](https://github.com/alexa/ask-cli/issues/261)) ([6422827](https://github.com/alexa/ask-cli/commit/64228278aea2b49374ee31d30fb008687c422842))
+* default folder name to skill name for ask new command. ([#262](https://github.com/alexa/ask-cli/issues/262)) ([0e50cfe](https://github.com/alexa/ask-cli/commit/0e50cfe9d5e4d9b1d93ee6abbad113b3ff64d815))
+* do not throw error exit code when the enable-skill request skipped ([#266](https://github.com/alexa/ask-cli/issues/266)) ([0a2b166](https://github.com/alexa/ask-cli/commit/0a2b1664a448d67eaa6d2dfe045bac6bc5b8db37))
+* output deploy error if error not string ([#258](https://github.com/alexa/ask-cli/issues/258)) ([62c059c](https://github.com/alexa/ask-cli/commit/62c059c191bb4d08f97233782fe63008de3d8b36))
+
 ## [2.12.0](https://github.com/alexa/ask-cli/compare/v2.11.2...v2.12.0) (2020-07-15)
 
 
