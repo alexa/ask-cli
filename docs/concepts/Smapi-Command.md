@@ -117,12 +117,17 @@ The path params
 | Updates the ssl certificates associated with this skill. | [set-ssl-certificates](#set-ssl-certificates) |
 | Submit the skill for certification. | [submit-skill-for-certification](#submit-skill-for-certification) |
 | Withdraws the skill from certification. | [withdraw-skill-from-certification](#withdraw-skill-from-certification) |
+| Retrieve a list of all skill versions associated with this skill id. | [list-versions-for-skill](#list-versions-for-skill) |
+| Submit a target skill version to rollback to. Only one rollback or publish operation can be outstanding for a given skillId. | [rollback-skill](#rollback-skill) |
+| Get the rollback status of a skill given an associated rollbackRequestId. Use ~latest in place of rollbackRequestId to get the latest rollback status. | [get-rollback-for-skill](#get-rollback-for-skill) |
 | Creates a new export for a skill with given skillId and stage. | [create-export-request-for-skill](#create-export-request-for-skill) |
 | Get status for given exportId. | [get-status-of-export-request](#get-status-of-export-request) |
 | Creates a new import for a skill. | [create-skill-package](#create-skill-package) |
 | Creates a new import for a skill with given skillId. | [import-skill-package](#import-skill-package) |
 | Get status for given importId. | [get-import-status](#get-import-status) |
 | Creates a new uploadUrl. | [create-upload-url](#create-upload-url) |
+| Creates a new clone locale workflow for a skill with given skillId, source locale, and target locales. In a single workflow, a locale can be cloned to multiple target locales. However, only one such workflow can be started at any time. | [clone-locale](#clone-locale) |
+| Returns the status of a clone locale workflow associated with the unique identifier of cloneLocaleRequestId. | [get-clone-locale-status](#get-clone-locale-status) |
 | Get the list of Vendor information. | [get-vendor-list](#get-vendor-list) |
 | The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account. | [query-development-audit-logs](#query-development-audit-logs) |
 | API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results. | [list-nlu-evaluations](#list-nlu-evaluations) |
@@ -167,7 +172,7 @@ Lists catalogs associated with a vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -238,7 +243,7 @@ Lists all the catalogs associated with a skill.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-s,--skill-id <skill-id></dt>
@@ -286,7 +291,7 @@ Lists all the uploads for a particular catalog.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-c,--catalog-id <catalog-id></dt>
@@ -383,7 +388,7 @@ Lists the subscribers for a particular vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -494,7 +499,7 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--subscriber-id <subscriber-id></dt>
@@ -660,7 +665,7 @@ Get the list of in-skill products for the vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--product-id <product-id></dt>
@@ -726,7 +731,7 @@ Get the list of in-skill products for the skillId.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -852,7 +857,7 @@ Get the associated skills for the in-skill product.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1209,7 +1214,7 @@ List all testers in a beta test for the given Alexa skill.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1330,7 +1335,7 @@ Get list of all certifications available for a skill, including information abou
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1478,7 +1483,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--sort-direction <sort-direction></dt>
@@ -1645,7 +1650,7 @@ List all catalogs for the vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1818,7 +1823,7 @@ This is a paginated API that retrieves results of conflict detection job for a s
     <dt>--vers <vers></dt>
     <dd markdown="span">[REQUIRED] Version of interaction model. Use "~current" to get the model of the current version.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 100. If more results are present, the response will contain a nextToken and a _link.next href.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1845,7 +1850,7 @@ List all the historical versions of the given catalogId.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>--sort-field <sort-field></dt>
@@ -1974,7 +1979,7 @@ Get catalog values from the given catalogId &amp; version.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2036,7 +2041,7 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--sort-direction <sort-direction></dt>
@@ -2065,7 +2070,7 @@ List all slot types for the vendor.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2202,7 +2207,7 @@ List all slot type versions for the slot type id.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--sort-direction <sort-direction></dt>
     <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2426,7 +2431,7 @@ Get analytic metrics report of skill usage.
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2501,7 +2506,7 @@ List private distribution accounts.
     <dt>-g,--stage <stage></dt>
     <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2632,7 +2637,7 @@ Get the list of skills for the vendor.
 
 <dl>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
     <dt>-s,--skill-id <skill-id></dt>
@@ -2786,7 +2791,7 @@ Submit the skill for certification.
 
 `submit-skill-for-certification` command format:
 
-`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi submit-skill-for-certification <-s|--skill-id <skill-id>> [--publication-method <publication-method>] [--version-message <version-message>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2796,6 +2801,8 @@ Submit the skill for certification.
     <dt>--publication-method <publication-method></dt>
     <dd markdown="span">[OPTIONAL] Determines if the skill should be submitted only for certification and manually publish later or publish immediately after the skill is certified. Omitting the publication method will default to auto publishing. 
 [ENUM]: MANUAL_PUBLISHING,AUTO_PUBLISHING.</dd>
+    <dt>--version-message <version-message></dt>
+    <dd markdown="span">[OPTIONAL] Description of the version (limited to 300 characters).</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2822,6 +2829,77 @@ Withdraws the skill from certification.
 [ENUM]: TEST_SKILL,MORE_FEATURES,DISCOVERED_ISSUE,NOT_RECEIVED_CERTIFICATION_FEEDBACK,NOT_INTEND_TO_PUBLISH,OTHER.</dd>
     <dt>--message <message></dt>
     <dd markdown="span">[OPTIONAL] The message only in case the reason in OTHER.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-versions-for-skill
+
+Retrieve a list of all skill versions associated with this skill id.
+
+`list-versions-for-skill` command format:
+
+`$ ask smapi list-versions-for-skill <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### rollback-skill
+
+Submit a target skill version to rollback to. Only one rollback or publish operation can be outstanding for a given skillId.
+
+`rollback-skill` command format:
+
+`$ ask smapi rollback-skill <-s|--skill-id <skill-id>> <--target-version <target-version>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--target-version <target-version></dt>
+    <dd markdown="span">[REQUIRED] The target skill version to rollback to.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-rollback-for-skill
+
+Get the rollback status of a skill given an associated rollbackRequestId. Use ~latest in place of rollbackRequestId to get the latest rollback status.
+
+`get-rollback-for-skill` command format:
+
+`$ ask smapi get-rollback-for-skill <-s|--skill-id <skill-id>> <--rollback-request-id <rollback-request-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--rollback-request-id <rollback-request-id></dt>
+    <dd markdown="span">[REQUIRED] Defines the identifier for a rollback request. If set to ~latest, request returns the status of the latest rollback request.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2952,6 +3030,67 @@ Creates a new uploadUrl.
 **Options**
 
 <dl>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### clone-locale
+
+Creates a new clone locale workflow for a skill with given skillId, source locale, and target locales. In a single workflow, a locale can be cloned to multiple target locales. However, only one such workflow can be started at any time.
+
+`clone-locale` command format:
+
+`$ ask smapi clone-locale <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--source-locale <source-locale>> <--target-locales <target-locales>> [--overwrite-mode <overwrite-mode>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL] Stages of a skill on which locales can be cloned. Currently only `development` stage is supported.
+
+* `development` - skills which are currently in development corresponds to this stage.</dd>
+    <dt>--source-locale <source-locale></dt>
+    <dd markdown="span">[REQUIRED] Locale with the assets that will be cloned.</dd>
+    <dt>--target-locales <target-locales></dt>
+    <dd markdown="span">[REQUIRED] A list of locale(s) where the assets will be copied to. 
+[MULTIPLE]: Values can be separated by comma.</dd>
+    <dt>--overwrite-mode <overwrite-mode></dt>
+    <dd markdown="span">[OPTIONAL] Can locale of skill be overwritten. Default value is DO_NOT_OVERWRITE. 
+[ENUM]: DO_NOT_OVERWRITE,OVERWRITE.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-clone-locale-status
+
+Returns the status of a clone locale workflow associated with the unique identifier of cloneLocaleRequestId.
+
+`get-clone-locale-status` command format:
+
+`$ ask smapi get-clone-locale-status <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--clone-locale-request-id <clone-locale-request-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL] Stages of a skill on which locales can be cloned. Currently only `development` stage is supported.
+
+* `development` - skills which are currently in development corresponds to this stage.</dd>
+    <dt>--clone-locale-request-id <clone-locale-request-id></dt>
+    <dd markdown="span">[REQUIRED] Defines the identifier for a clone locale workflow.
+If set to ~latest, request returns the status of the latest clone locale workflow.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3336,7 +3475,7 @@ API which requests all the ASR annotation sets for a skill. Returns the annotati
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext.</dd>
     <dt>-p, --profile <profile></dt>
@@ -3455,7 +3594,7 @@ API which deletes the ASR annotation set. Developers cannot get&#x2F;list the de
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
     <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. Defaults to 1000. If more results are present, the response will contain a paginationContext.</dd>
     <dt>--annotation-set-id <annotation-set-id></dt>
@@ -3511,7 +3650,7 @@ API that allows developers to get historical ASR evaluations they run before.
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[OPTIONAL] locale in bcp 47 format. Used to filter results with the specified locale. If omitted, the response would include all evaluations regardless of what locale was used in the evaluation.</dd>
     <dt>-g,--stage <stage></dt>
@@ -3620,7 +3759,7 @@ Paginated API which returns the test case results of an evaluation. This should 
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--next-token <next-token></dt>
-    <dd markdown="span">[OPTIONAL] A token provided to continue returning results from a previous request which was partial.</dd>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--evaluation-id <evaluation-id></dt>
     <dd markdown="span">[REQUIRED] Identifier of the evaluation.</dd>
     <dt>--max-results <max-results></dt>
