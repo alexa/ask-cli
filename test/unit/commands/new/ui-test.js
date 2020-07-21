@@ -294,7 +294,7 @@ describe('Commands new - UI test', () => {
                     choices: TEST_TEMPLATE_CHOICES,
                     pageSize: 30
                 });
-                expect(inquirer.prompt.args[0][0][0].filter('a         b')).equal('a');
+                expect(inquirer.prompt.args[0][0][0].filter('a\nb')).equal('a');
                 expect(err).equal(null);
                 expect(response).equal(TEST_TEMPLATE_NAME);
                 done();
@@ -313,7 +313,7 @@ describe('Commands new - UI test', () => {
                     choices: TEST_TEMPLATE_CHOICES,
                     pageSize: 30
                 });
-                expect(inquirer.prompt.args[0][0][0].filter('a         b')).equal('a');
+                expect(inquirer.prompt.args[0][0][0].filter('a\nb')).equal('a');
                 expect(err.message).equal(TEST_ERROR);
                 expect(response).equal(undefined);
                 done();
