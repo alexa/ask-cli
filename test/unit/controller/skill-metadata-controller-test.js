@@ -2,17 +2,19 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs-extra');
-const jsonView = require('@src/view/json-view');
-const CLiError = require('@src/exceptions/cli-error');
-const ResourcesConfig = require('@src/model/resources-config');
+
 const httpClient = require('@src/clients/http-client');
-const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const AuthorizationController = require('@src/controllers/authorization-controller');
+const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
+const CliError = require('@src/exceptions/cli-error');
+const CliWarn = require('@src/exceptions/cli-warn');
 const Manifest = require('@src/model/manifest');
-const Messenger = require('@src/view/messenger');
-const zipUtils = require('@src/utils/zip-utils');
-const hashUtils = require('@src/utils/hash-utils');
+const ResourcesConfig = require('@src/model/resources-config');
 const CONSTANTS = require('@src/utils/constants');
+const hashUtils = require('@src/utils/hash-utils');
+const zipUtils = require('@src/utils/zip-utils');
+const jsonView = require('@src/view/json-view');
+const Messenger = require('@src/view/messenger');
 
 describe('Controller test - skill metadata controller test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
@@ -215,9 +217,9 @@ describe('Controller test - skill metadata controller test', () => {
         it('| return error when dominInfo is not provided', () => {
             // setup
             Manifest.getInstance().setApis({});
-            const expectedErrMessage = '[Error]: Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.';
+            const expectedErrMessage = 'Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.';
             // call
-            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
+            expect(() => skillMetaController.validateDomain()).to.throw(CliError, expectedErrMessage);
         });
 
         it('| return error when dominInfo contains more than one domain', () => {
@@ -226,9 +228,9 @@ describe('Controller test - skill metadata controller test', () => {
                 custom: {},
                 smartHome: {}
             });
-            const expectedErrMessage = '[Warn]: Skill with multiple api domains cannot be enabled. Skip the enable process.';
+            const expectedErrMessage = 'Skill with multiple api domains cannot be enabled. Skip the enable process.';
             // call
-            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
+            expect(() => skillMetaController.validateDomain()).to.throw(CliWarn, expectedErrMessage);
         });
 
         it('| return error when domain cannot be enabled', () => {
@@ -236,9 +238,9 @@ describe('Controller test - skill metadata controller test', () => {
             Manifest.getInstance().setApis({
                 smartHome: {}
             });
-            const expectedErrMessage = '[Warn]: Skill api domain "smartHome" cannot be enabled. Skip the enable process.';
+            const expectedErrMessage = 'Skill api domain "smartHome" cannot be enabled. Skip the enable process.';
             // call
-            expect(() => skillMetaController.validateDomain()).to.throw(CLiError, expectedErrMessage);
+            expect(() => skillMetaController.validateDomain()).to.throw(CliWarn, expectedErrMessage);
         });
 
         it('| callback error when getSkillEnablement return error', (done) => {
