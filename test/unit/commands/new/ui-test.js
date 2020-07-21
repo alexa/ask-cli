@@ -51,8 +51,8 @@ describe('Commands new - UI test', () => {
         }
     };
     const TEST_TEMPLATE_CHOICES = [
-        `template1\t\t    ${chalk.gray('templateDescription1')}`,
-        `template2\t\t    ${chalk.gray('')}`
+        `template1\n  ${chalk.gray('templateDescription1')}`,
+        `template2\n  ${chalk.gray('')}`
     ];
     const TEST_DEPLOYMENT_CHOICES_WITH_SEP = [
         `${TEST_DEPLOYMENT_OPTION_NAME}\n  ${chalk.gray('HOSTED_DESCRIPTION')}`,
@@ -291,9 +291,10 @@ describe('Commands new - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Choose a template to start with: ',
                     type: 'list',
-                    choices: TEST_TEMPLATE_CHOICES
+                    choices: TEST_TEMPLATE_CHOICES,
+                    pageSize: 30
                 });
-                expect(inquirer.prompt.args[0][0][0].filter('a         b')).equal('a');
+                expect(inquirer.prompt.args[0][0][0].filter('a\nb')).equal('a');
                 expect(err).equal(null);
                 expect(response).equal(TEST_TEMPLATE_NAME);
                 done();
@@ -309,9 +310,10 @@ describe('Commands new - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Choose a template to start with: ',
                     type: 'list',
-                    choices: TEST_TEMPLATE_CHOICES
+                    choices: TEST_TEMPLATE_CHOICES,
+                    pageSize: 30
                 });
-                expect(inquirer.prompt.args[0][0][0].filter('a         b')).equal('a');
+                expect(inquirer.prompt.args[0][0][0].filter('a\nb')).equal('a');
                 expect(err.message).equal(TEST_ERROR);
                 expect(response).equal(undefined);
                 done();
