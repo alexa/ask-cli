@@ -367,7 +367,9 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dd markdown="span">[REQUIRED] Unique identifier of the upload.</dd>
     <dt>--part-e-tags <part-e-tags></dt>
     <dd markdown="span">[OPTIONAL] List of (eTag, part number) pairs for each part of the file uploaded. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -412,7 +414,9 @@ Creates a new subscriber resource for a vendor.
 <dl>
     <dt>--create-subscriber-request <create-subscriber-request></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for createSubscriber API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -457,7 +461,9 @@ Updates the properties of a subscriber.
     <dd markdown="span">[REQUIRED] Unique identifier of the subscriber.</dd>
     <dt>--update-subscriber-request <update-subscriber-request></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for updateSubscriber API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -644,7 +650,9 @@ Creates a new upload for a catalog and returns location to track the upload proc
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--catalog-upload-request-body <catalog-upload-request-body></dt>
     <dd markdown="span">[REQUIRED] Provides the request body for create content upload 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -706,7 +714,9 @@ Creates a new in-skill product for given vendorId.
 <dl>
     <dt>--create-in-skill-product-request <create-in-skill-product-request></dt>
     <dd markdown="span">[REQUIRED] defines the request body for createInSkillProduct API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -784,7 +794,9 @@ Updates in-skill product definition for given productId. Only development stage 
     <dd markdown="span">[OPTIONAL] Stage for skill.</dd>
     <dt>--in-skill-product <in-skill-product></dt>
     <dd markdown="span">[REQUIRED] defines the request body for updateInSkillProduct API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -985,7 +997,9 @@ Create AccountLinking information for the skill.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>--account-linking-request <account-linking-request></dt>
     <dd markdown="span">[REQUIRED] The fields required to create accountLinking partner. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
@@ -1625,7 +1639,9 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dd markdown="span">[REQUIRED] The locale for the model requested e.g. en-GB, en-US, de-DE.</dd>
     <dt>--interaction-model <interaction-model></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--if-match <if-match></dt>
     <dd markdown="span">[OPTIONAL] Request header that specified an entity tag. The server will update the resource only if the eTag matches with the resource's current eTag.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2094,7 +2110,9 @@ Create a new version of slot type within the given slotTypeId.
 <dl>
     <dt>--slot-type <slot-type></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2233,7 +2251,9 @@ Create a new version of slot type entity for the given slotTypeId.
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>--slot-type <slot-type></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2331,7 +2351,9 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 [ENUM]: NA,EU,FE.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
     <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2390,7 +2412,9 @@ Updates skill manifest for given skillId and stage.
 * `live` - skills which are currently live corresponds to this stage.</dd>
     <dt>--manifest <manifest></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for updateSkill API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2664,7 +2688,9 @@ Creates a new skill for given vendorId.
 <dl>
     <dt>--manifest <manifest></dt>
     <dd markdown="span">[REQUIRED] Defines the request body for createSkill API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -2776,7 +2802,9 @@ Updates the ssl certificates associated with this skill.
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>--ssl-certificate-payload <ssl-certificate-payload></dt>
     <dd markdown="span">[REQUIRED] Defines the input/output of the ssl certificates api for a skill. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3131,16 +3159,24 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
 <dl>
     <dt>--request-filters-clients <request-filters-clients></dt>
     <dd markdown="span">[OPTIONAL] List of Client IDs for filtering. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--request-filters-operations <request-filters-operations></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of operation names and versions. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--request-filters-resources <request-filters-resources></dt>
     <dd markdown="span">[OPTIONAL] Filters for a list of resources and/or their types. See documentation for allowed types. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--request-filters-requesters <request-filters-requesters></dt>
     <dd markdown="span">[OPTIONAL] Request Filters for filtering audit logs. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>--request-filters-start-time <request-filters-start-time></dt>
     <dd markdown="span">[OPTIONAL] Sets the start time for this search. Any audit logs with timestamps after this time (inclusive) will be included in the response.</dd>
     <dt>--request-filters-end-time <request-filters-end-time></dt>
@@ -3452,7 +3488,9 @@ API which replaces the annotations in NLU annotation set.
     <dd markdown="span">[REQUIRED] Standard HTTP. Pass `application/json` or `test/csv` for POST calls with a json/csv body.</dd>
     <dt>--update-nlu-annotation-set-annotations-request <update-nlu-annotation-set-annotations-request></dt>
     <dd markdown="span">[REQUIRED] Payload sent to the update NLU annotation set API. 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3627,7 +3665,9 @@ API that updates the annotaions in the annotation set.
     <dd markdown="span">[REQUIRED] Identifier of the ASR annotation set.</dd>
     <dt>--annotations <annotations></dt>
     <dd markdown="span">[REQUIRED]  
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -3798,7 +3838,9 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
 [ENUM]: NA,EU,FE,default.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
     <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
-[JSON]: JSON string or a file. Example: "$(cat {filePath})" or "file:{filePath}", either absolute or relative path are supported.</dd>
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
