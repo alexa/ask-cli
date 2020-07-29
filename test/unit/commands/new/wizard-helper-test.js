@@ -12,7 +12,6 @@ describe('Commands new test - wizard helper test', () => {
     const TEST_OPTIONS = {};
     const TEST_LANGUAGE_RESPONSE = 'NodeJS';
     const TEST_DEPLOYMENT_TYPE = '@ask-cli/cfn-deployer';
-    const TEST_DEPLOYMENT_MANUAL_TYPE = ui.SKIP_DEPLOY_DELEGATE_SELECTION;
     const TEST_HOSTED_DEPLOYMENT = '@ask-cli/hosted-skill-deployer';
     const TEST_TEMPLATE_URL = 'TEST_TEMPLATE_URL';
     const TEST_TEMPLATE_NAME = 'TEST_TEMPLATE_NAME';
@@ -51,7 +50,7 @@ describe('Commands new test - wizard helper test', () => {
             sinon.stub(ui, 'selectSkillCodeLanguage');
             sinon.stub(ui, 'getDeploymentType');
             sinon.stub(ui, 'confirmUsingUnofficialTemplate');
-            sinon.stub(urlUtils, 'isUrlWithGitExtension');
+            sinon.stub(urlUtils, 'isValidUrl');
             sinon.stub(urlUtils, 'isUrlOfficialTemplate');
             sinon.stub(httpClient, 'request');
             sinon.stub(ui, 'getTargetTemplateName');
@@ -112,13 +111,12 @@ describe('Commands new test - wizard helper test', () => {
             });
         });
 
-        it('| custom template should not be non-git url, expect throw error', (done) => {
+        it('| custom template should not valid url, expect throw error', (done) => {
             // setup
-            const TEST_GIT_ERROR = `The provided template url ${TEST_TEMPLATE_URL} is not a supported type. \
-We currently only support ".git" url for user's custom template.`;
+            const TEST_GIT_ERROR = `The provided template url ${TEST_TEMPLATE_URL} is not a valid url.`;
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
-            urlUtils.isUrlWithGitExtension.returns(false);
+            urlUtils.isValidUrl.returns(false);
             // call
             wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS_WITH_TEMPLATE, (err) => {
                 // verify
@@ -131,7 +129,7 @@ We currently only support ".git" url for user's custom template.`;
             // setup
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
-            urlUtils.isUrlWithGitExtension.returns(true);
+            urlUtils.isValidUrl.returns(true);
             urlUtils.isUrlOfficialTemplate.returns(false);
             ui.confirmUsingUnofficialTemplate.callsArgWith(0, TEST_ERROR);
             // call
@@ -148,7 +146,7 @@ We currently only support ".git" url for user's custom template.`;
             // setup
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
-            urlUtils.isUrlWithGitExtension.returns(true);
+            urlUtils.isValidUrl.returns(true);
             urlUtils.isUrlOfficialTemplate.returns(false);
             ui.confirmUsingUnofficialTemplate.callsArgWith(0, null, false);
             // call
@@ -221,7 +219,7 @@ We currently only support ".git" url for user's custom template.`;
             // setup
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
-            urlUtils.isUrlWithGitExtension.returns(true);
+            urlUtils.isValidUrl.returns(true);
             urlUtils.isUrlOfficialTemplate.returns(true);
             ui.getSkillName.callsArgWith(1, null, TEST_SKILL_NAME);
             ui.getProjectFolderName.callsArgWith(1, TEST_ERROR);

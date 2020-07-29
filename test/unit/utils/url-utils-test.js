@@ -189,58 +189,6 @@ describe('Utils test - url utility', () => {
         });
     });
 
-    describe('# test function isUrlWithGitExtension', () => {
-        [
-            {
-                testCase: 'input url string is null',
-                urlString: null,
-                expectation: false
-            },
-            {
-                testCase: 'input url string is undefined',
-                urlString: undefined,
-                expectation: false
-            },
-            {
-                testCase: 'input url string is empty',
-                urlString: '',
-                expectation: false
-            },
-            {
-                testCase: 'input url string is blank',
-                urlString: '        ',
-                expectation: false
-            },
-            {
-                testCase: 'input url string is random string',
-                urlString: 'aaaaaaaaaaaaabbbbbbbbbbbsssssssssssssss',
-                expectation: false
-            },
-            {
-                testCase: 'input url is not a string',
-                urlString: 12323,
-                expectation: false
-            },
-            {
-                testCase: 'input url string is random url',
-                urlString: 'https://test.json',
-                expectation: false
-            },
-            {
-                testCase: 'input url string is git url',
-                urlString: 'https://test.git',
-                expectation: true
-            }
-        ].forEach(({ testCase, urlString, expectation }) => {
-            it(`| ${testCase}, expect isValidResult ${expectation}`, () => {
-                // call
-                const callResult = urlUtility.isUrlWithGitExtension(urlString);
-                // verify
-                expect(callResult).equal(expectation);
-            });
-        });
-    });
-
     describe('# test function isUrlOfficialTemplate', () => {
         [
             {
