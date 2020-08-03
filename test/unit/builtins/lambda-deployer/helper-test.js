@@ -82,7 +82,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
                 }
             };
             const TEST_IAM_ROLE_ERROR = `The IAM role for Lambda ARN (${TEST_LAMBDA_ARN}) should be ${TEST_REMOTE_IAM_ROLE}, \
-but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-deploy again. To ignore this error run ask deploy --ignore-hash.`;
+but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
             helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
@@ -102,7 +102,7 @@ but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-dep
                 }
             };
             const TEST_REVISION_ID_ERROR = `The current revisionId (The revision ID for Lambda ARN (${TEST_LAMBDA_ARN}) should be \
-${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve this revision mismatch and re-deploy again. To ignore this error run ask deploy --ignore-hash.`;
+${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve this revision mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
             helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
