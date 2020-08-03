@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const Listr = require('listr');
 const events = require('events');
 const { Observable } = require('rxjs');
+const CliError = require('@src/exceptions/cli-error');
 const MultiTasksView = require('@src/view/multi-tasks-view');
 
 const { ListrReactiveTask } = MultiTasksView;
@@ -62,14 +63,14 @@ describe('View test - MultiTasksView test', () => {
             // setup
             const multiTasks = new MultiTasksView(TEST_OPTIONS);
             const newTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
-            sinon.stub(Listr.prototype, 'run').rejects({ errors: ['error'] });
+            sinon.stub(Listr.prototype, 'run').rejects({ errors: ['error 1', { resultMessage: 'error 2' }, new Error('error 3')] });
             sinon.stub(ListrReactiveTask.prototype, 'execute');
             multiTasks._listrTasks.push(newTask);
             // call
             multiTasks.start((err, res) => {
                 // verify
                 expect(res).equal(undefined);
-                expect(err.error).equal('error');
+                expect(err.error).eql(new CliError('error 1\nerror 2\nerror 3'));
                 expect(ListrReactiveTask.prototype.execute.callCount).equal(1);
                 done();
             });
