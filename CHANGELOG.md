@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](https://github.com/alexa/ask-cli/compare/v2.13.0...v2.14.0) (2020-08-04)
+
+
+### Features
+
+* modify the default AWS region for FE to us-west-2 ([c418bea](https://github.com/alexa/ask-cli/commit/c418beab799188f26940f0c3fc809ac75d035e8e))
+
+
+### Bug Fixes
+
+* error object Object to show meaningful error message ([#275](https://github.com/alexa/ask-cli/issues/275)) ([fd4566d](https://github.com/alexa/ask-cli/commit/fd4566de98e2086f8e0dc20f989123a6fdbb7272))
+* fix deploy fails when images specified as file paths in skill package ([#272](https://github.com/alexa/ask-cli/issues/272)) ([b8341f8](https://github.com/alexa/ask-cli/commit/b8341f8f540d570f89faf6832b850a5f653c7295))
+* improve the description for ask-smapi command [JSON] options ([6194e84](https://github.com/alexa/ask-cli/commit/6194e8407c46c04ae1e47b87228bf55640005e0f))
+* remove check for template url ending with .git ([#273](https://github.com/alexa/ask-cli/issues/273)) ([e1be6b7](https://github.com/alexa/ask-cli/commit/e1be6b7a9e1fbd31b5d06339809a9ed520f9551b))
+
 ## [2.13.0](https://github.com/alexa/ask-cli/compare/v2.12.1...v2.13.0) (2020-07-21)
 
 
