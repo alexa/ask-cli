@@ -32,7 +32,8 @@
     "functional-test": "mocha -t 180000 test/functional/run-test.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
     "pre-release": "standard-version",
-    "prism": "prism"
+    "prism": "prism",
+    "postinstall": "node postinstall.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",

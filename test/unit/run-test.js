@@ -1,5 +1,7 @@
 require('module-alias/register');
 
+process.env.ASK_SHARE_USAGE = false;
+
 /**
  * This list manages all the files we want to cover during the refactor.
  * Please also include the test-ready module in package.json's "nyc.include" list.
@@ -76,7 +78,6 @@ require('module-alias/register');
     '@test/unit/model/abstract-config-file-test',
     '@test/unit/model/app-config-test',
     '@test/unit/model/dialog-save-skill-io-file-test',
-    '@test/unit/model/metric-config-test',
     '@test/unit/model/manifest-test',
     '@test/unit/model/resources-config/resources-config-test',
     '@test/unit/model/resources-config/ask-resources-test',
