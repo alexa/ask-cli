@@ -4,24 +4,21 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
-const httpClient = require('@src/clients/http-client');
-const SmapiClient = require('@src/clients/smapi-client');
+const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const ResourcesConfig = require('@src/model/resources-config');
 const Manifest = require('@src/model/manifest');
 const SkillInfrastructureController = require('@src/controllers/skill-infrastructure-controller');
 const DeployDelegate = require('@src/controllers/skill-infrastructure-controller/deploy-delegate');
 const MultiTasksView = require('@src/view/multi-tasks-view');
-const jsonView = require('@src/view/json-view');
 const AuthorizationController = require('@src/controllers/authorization-controller');
+const profileHelper = require('@src/utils/profile-helper');
 const hashUtils = require('@src/utils/hash-utils');
-const CONSTANTS = require('@src/utils/constants');
 
 describe('Controller test - skill infrastructure controller test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
     const TEST_WORKSPACE = 'workspace';
-    const TEST_SKILL_ID = 'skillId';
     const TEST_CONFIGURATION = {
         profile: TEST_PROFILE,
         doDebug: false
@@ -573,10 +570,10 @@ describe('Controller test - skill infrastructure controller test', () => {
             sinon.restore();
         });
 
-        it('| SMAPI update manifest connection fails, expect error called back', (done) => {
+        it('| deploy skill package fails, expect error called back', (done) => {
             // setup
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, 'error');
+            sinon.stub(profileHelper, 'resolveVendorId');
+            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').yields('error');
             // call
             skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
                 // verify
@@ -586,175 +583,26 @@ describe('Controller test - skill infrastructure controller test', () => {
             });
         });
 
-        it('| SMAPI update manifest fails with >= 300 error code, expect SMAPI error called back', (done) => {
+        it('| resolve vendor id fails, expect error called back', (done) => {
             // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 401,
-                body: {
-                    message: 'unauthrized'
-                }
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
+            sinon.stub(profileHelper, 'resolveVendorId').throws(new Error('error'));
             // call
             skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
                 // verify
                 expect(res).equal(undefined);
-                expect(err).equal(jsonView.toString(TEST_SMAPI_RESPONSE.body));
+                expect(err.message).equal('error');
                 done();
             });
         });
 
-        it('| SMAPI update manifest passes but polling fails, expect polling error called back', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 202
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, 'poll error');
-            // call
-            skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
-                // verify
-                expect(res).equal(undefined);
-                expect(err).equal('poll error');
-                done();
-            });
-        });
-
-        it('| SMAPI update manifest passes but polling cause SMAPI to fail, expect SMAPI error called back', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 202
-            };
-            const TEST_POLL_RESPONSE = {
-                body: 'invalid'
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
-            // call
-            skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
-                // verify
-                expect(res).equal(undefined);
-                expect(err.startsWith('[Error]: Failed to extract the manifest result from SMAPI\'s response.\n')).equal(true);
-                done();
-            });
-        });
-
-        it('| SMAPI update manifest passes but polling result is not SUCCEEDED, expect SMAPI response errored back', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 202
-            };
-            const TEST_POLL_RESPONSE = {
-                body: {
-                    manifest: {
-                        lastUpdateRequest: {
-                            status: 'TEST_STATUS'
-                        }
-                    }
-                }
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
-            // call
-            skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
-                // verify
-                expect(res).equal(undefined);
-                expect(err).equal('[Error]: Updating skill manifest but received non-success message from SMAPI: TEST_STATUS');
-                done();
-            });
-        });
-
-        it('| SMAPI update manifest passes and update succeeds, expect call back with no error', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 202
-            };
-            const TEST_POLL_RESPONSE = {
-                body: {
-                    manifest: {
-                        lastUpdateRequest: {
-                            status: CONSTANTS.SKILL.SKILL_STATUS.SUCCEEDED
-                        }
-                    }
-                }
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            sinon.stub(SkillInfrastructureController.prototype, '_pollSkillStatus').callsArgWith(2, null, TEST_POLL_RESPONSE);
+        it('| deploy skill package succeeds, expect call back with no error', (done) => {
+            sinon.stub(profileHelper, 'resolveVendorId');
+            sinon.stub(SkillMetadataController.prototype, 'deploySkillPackage').yields();
             // call
             skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                done();
-            });
-        });
-    });
-
-    describe('# test class method: _pollSkillStatus', () => {
-        const testSmapiClient = new SmapiClient(TEST_CONFIGURATION);
-        const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
-
-        afterEach(() => {
-            sinon.restore();
-        });
-
-        it('| poll skill status but error happens when polling status', (done) => {
-            // setup
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, 'error');
-            // call
-            skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {
-                // verify
-                expect(res).equal(null);
-                expect(err).equal('error');
-                done();
-            });
-        });
-
-        it('| poll skill status but SMAPI returns failure', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 401,
-                body: {
-                    message: 'unauthrized'
-                }
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            // call
-            skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {
-                // verify
-                expect(res).equal(null);
-                expect(err).equal(jsonView.toString(TEST_SMAPI_RESPONSE.body));
-                done();
-            });
-        });
-
-        it('| poll skill status successfully complete', (done) => {
-            // setup
-            const TEST_SMAPI_RESPONSE = {
-                statusCode: 202,
-                body: {
-                    manifest: {
-                        lastUpdateRequest: {
-                            status: 'TEST'
-                        }
-                    }
-                }
-            };
-            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
-            sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_SMAPI_RESPONSE);
-            // call
-            skillInfraController._pollSkillStatus(testSmapiClient, TEST_SKILL_ID, (err, res) => {
-                // verify
-                expect(err).equal(null);
-                expect(res.statusCode).equal(202);
-                expect(res.body).deep.equal(TEST_SMAPI_RESPONSE.body);
                 done();
             });
         });
