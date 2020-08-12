@@ -56,6 +56,10 @@ describe('Commands new test - wizard helper test', () => {
             sinon.stub(ui, 'getTargetTemplateName');
             sinon.stub(ui, 'getSkillName');
             sinon.stub(ui, 'getProjectFolderName');
+            sinon.stub(ui, 'getSkillDefaultRegion');
+            sinon.stub(ui, 'getSkillLocale');
+            ui.getSkillLocale.yields(null, 'en-US');
+            ui.getSkillDefaultRegion.yields(0, null, 'US_EAST_1');
         });
 
         afterEach(() => {
