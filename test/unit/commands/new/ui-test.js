@@ -20,6 +20,7 @@ function validateInquirerConfig(stub, expectedConfig) {
 
 describe('Commands new - UI test', () => {
     const TEST_SKILL_NAME = 'skillName';
+    const TEST_LOCALE = 'en-US';
     const TEST_REPO_NAME = 'repo';
     const TEST_FOLDER_NAME = 'folderName';
     const TEST_URL = `https://${TEST_REPO_NAME}.git?data=1`;
@@ -139,6 +140,74 @@ describe('Commands new - UI test', () => {
             ui.getSkillName(TEST_URL, () => {
                 // verify
                 expect(inquirer.prompt.args[0][0][0].validate('input')).equal(true);
+                done();
+            });
+        });
+    });
+
+    describe('# validate ui.getSkillLocale', () => {
+        beforeEach(() => {
+            sinon.stub(inquirer, 'prompt');
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| getSkillLocale is set by user and inquirer throws exception', (done) => {
+            // setup
+            inquirer.prompt.rejects(new Error(TEST_ERROR));
+            // call
+            ui.getSkillLocale((err, response) => {
+                // verify
+                expect(err.message).equal(TEST_ERROR);
+                expect(response).equal(undefined);
+                done();
+            });
+        });
+
+        it('| getSkillLocale is set by user and return correctly', (done) => {
+            // setup
+            inquirer.prompt.resolves({ locale: TEST_LOCALE });
+            // call
+            ui.getSkillLocale((err, response) => {
+                // verify
+                expect(err).equal(null);
+                expect(response).equal(TEST_LOCALE);
+                done();
+            });
+        });
+    });
+
+    describe('# validate ui.getSkillDefaultRegion', () => {
+        beforeEach(() => {
+            sinon.stub(inquirer, 'prompt');
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| getSkillDefaultRegion is set by user and inquirer throws exception', (done) => {
+            // setup
+            inquirer.prompt.rejects(new Error(TEST_ERROR));
+            // call
+            ui.getSkillDefaultRegion((err, response) => {
+                // verify
+                expect(err.message).equal(TEST_ERROR);
+                expect(response).equal(undefined);
+                done();
+            });
+        });
+
+        it('| getSkillDefaultRegion is set by user and return correctly', (done) => {
+            // setup
+            inquirer.prompt.resolves({ region: 'us-east-1' });
+            // call
+            ui.getSkillDefaultRegion((err, response) => {
+                // verify
+                expect(err).equal(null);
+                expect(response).equal('US_EAST_1');
                 done();
             });
         });

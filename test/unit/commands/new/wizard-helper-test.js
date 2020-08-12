@@ -89,6 +89,32 @@ describe('Commands new test - wizard helper test', () => {
             });
         });
 
+        it('| user input getSkillLocale fails, expect throw error', (done) => {
+            // setup
+            ui.selectSkillCodeLanguage.yields(null, TEST_LANGUAGE_RESPONSE);
+            ui.getDeploymentType.yields(null, TEST_HOSTED_DEPLOYMENT);
+            ui.getSkillLocale.yields(TEST_ERROR);
+            // call
+            wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| user input getSkillDefaultRegion fails, expect throw error', (done) => {
+            // setup
+            ui.selectSkillCodeLanguage.yields(null, TEST_LANGUAGE_RESPONSE);
+            ui.getDeploymentType.yields(null, TEST_HOSTED_DEPLOYMENT);
+            ui.getSkillDefaultRegion.yields(TEST_ERROR);
+            // call
+            wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
         it('| Hosted skills do not support Java, expect throw error', (done) => {
             // setup
             const TEST_HOSTED_ERROR = 'Alexa hosted skills don\'t support Java currently.';
