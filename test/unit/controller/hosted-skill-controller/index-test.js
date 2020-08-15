@@ -248,7 +248,6 @@ describe('Controller test - hosted skill controller test', () => {
         });
     });
 
-
     describe('# test class method: getHostedSkillPermission', () => {
         let hostedSkillController;
         beforeEach(() => {
@@ -502,6 +501,164 @@ describe('Controller test - hosted skill controller test', () => {
             // call
             hostedSkillController.deleteSkill(TEST_SKILL_ID, (err) => {
                 expect(err).equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method: downloadGitHookScript', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        const TEST_FOLDER_NAME = 'folderName';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| check S3 Scripts fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkS3Scripts').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.downloadGitHookScript(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| download Script from S3 fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkS3Scripts').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, TEST_ERROR);
+            // call
+            hostedSkillController.downloadGitHookScript(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| download Script from S3 succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkS3Scripts').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, null);
+            // call
+            hostedSkillController.downloadGitHookScript(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(null);
+                done();
+            });
+        });
+
+    });
+
+    describe('# test class method: checkS3Scripts', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        const TEST_FOLDER_NAME = 'folderName';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| check Auth Info Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkAuthInfoScript').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.checkS3Scripts((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| check Ask Pre Push Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkAuthInfoScript').callsArgWith(0, null);
+            sinon.stub(HostedSkillController.prototype, 'checkAskPrePushScript').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.checkS3Scripts((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| All Scripts checking succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(HostedSkillController.prototype, 'checkAuthInfoScript').callsArgWith(0, null);
+            sinon.stub(HostedSkillController.prototype, 'checkAskPrePushScript').callsArgWith(0, null);
+            // call
+            hostedSkillController.checkS3Scripts((err) => {
+                expect(err).equal(null);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method: checkAuthInfoScript', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| helper check Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(helper, 'checkScript').callsArgWith(2, TEST_ERROR);
+            // call
+            hostedSkillController.checkAuthInfoScript((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| helper check Script succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(helper, 'checkScript').callsArgWith(2, null);
+            // call
+            hostedSkillController.checkAuthInfoScript((err) => {
+                expect(err).equal(null);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method: checkAskPrePushScript', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| helper check Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(fs, 'existsSync').onCall(0).returns(false);
+            sinon.stub(fs, 'mkdirSync');
+            sinon.stub(helper, 'checkScript').callsArgWith(2, TEST_ERROR);
+            // call
+            hostedSkillController.checkAskPrePushScript((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| helper check Script succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(fs, 'existsSync').onCall(0).returns(true);
+            sinon.stub(helper, 'checkScript').callsArgWith(2, null);
+            // call
+            hostedSkillController.checkAskPrePushScript((err) => {
+                expect(err).equal(null);
                 done();
             });
         });

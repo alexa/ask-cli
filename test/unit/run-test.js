@@ -95,6 +95,7 @@ require('module-alias/register');
     '@test/unit/controller/skill-infrastructure-controller-test',
     '@test/unit/controller/deploy-delegate-test',
     '@test/unit/controller/hosted-skill-controller/index-test',
+    '@test/unit/controller/hosted-skill-controller/helper-test',
     '@test/unit/controller/hosted-skill-controller/clone-flow-test',
     // view
     '@test/unit/view/messenger-test',

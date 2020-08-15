@@ -239,14 +239,14 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             });
         });
 
-        it('| set Pre PushHook Template fails, expect error thrown', (done) => {
+        it('| set pre push hook script fails, expect error thrown', (done) => {
             // setup
             sinon.stub(gitClient, 'updateCredentialHelper');
             sinon.stub(gitClient, 'checkoutBranch');
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(gitClient, 'setupGitIgnore');
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, TEST_ERROR);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
@@ -262,7 +262,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(gitClient, 'setupGitIgnore');
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHooksTemplate').callsArgWith(2, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, null);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify

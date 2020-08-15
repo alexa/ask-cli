@@ -53,6 +53,7 @@
     "js-yaml": "^3.13.1",
     "jsonfile": "^2.4.0",
     "listr": "^0.14.3",
+    "md5-file": "^5.0.0",
     "module-alias": "^2.1.0",
     "mustache": "^4.0.1",
     "open": "^7.0.3",
