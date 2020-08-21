@@ -541,7 +541,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, TEST_ERROR);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify
@@ -573,7 +573,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, null);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify

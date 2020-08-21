@@ -246,7 +246,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(gitClient, 'setupGitIgnore');
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, TEST_ERROR);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
@@ -262,7 +262,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
             sinon.stub(gitClient, 'merge');
             sinon.stub(gitClient, 'deleteBranch');
             sinon.stub(gitClient, 'setupGitIgnore');
-            sinon.stub(HostedSkillController.prototype, 'downloadGitHookScript').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, null);
             // call
             hostedSkillHelper.postUpgradeGitSetup(TEST_PROFILE, TEST_DO_DEBUG, gitClient, (err) => {
                 // verify
