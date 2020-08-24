@@ -46,6 +46,7 @@ parallel('smapi command test', () => {
     const location = 'US';
     const sourceLocale = 'en-US';
     const targetLocales = 'en-GB';
+    const acceptLanguage = 'en-GB';
     const cloneLocaleRequestId = 'someCloneLocaleRequestId';
     const uploadId = 'someUploadId';
     const subscriberId = 'someSubscriberId';
@@ -1132,6 +1133,20 @@ parallel('smapi command test', () => {
 
     it('| should get rollback for skill', async () => {
         const args = [subCmd, 'get-rollback-for-skill', '-s', skillId, '--rollback-request-id', rollbackRequestId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should publish skill', async () => {
+        const args = [subCmd, 'publish-skill', '-s', skillId, '--accept-language', acceptLanguage, '--publishes-at-date', '2019-04-12T23:20:50.52Z'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get skill publications', async () => {
+        const args = [subCmd, 'get-skill-publications', '-s', skillId, '--accept-language', acceptLanguage];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
