@@ -10,6 +10,7 @@ const inSkillProductRequestBody = require('@test/integration/fixtures/create-in-
 const accountLinkingRequest = require('@test/integration/fixtures/account-linking-request.json');
 const interactionModel = require('@test/integration/fixtures/interaction-model.json');
 const annotationSet = require('@test/integration/fixtures/annotation-set.json');
+const jobDefinition = require('@test/integration/fixtures/job-definition.json');
 
 parallel.limit(8);
 
@@ -52,6 +53,9 @@ parallel('smapi command test', () => {
     const subscriberId = 'someSubscriberId';
     const subscriptionId = 'someSubscriptionId';
     const updateRequestId = 'someUpdateRequestId';
+    const imJobId = 'someIMJobId';
+    const imJobStatus = 'imJobStatus';
+    const imExecutionId = 'imExecutionId';
     const version = '2.0.0';
     const targetVersion = '7';
     const rollbackRequestId = 'someRollbackRequestId';
@@ -64,6 +68,7 @@ parallel('smapi command test', () => {
     const contentType = 'application/json';
     const annotationSetId = 'someAnnotationSetId';
     const updateNluAnnotationSetAnnotationsRequest = JSON.stringify(annotationSet);
+    const interactionModelJobDefinition = JSON.stringify(jobDefinition);
     const annotations = JSON.stringify(
         [
             {
@@ -1150,6 +1155,56 @@ parallel('smapi command test', () => {
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
+    });
+
+    it('| should list all the job defintions for IM', async () => {
+        const args = [subCmd, 'list-job-definitions-for-interaction-model'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create job definition for IM', async () => {
+        const args = [subCmd, 'create-job-definition-for-interaction-model',
+            '--job-definition', interactionModelJobDefinition];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get job definition for IM', async () => {
+        const args = [subCmd, 'get-job-definition-for-interaction-model', '--job-id', imJobId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should delete job definition for IM', async () => {
+        const args = [subCmd, 'delete-job-definition-for-interaction-model', '--job-id', imJobId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should set job status for IM', async () => {
+        const args = [subCmd, 'set-job-status-for-interaction-model', '--job-id', imJobId, '--status', imJobStatus];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
+    });
+
+    it('| should list all the job executions for IM', async () => {
+        const args = [subCmd, 'list-job-executions-for-interaction-model', '--job-id', imJobId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should cancel next job execution for IMJob', async () => {
+        const args = [subCmd, 'cancel-next-job-execution-for-interaction-model', '--job-id', imJobId, '--execution-id', imExecutionId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     after(() => {
