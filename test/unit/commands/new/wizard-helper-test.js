@@ -56,6 +56,10 @@ describe('Commands new test - wizard helper test', () => {
             sinon.stub(ui, 'getTargetTemplateName');
             sinon.stub(ui, 'getSkillName');
             sinon.stub(ui, 'getProjectFolderName');
+            sinon.stub(ui, 'getSkillDefaultRegion');
+            sinon.stub(ui, 'getSkillLocale');
+            ui.getSkillLocale.yields(null, 'en-US');
+            ui.getSkillDefaultRegion.yields(0, null, 'US_EAST_1');
         });
 
         afterEach(() => {
@@ -77,6 +81,32 @@ describe('Commands new test - wizard helper test', () => {
             // setup
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, TEST_ERROR);
+            // call
+            wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| user input getSkillLocale fails, expect throw error', (done) => {
+            // setup
+            ui.selectSkillCodeLanguage.yields(null, TEST_LANGUAGE_RESPONSE);
+            ui.getDeploymentType.yields(null, TEST_HOSTED_DEPLOYMENT);
+            ui.getSkillLocale.yields(TEST_ERROR);
+            // call
+            wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| user input getSkillDefaultRegion fails, expect throw error', (done) => {
+            // setup
+            ui.selectSkillCodeLanguage.yields(null, TEST_LANGUAGE_RESPONSE);
+            ui.getDeploymentType.yields(null, TEST_HOSTED_DEPLOYMENT);
+            ui.getSkillDefaultRegion.yields(TEST_ERROR);
             // call
             wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
                 // verify

@@ -17,9 +17,11 @@ module.exports = (smapiClient) => {
         const TEST_ACCESS_TOKEN = 'access_token';
         const TEST_RUNTIME_FIELD = 'NodeJS';
         const TEST_RUNTIME_VALUE = 'NODE_10_X';
+        const TEST_REGION_VALUE = 'US_EAST_1';
         const TEST_MANIFEST = {
             runtime: TEST_RUNTIME_FIELD,
             vendorId: TEST_VENDOR_ID,
+            region: TEST_REGION_VALUE,
             manifest: {}
         };
         let httpClientStub;
@@ -45,6 +47,7 @@ module.exports = (smapiClient) => {
                         manifest: {},
                         hosting: {
                             alexaHosted: {
+                                region: TEST_REGION_VALUE,
                                 runtime: TEST_RUNTIME_VALUE
                             }
                         }
