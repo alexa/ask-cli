@@ -7,7 +7,6 @@ const httpClient = require('@src/clients/http-client');
 const { AbstractCommand } = require('@src/commands/abstract-command');
 const AppConfig = require('@src/model/app-config');
 const CONSTANTS = require('@src/utils/constants');
-const metricClient = require('@src/utils/metrics');
 const Messenger = require('@src/view/messenger');
 
 const packageJson = require('@root/package.json');
@@ -60,7 +59,6 @@ describe('Command test - AbstractCommand class', () => {
             sinon.stub(path, 'join').returns(APP_CONFIG_NO_PROFILES_PATH);
             mockProcessExit = sinon.stub(process, 'exit');
             mockConsoleError = sinon.stub(console, 'error');
-            sinon.stub(metricClient, 'sendData').resolves();
             sinon.stub(AbstractCommand.prototype, '_remindsIfNewVersion').callsArgWith(2);
         });
 
@@ -456,7 +454,6 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
         beforeEach(() => {
             AppConfigReadStub = sinon.stub(AppConfig.prototype, 'read');
             sinon.stub(process, 'exit');
-            sinon.stub(metricClient, 'sendData').resolves();
         });
 
         it('| should not be null for non-configure commands', async () => {

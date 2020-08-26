@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const jsonfile = require('jsonfile');
 
 const profileHelper = require('@src/utils/profile-helper');
@@ -141,6 +141,24 @@ describe('Model test - app config test', () => {
             });
         });
 
+        it('test getMachineId function successfully', () => {
+            expect(AppConfig.getInstance().getMachineId()).deep.equal('machineId');
+        });
+
+        it('test setMachineId function successfully', () => {
+            AppConfig.getInstance().setMachineId('new Machine id');
+            expect(AppConfig.getInstance().getMachineId()).equal('new Machine id');
+        });
+
+        it('test getShareUsage function successfully', () => {
+            expect(AppConfig.getInstance().getShareUsage()).deep.equal(false);
+        });
+
+        it('test getShareUsage when property is not set', () => {
+            sinon.stub(AppConfig.prototype, 'getProperty').returns();
+            expect(AppConfig.getInstance().getShareUsage()).deep.equal(true);
+        });
+
         afterEach(() => {
             AppConfig.dispose();
             sinon.restore();
@@ -199,6 +217,24 @@ describe('Model test - app config test', () => {
 
         afterEach(() => {
             AppConfig.dispose();
+        });
+    });
+
+    describe('# inspect correctness of configFileExists', () => {
+        it('| returns true if config file exists', () => {
+            sinon.stub(fs, 'existsSync').returns(true);
+
+            expect(AppConfig.configFileExists()).to.equal(true);
+        });
+
+        it('| returns false if config file does not exist', () => {
+            sinon.stub(fs, 'existsSync').returns(false);
+
+            expect(AppConfig.configFileExists()).to.equal(false);
+        });
+
+        afterEach(() => {
+            sinon.restore();
         });
     });
 });

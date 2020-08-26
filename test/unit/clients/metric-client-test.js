@@ -1,7 +1,10 @@
 const chai = require('chai');
+const uuid = require('uuid/v4');
 const chaiUuid = require('chai-uuid');
 const chaiJsonSchema = require('chai-json-schema');
 const sinon = require('sinon');
+const { METRICS } = require('@src/utils/constants');
+const AppConfig = require('@src/model/app-config');
 const { MetricClient, MetricActionResult } = require('@src/clients/metric-client');
 const jsonSchema = require('@test/fixture/ask-devtools-metrics.schema.json');
 
@@ -10,35 +13,62 @@ chai.use(chaiUuid);
 chai.use(chaiJsonSchema);
 
 describe('Clients test - cli metric client', () => {
-    const clientOptions = {
-        version: '1.0.1',
-        machineId: '8b2723f2-a25e-4d2c-89df-f9f590b8bb6e',
-        newUser: true,
-        clientId: 'ASK CLI',
-        serverUrl: 'https://somehost.com/dev/telemetry',
-    };
+    const getShareUsageStub = sinon.stub();
+    const getMachineIdStub = sinon.stub();
+    const setMachineIdStub = sinon.stub();
+    const writeConfigStub = sinon.stub();
+    let configExistsStub;
+    let shareUsageVariableValue;
 
-    const { version, machineId, newUser, clientId, serverUrl } = clientOptions;
+    beforeEach(() => {
+        shareUsageVariableValue = process.env.ASK_SHARE_USAGE;
+        delete process.env.ASK_SHARE_USAGE;
+        configExistsStub = sinon.stub(AppConfig, 'configFileExists').returns(true);
+        sinon.stub(AppConfig.prototype, 'read');
+        sinon.stub(AppConfig, 'getInstance').returns({
+            getShareUsage: getShareUsageStub.returns(true),
+            getMachineId: getMachineIdStub.returns(uuid()),
+            setMachineId: setMachineIdStub,
+            write: writeConfigStub,
+            read: sinon.stub()
+        });
+    });
+
+    afterEach(() => {
+        process.env.ASK_SHARE_USAGE = shareUsageVariableValue;
+        sinon.restore();
+    });
 
     describe('# constructor validation', () => {
         it('| creates instance of MetricClient, expect initial data to be set', () => {
             // set up
-            const client = new MetricClient(clientOptions);
+            const client = new MetricClient();
 
             // call
             const data = client.getData();
 
             // verify
-            expect(data).include({ version, machineId, newUser, clientId, timeUploaded: null });
+            expect(data).have.keys(['actions', 'version', 'machineId', 'newUser', 'timeStarted', 'clientId', 'timeUploaded']);
             expect(data.actions).eql([]);
             expect(data.timeStarted).instanceof(Date);
+        });
+
+        it('| creates machine id if it does not exist', () => {
+            getMachineIdStub.returns(undefined);
+
+            // call
+            new MetricClient();
+
+            // verify
+            expect(setMachineIdStub.callCount).eql(1);
+            expect(writeConfigStub.callCount).eql(1);
         });
     });
 
     describe('# start action validation', () => {
         let client;
         beforeEach(() => {
-            client = new MetricClient(clientOptions);
+            client = new MetricClient();
         });
 
         it('| adds action, expect action to be set', () => {
@@ -88,7 +118,7 @@ describe('Clients test - cli metric client', () => {
         const name = 'ask.clone';
         const type = 'userCommand';
         beforeEach(() => {
-            client = new MetricClient(clientOptions);
+            client = new MetricClient();
             action = client.startAction(name, type);
         });
 
@@ -151,8 +181,9 @@ describe('Clients test - cli metric client', () => {
         let httpClientPostStub;
         const name = 'ask.clone';
         const type = 'userCommand';
+
         beforeEach(() => {
-            client = new MetricClient(clientOptions);
+            client = new MetricClient();
             client.startAction(name, type);
         });
 
@@ -171,14 +202,29 @@ describe('Clients test - cli metric client', () => {
 
             expect(success).eql(true);
             expect(httpClientPostStub.calledOnce).eql(true);
-            expect(calledUrl).eql(serverUrl);
+            expect(calledUrl).eql(METRICS.ENDPOINT);
             expect(JSON.parse(calledPayload)).to.be.jsonSchema(jsonSchema);
         });
 
         it('| sends metrics, expect metrics not to be send to metric server when enabled is false', async () => {
+            configExistsStub.returns(false);
             httpClientPostStub = sinon.stub(client.httpClient, 'post');
 
-            const disabledClient = new MetricClient({ enabled: false, ...clientOptions });
+            const disabledClient = new MetricClient();
+
+            // call
+            const { success } = await disabledClient.sendData();
+
+            // verify
+            expect(success).eql(true);
+            expect(httpClientPostStub.called).eql(false);
+        });
+
+        it('| sends metrics, expect metrics not to be send to metric server when ASK_SHARE_USAGE is false', async () => {
+            process.env.ASK_SHARE_USAGE = false;
+            httpClientPostStub = sinon.stub(client.httpClient, 'post');
+
+            const disabledClient = new MetricClient();
 
             // call
             const { success } = await disabledClient.sendData();
@@ -199,7 +245,7 @@ describe('Clients test - cli metric client', () => {
 
             expect(success).eql(false);
             expect(httpClientPostStub.calledThrice).eql(true);
-            expect(calledUrl).eql(serverUrl);
+            expect(calledUrl).eql(METRICS.ENDPOINT);
             expect(JSON.parse(calledPayload)).to.be.jsonSchema(jsonSchema);
         });
     });

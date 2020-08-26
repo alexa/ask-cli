@@ -33,7 +33,8 @@
     "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
     "pre-release": "standard-version",
-    "prism": "prism"
+    "prism": "prism",
+    "postinstall": "node postinstall.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
