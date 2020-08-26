@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/alexa/ask-cli/compare/v2.14.0...v2.15.0) (2020-08-26)
+
+
+### Features
+
+* add locale and region for AHS ([#287](https://github.com/alexa/ask-cli/issues/287)) ([6c8991c](https://github.com/alexa/ask-cli/commit/6c8991c2d171cd0783422335e4c655f136c2e038))
+* add telemetry in smapi commands ([#278](https://github.com/alexa/ask-cli/issues/278)) ([54f972b](https://github.com/alexa/ask-cli/commit/54f972b185ea989c97fc667a83b320f84c2b65de))
+* update ask smapi model to 1.10.1 ([4d91056](https://github.com/alexa/ask-cli/commit/4d91056ed12dddb8579b45dd57294467fda1044e))
+
 ## [2.14.0](https://github.com/alexa/ask-cli/compare/v2.13.0...v2.14.0) (2020-08-04)
 
 
