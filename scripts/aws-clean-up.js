@@ -9,42 +9,48 @@ const lambda = new AWS.Lambda({ region });
 const prefix = 'ask-';
 
 const deleteBucket = async (name) => {
-    try {
-        const versions = await s3.listObjectVersions({ Bucket: name }).promise();
+    const versions = await s3.listObjectVersions({ Bucket: name }).promise();
 
-        let deletePromises = versions.Versions.map(i => s3.deleteObject({ Bucket: name, Key: i.Key, VersionId: i.VersionId }).promise());
-        await Promise.all(deletePromises);
+    let deletePromises = versions.Versions.map(i => s3.deleteObject({ Bucket: name, Key: i.Key, VersionId: i.VersionId }).promise());
+    await Promise.all(deletePromises);
 
-        deletePromises = versions.DeleteMarkers.map(i => s3.deleteObject({ Bucket: name, Key: i.Key, VersionId: i.VersionId }).promise());
-        await Promise.all(deletePromises);
+    deletePromises = versions.DeleteMarkers.map(i => s3.deleteObject({ Bucket: name, Key: i.Key, VersionId: i.VersionId }).promise());
+    await Promise.all(deletePromises);
 
-        await s3.deleteBucket({ Bucket: name }).promise();
-    } catch (e) { console.log('Unable to delete ', name); }
+    return s3.deleteBucket({ Bucket: name }).promise();
 };
 
 const cleanUp = async () => {
     console.log(`cleaning aws resources with prefix "${prefix}"`);
-    await cf.listStacks().promise().then(res => {
+
+    const stackResults = await cf.listStacks().promise().then(res => {
         const Stacks = res.StackSummaries
             .filter(s => s.StackName.startsWith(prefix) && !s.StackStatus.includes('DELETE_COMPLETE'));
         console.log('Stacks #:', Stacks.length);
         const deletePromises = Stacks.map(i => cf.deleteStack({ StackName: i.StackName }).promise());
-        return Promise.all(deletePromises);
+        return Promise.allSettled(deletePromises);
     });
 
-    await lambda.listFunctions().promise().then(res => {
+    const functionResults = await lambda.listFunctions().promise().then(res => {
         const Functions = res.Functions.filter(i => i.FunctionName.startsWith(prefix));
         console.log('Functions #:', Functions.length);
         const deletePromises = Functions.map(i => lambda.deleteFunction({ FunctionName: i.FunctionName }).promise());
-        return Promise.all(deletePromises);
+        return Promise.allSettled(deletePromises);
     });
 
-    await s3.listBuckets().promise().then(async (res) => {
+    const bucketResults = await s3.listBuckets().promise().then(async (res) => {
         const Buckets = res.Buckets.filter(b => b.Name.startsWith(prefix));
         console.log('Buckets #:', Buckets.length);
         const deletePromises = Buckets.map((i) => deleteBucket(i.Name));
-        return Promise.all(deletePromises);
+        return Promise.allSettled(deletePromises);
     });
+
+    const rejected = [...stackResults, ...functionResults, ...bucketResults].filter(r => r.status === 'rejected');
+    if (rejected.length) {
+        rejected.forEach(r => {
+            console.error(r.reason);
+        });
+    }
     console.log('done');
 };
 
