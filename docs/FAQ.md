@@ -6,10 +6,10 @@
 - If you have used v1 ask-cli, please use command `ask util upgrade-project` to update your existing v1 project to v2 format.
 - If you want to clone an Alexa-Hosted skill, please use command `ask init --hosted-skill-id {skillId}`.
 - If you want to develop skill in local project from web console, please use command `ask init` to flexibly link your resources in the ask-resources.json. More in details:
-  1. Create a new folder as your local Alexa skill project, run `ask api export-package -s {skillId} -g {stage}` to download your skill-package.
+  1. Create a new folder as your local Alexa skill project, run `ask smapi export-package -s {skillId} -g {stage}` to download your skill-package.
   2. Retrieve your Lambda source code. This step really depends on how you source control your code, it can be the code downloaded from existing Lambda function, or S3, or from "git clone".
   3. Run `ask init` wizard, where you will be asked to fill your skill-id, file path for skill-package and Lambda source code, and how do you want to deploy the skill infrastructures (backend).
-- If you want to get your latest change after updating skill in ASK console, please run `ask api export-package` command once you make sure local changes towards skill-package won't be overwritten by the command.
+- If you want to get your latest change after updating skill in ASK console, please run `ask smapi export-package` command once you make sure local changes towards skill-package won't be overwritten by the command.
 
 Our reason to remove the clone command is to define ask-cli as a deployment tool for Alexa skill, not source control tool. The data flow in CLI will be user-driven and unidirectional. We highly encourage our skill developers to use their own source version control tools to manage their projects.
 
