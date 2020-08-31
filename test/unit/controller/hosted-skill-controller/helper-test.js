@@ -100,14 +100,20 @@ describe('Controller test - hosted skill controller - helper test', () => {
 
     describe('# test helper method: downloadScriptFromS3', () => {
         const TEST_SCRIPT_URL = 'script_url';
-        const TEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'downloadScriptFromS3.json');
-        const TEST_RESPONSE = `{"data": test}`;
-        let TEST_STREAM;
+        const TEST_FILE_PATH = 'filepath'
+        let httpsSub;
+        let writeStreamOnStub;
+        let responseStub;
 
         beforeEach(() => {
-            TEST_STREAM = new PassThrough();
-            TEST_STREAM.push(TEST_RESPONSE);
-            TEST_STREAM.end();
+            responseStub = {
+                pipe: () => {}
+            }
+            writeStreamOnStub = sinon.stub();
+            sinon.stub(fs, 'createWriteStream').returns({
+                on: writeStreamOnStub
+            });
+            httpsSub = sinon.stub(https, 'get');
         });
 
         afterEach(() => {
@@ -116,16 +122,18 @@ describe('Controller test - hosted skill controller - helper test', () => {
 
         it('| download Script succeeds, expect none error response', (done) => {
             // setup
-            sinon.stub(https, 'get').callsFake((TEST_SCRIPT_URL, callback) => {
-                callback(TEST_STREAM);
-                return {end: sinon.stub()};
+            httpsSub.callsFake((TEST_SCRIPT_URL, callback) => {
+                return callback(responseStub);
             })
-            sinon.spy(TEST_STREAM, 'pipe');
+            // sinon.spy(TEST_STREAM, 'pipe');
+            writeStreamOnStub.callsArgWith(1);
             sinon.stub(fs, 'chmodSync');
             // call
             helper.downloadScriptFromS3(TEST_SCRIPT_URL, TEST_FILE_PATH, (err) => {
+                // verify
+                expect(fs.createWriteStream.args[0][0]).equal(TEST_FILE_PATH);
+                expect(httpsSub.args[0][0]).equal(TEST_SCRIPT_URL)
                 expect(err).equal(null);
-                fs.removeSync(TEST_FILE_PATH);
                 done();
             });
         });
