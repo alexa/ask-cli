@@ -3,7 +3,7 @@ name: Integration Test
 on:
   push:
     paths-ignore:
-      - 'docs/**'
+      - '**.md'
 
 jobs:
   build:
