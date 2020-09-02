@@ -317,7 +317,7 @@ describe('Commands upgrade project test - command class test', () => {
                 sinon.stub(path, 'join').returns(FIXTURE_HOSTED_SKILL_RESOURCES_CONFIG);
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
-                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(3, TEST_ERROR);
+                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(5, TEST_ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -346,7 +346,7 @@ describe('Commands upgrade project test - command class test', () => {
                 path.join.callThrough();
                 sinon.stub(hostedSkillHelper, 'downloadSkillPackage').callsArgWith(5, null);
                 sinon.stub(hostedSkillHelper, 'handleExistingLambdaCode');
-                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(3, null);
+                sinon.stub(hostedSkillHelper, 'postUpgradeGitSetup').callsArgWith(5, null);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
