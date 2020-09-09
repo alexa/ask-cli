@@ -4,7 +4,7 @@ const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
 const AppConfig = require('@src/model/app-config');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
-const { resolveProviderChain } = require('@src/utils/provider-chain-utils');
+const DynamicConfig = require('@src/utils/dynamic-config');
 
 new AppConfig();
 
@@ -18,8 +18,9 @@ const refreshTokenConfig = {
     clientSecret: authorizationController.oauthClient.config.clientConfirmation,
     refreshToken: AppConfig.getInstance().getToken(profile).refresh_token
 };
-const authEndpoint = resolveProviderChain([process.env.ASK_LWA_TOKEN_HOST, CONSTANTS.LWA.DEFAULT_TOKEN_HOST]);
-const smapiEndpoint = resolveProviderChain([process.env.ASK_SMAPI_SERVER_BASE_URL, CONSTANTS.SMAPI.ENDPOINT]);
+
+const authEndpoint = DynamicConfig.lwaTokenHost;
+const smapiEndpoint = DynamicConfig.smapiBaseUrl;
 
 const cleanUp = async () => {
     console.log('cleaning ask resources');
