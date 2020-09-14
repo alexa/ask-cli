@@ -6,4 +6,5 @@ in '~/.ask/cli_config'.
 
 Learn more: https://developer.amazon.com/docs/alexa/smapi/ask-cli-telemetry.html
 ================================================================================ 
+test
 `);
