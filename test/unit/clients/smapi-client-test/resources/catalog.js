@@ -24,7 +24,7 @@ module.exports = (smapiClient) => {
         const TEST_CATALOG_TYPE = 'type';
         const TEST_CATALOG_USAGE = 'usage';
         const TEST_CATALOG_TITLE = 'title';
-        const TEST_NUMBER_OF_PARTS = 'numberOfParts';
+        const TEST_NUMBER_OF_PARTS = 'numberOfUploadParts';
         const TEST_PART_ETAG_LIST = ['list1', 'list2'];
         const TEST_PROFILE = 'testProfile';
         const TEST_ACCESS_TOKEN = 'access_token';
@@ -145,7 +145,7 @@ module.exports = (smapiClient) => {
                         authorization: TEST_ACCESS_TOKEN
                     },
                     body: {
-                        numberOfParts: TEST_NUMBER_OF_PARTS
+                        numberOfUploadParts: TEST_NUMBER_OF_PARTS
                     },
                     json: true
                 }
