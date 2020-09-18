@@ -92,6 +92,13 @@ The path params
 | Delete the slot type. | [delete-interaction-model-slot-type](#delete-interaction-model-slot-type) |
 | Get the status of slot type resource and its sub-resources for a given slotTypeId. | [get-interaction-model-slot-type-build-status](#get-interaction-model-slot-type-build-status) |
 | Update description and vendorGuidance string for certain version of a slot type. | [update-interaction-model-slot-type](#update-interaction-model-slot-type) |
+| Retrieve a list of jobs associated with the vendor. | [list-job-definitions-for-interaction-model](#list-job-definitions-for-interaction-model) |
+| Creates a new Job Definition from the Job Definition request provided. This can be either a CatalogAutoRefresh, which supports time-based configurations for catalogs, or a ReferencedResourceVersionUpdate, which is used for slotTypes and Interaction models to be automatically updated on the dynamic update of their referenced catalog. | [create-job-definition-for-interaction-model](#create-job-definition-for-interaction-model) |
+| Get the job definition for a given jobId. | [get-job-definition-for-interaction-model](#get-job-definition-for-interaction-model) |
+| Delete the job definition for a given jobId. | [delete-job-definition-for-interaction-model](#delete-job-definition-for-interaction-model) |
+| Update the JobStatus to Enable or Disable a job. | [set-job-status-for-interaction-model](#set-job-status-for-interaction-model) |
+| List the execution history associated with the job definition, with default sortField to be the executions' timestamp. | [list-job-executions-for-interaction-model](#list-job-executions-for-interaction-model) |
+| Cancel the next execution for the given job. | [cancel-next-job-execution-for-interaction-model](#cancel-next-job-execution-for-interaction-model) |
 | List all slot type versions for the slot type id. | [list-interaction-model-slot-type-versions](#list-interaction-model-slot-type-versions) |
 | Create a new version of slot type entity for the given slotTypeId. | [create-interaction-model-slot-type-version](#create-interaction-model-slot-type-version) |
 | Get slot type version data of given slot type version. | [get-interaction-model-slot-type-version](#get-interaction-model-slot-type-version) |
@@ -2204,6 +2211,169 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dd markdown="span">[REQUIRED] The identifier for a slot type.</dd>
     <dt>--slot-type-description <slot-type-description></dt>
     <dd markdown="span">[REQUIRED] The slot type description with a 255 character maximum.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-job-definitions-for-interaction-model
+
+Retrieve a list of jobs associated with the vendor.
+
+`list-job-definitions-for-interaction-model` command format:
+
+`$ ask smapi list-job-definitions-for-interaction-model [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-job-definition-for-interaction-model
+
+Creates a new Job Definition from the Job Definition request provided. This can be either a CatalogAutoRefresh, which supports time-based configurations for catalogs, or a ReferencedResourceVersionUpdate, which is used for slotTypes and Interaction models to be automatically updated on the dynamic update of their referenced catalog.
+
+`create-job-definition-for-interaction-model` command format:
+
+`$ ask smapi create-job-definition-for-interaction-model <--job-definition <job-definition>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-definition <job-definition></dt>
+    <dd markdown="span">[REQUIRED] Request to create a new Job Definition. 
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-job-definition-for-interaction-model
+
+Get the job definition for a given jobId.
+
+`get-job-definition-for-interaction-model` command format:
+
+`$ ask smapi get-job-definition-for-interaction-model <--job-id <job-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-id <job-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic jobs.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### delete-job-definition-for-interaction-model
+
+Delete the job definition for a given jobId.
+
+`delete-job-definition-for-interaction-model` command format:
+
+`$ ask smapi delete-job-definition-for-interaction-model <--job-id <job-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-id <job-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic jobs.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### set-job-status-for-interaction-model
+
+Update the JobStatus to Enable or Disable a job.
+
+`set-job-status-for-interaction-model` command format:
+
+`$ ask smapi set-job-status-for-interaction-model <--job-id <job-id>> <--status <status>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-id <job-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic jobs.</dd>
+    <dt>--status <status></dt>
+    <dd markdown="span">[REQUIRED] Current status of the job definition. 
+[ENUM]: DISABLED,ENALBED.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-job-executions-for-interaction-model
+
+List the execution history associated with the job definition, with default sortField to be the executions&#39; timestamp.
+
+`list-job-executions-for-interaction-model` command format:
+
+`$ ask smapi list-job-executions-for-interaction-model <--job-id <job-id>> [--max-results <max-results>] [--next-token <next-token>] [--sort-direction <sort-direction>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-id <job-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic jobs.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--sort-direction <sort-direction></dt>
+    <dd markdown="span">[OPTIONAL] Sets the sorting direction of the result items. When set to 'asc' these items are returned in ascending order of sortField value and when set to 'desc' these items are returned in descending order of sortField value.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### cancel-next-job-execution-for-interaction-model
+
+Cancel the next execution for the given job.
+
+`cancel-next-job-execution-for-interaction-model` command format:
+
+`$ ask smapi cancel-next-job-execution-for-interaction-model <--job-id <job-id>> <--execution-id <execution-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--job-id <job-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic jobs.</dd>
+    <dt>--execution-id <execution-id></dt>
+    <dd markdown="span">[REQUIRED] The identifier for dynamic job executions. Currently only allowed for scheduled executions.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
