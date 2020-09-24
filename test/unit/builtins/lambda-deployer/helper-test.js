@@ -16,6 +16,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
     const TEST_AWS_PROFILE = 'default';
     const TEST_AWS_REGION = 'us-east-1';
     const TEST_ALEXA_REGION = 'default';
+    const TEST_ALEXA_REGION_NON_DEFAULT = 'EU';
     const TEST_SKILL_NAME = 'skill_name';
     const TEST_SKILL_ID = 'skill_id';
     const TEST_IAM_ROLE_ARN = 'iam_role_arn';
@@ -32,7 +33,7 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
         }
     };
 
-    describe('# test class method: validateLambdaDeployState', () => {
+    describe('# test class method: loadLambdaInformation', () => {
         const TEST_LOCAL_IAM_ROLE = 'local_iam_role';
         const TEST_LOCAL_REVISION_ID = 'local_revision_id';
         const TEST_LOCAL_DEPLOY_STATE = {
@@ -42,37 +43,81 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
                 revisionId: TEST_LOCAL_REVISION_ID
             }
         };
+        const TEST_USER_CONFIG_WITH_BASEDON = {
+            regionalOverrides: {
+                [TEST_ALEXA_REGION_NON_DEFAULT]: {
+                    basedOn: {
+                        lambda: {
+                            arn: TEST_LAMBDA_ARN
+                        }
+                    }
+                }
+            }
+        };
         const TEST_REMOTE_IAM_ROLE = 'remote_iam_role';
         const TEST_REMOTE_REVISION_ID = 'remote_revision_id';
+        const TEST_LOAD_LAMBDA_OPTION_NO_LAMBDA_STATE = {
+            awsProfile: TEST_AWS_PROFILE,
+            awsRegion: TEST_AWS_REGION,
+            alexaRegion: TEST_ALEXA_REGION,
+            ignoreHash: TEST_IGNORE_HASH,
+            deployState: {},
+            userConfig: {}
+        };
+
+        const TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE = {
+            awsProfile: TEST_AWS_PROFILE,
+            awsRegion: TEST_AWS_REGION,
+            alexaRegion: TEST_ALEXA_REGION,
+            ignoreHash: TEST_IGNORE_HASH,
+            deployState: TEST_LOCAL_DEPLOY_STATE,
+            userConfig: {}
+        };
+
+        const TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE_IGNORE_HASH = {
+            awsProfile: TEST_AWS_PROFILE,
+            awsRegion: TEST_AWS_REGION,
+            alexaRegion: TEST_ALEXA_REGION,
+            ignoreHash: true,
+            deployState: TEST_LOCAL_DEPLOY_STATE,
+            userConfig: {}
+        };
+
+        const TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON = {
+            awsProfile: TEST_AWS_PROFILE,
+            awsRegion: TEST_AWS_REGION,
+            alexaRegion: TEST_ALEXA_REGION_NON_DEFAULT,
+            ignoreHash: true,
+            deployState: TEST_LOCAL_DEPLOY_STATE,
+            userConfig: TEST_USER_CONFIG_WITH_BASEDON
+        };
 
         afterEach(() => {
             sinon.restore();
         });
 
         it('| no lambda arn found, expect original deploystate return', (done) => {
-            // setup
-            const TEST_DEPLOY_STATE_NO_LAMBDA = {};
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_DEPLOY_STATE_NO_LAMBDA, TEST_IGNORE_HASH, (err, data) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_NO_LAMBDA_STATE, (err, data) => {
                 // verify
-                expect(data.updatedDeployState).equal(TEST_DEPLOY_STATE_NO_LAMBDA);
+                expect(data).deep.equal({});
                 done();
             });
         });
 
-        it('| an existing lambda arn found, getFunction request fails, expect an error return', (done) => {
+        it('| an existing lambda arn found in deployState, getFunction request fails, expect an error return', (done) => {
             // setup
             const TEST_GET_FUNCTION_ERROR = 'get_function_error';
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, TEST_GET_FUNCTION_ERROR);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
                 // verify
                 expect(err).equal(TEST_GET_FUNCTION_ERROR);
                 done();
             });
         });
 
-        it('| an existing lambda arn found, getFunction request passes, the local iam role does not equal with the remote iam role, '
+        it('| an existing lambda arn found in deployState, getFunction request passes, the local iam role does not equal with the remote iam role, '
         + 'expect an error return', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
@@ -81,18 +126,18 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
                     RevisionId: TEST_REMOTE_REVISION_ID
                 }
             };
-            const TEST_IAM_ROLE_ERROR = `The IAM role for Lambda ARN (${TEST_LAMBDA_ARN}) should be ${TEST_REMOTE_IAM_ROLE}, \
-but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
+            const TEST_IAM_ROLE_ERROR = `The IAM role for Lambda ARN (${TEST_LAMBDA_ARN}) should be "${TEST_REMOTE_IAM_ROLE}", \
+but found "${TEST_LOCAL_IAM_ROLE}". Please solve this IAM role mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
                 // verify
                 expect(err).equal(TEST_IAM_ROLE_ERROR);
                 done();
             });
         });
 
-        it('| an existing lambda arn found, getFunction request passes, the local revisionId does not equal with the remote revisionId,'
+        it('| an existing lambda arn found in deployState, getFunction request passes, the local revisionId does not equal with the remote revisionId,'
         + 'expect an error return', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
@@ -102,18 +147,19 @@ but found ${TEST_LOCAL_IAM_ROLE}. Please solve this IAM role mismatch and re-dep
                 }
             };
             const TEST_REVISION_ID_ERROR = `The current revisionId (The revision ID for Lambda ARN (${TEST_LAMBDA_ARN}) should be \
-${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve this revision mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
+${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. \
+Please solve this revision mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
                 // verify
                 expect(err).equal(TEST_REVISION_ID_ERROR);
                 done();
             });
         });
 
-        it('| an existing lambda arn found, getFunction request passes, the local revisionId and remote revisionId compare is ignored'
-        + 'expect updated deploy state return', (done) => {
+        it('| an existing lambda arn found in deployState, getFunction request passes, the local revisionId and remote revisionId compare is ignored'
+        + 'expect lambda data returned', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
                 Configuration: {
@@ -121,17 +167,16 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
                     RevisionId: TEST_REMOTE_REVISION_ID
                 }
             };
-            const IGNORE_HASH = true;
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, IGNORE_HASH, (err, data) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE_IGNORE_HASH, (err, data) => {
                 // verify
-                expect(data.updatedDeployState.iamRole).equal(TEST_LOCAL_IAM_ROLE);
+                expect(data.iamRole).equal(TEST_LOCAL_IAM_ROLE);
                 done();
             });
         });
 
-        it('| an existing lambda arn found, getFunction request passes, expect updated deploy state return', (done) => {
+        it('| an existing lambda arn found in deployState, getFunction request passes, expect lambda data returned', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
                 Configuration: {
@@ -141,20 +186,65 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             };
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.validateLambdaDeployState(REPORTER, TEST_AWS_PROFILE, TEST_AWS_REGION, TEST_LOCAL_DEPLOY_STATE, TEST_IGNORE_HASH, (err, data) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err, data) => {
                 // verify
-                expect(data.updatedDeployState.iamRole).equal(TEST_LOCAL_IAM_ROLE);
-                expect(data.updatedDeployState.lambda.revisionId).equal(TEST_LOCAL_REVISION_ID);
+                expect(data.iamRole).equal(TEST_LOCAL_IAM_ROLE);
+                expect(data.lambda.revisionId).equal(TEST_LOCAL_REVISION_ID);
+                done();
+            });
+        });
+
+        it('| using Lambda arn from basedOn, getFunction return error, expect error called back', (done) => {
+            // setup
+            const GET_FUNC_ERR = 'get func err';
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, GET_FUNC_ERR);
+            // call
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON, (err, data) => {
+                // verify
+                expect(err).equal(`Failed to load the Lambda (${TEST_LAMBDA_ARN}) specified in "basedOn". ${GET_FUNC_ERR}`);
+                expect(data).equal(undefined);
+                done();
+            });
+        });
+
+        it('| using Lambda arn from basedOn, getFunction request passes, expect lambda data returned', (done) => {
+            // setup
+            const TEST_REMOTE_DEPLOY_STATE = {
+                Configuration: {
+                    Role: TEST_REMOTE_IAM_ROLE,
+                    RevisionId: TEST_REMOTE_REVISION_ID
+                }
+            };
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+            // call
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON, (err, data) => {
+                // verify
+                expect(data.iamRole).equal(TEST_REMOTE_IAM_ROLE);
+                expect(data.lambda.revisionId).equal(TEST_REMOTE_REVISION_ID);
+                expect(data.lambda.arn).equal(TEST_LAMBDA_ARN);
                 done();
             });
         });
     });
 
     describe('# test class method: deployIAMRole', () => {
-        const TEST_DEPLOYSTATE_NO_ROLE = {
-        };
+        const TEST_DEPLOYSTATE_NO_ROLE = {};
         const TEST_DEPLOYSTATE = {
             iamRole: TEST_IAM_ROLE_ARN
+        };
+        const TEST_IAM_CONFIG_NO_ROLE = {
+            awsProfile: TEST_AWS_PROFILE,
+            alexaRegion: TEST_ALEXA_REGION,
+            skillName: TEST_SKILL_NAME,
+            awsRegion: TEST_AWS_REGION,
+            deployState: {}
+        };
+        const TEST_IAM_CONFIG = {
+            awsProfile: TEST_AWS_PROFILE,
+            alexaRegion: TEST_ALEXA_REGION,
+            skillName: TEST_SKILL_NAME,
+            awsRegion: TEST_AWS_REGION,
+            deployState: TEST_DEPLOYSTATE
         };
 
         afterEach(() => {
@@ -166,9 +256,9 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             const TEST_ERROR = 'getRole error message';
             sinon.stub(IAMClient.prototype, 'getIAMRole').callsArgWith(1, TEST_ERROR);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE, (err) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err) => {
                 // verify
-                expect(err).equal(TEST_ERROR);
+                expect(err).equal(`Failed to retrieve IAM role (${TEST_IAM_ROLE_ARN}) for Lambda. ${TEST_ERROR}`);
                 done();
             });
         });
@@ -178,7 +268,7 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             const TEST_GET_ROLE_ERROR = `The IAM role is not found. Please check if your IAM role from region ${TEST_ALEXA_REGION} is valid.`;
             sinon.stub(IAMClient.prototype, 'getIAMRole').callsArgWith(1, TEST_NO_SUCH_ENTITY_ERROR);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE, (err) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err) => {
                 // verify
                 expect(err).equal(TEST_GET_ROLE_ERROR);
                 done();
@@ -189,7 +279,7 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             // setup
             sinon.stub(IAMClient.prototype, 'getIAMRole').callsArgWith(1, null, TEST_ROLE_DATA);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE, (err, res) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err, res) => {
                 // verify
                 expect(res).equal(TEST_IAM_ROLE_ARN);
                 done();
@@ -201,9 +291,9 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             const TEST_CREATE_ROLE_ERROR = 'createIAMRole error message';
             sinon.stub(IAMClient.prototype, 'createBasicLambdaRole').callsArgWith(1, TEST_CREATE_ROLE_ERROR);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE_NO_ROLE, (err) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err) => {
                 // verify
-                expect(err).equal(TEST_CREATE_ROLE_ERROR);
+                expect(err).equal(`Failed to create IAM role before deploying Lambda. ${TEST_CREATE_ROLE_ERROR}`);
                 done();
             });
         });
@@ -214,9 +304,9 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             sinon.stub(IAMClient.prototype, 'createBasicLambdaRole').callsArgWith(1, null, TEST_ROLE_DATA);
             sinon.stub(IAMClient.prototype, 'attachBasicLambdaRolePolicy').callsArgWith(1, TEST_POLICY_ERROR);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE_NO_ROLE, (err) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err) => {
                 // verify
-                expect(err).equal(TEST_POLICY_ERROR);
+                expect(err).equal(`Failed to create IAM role before deploying Lambda. ${TEST_POLICY_ERROR}`);
                 done();
             });
         });
@@ -226,12 +316,11 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             sinon.stub(IAMClient.prototype, 'createBasicLambdaRole').callsArgWith(1, null, TEST_ROLE_DATA);
             sinon.stub(IAMClient.prototype, 'attachBasicLambdaRolePolicy').callsArgWith(1, null, TEST_IAM_ROLE_ARN);
             // call
-            helper.deployIAMRole(REPORTER, TEST_AWS_PROFILE, TEST_ALEXA_REGION, TEST_SKILL_NAME, TEST_AWS_REGION, TEST_DEPLOYSTATE_NO_ROLE,
-                (err, res) => {
+            helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err, res) => {
                 // verify
-                    expect(res).equal(TEST_IAM_ROLE_ARN);
-                    done();
-                });
+                expect(res).equal(TEST_IAM_ROLE_ARN);
+                done();
+            });
         });
     });
 
@@ -256,7 +345,7 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             iamRoleArn: TEST_IAM_ROLE_ARN,
             zipFilePath: TEST_ZIP_FILE_PATH,
             userConfig: { awsRegion: TEST_AWS_REGION },
-            currentRegionDeployState: {}
+            deployState: {}
         };
         const TEST_UPDATE_OPTIONS = {
             profile: TEST_PROFILE,
@@ -269,7 +358,7 @@ ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. Please solve th
             iamRoleArn: TEST_IAM_ROLE_ARN,
             zipFilePath: TEST_ZIP_FILE_PATH,
             userConfig: { awsRegion: TEST_AWS_REGION, runtime: TEST_RUNTIME, handler: TEST_HANDLER },
-            currentRegionDeployState: { lambda: {
+            deployState: { lambda: {
                 arn: TEST_LAMBDA_ARN,
                 lastModified: TEST_LAST_MODIFIED,
                 revisionId: TEST_REVISION_ID
