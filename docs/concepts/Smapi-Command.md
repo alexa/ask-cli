@@ -3468,7 +3468,10 @@ The operation outputs an evaluationId which allows the retrieval of the current 
 
 <dl>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[OPTIONAL].</dd>
+    <dd markdown="span">[OPTIONAL]  
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[REQUIRED].</dd>
     <dt>--source-annotation-id <source-annotation-id></dt>
