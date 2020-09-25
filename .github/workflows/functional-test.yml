@@ -1,0 +1,29 @@
+name: Functional Test
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: git config --global user.email "ask-cli-test@amazon.com"
+    - run: git config --global user.name "Ask Cli Test"
+    - run: npm install
+    - run: npm link
+    - run: npm run functional-test
+      env:
+        ASK_VENDOR_ID: ${{ secrets.ASK_VENDOR_ID }}
+        ASK_REFRESH_TOKEN: ${{ secrets.ASK_REFRESH_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        DEBUG: true

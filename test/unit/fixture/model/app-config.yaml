@@ -1,3 +1,5 @@
+machine_id: machineId
+share_usage: false
 profiles:
   testProfile:
     aws_profile: awsProfile

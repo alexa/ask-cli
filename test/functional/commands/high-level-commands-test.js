@@ -43,6 +43,8 @@ parallel('high level commands test', () => {
         let inputs = [
             { match: '? Choose the programming language' },
             { match: '? Choose a method to host your skill' },
+            { match: '? Choose the default locale for your skill' },
+            { match: '? Choose the default region for your skill' },
             { match: '? Please type in your skill name' },
             { match: '? Please type in your folder name', input: folderName }
         ];
@@ -113,7 +115,7 @@ parallel('high level commands test', () => {
             { match: '? Choose the programming language' },
             { match: '? Choose a method to host your skill', input: `${KeySymbol.DOWN}${KeySymbol.DOWN}` },
             { match: '? Choose a template to start with' },
-            { match: '? Please type in your skill name' },
+            { match: '? Please type in your skill name', input: folderName },
             { match: '? Please type in your folder name', input: folderName }
         ];
 

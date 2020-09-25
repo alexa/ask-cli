@@ -1,6 +1,6 @@
 {
   "name": "ask-cli",
-  "version": "2.14.0",
+  "version": "2.16.1",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
     "ask": "bin/ask.js"
@@ -29,15 +29,17 @@
     "test:report": "nyc --cache npm test && nyc report --reporter=html",
     "test:browser": "npm run test:report && open coverage/index.html",
     "integration-test": "mocha -t 180000 test/integration/run-test.js",
-    "functional-test": "mocha -t 180000 test/functional/run-test.js",
+    "functional-test": "mocha -t 600000 test/functional/run-test.js",
+    "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
     "pre-release": "standard-version",
-    "prism": "prism"
+    "prism": "prism",
+    "postinstall": "node postinstall.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "ask-smapi-model": "1.10.0",
+    "ask-smapi-model": "~1.12.2",
     "ask-smapi-sdk": "^1.2.0",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",

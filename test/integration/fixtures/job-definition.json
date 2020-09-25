@@ -1,0 +1,14 @@
+{
+    "jobDefinition": {
+      "type": "CatalogAutoRefresh",
+      "resource": {
+        "type": "Catalog",
+        "id": "amzn1.ask.interactionModel.catalog.661c3570-99d8-4b3f-95b7-db8c403a6125"
+     },
+      "trigger": {
+        "type": "Scheduled",
+        "hour": 4
+    },
+      "status": "ENABLED" 
+    }
+}

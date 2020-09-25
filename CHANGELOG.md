@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.16.1](https://github.com/alexa/ask-cli/compare/v2.16.0...v2.16.1) (2020-09-25)
+
+
+### Bug Fixes
+
+* bump ask-smapi-sdk version to include some fix to smapi commands ([5370df2](https://github.com/alexa/ask-cli/commit/5370df2cc7bd6d8db17b9557bc1490fc068dd162))
+
+## [2.16.0](https://github.com/alexa/ask-cli/compare/v2.15.0...v2.16.0) (2020-09-18)
+
+
+### Features
+
+* add commands for dynamic update feature, add skipUnwrap for createJobDefinitionRequest ([7d53461](https://github.com/alexa/ask-cli/commit/7d534614eb553fed8edb425ddfea1fe71572f5de))
+
+
+### Bug Fixes
+
+* failure in smapiClient for createCatalogUpload method ([6e838e8](https://github.com/alexa/ask-cli/commit/6e838e8007df4a9214b37c7a7b0c59adb17b5699))
+* issue with different path on windows and mac ([#298](https://github.com/alexa/ask-cli/issues/298)) ([66439e2](https://github.com/alexa/ask-cli/commit/66439e2de082c186c9bbe29c7a051fa6aa1bfeb2))
+* log error on auth failure. ([#299](https://github.com/alexa/ask-cli/issues/299)) ([798fb44](https://github.com/alexa/ask-cli/commit/798fb44ce68093159358ea6cde06875c819fd8cb))
+* propogate correct error message for file not found ([23aabd7](https://github.com/alexa/ask-cli/commit/23aabd7b361139603d80fc0becaa68fe88731dc4))
+
+## [2.15.0](https://github.com/alexa/ask-cli/compare/v2.14.0...v2.15.0) (2020-08-26)
+
+
+### Features
+
+* add locale and region for AHS ([#287](https://github.com/alexa/ask-cli/issues/287)) ([6c8991c](https://github.com/alexa/ask-cli/commit/6c8991c2d171cd0783422335e4c655f136c2e038))
+* add telemetry in smapi commands ([#278](https://github.com/alexa/ask-cli/issues/278)) ([54f972b](https://github.com/alexa/ask-cli/commit/54f972b185ea989c97fc667a83b320f84c2b65de))
+* update ask smapi model to 1.10.1 ([4d91056](https://github.com/alexa/ask-cli/commit/4d91056ed12dddb8579b45dd57294467fda1044e))
+
 ## [2.14.0](https://github.com/alexa/ask-cli/compare/v2.13.0...v2.14.0) (2020-08-04)
 
 
