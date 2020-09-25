@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.16.1](https://github.com/alexa/ask-cli/compare/v2.16.0...v2.16.1) (2020-09-25)
+
+
+### Bug Fixes
+
+* bump ask-smapi-sdk version to include some fix to smapi commands ([5370df2](https://github.com/alexa/ask-cli/commit/5370df2cc7bd6d8db17b9557bc1490fc068dd162))
+
 ## [2.16.0](https://github.com/alexa/ask-cli/compare/v2.15.0...v2.16.0) (2020-09-18)
 
 
