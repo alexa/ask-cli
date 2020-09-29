@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const parallel = require('mocha.parallel');
 const { run, KeySymbol, resetTempDirectory, getPathInTempDirectory, makeFolderInTempDirectory } = require('@test/test-utils');
 
-describe('high level commands test', () => {
+parallel('high level commands test', () => {
     let cmd;
 
     before(() => {

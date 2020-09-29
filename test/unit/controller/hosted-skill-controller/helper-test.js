@@ -19,6 +19,8 @@ describe('Controller test - hosted skill controller - helper test', () => {
 
         it('| helper download Script fails, expect error thrown ', (done) => {
             // setup
+            sinon.stub(fs, 'existsSync').returns(false);
+            sinon.stub(fs, 'mkdirSync');
             sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, TEST_ERROR);
             // call
             helper.downloadAuthInfoScript((err) => {
@@ -29,6 +31,7 @@ describe('Controller test - hosted skill controller - helper test', () => {
 
         it('| helper download Script succeeds, expect none error response', (done) => {
             // setup
+            sinon.stub(fs, 'existsSync').returns(true);
             sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, null);
             // call
             helper.downloadAuthInfoScript((err) => {
