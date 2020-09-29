@@ -4,6 +4,7 @@ const chaiUuid = require('chai-uuid');
 const chaiJsonSchema = require('chai-json-schema');
 const sinon = require('sinon');
 const { METRICS } = require('@src/utils/constants');
+const profileHelper = require('@src/utils/profile-helper');
 const AppConfig = require('@src/model/app-config');
 const { MetricClient, MetricActionResult } = require('@src/clients/metric-client');
 const jsonSchema = require('@test/fixture/ask-devtools-metrics.schema.json');
@@ -17,6 +18,7 @@ describe('Clients test - cli metric client', () => {
     const getMachineIdStub = sinon.stub();
     const setMachineIdStub = sinon.stub();
     const writeConfigStub = sinon.stub();
+    let isEnvProfileStub;
     let configExistsStub;
     let shareUsageVariableValue;
 
@@ -24,6 +26,7 @@ describe('Clients test - cli metric client', () => {
         shareUsageVariableValue = process.env.ASK_SHARE_USAGE;
         delete process.env.ASK_SHARE_USAGE;
         configExistsStub = sinon.stub(AppConfig, 'configFileExists').returns(true);
+        isEnvProfileStub = sinon.stub(profileHelper, 'isEnvProfile').returns(false);
         sinon.stub(AppConfig.prototype, 'read');
         sinon.stub(AppConfig, 'getInstance').returns({
             getShareUsage: getShareUsageStub.returns(true),
@@ -208,12 +211,11 @@ describe('Clients test - cli metric client', () => {
 
         it('| sends metrics, expect metrics not to be send to metric server when enabled is false', async () => {
             configExistsStub.returns(false);
+            client = new MetricClient();
             httpClientPostStub = sinon.stub(client.httpClient, 'post');
 
-            const disabledClient = new MetricClient();
-
             // call
-            const { success } = await disabledClient.sendData();
+            const { success } = await client.sendData();
 
             // verify
             expect(success).eql(true);
@@ -222,16 +224,29 @@ describe('Clients test - cli metric client', () => {
 
         it('| sends metrics, expect metrics not to be send to metric server when ASK_SHARE_USAGE is false', async () => {
             process.env.ASK_SHARE_USAGE = false;
+            client = new MetricClient();
             httpClientPostStub = sinon.stub(client.httpClient, 'post');
 
-            const disabledClient = new MetricClient();
-
             // call
-            const { success } = await disabledClient.sendData();
+            const { success } = await client.sendData();
 
             // verify
             expect(success).eql(true);
             expect(httpClientPostStub.called).eql(false);
+        });
+
+        it('| sends metrics, expect metrics be send to metric server when using env profile', async () => {
+            isEnvProfileStub.returns(true);
+            client = new MetricClient();
+            httpClientPostStub = sinon.stub(client.httpClient, 'post').resolves({});
+
+            // call
+            const { success } = await client.sendData();
+
+            // verify
+            expect(success).eql(true);
+            expect(httpClientPostStub.called).eql(true);
+            expect(httpClientPostStub.args[0][1]).contains('"machine_id":"all_environmental"');
         });
 
         it('| sends metrics, expect to retry on transmission error', async () => {
