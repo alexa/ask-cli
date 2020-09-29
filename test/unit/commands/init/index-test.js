@@ -489,6 +489,37 @@ describe('Commands init test - command class test', () => {
         afterEach(() => {
             sinon.restore();
         });
+
+        it('| hosted skill controller updateAskSystemScripts fails, expect error thrown', (done) => {
+            // setup
+            const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
+            const GET_MANIFEST_RESPONSE = {
+                statusCode: 200,
+                headers: {},
+                body: {
+                    manifest: {
+                        publishingInformation: {
+                            locales: {
+                                [TEST_LOCALE_CA]: {
+                                    name: TEST_SKILL_NAME
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
+            sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, TEST_ERROR);
+            // call
+            instance.handle(TEST_CMD, (err) => {
+                // verify
+                expect(err).equal(TEST_ERROR);
+                expect(errorStub.args[0][0]).equal(TEST_ERROR);
+                done();
+            });
+        });
+
         it('| hosted skill controller clone fails, expect error thrown', (done) => {
             // setup
             const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
@@ -509,6 +540,7 @@ describe('Commands init test - command class test', () => {
             };
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, TEST_ERROR);
             // call
             instance.handle(TEST_CMD, (err) => {
@@ -519,7 +551,7 @@ describe('Commands init test - command class test', () => {
             });
         });
 
-        it('| download Git Hooks script fails, expect error thrown', (done) => {
+        it('| downloadAskScripts fails, expect error thrown', (done) => {
             // setup
             const TEST_FOLDER_NAME = 'TEST_FOLDER_NAME';
             const TEST_LOCALE = 'en-US';
@@ -540,8 +572,9 @@ describe('Commands init test - command class test', () => {
             };
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, TEST_ERROR);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify
@@ -572,8 +605,9 @@ describe('Commands init test - command class test', () => {
             };
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
-            sinon.stub(HostedSkillController.prototype, 'downloadAskScripts').callsArgWith(1, null);
+            sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, null);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify
