@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const fs = require('fs');
+const fs = require('fs-extra');
 const sinon = require('sinon');
 
 const httpClient = require('@src/clients/http-client');
@@ -521,6 +521,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| check S3 Scripts fails, expect error thrown ', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, TEST_ERROR);
             // call
             hostedSkillController.downloadAskScripts(TEST_FOLDER_NAME, (err) => {
@@ -531,6 +532,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| download Script from S3 fails, expect error thrown ', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, TEST_ERROR);
             // call
@@ -542,6 +544,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| download Script from S3 succeeds, expect none error response', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, null);
             // call
@@ -567,6 +570,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| update Auth Info Script fails, expect error thrown ', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, TEST_ERROR);
             // call
             hostedSkillController.updateAskSystemScripts((err) => {
@@ -577,6 +581,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| update Ask Pre Push Script fails, expect error thrown ', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
             sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, TEST_ERROR);
             // call
@@ -588,6 +593,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| update git credential helper Script fails, expect none error response', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
             sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, null);
             sinon.stub(helper, 'downloadGitCredentialHelperScript').callsArgWith(0, TEST_ERROR);
@@ -600,6 +606,7 @@ describe('Controller test - hosted skill controller test', () => {
 
         it('| All Scripts checking succeeds, expect none error response', (done) => {
             // setup
+            sinon.stub(fs, 'ensureDirSync');
             sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
             sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, null);
             sinon.stub(helper, 'downloadGitCredentialHelperScript').callsArgWith(0, null);
