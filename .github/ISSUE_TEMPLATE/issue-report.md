@@ -19,8 +19,8 @@ ISSUES MISSING IMPORTANT INFORMATION MAY BE CLOSED WITHOUT INVESTIGATION.
 [ ] Bug report  <!-- Please search GitHub for a similar issue or PR before submitting -->
 [ ] Performance issue
 [ ] Feature request
-[ ] Documentation issue or request
-[ ] Other... Please describe:
+[ ] Documentation issue or request <!-- If the issue with  https://developer.amazon.com/en-US/docs/alexa, please use the feedback button to send your feedback. -->
+[ ] Other... Please describe: <!-- Please try first searching https://forums.developer.amazon.com for general questions. -->
 </code></pre>
 
 <!--- Provide a general summary of the issue in the Title above -->
