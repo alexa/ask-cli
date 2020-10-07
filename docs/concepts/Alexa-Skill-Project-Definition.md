@@ -58,7 +58,20 @@ Below shows the example how CLI tracks user's config and the deployment states, 
           "awsRegion": "{aws-region}",
           "runtime": "{lambdaRuntime}",
           "handler": "{lambdaHandler}",
-          "templatePath": "stack.yaml"
+          "templatePath": "stack.yaml",
+          "artifactsS3": { // custom s3 configuration to upload skill build artifact (zip, jar,etc)
+            "bucketName": "{bucketName}", // custom bucket name to store artifacts
+            "bucketKey": "{bucketKey.zip}" // custom bucket object key
+          },
+          "cfn": {
+            "parameters": { // additional parameters to pass to the CloudFormation
+              "SomeUserParameter1Key": "some value",
+              "SomeUserParameter2Key": "another value"
+            },
+            "capabilities": [ // additional capabilities to pass to the CloudFormation. CAPABILITY_IAM capability is always passed by default.
+              "CAPABILITY_NAMED_IAM"
+            ]
+          }
         }
       }
     }
@@ -95,6 +108,13 @@ Below shows the example how CLI tracks user's config and the deployment states, 
                 "key": "{key}",
                 "objectVersion": "{version}"
               },
+              "outputs": [ // outputs from the CloudFormation deploy
+                {
+                  "OutputKey": "{outputKey}",
+                  "OutputValue": "{outputValue}",
+                  "Description": "{description}"
+                }
+              ],
               "stackId": "arn:aws:cloudformation:..."
             },
             "{supportedRegion}": { ... }

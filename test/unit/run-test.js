@@ -12,6 +12,8 @@ process.env.ASK_SHARE_USAGE = false;
     // builtins
     '@test/unit/builtins/lambda-deployer/index-test.js',
     '@test/unit/builtins/lambda-deployer/helper-test.js',
+    '@test/unit/builtins/cfn-deployer/index-test.js',
+    '@test/unit/builtins/cfn-deployer/helper-test.js',
     // commands
     '@test/unit/commands/option-validator-test',
     '@test/unit/commands/abstract-command-test',
