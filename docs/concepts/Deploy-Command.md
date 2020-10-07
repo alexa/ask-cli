@@ -106,6 +106,10 @@ Supported parameters in `userConfig`:
 * handler: The entry point for the Lambda function in your code. Value of this field will be passed to *LambdaHandler* in the stack
 * templatePath: The stack file path that you wish to deploy with.
 * regionalOverrides: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
+* skillInfrastructure.artifactsS3.bucketName: You can be use to provide custom bucket name, otherwise ask cli will create a new bucket.
+* skillInfrastructure.artifactsS3.bucketKey: You can be use to provide custom bucket object key.
+* skillInfrastructure.cfn.parameters: You can be use to provide additional parameters to pass to the CloudFormation.
+* skillInfrastructure.cfn.capabilities: You can be use to provide additional capabilities to pass to the CloudFormation. CAPABILITY_IAM capability is always passed by default.
 
 ## Other Concepts
 
