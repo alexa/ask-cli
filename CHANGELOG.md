@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.16.3](https://github.com/alexa/ask-cli/compare/v2.16.2...v2.16.3) (2020-10-09)
+
+### [2.16.2](https://github.com/alexa/ask-cli/compare/v2.16.1...v2.16.2) (2020-10-07)
+
+
+### Bug Fixes
+
+* error in metric client when env profile is used and .ask holder exists ([fa9529a](https://github.com/alexa/ask-cli/commit/fa9529a1c93bb3908f7e20b98d52849117bd62e6))
+
 ### [2.16.1](https://github.com/alexa/ask-cli/compare/v2.16.0...v2.16.1) (2020-09-25)
 
 

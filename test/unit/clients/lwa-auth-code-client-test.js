@@ -312,11 +312,11 @@ describe('# Clients test - LWA OAuth2 client test', () => {
             expect(lwaClient.config.state).equal('state');
         });
 
-        it('| test default value setting in case of invalid config values', () => {
+        it('| test default value setting in case of undefined config values', () => {
             // setup
             const INVALID_CONFIG = {
-                clientId: ' ',
-                clientConfirmation: ' '
+                clientId: undefined,
+                clientConfirmation: undefined
             };
             process.env.ASK_LWA_CLIENT_ID = 'envClientId';
             process.env.ASK_LWA_CLIENT_CONFIRMATION = 'envClientConfirmation';
