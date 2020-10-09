@@ -110,7 +110,6 @@ process.env.ASK_SHARE_USAGE = false;
     '@test/unit/utils/zip-utils-test',
     '@test/unit/utils/hash-utils-test',
     '@test/unit/utils/retry-utility-test',
-    '@test/unit/utils/provider-chain-utils-test',
     '@test/unit/utils/local-host-server-test',
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
