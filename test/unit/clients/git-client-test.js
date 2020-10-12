@@ -62,11 +62,11 @@ describe('Clients test - cli git client', () => {
     });
 
     describe('# test configureCredentialHelper', () => {
-        const TEST_CREDENTIAL_HELPER_PATH = 'TEST_CREDENTIAL_HELPER_PATH';
+        const TEST_CREDENTIAL_SCRIPT_EXECUTION = 'TEST_CREDENTIAL_SCRIPT_EXECUTION';
         const TEST_GIT_HOST_URL = 'SOME_URL';
         const TEST_COMMAND = [
             `git config --local credential.${TEST_GIT_HOST_URL}.helper ""`,
-            `git config --local --add credential.${TEST_GIT_HOST_URL}.helper "!${TEST_CREDENTIAL_HELPER_PATH}"`,
+            `git config --local --add credential.${TEST_GIT_HOST_URL}.helper "!${TEST_CREDENTIAL_SCRIPT_EXECUTION}"`,
             `git config --local credential.${TEST_GIT_HOST_URL}.UseHttpPath true`];
 
         afterEach(() => {
@@ -78,7 +78,7 @@ describe('Clients test - cli git client', () => {
             const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
             sinon.stub(gitClient, '_execChildProcessSync');
             // call
-            gitClient.configureCredentialHelper(TEST_CREDENTIAL_HELPER_PATH, TEST_GIT_HOST_URL);
+            gitClient.configureCredentialHelper(TEST_CREDENTIAL_SCRIPT_EXECUTION, TEST_GIT_HOST_URL);
             // verify
             expect(gitClient._execChildProcessSync.callCount).eq(3);
             expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
@@ -91,38 +91,7 @@ describe('Clients test - cli git client', () => {
             const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
             sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
             // call & verify
-            expect(() => gitClient.configureCredentialHelper(TEST_CREDENTIAL_HELPER_PATH)).throw(CLiError, `CliError: ${TEST_ERROR}`);
-        });
-    });
-
-    describe('# test updateCredentialHelper', () => {
-        const TEST_CREDENTIAL_HELPER_PATH = 'TEST_CREDENTIAL_HELPER_PATH';
-        const TEST_COMMAND = [
-            `git config --local --replace-all credential.helper "!${TEST_CREDENTIAL_HELPER_PATH}"`,
-            'git config --local credential.UseHttpPath true'];
-
-        afterEach(() => {
-            sinon.restore();
-        });
-
-        it('| test git updateCredentialHelper execute commands correctly ', () => {
-            // setup
-            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS);
-            sinon.stub(gitClient, '_execChildProcessSync');
-            // call
-            gitClient.updateCredentialHelper(TEST_CREDENTIAL_HELPER_PATH);
-            // verify
-            expect(gitClient._execChildProcessSync.callCount).eq(2);
-            expect(gitClient._execChildProcessSync.args[0][0]).eq(TEST_COMMAND[0]);
-            expect(gitClient._execChildProcessSync.args[1][0]).eq(TEST_COMMAND[1]);
-        });
-
-        it('| test git updateCredentialHelper fails', () => {
-            // setup
-            const gitClient = new GitClient(TEST_PROJECT_PATH, TEST_VERBOSITY_OPTIONS_DEBUG);
-            sinon.stub(gitClient, '_execChildProcessSync').throws(new CLiError(`${TEST_ERROR}`));
-            // call & verify
-            expect(() => gitClient.updateCredentialHelper(TEST_CREDENTIAL_HELPER_PATH)).throw(CLiError, `CliError: ${TEST_ERROR}`);
+            expect(() => gitClient.configureCredentialHelper(TEST_CREDENTIAL_SCRIPT_EXECUTION, TEST_GIT_HOST_URL)).throw(CLiError, `CliError: ${TEST_ERROR}`);
         });
     });
 

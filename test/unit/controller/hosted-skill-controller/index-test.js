@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const fs = require('fs');
+const fs = require('fs-extra');
 const sinon = require('sinon');
 
 const httpClient = require('@src/clients/http-client');
@@ -180,11 +180,12 @@ describe('Controller test - hosted skill controller test', () => {
             const TEST_SKILL_PACKAGE_ERROR = 'TEST_SKILL_PACKAGE_ERROR';
             const TEST_STATUS_RESPONSE = {
                 statusCode: 200,
-                body: {}
+                body: {
+                    alexaHosted: { repository: { url: 'test' } }
+                }
             };
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_RESPONSE); // stub getAlexaHostedSkillMetadata smapi request
-            sinon.stub(HostedSkillController.prototype, 'getHostedSkillMetadata').yields(null, { repository: { url: 'test' } });
             sinon.stub(CloneFlow, 'generateProject');
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, TEST_SKILL_PACKAGE_ERROR);
@@ -247,7 +248,6 @@ describe('Controller test - hosted skill controller test', () => {
             });
         });
     });
-
 
     describe('# test class method: getHostedSkillPermission', () => {
         let hostedSkillController;
@@ -502,6 +502,117 @@ describe('Controller test - hosted skill controller test', () => {
             // call
             hostedSkillController.deleteSkill(TEST_SKILL_ID, (err) => {
                 expect(err).equal(undefined);
+                done();
+            });
+        });
+    });
+
+    describe('# test class method: downloadAskScripts', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        const TEST_FOLDER_NAME = 'folderName';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| check S3 Scripts fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.downloadAskScripts(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| download Script from S3 fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, TEST_ERROR);
+            // call
+            hostedSkillController.downloadAskScripts(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| download Script from S3 succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadScriptFromS3').callsArgWith(2, null);
+            // call
+            hostedSkillController.downloadAskScripts(TEST_FOLDER_NAME, (err) => {
+                expect(err).equal(null);
+                done();
+            });
+        });
+
+    });
+
+    describe('# test class method: updateAskSystemScripts', () => {
+        let hostedSkillController;
+        const TEST_ERROR = 'error';
+        const TEST_FOLDER_NAME = 'folderName';
+        beforeEach(() => {
+            hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| update Auth Info Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.updateAskSystemScripts((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| update Ask Pre Push Script fails, expect error thrown ', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.updateAskSystemScripts((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| update git credential helper Script fails, expect none error response', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadGitCredentialHelperScript').callsArgWith(0, TEST_ERROR);
+            // call
+            hostedSkillController.updateAskSystemScripts((err) => {
+                expect(err).equal(TEST_ERROR);
+                done();
+            });
+        });
+
+        it('| All Scripts checking succeeds, expect none error response', (done) => {
+            // setup
+            sinon.stub(fs, 'ensureDirSync');
+            sinon.stub(helper, 'downloadAuthInfoScript').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadAskPrePushScript').callsArgWith(0, null);
+            sinon.stub(helper, 'downloadGitCredentialHelperScript').callsArgWith(0, null);
+            // call
+            hostedSkillController.updateAskSystemScripts((err) => {
+                expect(err).equal(null);
                 done();
             });
         });
