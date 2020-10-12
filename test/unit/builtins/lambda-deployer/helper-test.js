@@ -43,13 +43,11 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
                 revisionId: TEST_LOCAL_REVISION_ID
             }
         };
-        const TEST_USER_CONFIG_WITH_BASEDON = {
+        const TEST_USER_CONFIG_WITH_SOURCELAMBDA = {
             regionalOverrides: {
                 [TEST_ALEXA_REGION_NON_DEFAULT]: {
-                    basedOn: {
-                        lambda: {
-                            arn: TEST_LAMBDA_ARN
-                        }
+                    sourceLambda: {
+                        arn: TEST_LAMBDA_ARN
                     }
                 }
             }
@@ -83,13 +81,13 @@ describe('Builtins test - lambda-deployer helper.js test', () => {
             userConfig: {}
         };
 
-        const TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON = {
+        const TEST_LOAD_LAMBDA_OPTION_WITH_SOURCELAMBDA = {
             awsProfile: TEST_AWS_PROFILE,
             awsRegion: TEST_AWS_REGION,
             alexaRegion: TEST_ALEXA_REGION_NON_DEFAULT,
             ignoreHash: true,
             deployState: TEST_LOCAL_DEPLOY_STATE,
-            userConfig: TEST_USER_CONFIG_WITH_BASEDON
+            userConfig: TEST_USER_CONFIG_WITH_SOURCELAMBDA
         };
 
         afterEach(() => {
@@ -194,20 +192,20 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             });
         });
 
-        it('| using Lambda arn from basedOn, getFunction return error, expect error called back', (done) => {
+        it('| using Lambda arn from sourceLambda, getFunction return error, expect error called back', (done) => {
             // setup
             const GET_FUNC_ERR = 'get func err';
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, GET_FUNC_ERR);
             // call
-            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON, (err, data) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_SOURCELAMBDA, (err, data) => {
                 // verify
-                expect(err).equal(`Failed to load the Lambda (${TEST_LAMBDA_ARN}) specified in "basedOn". ${GET_FUNC_ERR}`);
+                expect(err).equal(`Failed to load the Lambda (${TEST_LAMBDA_ARN}) specified in "sourceLambda". ${GET_FUNC_ERR}`);
                 expect(data).equal(undefined);
                 done();
             });
         });
 
-        it('| using Lambda arn from basedOn, getFunction request passes, expect lambda data returned', (done) => {
+        it('| using Lambda arn from sourceLambda, getFunction request passes, expect lambda data returned', (done) => {
             // setup
             const TEST_REMOTE_DEPLOY_STATE = {
                 Configuration: {
@@ -217,7 +215,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             };
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
             // call
-            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_BASEDON, (err, data) => {
+            helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_SOURCELAMBDA, (err, data) => {
                 // verify
                 expect(data.iamRole).equal(TEST_REMOTE_IAM_ROLE);
                 expect(data.lambda.revisionId).equal(TEST_REMOTE_REVISION_ID);
