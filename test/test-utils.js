@@ -21,6 +21,11 @@ const resetTempDirectory = () => {
     fs.emptyDirSync(tempDirectory);
 };
 
+const deleteFolderInTempDirectory = (folder) => {
+    const folderPath = path.join(tempDirectory, folder);
+    fs.removeSync(folderPath);
+};
+
 const getPathInTempDirectory = (folderPath) => path.join(tempDirectory, folderPath);
 
 const makeFolderInTempDirectory = (folderPath) => {
@@ -103,6 +108,7 @@ module.exports = {
     getPathInTempDirectory,
     makeFolderInTempDirectory,
     resetTempDirectory,
+    deleteFolderInTempDirectory,
     run,
     startMockSmapiServer,
     startMockLwaServer,

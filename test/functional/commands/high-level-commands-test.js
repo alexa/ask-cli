@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const parallel = require('mocha.parallel');
-const { run, KeySymbol, resetTempDirectory, getPathInTempDirectory, makeFolderInTempDirectory } = require('@test/test-utils');
+const { run, KeySymbol, resetTempDirectory, deleteFolderInTempDirectory,
+    getPathInTempDirectory, makeFolderInTempDirectory } = require('@test/test-utils');
 
 parallel('high level commands test', () => {
     let cmd;
@@ -15,6 +16,7 @@ parallel('high level commands test', () => {
 
     it('| should init new skill', async () => {
         const folderName = 'new-skill';
+        deleteFolderInTempDirectory(folderName);
         makeFolderInTempDirectory(`${folderName}/skill-package`);
         makeFolderInTempDirectory(`${folderName}/lambda`);
 
@@ -38,6 +40,8 @@ parallel('high level commands test', () => {
 
     it('| should set up, deploy, clone hosted skill', async () => {
         let folderName = 'hosted-skill';
+        deleteFolderInTempDirectory(folderName);
+
         // new
         let args = ['new'];
         let inputs = [
@@ -84,6 +88,7 @@ parallel('high level commands test', () => {
 
     it('| should set up and deploy skill with cloud formation deployer', async () => {
         const folderName = 'cf-deployer-skill';
+        deleteFolderInTempDirectory(folderName);
         // new
         let args = ['new'];
         const inputs = [
@@ -109,6 +114,7 @@ parallel('high level commands test', () => {
 
     it('| should set up and deploy skill with lambda deployer', async () => {
         const folderName = 'lambda-skill';
+        deleteFolderInTempDirectory(folderName);
         // new
         let args = ['new'];
         const inputs = [
