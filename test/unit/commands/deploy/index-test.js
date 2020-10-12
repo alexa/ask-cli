@@ -64,7 +64,7 @@ describe('Commands deploy test - command class test', () => {
             pathStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             pathStub.withArgs(TEST_SKILL_METADATA_SRC, CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST).returns(FIXTURE_MANIFEST_FILE);
             pathStub.callThrough();
-            // sinon.stub(helper, 'highlightProfile').returns(undefined);
+            // sinon.stub(helper, 'confirmProfile').returns(undefined);
             instance = new DeployCommand(optionModel);
         });
 
@@ -122,7 +122,7 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal('Skill package src is not found in ask-resources.json.');
-                    expect(errorStub.args[0][0].message).equal('Skill package src is not found in ask-resources.json.');
+                    expect(errorStub.args[0][0]).equal('Skill package src is not found in ask-resources.json.');
                     expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(0);
                     done();
@@ -136,7 +136,7 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal('The skillMetadata src file ./skillPackage does not exist.');
-                    expect(errorStub.args[0][0].message).equal('The skillMetadata src file ./skillPackage does not exist.');
+                    expect(errorStub.args[0][0]).equal('The skillMetadata src file ./skillPackage does not exist.');
                     expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(0);
                     done();

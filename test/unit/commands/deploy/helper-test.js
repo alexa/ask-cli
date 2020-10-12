@@ -17,7 +17,7 @@ describe('Commands deploy test - helper test', () => {
     const TEST_DO_DEBUG = false;
     const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH };
 
-    describe('# test helper method - highlightProfile', () => {
+    describe('# test helper method - confirmProfile', () => {
         afterEach(() => {
             sinon.restore();
         });
@@ -27,10 +27,10 @@ describe('Commands deploy test - helper test', () => {
             sinon.stub(ResourcesConfig.prototype, 'getProfile').returns(undefined);
             try {
                 // call
-                helper.highlightProfile(TEST_PROFILE);
+                helper.confirmProfile(TEST_PROFILE);
             } catch (err) {
                 // verify
-                expect(err).equal(
+                expect(err.message).equal(
                     `Profile [${TEST_PROFILE}] does not exist. Please configure it in your ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG} file.`
                 );
             }
@@ -45,7 +45,7 @@ describe('Commands deploy test - helper test', () => {
             sinon.stub(ResourcesConfig.prototype, 'getProfile').returns({ test: 'result' });
             try {
                 // call
-                helper.highlightProfile(TEST_PROFILE);
+                helper.confirmProfile(TEST_PROFILE);
             } catch (err) {
                 // verify
                 expect(err).equal(undefined);
