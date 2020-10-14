@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.17.0](https://github.com/alexa/ask-cli/compare/v2.16.4...v2.17.0) (2020-10-14)
+
+
+### Features
+
+* support sourceLambda field for lambda-deployer to use existing Lambda ([#308](https://github.com/alexa/ask-cli/issues/308)) ([db27a3d](https://github.com/alexa/ask-cli/commit/db27a3d85505d8e4e65504050344fa8cda52dbc2))
+
+
+### Bug Fixes
+
+* add profile checker in the deploy flow ([#295](https://github.com/alexa/ask-cli/issues/295)) ([ce3edc4](https://github.com/alexa/ask-cli/commit/ce3edc49364347027b8d0a877162801a7fc9967c))
+
 ### [2.16.4](https://github.com/alexa/ask-cli/compare/v2.16.3...v2.16.4) (2020-10-12)
 
 ### [2.16.3](https://github.com/alexa/ask-cli/compare/v2.16.2...v2.16.3) (2020-10-09)
