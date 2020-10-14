@@ -108,7 +108,7 @@ describe('Commands deploy test - command class test', () => {
                     // verify
                     expect(err).instanceOf(CliWarn);
                     expect(errorStub.callCount).equal(0);
-                    expect(infoStub.callCount).equal(0);
+                    expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(1);
                     done();
                 });
@@ -121,8 +121,8 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal('Skill package src is not found in ask-resources.json.');
-                    expect(errorStub.args[0][0].message).equal('Skill package src is not found in ask-resources.json.');
-                    expect(infoStub.callCount).equal(0);
+                    expect(errorStub.args[0][0]).equal('Skill package src is not found in ask-resources.json.');
+                    expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -135,8 +135,8 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err.message).equal('The skillMetadata src file ./skillPackage does not exist.');
-                    expect(errorStub.args[0][0].message).equal('The skillMetadata src file ./skillPackage does not exist.');
-                    expect(infoStub.callCount).equal(0);
+                    expect(errorStub.args[0][0]).equal('The skillMetadata src file ./skillPackage does not exist.');
+                    expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -153,7 +153,7 @@ describe('Commands deploy test - command class test', () => {
                     // verify
                     expect(err.message).equal('File invalidPath not exists.');
                     expect(errorStub.callCount).equal(0);
-                    expect(infoStub.callCount).equal(0);
+                    expect(infoStub.callCount).equal(2);
                     expect(warnStub.callCount).equal(1);
                     done();
                 });
@@ -173,7 +173,9 @@ describe('Commands deploy test - command class test', () => {
                     // verify
                     expect(err).equal('error');
                     expect(errorStub.args[0][0]).equal('error');
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[0][0]).equal('Deploy configuration loaded from ask-resources.json');
+                    expect(infoStub.args[1][0]).equal(`Deploy project for profile [${TEST_PROFILE}]\n`);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -190,8 +192,8 @@ describe('Commands deploy test - command class test', () => {
                     // verify
                     expect(err).equal('error');
                     expect(errorStub.args[0][0]).equal('error');
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0].startsWith('Skill ID:')).equal(true);
                     expect(warnStub.callCount).equal(1);
                     done();
                 });
@@ -208,8 +210,8 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err).equal(undefined);
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0].startsWith('Skill ID:')).equal(true);
                     expect(errorStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(1);
                     done();
@@ -226,10 +228,10 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(cmd, (err) => {
                     // verify
                     expect(err).equal(undefined);
-                    expect(infoStub.callCount).equal(3);
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
-                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.callCount).equal(5);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[4][0].startsWith('Skill ID:')).equal(true);
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -263,10 +265,10 @@ describe('Commands deploy test - command class test', () => {
                     // verify
                     expect(err).equal('error');
                     expect(errorStub.args[0][0]).equal('error');
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
-                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
-                    expect(infoStub.args[3][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[4][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[5][0]).equal('\n==================== Build Skill Code ====================');
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -306,13 +308,13 @@ describe('Commands deploy test - command class test', () => {
                 instance.handle(TEST_CMD, (err) => {
                     // verify
                     expect(err).equal(undefined);
-                    expect(infoStub.callCount).equal(6);
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
-                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
-                    expect(infoStub.args[3][0]).equal('\n==================== Build Skill Code ====================');
-                    expect(infoStub.args[4][0]).equal('Skill code built successfully.');
-                    expect(infoStub.args[5][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
+                    expect(infoStub.callCount).equal(8);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[4][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[5][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[6][0]).equal('Skill code built successfully.');
+                    expect(infoStub.args[7][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
 with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     expect(warnStub.callCount).equal(0);
                     done();
@@ -337,13 +339,13 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     // verify
                     expect(err).equal(undefined);
                     expect(errorStub.callCount).equal(0);
-                    expect(infoStub.callCount).equal(5);
-                    expect(infoStub.args[0][0]).equal('\n==================== Build Skill Code ====================');
-                    expect(infoStub.args[1][0]).equal('Skill code built successfully.');
-                    expect(infoStub.args[2][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
+                    expect(infoStub.callCount).equal(7);
+                    expect(infoStub.args[2][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[3][0]).equal('Skill code built successfully.');
+                    expect(infoStub.args[4][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
 with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
-                    expect(infoStub.args[3][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
-                    expect(infoStub.args[4][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
+                    expect(infoStub.args[5][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
+                    expect(infoStub.args[6][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
                     expect(warnStub.callCount).equal(0);
                     expect(helper.enableSkill.calledOnce).equal(false);
                     done();
@@ -379,14 +381,14 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     // verify
                     expect(err).equal('error');
                     expect(errorStub.args[0][0]).equal('error');
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
-                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
-                    expect(infoStub.args[3][0]).equal('\n==================== Build Skill Code ====================');
-                    expect(infoStub.args[4][0]).equal('Skill code built successfully.');
-                    expect(infoStub.args[5][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[4][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[5][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[6][0]).equal('Skill code built successfully.');
+                    expect(infoStub.args[7][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
 with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
-                    expect(infoStub.args[6][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
+                    expect(infoStub.args[8][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
                     expect(warnStub.callCount).equal(0);
                     done();
                 });
@@ -408,16 +410,16 @@ with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
                     // verify
                     expect(err).equal(undefined);
                     expect(errorStub.callCount).equal(0);
-                    expect(infoStub.callCount).equal(8);
-                    expect(infoStub.args[0][0]).equal('==================== Deploy Skill Metadata ====================');
-                    expect(infoStub.args[1][0]).equal('Skill package deployed successfully.');
-                    expect(infoStub.args[2][0].startsWith('Skill ID:')).equal(true);
-                    expect(infoStub.args[3][0]).equal('\n==================== Build Skill Code ====================');
-                    expect(infoStub.args[4][0]).equal('Skill code built successfully.');
-                    expect(infoStub.args[5][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
+                    expect(infoStub.callCount).equal(10);
+                    expect(infoStub.args[2][0]).equal('==================== Deploy Skill Metadata ====================');
+                    expect(infoStub.args[3][0]).equal('Skill package deployed successfully.');
+                    expect(infoStub.args[4][0].startsWith('Skill ID:')).equal(true);
+                    expect(infoStub.args[5][0]).equal('\n==================== Build Skill Code ====================');
+                    expect(infoStub.args[6][0]).equal('Skill code built successfully.');
+                    expect(infoStub.args[7][0]).equal(`Code for region default+NA built to ${TEST_CODE_BUILD_RESULT[0].build.file} successfully \
 with build flow ${TEST_CODE_BUILD_RESULT[0].buildFlow}.`);
-                    expect(infoStub.args[6][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
-                    expect(infoStub.args[7][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
+                    expect(infoStub.args[8][0]).equal('\n==================== Deploy Skill Infrastructure ====================');
+                    expect(infoStub.args[9][0]).equal('Skill infrastructures deployed successfully through @ask-cli/cfn-deployer.');
                     expect(warnStub.callCount).equal(0);
                     expect(helper.enableSkill.calledOnce).equal(true);
                     done();

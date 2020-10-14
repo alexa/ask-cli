@@ -1,12 +1,15 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const Messenger = require('@src/view/messenger');
 
 const helper = require('@src/commands/deploy/helper');
 const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
 const SkillCodeController = require('@src/controllers/skill-code-controller');
 const SkillInfrastructureController = require('@src/controllers/skill-infrastructure-controller');
+const CliError = require('@src/exceptions/cli-error');
+const ResourcesConfig = require('@src/model/resources-config');
+const CONSTANTS = require('@src/utils/constants');
 const profileHelper = require('@src/utils/profile-helper');
+const Messenger = require('@src/view/messenger');
 
 describe('Commands deploy test - helper test', () => {
     const TEST_PROFILE = 'default';
@@ -14,6 +17,32 @@ describe('Commands deploy test - helper test', () => {
     const TEST_VENDOR_ID = 'vendor';
     const TEST_DO_DEBUG = false;
     const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH };
+
+    describe('# test helper method - confirmProfile', () => {
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| profile does not exist, expect throw error', () => {
+            // setup
+            sinon.stub(ResourcesConfig.prototype, 'getProfile').returns(undefined);
+            // call & verify
+            expect(() => helper.confirmProfile(TEST_PROFILE)).throw(CliError,
+                `Profile [${TEST_PROFILE}] does not exist. Please configure it in your ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG} file.`);
+        });
+
+        it('| profile does exist, expect messenger info', () => {
+            // setup
+            const infoStub = sinon.stub();
+            sinon.stub(Messenger, 'getInstance').returns({
+                info: infoStub
+            });
+            sinon.stub(ResourcesConfig.prototype, 'getProfile').returns({ test: 'result' });
+            // call & verify
+            expect(() => helper.confirmProfile(TEST_PROFILE)).to.not.throw();
+            expect(infoStub.args[0][0]).equal(`Deploy project for profile [${TEST_PROFILE}]\n`);
+        });
+    });
 
     describe('# test helper method - deploySkillMetadata', () => {
         afterEach(() => {

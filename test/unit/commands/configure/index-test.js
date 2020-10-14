@@ -27,7 +27,6 @@ describe('Commands Configure test - command class test', () => {
     let infoStub;
     let errorStub;
     let warnStub;
-    let getProfileListStub;
 
     beforeEach(() => {
         infoStub = sinon.stub();
