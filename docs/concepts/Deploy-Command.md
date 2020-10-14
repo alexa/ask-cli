@@ -65,7 +65,7 @@ Deployer is the module that serve for any unique serverless deploy mechanism. De
 
 ---
 
-Below are the built-in deployers that CLI provides to help developers deploy their customized logic to the AWS services:
+Below are the built-in deployers that CLI provides to help developers deploy their backend using the AWS services:
 
 #### @ask-cli/lambda-deployer
 This deployer is managing Lambda services by using the default settings to create/retrieve the IAM Role for the skill application, create/update the Lambda function with minimum required permissions and event trigger. Below shows the details of what this deployer does:
@@ -78,6 +78,13 @@ This deployer is managing Lambda services by using the default settings to creat
   3. Deploy Lambda function.
      * If Lambda ARN is not present, the deployer will create the Lambda function by adding the event trigger.
      * If Lambda ARN is present, the deloyer will update the Lambda function's code and configuration.
+
+Supported parameters in `userConfig`:
+* awsRegion
+* runtime: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details.
+* handler: The entry point for the Lambda function in your code.
+* sourceLambda: You can set the `userConfig.sourceLambda.arn` to specify an existing Lambda ARN to reuse. This will be the target Lambda function when you deploy.
+* regionalOverrides: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
 
 #### @ask-cli/cfn-deployer
 This deployer is implementing the idea of **Code as Infra** by using AWS CloudFormation. By using the CloudFormation template as the recipe, skill applications with similar infrastructure settings can simply share or extend existing template files. CloudFormation service also manages auto-rollback when a failure happens. Below shows the details of what this deployer does:
@@ -92,6 +99,13 @@ This deployer is implementing the idea of **Code as Infra** by using AWS CloudFo
      * If the `lastDeployHash` doesn't change for the source skillCode, the deployer will not upload the code to S3, and thus no new version will be created.
   3. Based on the presense of stackId, the deployer will create/update AWS CloudFormation stack for each region. The creation of a stack usually takes some time as new infrastructures are being provisioned; while the update of a stack resource is much faster as the update is executed based on the changeset. Please read more about the [CloudFormation update](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html).
   4. Polling stack status and real-time display the latest event message. Provide detailed resource-level reason message if any deployment of resource fails.
+
+Supported parameters in `userConfig`:
+* awsRegion
+* runtime: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details. Value of this field will be passed to *LambdaRuntime* in the stack.
+* handler: The entry point for the Lambda function in your code. Value of this field will be passed to *LambdaHandler* in the stack
+* templatePath: The stack file path that you wish to deploy with.
+* regionalOverrides: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
 
 ## Other Concepts
 

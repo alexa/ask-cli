@@ -55,7 +55,8 @@ describe('Builtins test - lambda-deployer index.js test', () => {
             deployState: {}
         };
         const TEST_VALIDATED_DEPLOY_STATE = {
-            updatedDeployState: {}
+            lambda: {},
+            iamRole: {}
         };
 
         afterEach(() => {
@@ -101,9 +102,9 @@ Please run "ask configure" to re-configure your porfile.`;
 
         it('| alexaRegion is set correctly, validate Lambda deploy state fails, expect an error return', (done) => {
             // setup
-            const TEST_ERROR = 'validateLambdaDeployState error message';
+            const TEST_ERROR = 'loadLambdaInformation error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, TEST_ERROR);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err) => {
                 // verify
@@ -116,8 +117,8 @@ Please run "ask configure" to re-configure your porfile.`;
             // setup
             const TEST_ERROR = 'IAMRole error message';
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, TEST_ERROR);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err) => {
                 // verify
@@ -131,8 +132,8 @@ Please run "ask configure" to re-configure your porfile.`;
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err, data) => {
@@ -148,8 +149,8 @@ Please run "ask configure" to re-configure your porfile.`;
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, TEST_ERROR);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err, data) => {
@@ -178,8 +179,8 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
                 lambdaResponse: LAMDBA_RESPONSE
             };
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, TEST_LAMBDA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS, (err, res) => {
@@ -213,15 +214,15 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
                 lambdaResponse: {}
             };
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, TEST_LAMBDA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
                 // verify
                 expect(err).equal(null);
-                expect(helper.validateLambdaDeployState.args[0][2]).equal(USER_CONFIG_AWS_REGION);
-                expect(helper.deployIAMRole.args[0][4]).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.loadLambdaInformation.args[0][1].awsRegion).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][1].awsRegion).equal(USER_CONFIG_AWS_REGION);
                 done();
             });
         });
@@ -240,15 +241,15 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
                 // verify
                 expect(err).equal(null);
-                expect(helper.validateLambdaDeployState.args[0][2]).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
-                expect(helper.deployIAMRole.args[0][4]).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
+                expect(helper.loadLambdaInformation.args[0][1].awsRegion).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][1].awsRegion).equal(MAPPING_ALEXA_DEFAULT_AWS_REGION);
                 done();
             });
         });
@@ -274,15 +275,15 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_EU_REGION, (err) => {
                 // verify
                 expect(err).equal(null);
-                expect(helper.validateLambdaDeployState.args[0][2]).equal(USER_CONFIG_AWS_REGION);
-                expect(helper.deployIAMRole.args[0][4]).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.loadLambdaInformation.args[0][1].awsRegion).equal(USER_CONFIG_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][1].awsRegion).equal(USER_CONFIG_AWS_REGION);
                 done();
             });
         });
@@ -303,15 +304,15 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
             };
             const LAMDBA_RESULT = {};
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            sinon.stub(helper, 'validateLambdaDeployState').callsArgWith(5, null, TEST_VALIDATED_DEPLOY_STATE);
-            sinon.stub(helper, 'deployIAMRole').callsArgWith(6, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
             sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, LAMDBA_RESULT);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_AWS_REGION, (err) => {
                 // verify
                 expect(err).equal(null);
-                expect(helper.validateLambdaDeployState.args[0][2]).equal(MAPPING_ALEXA_EU_AWS_REGION);
-                expect(helper.deployIAMRole.args[0][4]).equal(MAPPING_ALEXA_EU_AWS_REGION);
+                expect(helper.loadLambdaInformation.args[0][1].awsRegion).equal(MAPPING_ALEXA_EU_AWS_REGION);
+                expect(helper.deployIAMRole.args[0][1].awsRegion).equal(MAPPING_ALEXA_EU_AWS_REGION);
                 done();
             });
         });
