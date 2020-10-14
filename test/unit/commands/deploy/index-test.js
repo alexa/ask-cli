@@ -64,7 +64,6 @@ describe('Commands deploy test - command class test', () => {
             pathStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             pathStub.withArgs(TEST_SKILL_METADATA_SRC, CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST).returns(FIXTURE_MANIFEST_FILE);
             pathStub.callThrough();
-            // sinon.stub(helper, 'confirmProfile').returns(undefined);
             instance = new DeployCommand(optionModel);
         });
 
