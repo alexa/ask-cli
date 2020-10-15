@@ -159,7 +159,7 @@ describe('Smapi test - smapiCommandHandler function', () => {
                 skillId,
                 someNonPopulatedProperty: null,
                 someArray: null,
-                simulationsApiRequest: null })}\n`]);
+                simulationsApiRequest: {} })}\n`]);
         expect(messengerStub.args[3]).eql(['INFO', 'Response:']);
         expect(messengerStub.args[4]).eql(['INFO', jsonView.toString(fakeResponse)]);
     });
