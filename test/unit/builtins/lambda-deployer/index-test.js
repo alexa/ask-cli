@@ -69,7 +69,7 @@ describe('Builtins test - lambda-deployer index.js test', () => {
                 profile: null,
             };
             const TEST_ERROR = `Profile [${NULL_PROFILE}] doesn't have AWS profile linked to it. \
-Please run "ask configure" to re-configure your porfile.`;
+Please run "ask configure" to re-configure your profile.`;
             sinon.stub(awsUtil, 'getAWSProfile').withArgs(NULL_PROFILE).returns(NULL_PROFILE);
             // call
             lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITHOUT_PROFILE, (err) => {
