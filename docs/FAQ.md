@@ -27,3 +27,9 @@ Related issues: https://github.com/alexa/ask-cli/issues/38, https://github.com/a
 ### Q: How to deploy only skill package and ignore skillInfrastructure?
 
 ASK CLI v1 had option '--target' to deploy only skill package and not the infrastructure. Similar behavior can be achieved in ASK CLI v2 by removing "skillInfrastructure" property from ask-resources.json. 
+
+
+---
+
+### Q: For users of ask-cli-x, if you encounter issue when using the CLI:
+We have upgraded to v2 ask-cli. If you are still using ask-cli-x, we suggest you installing/updating the ask-cli. Please check the detailed solution in https://github.com/alexa/ask-cli/issues/74.
