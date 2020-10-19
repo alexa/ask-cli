@@ -7,7 +7,7 @@
   },
   "debug": {
     "name": "debug",
-    "description": "Enables the ASK CLI  to show debug messages in the output of the command.",
+    "description": "Enables the ASK CLI to show debug messages in the output of the command.",
     "alias": null,
     "stringInput": "NONE"
   },
@@ -163,5 +163,32 @@
     "name": "keywords",
     "description": "Keywords can be description of tasks, task name or tags in task definition.\n[MULTIPLE]: Values can be separated by comma.",
     "stringInput": "OPTIONAL"
+  },
+  "debug-port": {
+    "name": "debug-port",
+    "description": "Port at which the debug process will run.",
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "INTEGER"
+    }]
+  },
+  "wait-for-attach": {
+    "name": "wait-for-attach",
+    "description": "Waits for debugging inspector to attach. The default port for the process is 5000.",
+    "stringInput": "NONE"
+  },
+  "region": {
+    "name": "region",
+    "description": "Sets the run region for the session. Accepted values are - [EU, FE, NA]. Defaults to NA. To know more about which region is right for you refer - https://developer.amazon.com/en-US/docs/alexa/ask-toolkit/vs-code-testing-simulator.html#prepare",
+    "stringInput": "REQUIRED",
+    "rule": [{
+      "type": "ENUM",
+      "values": ["NA", "FE", "EU"]
+    }]
+  },
+  "watch": {
+    "name": "watch",
+    "description": "Uses nodemon to monitor changes and automatically restart the run session.",
+    "stringInput": "NONE"
   }
 }

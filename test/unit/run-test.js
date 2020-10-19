@@ -124,6 +124,12 @@ process.env.ASK_SHARE_USAGE = false;
     '@test/unit/utils/hash-utils-test',
     '@test/unit/utils/retry-utility-test',
     '@test/unit/utils/local-host-server-test',
+    // command - run
+    '@test/unit/commands/run/index-test',
+    '@test/unit/commands/run/helper-test',
+    '@test/unit/commands/run/run-flow/java-run-test',
+    '@test/unit/commands/run/run-flow/nodejs-run-test',
+    '@test/unit/commands/run/run-flow/python-run-test'
 ].forEach((testFile) => {
     // eslint-disable-next-line global-require
     require(testFile);
