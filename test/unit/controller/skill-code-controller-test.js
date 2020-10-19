@@ -61,7 +61,7 @@ describe('Controller test - skill code controller test', () => {
         it('| skillCodeController resolve unique code settings passes but code builder execute fails, expect error throws', (done) => {
             // setup
             sinon.stub(SkillCodeController.prototype, '_resolveUniqueCodeList').returns(TEST_CODE_LIST);
-            sinon.stub(CodeBuilder.prototype, '_decidePackageBuilder');
+            sinon.stub(CodeBuilder.prototype, '_selectBuildFlowClass');
             sinon.stub(CodeBuilder.prototype, 'execute').callsArgWith(0, 'error');
             // call
             skillCodeController.buildCode((err) => {
@@ -74,7 +74,7 @@ describe('Controller test - skill code controller test', () => {
         it('| skillCodeController resolve unique code settings and code builder execute pass, expect no error called back', (done) => {
             // setup
             sinon.stub(SkillCodeController.prototype, '_resolveUniqueCodeList').returns(TEST_CODE_LIST);
-            sinon.stub(CodeBuilder.prototype, '_decidePackageBuilder');
+            sinon.stub(CodeBuilder.prototype, '_selectBuildFlowClass');
             sinon.stub(CodeBuilder.prototype, 'execute').callsArgWith(0);
             // call
             skillCodeController.buildCode((err) => {

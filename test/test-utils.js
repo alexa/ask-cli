@@ -29,7 +29,9 @@ const deleteFolderInTempDirectory = (folder) => {
 const getPathInTempDirectory = (folderPath) => path.join(tempDirectory, folderPath);
 
 const makeFolderInTempDirectory = (folderPath) => {
-    fs.ensureDirSync(getPathInTempDirectory(folderPath));
+    const fullPath = getPathInTempDirectory(folderPath);
+    fs.ensureDirSync(fullPath);
+    return fullPath;
 };
 
 const run = (cmd, args, options = {}) => {

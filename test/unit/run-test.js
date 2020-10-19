@@ -14,6 +14,12 @@ process.env.ASK_SHARE_USAGE = false;
     '@test/unit/builtins/lambda-deployer/helper-test.js',
     '@test/unit/builtins/cfn-deployer/index-test.js',
     '@test/unit/builtins/cfn-deployer/helper-test.js',
+    '@test/unit/builtins/build-flows/abstract-build-flow-test.js',
+    '@test/unit/builtins/build-flows/custom-test.js',
+    '@test/unit/builtins/build-flows/java-mvn-test.js',
+    '@test/unit/builtins/build-flows/nodejs-npm-test.js',
+    '@test/unit/builtins/build-flows/python-pip-test.js',
+    '@test/unit/builtins/build-flows/zip-only-test.js',
     // commands
     '@test/unit/commands/option-validator-test',
     '@test/unit/commands/abstract-command-test',
