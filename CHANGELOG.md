@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.18.0](https://github.com/alexa/ask-cli/compare/v2.17.0...v2.18.0) (2020-10-19)
+
+
+### Features
+
+* rewrite of cf deployer ([77e8fba](https://github.com/alexa/ask-cli/commit/77e8fba940c406e2ab74f84d6dbbd49afd1a03f9))
+
+
+### Bug Fixes
+
+* append custom user agent string to smapi client ([#323](https://github.com/alexa/ask-cli/issues/323)) ([e7d9730](https://github.com/alexa/ask-cli/commit/e7d9730ea6cf6b0a9d78f06f45a6d0e4ed985395))
+* issue when generate-lwa-tokens fails when scopes not specified with custom client id and secret ([#322](https://github.com/alexa/ask-cli/issues/322)) ([dfd1c23](https://github.com/alexa/ask-cli/commit/dfd1c230aaa4cab115ba98d6fc32a41965907eb2))
+* smapi - pass {} by default when non of the in body params specified ([97fe277](https://github.com/alexa/ask-cli/commit/97fe27725930d888737745d65037b560e066bb4c))
+
 ## [2.17.0](https://github.com/alexa/ask-cli/compare/v2.16.4...v2.17.0) (2020-10-14)
 
 
