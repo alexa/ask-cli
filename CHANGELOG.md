@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.18.1](https://github.com/alexa/ask-cli/compare/v2.18.0...v2.18.1) (2020-10-20)
+
+
+### Bug Fixes
+
+* shorten profile name lambda function name generation ([#324](https://github.com/alexa/ask-cli/issues/324)) ([8af023c](https://github.com/alexa/ask-cli/commit/8af023cc122c3a2fb0e5146afe6749d2b1e977a8))
+
 ## [2.18.0](https://github.com/alexa/ask-cli/compare/v2.17.0...v2.18.0) (2020-10-19)
 
 
