@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.19.0](https://github.com/alexa/ask-cli/compare/v2.18.2...v2.19.0) (2020-10-27)
+
+
+### Features
+
+* build flows rewrite to be independent of powershell and bash ([#245](https://github.com/alexa/ask-cli/issues/245)) ([6b27ef8](https://github.com/alexa/ask-cli/commit/6b27ef8818946479c0e2597d8d913c07d30bd269))
+
 ### [2.18.2](https://github.com/alexa/ask-cli/compare/v2.18.1...v2.18.2) (2020-10-27)
 
 
