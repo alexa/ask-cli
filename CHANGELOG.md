@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.18.2](https://github.com/alexa/ask-cli/compare/v2.18.1...v2.18.2) (2020-10-27)
+
+
+### Bug Fixes
+
+* name for variable to configure custom s3 scripts base url ([#326](https://github.com/alexa/ask-cli/issues/326)) ([7c8855d](https://github.com/alexa/ask-cli/commit/7c8855d30825d70f70a8c95851a53d3c78786229))
+
 ### [2.18.1](https://github.com/alexa/ask-cli/compare/v2.18.0...v2.18.1) (2020-10-20)
 
 
