@@ -32,6 +32,7 @@
     "functional-test": "mocha -t 600000 --retries 2 test/functional/run-test.js",
     "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
+    "prepublishOnly": "babel lib -d lib; babel bin -d bin",
     "pre-release": "standard-version",
     "prism": "prism",
     "postinstall": "node postinstall.js"
@@ -71,9 +72,12 @@
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
     "@stoplight/prism-cli": "^3.3.3",
+    "babel-plugin-module-resolver": "^4.0.0",
     "chai": "^3.5.0",
     "chai-json-schema": "^1.5.1",
     "chai-uuid": "^1.0.6",
