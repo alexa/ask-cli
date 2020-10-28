@@ -136,15 +136,15 @@ This deployer is implementing the idea of **Code as Infra** by using AWS CloudFo
   4. Polling stack status and real-time display the latest event message. Provide detailed resource-level reason message if any deployment of resource fails.
 
 Supported parameters in `userConfig`:
-* awsRegion
-* runtime: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details. Value of this field will be passed to *LambdaRuntime* in the stack.
-* handler: The entry point for the Lambda function in your code. Value of this field will be passed to *LambdaHandler* in the stack
-* templatePath: The stack file path that you wish to deploy with.
-* regionalOverrides: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
-* skillInfrastructure.artifactsS3.bucketName: You can be use to provide custom bucket name, otherwise ask cli will create a new bucket.
-* skillInfrastructure.artifactsS3.bucketKey: You can be use to provide custom bucket object key.
-* skillInfrastructure.cfn.parameters: You can be use to provide additional parameters to pass to the CloudFormation.
-* skillInfrastructure.cfn.capabilities: You can be use to provide additional capabilities to pass to the CloudFormation. CAPABILITY_IAM capability is always passed by default.
+* `awsRegion`
+* `runtime`: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details. Value of this field will be passed to *LambdaRuntime* in the stack.
+* `handler`: The entry point for the Lambda function in your code. Value of this field will be passed to *LambdaHandler* in the stack
+* `templatePath`: The stack file path that you wish to deploy with.
+* `regionalOverrides`: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
+* `bucketName`: You can set `skillInfrastructure.artifactsS3.bucketName` to use a custom bucket name, otherwise ask cli will create a new bucket.
+* `bucketKey`: You can set `skillInfrastructure.artifactsS3.bucketKey` to use a custom bucket object key.
+* `cfn.parameters`: Use `skillInfrastructure.cfn.parameters` to pass additional parameters to CloudFormation.
+* `cfn.capabilities`: Use `skillInfrastructure.cfn.capabilities` to pass additional capabilities to CloudFormation. CAPABILITY_IAM capability is always passed by default.
 
 ## Other Concepts
 
