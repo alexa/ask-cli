@@ -1207,6 +1207,48 @@ parallel('smapi command test', () => {
         expect(result).include('Command executed successfully!');
     });
 
+    it('| should get resource schema', async () => {
+        const args = [subCmd, 'get-resource-schema', '--resource', 'manifest'];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should list smarthome capability test plans', async () => {
+        const args = [subCmd, 'list-smarthome-capability-test-plans', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get smarthome capablity evaluation results', async () => {
+        const args = [subCmd, 'get-smarthome-capablity-evaluation-results', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get smart home capability evaluation', async () => {
+        const args = [subCmd, 'get-smart-home-capability-evaluation', '-s', skillId, '--evaluation-id', evaluationId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should list smarthome capability evaluations', async () => {
+        const args = [subCmd, 'list-smarthome-capability-evaluations', '-s', skillId];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create smarthome capability evaluation', async () => {
+        const args = [subCmd, 'create-smarthome-capability-evaluation', '-s', skillId, '--capability-test-plan-id', 1, '--endpoint-endpoint-id', 2];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
