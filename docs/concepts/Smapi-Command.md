@@ -140,6 +140,7 @@ status of skill publishing. | [get-skill-publications](#get-skill-publications) 
 | Returns the status of a clone locale workflow associated with the unique identifier of cloneLocaleRequestId. | [get-clone-locale-status](#get-clone-locale-status) |
 | Get the list of Vendor information. | [get-vendor-list](#get-vendor-list) |
 | The SMAPI Audit Logs API provides customers with an audit history of all SMAPI calls made by a developer or developers with permissions on that account. | [query-development-audit-logs](#query-development-audit-logs) |
+| GetResourceSchema API provides schema for skill related resources. The schema returned by this API will be specific to vendor because it considers public beta features allowed for the vendor. | [get-resource-schema](#get-resource-schema) |
 | API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results. | [list-nlu-evaluations](#list-nlu-evaluations) |
 | This is an asynchronous API that starts an evaluation against the NLU model built by the skill's interaction model.
 The operation outputs an evaluationId which allows the retrieval of the current status of the operation and the results upon completion. This operation is unified, meaning both internal and external skill developers may use it evaluate NLU models. | [create-nlu-evaluations](#create-nlu-evaluations) |
@@ -164,6 +165,11 @@ The operation outputs an evaluationId which allows the retrieval of the current 
 | API which requests high level information about the evaluation like the current state of the job, status of the evaluation (if complete). Also returns the request used to start the job, like the number of total evaluations, number of completed evaluations, and start time. This should be considered the "cheap" operation while GetAsrEvaluationsResults is "expensive". | [get-asr-evaluation-status](#get-asr-evaluation-status) |
 | API which enables the deletion of an evaluation. | [delete-asr-evaluation](#delete-asr-evaluation) |
 | Paginated API which returns the test case results of an evaluation. This should be considered the "expensive" operation while GetAsrEvaluationsStatus is "cheap". | [list-asr-evaluations-results](#list-asr-evaluations-results) |
+| List all the test plan names and ids for a given skill ID. | [list-smarthome-capability-test-plans](#list-smarthome-capability-test-plans) |
+| Get test case results for an evaluation run. | [get-smarthome-capablity-evaluation-results](#get-smarthome-capablity-evaluation-results) |
+| Get top level information and status of a Smart Home capability evaluation. | [get-smart-home-capability-evaluation](#get-smart-home-capability-evaluation) |
+| List Smart Home capability evaluation runs for a skill. | [list-smarthome-capability-evaluations](#list-smarthome-capability-evaluations) |
+| Start a capability evaluation against a Smart Home skill. | [create-smarthome-capability-evaluation](#create-smarthome-capability-evaluation) |
 | This is a synchronous API that invokes the Lambda or third party HTTPS endpoint for a given skill. A successful response will contain information related to what endpoint was called, payload sent to and received from the endpoint. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where invoking the skill endpoint specifically fails, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the endpoint. The skill must belong to and be enabled by the user of this API. Also,  note that calls to the skill endpoint will timeout after 10 seconds. This  API is currently designed in a way that allows extension to an asynchronous  API if a significantly bigger timeout is required. | [invoke-skill-end-point](#invoke-skill-end-point) |
 | upload a file for the catalog. | [upload-catalog](#upload-catalog) |
 | download the skill package to "skill-package" folder in current directory. | [export-package](#export-package) |
@@ -1515,8 +1521,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>--sort-field <sort-field></dt>
     <dd markdown="span">[OPTIONAL] Sets the field on which the sorting would be applied.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[OPTIONAL] A filter used to retrieve items where the stage is equal to the given value. 
-[MULTIPLE]: Values can be separated by comma.
+    <dd markdown="span">[OPTIONAL] The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation. 
 [ENUM]: development,live.</dd>
     <dt>-l,--locale <locale></dt>
     <dd markdown="span">[OPTIONAL] A filter used to retrieve items where the locale is equal to the given value. 
@@ -3424,6 +3429,31 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
 </dl>
 
+### get-resource-schema
+
+GetResourceSchema API provides schema for skill related resources. The schema returned by this API will be specific to vendor because it considers public beta features allowed for the vendor.
+
+`get-resource-schema` command format:
+
+`$ ask smapi get-resource-schema <--resource <resource>> [--operation <operation>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>--resource <resource></dt>
+    <dd markdown="span">[REQUIRED] Name of the ASK resource for which schema is requested. 
+[ENUM]: manifest,skillPackageStructure.</dd>
+    <dt>--operation <operation></dt>
+    <dd markdown="span">[OPTIONAL] This parameter is required when resource is manifest because skill manifest schema differs based on operation. For example, submit for certification schema has more validations than create skill schema. 
+[ENUM]: CREATE_SKILL,UPDATE_SKILL,SUBMIT_SKILL,ENABLE_SKILL.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
 ### list-nlu-evaluations
 
 API which requests recently run nlu evaluations started by a vendor for a skill. Returns the evaluation id and some of the parameters used to start the evaluation. Developers can filter the results using locale and stage. Supports paging of results.
@@ -4035,6 +4065,141 @@ Paginated API which returns the test case results of an evaluation. This should 
 * `PASSED` - filter evaluation result status of `PASSED`
   * `FAILED` - filter evaluation result status of `FAILED` 
 [ENUM]: PASSED,FAILED.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-smarthome-capability-test-plans
+
+List all the test plan names and ids for a given skill ID.
+
+`list-smarthome-capability-test-plans` command format:
+
+`$ ask smapi list-smarthome-capability-test-plans <-s|--skill-id <skill-id>> [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-smarthome-capablity-evaluation-results
+
+Get test case results for an evaluation run.
+
+`get-smarthome-capablity-evaluation-results` command format:
+
+`$ ask smapi get-smarthome-capablity-evaluation-results <-s|--skill-id <skill-id>> [--max-results <max-results>] [--next-token <next-token>] <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] A unique ID to identify each Smart Home capability evaluation.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-smart-home-capability-evaluation
+
+Get top level information and status of a Smart Home capability evaluation.
+
+`get-smart-home-capability-evaluation` command format:
+
+`$ ask smapi get-smart-home-capability-evaluation <-s|--skill-id <skill-id>> <--evaluation-id <evaluation-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--evaluation-id <evaluation-id></dt>
+    <dd markdown="span">[REQUIRED] A unique ID to identify each Smart Home capability evaluation.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-smarthome-capability-evaluations
+
+List Smart Home capability evaluation runs for a skill.
+
+`list-smarthome-capability-evaluations` command format:
+
+`$ ask smapi list-smarthome-capability-evaluations <-s|--skill-id <skill-id>> [-g|--stage <stage>] [--start-timestamp-from <start-timestamp-from>] [--start-timestamp-to <start-timestamp-to>] [--max-results <max-results>] [--next-token <next-token>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL] The stage of the skill to be used for evaluation. An error will be returned if this skill stage is not enabled on the account used for evaluation. 
+[ENUM]: development,live.</dd>
+    <dt>--start-timestamp-from <start-timestamp-from></dt>
+    <dd markdown="span">[OPTIONAL] The begnning of the start time to query evaluation result.</dd>
+    <dt>--start-timestamp-to <start-timestamp-to></dt>
+    <dd markdown="span">[OPTIONAL] The end of the start time to query evaluation result.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-smarthome-capability-evaluation
+
+Start a capability evaluation against a Smart Home skill.
+
+`create-smarthome-capability-evaluation` command format:
+
+`$ ask smapi create-smarthome-capability-evaluation <-s|--skill-id <skill-id>> <--capability-test-plan-id <capability-test-plan-id>> <--endpoint-endpoint-id <endpoint-endpoint-id>> [-g|--stage <stage>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--capability-test-plan-id <capability-test-plan-id></dt>
+    <dd markdown="span">[REQUIRED].</dd>
+    <dt>--endpoint-endpoint-id <endpoint-endpoint-id></dt>
+    <dd markdown="span">[REQUIRED].</dd>
+    <dt>-g,--stage <stage></dt>
+    <dd markdown="span">[OPTIONAL]  
+[ENUM]: development,live.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
