@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.19.1](https://github.com/alexa/ask-cli/compare/v2.19.0...v2.19.1) (2020-10-30)
+
+
+### Bug Fixes
+
+* new s3 bucket created on each cf deploy ([b495be8](https://github.com/alexa/ask-cli/commit/b495be813d6a21bd1d60ec6827bc7c125e36a3cb))
+
 ## [2.19.0](https://github.com/alexa/ask-cli/compare/v2.18.2...v2.19.0) (2020-10-27)
 
 
