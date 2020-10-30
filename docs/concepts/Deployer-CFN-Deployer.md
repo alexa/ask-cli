@@ -6,7 +6,7 @@ In this example we are going to use the cfn-depoyer (and AWS CloudFormation) to 
 
 ## Update ask-resources.json
 
-In the ask-resources.json we define the paramaters we want to use in our CloudFormation template in the `skillInfrastructure.cfn.parameters` block.
+In the ask-resources.json we define the paramaters we want to use in our CloudFormation template in the `skillInfrastructure.userConfig.cfn.parameters` block.
 
 Here we are defining `ProjectName`, `Environment`, `UserTableName`.
 

@@ -141,10 +141,10 @@ Supported parameters in `userConfig`:
 * `handler`: The entry point for the Lambda function in your code. Value of this field will be passed to *LambdaHandler* in the stack
 * `templatePath`: The stack file path that you wish to deploy with.
 * `regionalOverrides`: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
-* `bucketName`: You can set `skillInfrastructure.artifactsS3.bucketName` to use a custom bucket name, otherwise ask cli will create a new bucket.
-* `bucketKey`: You can set `skillInfrastructure.artifactsS3.bucketKey` to use a custom bucket object key.
-* `cfn.parameters`: Use `skillInfrastructure.cfn.parameters` to pass additional parameters to CloudFormation.
-* `cfn.capabilities`: Use `skillInfrastructure.cfn.capabilities` to pass additional capabilities to CloudFormation. CAPABILITY_IAM capability is always passed by default.
+* `bucketName`: You can set `skillInfrastructure.userConfig.artifactsS3.bucketName` to use a custom bucket name, otherwise ask cli will create a new bucket.
+* `bucketKey`: You can set `skillInfrastructure.userConfig.artifactsS3.bucketKey` to use a custom bucket object key.
+* `cfn.parameters`: Use `skillInfrastructure.userConfig.cfn.parameters` to pass additional parameters to CloudFormation.
+* `cfn.capabilities`: Use `skillInfrastructure.userConfig.cfn.capabilities` to pass additional capabilities to CloudFormation. CAPABILITY_IAM capability is always passed by default.
 
 ## Other Concepts
 
