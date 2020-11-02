@@ -12,7 +12,7 @@ describe('Smapi test - makeSmapiCommander function', () => {
     it('| should create instance of commander', () => {
         const commander = makeSmapiCommander();
 
-        expect(commander._name).eql('ask smapi');
+        expect(commander._name).eql('smapi');
         expect(commander.commands.length).gt(0);
     });
 
