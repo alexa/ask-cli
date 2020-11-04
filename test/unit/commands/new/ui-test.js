@@ -316,7 +316,7 @@ describe('Commands new - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Choose the programming language you will use to code your skill: ',
                     type: 'list',
-                    choices: Object.keys(CONSTANTS.TEMPLATES.LANGUAGE_MAP)
+                    choices: Object.keys(CONSTANTS.TEMPLATES.PROJECT_BY_CODE_LANGUAGE)
                 });
                 expect(err).equal(null);
                 expect(response).equal(TEST_LANGUAGE);
@@ -333,7 +333,7 @@ describe('Commands new - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][0], {
                     message: 'Choose the programming language you will use to code your skill: ',
                     type: 'list',
-                    choices: Object.keys(CONSTANTS.TEMPLATES.LANGUAGE_MAP)
+                    choices: Object.keys(CONSTANTS.TEMPLATES.PROJECT_BY_CODE_LANGUAGE)
                 });
                 expect(err.message).equal(TEST_ERROR);
                 expect(response).equal(undefined);

@@ -51,6 +51,10 @@ process.env.ASK_SHARE_USAGE = false;
     // command - deploy
     '@test/unit/commands/deploy/index-test',
     '@test/unit/commands/deploy/helper-test',
+    // command - skill
+    '@test/unit/commands/skill/add-locales/index-test',
+    '@test/unit/commands/skill/add-locales/helper-test',
+    '@test/unit/commands/skill/add-locales/ui-test',
     // command - smapi
     '@test/unit/commands/smapi/cli-customization-processor-test.js',
     '@test/unit/commands/smapi/smapi-command-handler-test.js',
@@ -104,7 +108,6 @@ process.env.ASK_SHARE_USAGE = false;
     '@test/unit/controller/skill-infrastructure-controller-test',
     '@test/unit/controller/deploy-delegate-test',
     '@test/unit/controller/hosted-skill-controller/index-test',
-    '@test/unit/controller/hosted-skill-controller/helper-test',
     '@test/unit/controller/hosted-skill-controller/clone-flow-test',
     // view
     '@test/unit/view/messenger-test',

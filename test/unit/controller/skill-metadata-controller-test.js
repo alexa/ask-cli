@@ -689,6 +689,35 @@ describe('Controller test - skill metadata controller test', () => {
         });
     });
 
+    describe('# test class method: getInteractionModelLocales', () => {
+        const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+
+        beforeEach(() => {
+            new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+        });
+
+        afterEach(() => {
+            ResourcesConfig.dispose();
+            sinon.restore();
+        });
+
+        it('| returns the correct list when there is no file in the model folder', () => {
+            // setup
+            sinon.stub(path, 'join').returns('');
+            sinon.stub(fs, 'readdirSync').returns([]);
+            // call & verify
+            expect(skillMetaController.getInteractionModelLocales()).deep.equal({});
+        });
+
+        it('| returns the correct result when some locale exist some do not', () => {
+            // setup
+            sinon.stub(fs, 'readdirSync').returns(['a/b/en-US.json', '/d/e/en.json', '/f/g/en-US', 'en-US', 'de-DE.json']);
+            // call & verify
+            expect(skillMetaController.getInteractionModelLocales()['en-US'].endsWith(path.join('a', 'b', 'en-US.json'))).equal(true);
+            expect(skillMetaController.getInteractionModelLocales()['de-DE'].endsWith('de-DE.json')).equal(true);
+        });
+    });
+
     describe('# test class method: _createUploadUrl', () => {
         const skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
 

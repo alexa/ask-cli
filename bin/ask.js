@@ -19,11 +19,13 @@ require('@src/commands/dialog').createCommand(commander);
 commander
     .description('Command Line Interface for Alexa Skill Kit')
     .command('smapi', 'list of Alexa Skill Management API commands')
+    .command('skill', 'increase the productivity when managing skill metadata')
     .command('util', 'tooling functions when using ask-cli to manage Alexa Skill')
     .version(require('../package.json').version)
     .parse(process.argv);
 
-const ALLOWED_ASK_ARGV_2 = ['configure', 'deploy', 'new', 'init', 'dialog', 'smapi', 'util', 'help', '-v', '--version', '-h', '--help'];
+const ALLOWED_ASK_ARGV_2 = ['configure', 'deploy', 'new', 'init', 'dialog', 'smapi', 'skill', 'util', 'help', '-v', '--version', '-h', '--help'];
 if (process.argv[2] && ALLOWED_ASK_ARGV_2.indexOf(process.argv[2]) === -1) {
     console.log('Command not recognized. Please run "ask" to check the user instructions.');
+    process.exit(1);
 }
