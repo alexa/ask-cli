@@ -163,14 +163,26 @@ describe('Clients test - cli http request client', () => {
             });
         });
 
+        it('| request with no error and no response statusCode, expect error', (done) => {
+            // setup
+            stubRequest.callsArgWith(1, null, { body: 'response' });
+            // call
+            proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
+                // verify
+                expect(err).equal(`Failed to access the statusCode from the request to ${VALID_OPERATION}.`);
+                expect(response).equal(undefined);
+                done();
+            });
+        });
+
         it('| request with success, expect no error and response', (done) => {
             // setup
-            stubRequest.callsArgWith(1, null, 'response');
+            stubRequest.callsArgWith(1, null, { statusCode: 200 });
             // call
             proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
                 // verify
                 expect(err).equal(null);
-                expect(response).equal('response');
+                expect(response).deep.equal({ statusCode: 200 });
                 done();
             });
         });

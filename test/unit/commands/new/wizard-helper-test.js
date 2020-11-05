@@ -196,7 +196,8 @@ describe('Commands new test - wizard helper test', () => {
                 statusCode: 300,
                 body: {}
             };
-            const TEST_HTTP_ERROR = 'Failed to retrieve the template list. Please run again with --debug to check more details.';
+            const TEST_HTTP_ERROR = `Failed to retrieve the template list, please see the details from the error response.
+${JSON.stringify(TEST_HTTP_RESPONSE, null, 2)}`;
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
             httpClient.request.callsArgWith(3, null, TEST_HTTP_RESPONSE);
@@ -230,7 +231,7 @@ describe('Commands new test - wizard helper test', () => {
             // setup
             const TEST_HTTP_RESPONSE = {
                 statusCode: 200,
-                body: TEST_TEMPLATE_MAP
+                body: JSON.stringify(TEST_TEMPLATE_MAP)
             };
             ui.selectSkillCodeLanguage.callsArgWith(0, null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.callsArgWith(1, null);

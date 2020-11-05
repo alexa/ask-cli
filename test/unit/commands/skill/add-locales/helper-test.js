@@ -62,12 +62,12 @@ describe('Commands add-locales - helper test', () => {
         const TEST_TEMPLATE_BODY = { body: 'template' };
         const TEST_TEMPLATE_MAP = {
             statusCode: 200,
-            body: {
+            body: JSON.stringify({
                 INTERACTION_MODEL_BY_LANGUAGE: {
                     es: 'TEST_ES_URL',
                     en: 'TEST_EN_URL'
                 }
-            }
+            })
         };
         new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
         new Manifest(FIXTURE_MANIFEST_FILE_PATH);
@@ -93,18 +93,7 @@ describe('Commands add-locales - helper test', () => {
             httpClient.request.onFirstCall().callsArgWith(3, TEST_ERROR);
             // call
             helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-                expect(err).equal('Failed to retrieve the template list. Please run again with --debug to check more details.');
-                expect(result).equal(undefined);
-                done();
-            });
-        });
-
-        it('| fail to get the template map with statusCode not existing', (done) => {
-            // setup
-            httpClient.request.onFirstCall().callsArgWith(3, undefined, {});
-            // call
-            helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-                expect(err).equal('Failed to retrieve the template list. Please run again with --debug to check more details.');
+                expect(err).equal('Failed to retrieve the template list.\nError: error');
                 expect(result).equal(undefined);
                 done();
             });
@@ -115,7 +104,8 @@ describe('Commands add-locales - helper test', () => {
             httpClient.request.onFirstCall().callsArgWith(3, undefined, { statusCode: 401 });
             // call
             helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-                expect(err).equal('Failed to retrieve the template list. Please run again with --debug to check more details.');
+                expect(err).equal(`Failed to retrieve the template list, please see the details from the error response.
+${JSON.stringify({ statusCode: 401 }, null, 2)}`);
                 expect(result).equal(undefined);
                 done();
             });
@@ -156,7 +146,7 @@ describe('Commands add-locales - helper test', () => {
             httpClient.request.onSecondCall().callsArgWith(3, TEST_ERROR);
             // call
             helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-                expect(err).equal(`Failed to get TEST_EN_URL. ${TEST_ERROR}`);
+                expect(err).equal(`Failed to retrieve the template list.\n${TEST_ERROR}`);
                 expect(result).equal(undefined);
                 done();
             });
@@ -170,7 +160,10 @@ describe('Commands add-locales - helper test', () => {
             httpClient.request.onSecondCall().callsArgWith(3, null, { statusCode: 401 });
             // call
             helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-                expect(err).equal('Failed to get TEST_EN_URL. Http status code: 401');
+                expect(err).equal(`Failed to retrieve the template list, please see the details from the error response.
+{
+  "statusCode": 401
+}`);
                 expect(result).equal(undefined);
                 done();
             });
