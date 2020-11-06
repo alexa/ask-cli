@@ -133,7 +133,7 @@ ${JSON.stringify({ statusCode: 401 }, null, 2)}`);
                 expect(fs.copySync.args[0][0]).equal(TEST_MODEL_PATH);
                 expect(err).equal(undefined);
                 expect(result.size).equal(1);
-                expect(result.get('en-US')).equal(TEST_MODEL_PATH);
+                expect(result.get('en-US')).deep.equal({ uri: TEST_MODEL_PATH, canCopy: true });
                 done();
             });
         });
@@ -179,7 +179,7 @@ ${JSON.stringify({ statusCode: 401 }, null, 2)}`);
             helper.addLocales(['en-US'], TEST_PROFILE, TEST_DEBUG, (err, result) => {
                 expect(fs.writeFileSync.args[0][1]).equal(TEST_TEMPLATE_BODY.body);
                 expect(result.size).equal(1);
-                expect(result.get('en-US')).equal('TEST_EN_URL');
+                expect(result.get('en-US')).deep.equal({ uri: 'TEST_EN_URL', canCopy: false });
                 expect(err).equal(undefined);
                 done();
             });

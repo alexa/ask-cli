@@ -1,7 +1,6 @@
 const { expect } = require('chai');
 const inquirer = require('inquirer');
 const sinon = require('sinon');
-const fs = require('fs');
 
 const Messenger = require('@src/view/messenger');
 
@@ -90,13 +89,10 @@ describe('Commands add-locales - UI test', () => {
         it('| display info message when all selected locales are added', () => {
             // setup
             const TEST_MAP = new Map([
-                ['1', 'file1.json'],
-                ['2', 'file2.json']
+                ['1', { uri: 'file1.json', canCopy: true }],
+                ['2', { uri: 'file2.json', canCopy: false }]
             ]);
             const TEST_LIST = ['1', '2', '3'];
-            sinon.stub(fs, 'existsSync');
-            fs.existsSync.withArgs('file1.json').returns(true);
-            fs.existsSync.withArgs('file2.json').returns(false);
             // call
             ui.displayAddLocalesResult(TEST_LIST, TEST_MAP);
             // verify
