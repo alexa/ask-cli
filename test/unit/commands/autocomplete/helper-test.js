@@ -4,7 +4,6 @@ const EventEmitter = require('events');
 const fs = require('fs-extra');
 const sinon = require('sinon');
 
-const CONSTANTS = require('@src/utils/constants');
 const Helper = require('@src/commands/autocomplete/helper');
 
 describe('Commands autocomplete - helper test', () => {
@@ -12,6 +11,7 @@ describe('Commands autocomplete - helper test', () => {
     let setupShellInitFileStub;
     let cleanupShellInitFileStub;
     let initStub;
+    let treeStub;
     let omeletteStub;
 
     const testCommander = new commander.Command();
@@ -43,6 +43,7 @@ describe('Commands autocomplete - helper test', () => {
         setupShellInitFileStub = sinon.stub();
         cleanupShellInitFileStub = sinon.stub();
         initStub = sinon.stub();
+        treeStub = sinon.stub();
 
         omeletteStub = () => {
             class OmeletteStubClass extends EventEmitter {
@@ -51,6 +52,7 @@ describe('Commands autocomplete - helper test', () => {
                     this.setupShellInitFile = setupShellInitFileStub;
                     this.cleanupShellInitFile = cleanupShellInitFileStub;
                     this.init = initStub;
+                    this.tree = treeStub;
                 }
             }
             return new OmeletteStubClass();
@@ -92,37 +94,8 @@ describe('Commands autocomplete - helper test', () => {
         sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns(hints);
         helper.initAutoComplete();
 
+        expect(treeStub.callCount).eq(1);
         expect(initStub.callCount).eq(1);
-    });
-
-    it('should reply with first level commands', (done) => {
-        sinon.stub(fs, 'existsSync').withArgs(helper.autoCompleteHintsFile).returns(true);
-        sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns(hints);
-
-        helper = new Helper(omeletteStub);
-        helper.initAutoComplete();
-
-        const reply = (value) => {
-            expect(value).eq(CONSTANTS.TOP_LEVEL_COMMANDS);
-            done();
-        };
-
-        helper.completion.emit('command', { reply });
-    });
-
-    it('should reply with second level subCommands', (done) => {
-        sinon.stub(fs, 'existsSync').withArgs(helper.autoCompleteHintsFile).returns(true);
-        sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns(hints);
-
-        helper = new Helper(omeletteStub);
-        helper.initAutoComplete();
-
-        const reply = (value) => {
-            expect(value).eql(Object.keys(hints.smapi));
-            done();
-        };
-        helper.completion.emit('subCommand', { reply, line: 'ask unknown' });
-        helper.completion.emit('subCommand', { reply, line: 'ask smapi' });
     });
 
     afterEach(() => {
