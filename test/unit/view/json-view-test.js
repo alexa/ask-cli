@@ -15,6 +15,19 @@ describe('View test - JSON view test', () => {
             expect(jsonDisplay).equal(TEST_OBJ_JSON_STRING);
         });
 
+        it('| convert error to JSON string', () => {
+            // setup
+            const error = new Error();
+            error.extraInfo = 'some info';
+
+            // call
+            const jsonDisplay = jsonView.toString(error);
+            // verify
+            expect(jsonDisplay).includes('"stack"');
+            expect(jsonDisplay).includes('"message"');
+            expect(jsonDisplay).includes('"extraInfo"');
+        });
+
         it('| display error when JSON stringify throws error', () => {
             // setup
             const TEST_CIRCULAR_OBJ = {};
