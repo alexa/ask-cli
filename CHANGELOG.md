@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.20.0](https://github.com/alexa/ask-cli/compare/v2.19.3...v2.20.0) (2020-11-10)
+
+
+### Features
+
+* implement "ask skill add-locales" command ([999410b](https://github.com/alexa/ask-cli/commit/999410b20cbeb38613044d99f08720d135beed22))
+
+
+### Bug Fixes
+
+* address comment to avoid checking fs.existsSync every time ([2655742](https://github.com/alexa/ask-cli/commit/26557426c5c712e9969b49ef2ae66cd6d0c20e31))
+* change httpClient to include the error handling when statusCode doesn't exist ([eae53b5](https://github.com/alexa/ask-cli/commit/eae53b595708449dcd227b20d26178cd90caaeea))
+* display all property when printing error ([#334](https://github.com/alexa/ask-cli/issues/334)) ([b562325](https://github.com/alexa/ask-cli/commit/b562325f0c2ad40a7c07d0bb850079fab023632d))
+
 ### [2.19.3](https://github.com/alexa/ask-cli/compare/v2.19.2...v2.19.3) (2020-11-02)
 
 
