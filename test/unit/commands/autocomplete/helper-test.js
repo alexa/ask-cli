@@ -125,22 +125,6 @@ describe('Commands autocomplete - helper test', () => {
         helper.completion.emit('subCommand', { reply, line: 'ask smapi' });
     });
 
-    it('should reply with third level options', (done) => {
-        sinon.stub(fs, 'existsSync').withArgs(helper.autoCompleteHintsFile).returns(true);
-        sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns(hints);
-
-        helper = new Helper(omeletteStub);
-        helper.initAutoComplete();
-
-        const reply = (value) => {
-            expect(value).eql(Object.keys(hints.smapi['list-catalogs-for-vendor']));
-            done();
-        };
-
-        helper.completion.emit('option', { reply, line: 'ask unknown option' });
-        helper.completion.emit('option', { reply, line: 'ask smapi list-catalogs-for-vendor' });
-    });
-
     afterEach(() => {
         sinon.restore();
     });
