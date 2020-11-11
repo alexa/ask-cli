@@ -18,26 +18,8 @@ describe('Commands autocomplete - helper test', () => {
     testCommander._name = 'test';
     testCommander.command('command-one');
     testCommander.command('command-two');
-    testCommander.option('--large');
-    testCommander.option('-s, --small');
 
     const commanders = [testCommander];
-    const hints = {
-        smapi: {
-            '-h': {},
-            '--help': {},
-            'list-catalogs-for-vendor': {
-                '-h': {},
-                '--help': {},
-                '--next-token': {},
-                '--max-results': {},
-                '--profile': {},
-                '-p': {},
-                '--full-response': {},
-                '--debug': {}
-            }
-        }
-    };
 
     beforeEach(() => {
         setupShellInitFileStub = sinon.stub();
@@ -91,7 +73,7 @@ describe('Commands autocomplete - helper test', () => {
 
     it('initialize autocomplete if hint file is present', () => {
         sinon.stub(fs, 'existsSync').withArgs(helper.autoCompleteHintsFile).returns(true);
-        sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns(hints);
+        sinon.stub(fs, 'readJsonSync').withArgs(helper.autoCompleteHintsFile).returns({});
         helper.initAutoComplete();
 
         expect(treeStub.callCount).eq(1);
