@@ -138,7 +138,7 @@ describe('Model test - manifest file test', () => {
                 oldValue: {
                     custom: {
                         endpoint: {
-                            url: 'TEST_URL1'
+                            uri: 'arn:aws:lambda:us-east-1:200074948102:function:test'
                         },
                         interfaces: [{
                             type: 'VIDEO_APP'
@@ -146,7 +146,7 @@ describe('Model test - manifest file test', () => {
                         regions: {
                             EU: {
                                 endpoint: {
-                                    url: 'TEST_URL2'
+                                    uri: 'TEST_URL2'
                                 }
                             }
                         }
@@ -159,7 +159,7 @@ describe('Model test - manifest file test', () => {
                 newValue: 'apisDomain new',
                 oldValue: {
                     endpoint: {
-                        url: 'TEST_URL1'
+                        uri: 'arn:aws:lambda:us-east-1:200074948102:function:test'
                     },
                     interfaces: [{
                         type: 'VIDEO_APP'
@@ -167,7 +167,7 @@ describe('Model test - manifest file test', () => {
                     regions: {
                         EU: {
                             endpoint: {
-                                url: 'TEST_URL2'
+                                uri: 'TEST_URL2'
                             }
                         }
                     }
@@ -178,7 +178,7 @@ describe('Model test - manifest file test', () => {
                 input: ['custom', 'default'],
                 newValue: 'endpoint new default',
                 oldValue: {
-                    url: 'TEST_URL1'
+                    uri: 'arn:aws:lambda:us-east-1:200074948102:function:test'
                 }
             },
             {
@@ -186,7 +186,7 @@ describe('Model test - manifest file test', () => {
                 input: ['custom', 'EU'],
                 newValue: 'endpoint new EU',
                 oldValue: {
-                    url: 'TEST_URL2'
+                    uri: 'TEST_URL2'
                 }
             }
         ].forEach(({

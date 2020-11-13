@@ -39,7 +39,7 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "url": "TEST_URL1"
+          "uri": "arn:aws:lambda:us-east-1:200074948102:function:test"
         },
         "interfaces": [
           {
@@ -49,7 +49,7 @@
         "regions": {
           "EU": {
             "endpoint": {
-              "url": "TEST_URL2"
+              "uri": "TEST_URL2"
             }
           }
         }

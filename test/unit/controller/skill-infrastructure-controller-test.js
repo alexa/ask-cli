@@ -308,15 +308,17 @@ describe('Controller test - skill infrastructure controller test', () => {
     });
 
     describe('# test class method: updateSkillManifestWithDeployResult', () => {
+        const testUrl1 = 'arn:aws:lambda:us-east-1:200074948102:function:test';
+        const testUrl2 = 'TEST_URL2';
         const TEST_DEPLOY_RESULT = {
             default: {
                 endpoint: {
-                    url: 'TEST_URL1'
+                    uri: testUrl1
                 }
             },
             EU: {
                 endpoint: {
-                    url: 'TEST_URL2'
+                    uri: testUrl2
                 }
             }
         };
@@ -344,8 +346,8 @@ describe('Controller test - skill infrastructure controller test', () => {
                 expect(res).equal(undefined);
                 expect(err).equal('hash error');
                 expect(hashUtils.getHash.args[0][0]).equal(ResourcesConfig.getInstance().getSkillMetaSrc(TEST_PROFILE));
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').uri).equal(testUrl1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').uri).equal(testUrl2);
                 done();
             });
         });
@@ -360,8 +362,8 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').uri).equal(testUrl1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').uri).equal(testUrl2);
                 done();
             });
         });
@@ -376,14 +378,15 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('update error');
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').uri).equal(testUrl1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').uri).equal(testUrl2);
                 done();
             });
         });
 
         it('| manifest update correctly, expect success message and new hash set', (done) => {
             // setup
+            const setEndpointSpy = sinon.spy(Manifest.prototype, 'setApisEndpointByDomainRegion');
             sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
@@ -392,8 +395,10 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
-                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(setEndpointSpy.callCount).equal(1);
+                expect(setEndpointSpy.args[0][2].uri).equal(testUrl1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').uri).equal(testUrl1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').uri).equal(testUrl2);
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal('TEST_HASH');
                 done();
             });
