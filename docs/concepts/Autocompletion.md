@@ -4,17 +4,21 @@
 
 Autocompletion currently works for the following shells: bash, zsh and fish.
 
-For bash, please install bash-completion.
+### Bash prerequisites setup
+
+1. Install bash-completion.
 
 ```
 brew install bash-completion
 ```
 
-And the then add the following line to ~/.bash_profile or ~/.bashrc:
+2. Add bash_completion to ~/.bash_profile or ~/.bashrc:
 
 ```
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+echo '[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"' >> ~/.bash_profile
 ```
+
+Similar prerequisites steps can be run for zsh and fish shells.
 
 ## Enable Autocompletion
 To setup auto completion, please run the following command and then restart the terminal.
