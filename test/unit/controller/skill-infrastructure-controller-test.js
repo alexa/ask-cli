@@ -325,7 +325,7 @@ describe('Controller test - skill infrastructure controller test', () => {
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             new Manifest(FIXTURE_MANIFEST_FILE_PATH);
-            sinon.stub(fs, 'writeFileSync');
+            sinon.stub(fse, 'writeFileSync');
         });
 
         afterEach(() => {
@@ -517,6 +517,36 @@ describe('Controller test - skill infrastructure controller test', () => {
                 });
                 done();
             });
+        });
+    });
+    describe('# test class method: _updateEventsEndpoint', () => {
+        const lambdaUrl = 'arn:aws:lambda:us-east-1:200074948102:function';
+        let skillInfraController;
+        let setEventEndpointSpy;
+        beforeEach(() => {
+            new Manifest(FIXTURE_MANIFEST_FILE_PATH);
+            skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
+            setEventEndpointSpy = sinon.spy(Manifest.prototype, 'setEventEndpoint');
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+
+        it('| should update events endpoint', () => {
+            const userConfig = { reuseEndpointForEvents: true };
+
+            skillInfraController._updateEventsEndpoint(userConfig, lambdaUrl);
+
+            expect(setEventEndpointSpy.callCount).eq(1);
+        });
+
+        it('| should not update events endpoint', () => {
+            const userConfig = { };
+
+            skillInfraController._updateEventsEndpoint(userConfig, lambdaUrl);
+
+            expect(setEventEndpointSpy.callCount).eq(0);
         });
     });
 

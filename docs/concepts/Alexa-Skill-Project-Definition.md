@@ -59,6 +59,7 @@ Below shows the example how CLI tracks user's config and the deployment states, 
           "runtime": "{lambdaRuntime}",
           "handler": "{lambdaHandler}",
           "templatePath": "stack.yaml",
+          "reuseEndpointForEvents": true, // sets events endpoint in the skill manifest to equal the skill main endpoint
           "artifactsS3": { // custom s3 configuration to upload skill build artifact (zip, jar,etc)
             "bucketName": "{bucketName}", // custom bucket name to store artifacts
             "bucketKey": "{bucketKey.zip}" // custom bucket object key

@@ -174,6 +174,12 @@ describe('Model test - manifest file test', () => {
                 }
             },
             {
+                field: 'EventEndpoint',
+                input: [],
+                newValue: 'TEST_EVENT_URL2',
+                oldValue: 'TEST_EVENT_URL'
+            },
+            {
                 field: 'ApisEndpointByDomainRegion',
                 input: ['custom', 'default'],
                 newValue: 'endpoint new default',

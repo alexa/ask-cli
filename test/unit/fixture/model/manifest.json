@@ -55,6 +55,11 @@
         }
       }
     },
+    "events": {
+      "endpoint": {
+        "uri": "TEST_EVENT_URL"
+      }
+    },
     "manifestVersion": "1.0"
   }
 }
