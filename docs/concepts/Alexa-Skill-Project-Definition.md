@@ -38,7 +38,7 @@ Below shows the example how CLI tracks user's config and the deployment states, 
       // skillMetadata tracks Alexa skill's build-time JSONs
       "skillMetadata": {
         "src": "./skill-package",         // the source folder for skill package (either relative path or absolute path)
-        "lastDeployHash": "{hashResult}"  // CLI internal data to optimize the deploy flow
+        "manifest": "skill-prod.json" // overwrite name of the skill manifest. default: skill.json
       },
 
       // code owns Alexa skill code to be built and hosted

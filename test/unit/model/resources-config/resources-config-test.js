@@ -155,6 +155,12 @@ describe('Model test - resources config test', () => {
                 oldValue: TEST_ASK_RESOURCES.profiles[TEST_PROFILE].skillMetadata.src
             },
             {
+                field: 'SkillMetaManifest',
+                params: [TEST_PROFILE],
+                newValue: 'new skillMetadata src',
+                oldValue: TEST_ASK_RESOURCES.profiles[TEST_PROFILE].skillMetadata.manifest
+            },
+            {
                 field: 'SkillMetaLastDeployHash',
                 params: [TEST_PROFILE],
                 newValue: '==hash',
