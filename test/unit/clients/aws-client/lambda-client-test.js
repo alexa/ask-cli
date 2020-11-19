@@ -132,6 +132,18 @@ describe('Clients test - lambda client test', () => {
                 done();
             });
         });
+
+        it('| iamClient add Alexa permission by domain no permission needed for domain, expect undefined return.', (done) => {
+            // setup
+            const lambdaClient = new LambdaClient(TEST_CONFIGURATION);
+            const TEST_DOMAIN = 'non-existing';
+            // call
+            lambdaClient.addAlexaPermissionByDomain(TEST_DOMAIN, TEST_SKILL_ID, TEST_FUNCTION_ARN, (err) => {
+                // verify
+                expect(err).equal(undefined);
+                done();
+            });
+        });
     });
 
     describe('# function getFunction tests', () => {

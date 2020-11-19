@@ -59,6 +59,7 @@ Below shows the example how CLI tracks user's config and the deployment states, 
           "runtime": "{lambdaRuntime}",
           "handler": "{lambdaHandler}",
           "templatePath": "stack.yaml",
+          "targetEndpoint": ["alexaForBusiness", "custom", "flashBriefing", "health", "householdList", "music", "smartHome", "video", "events"], // set the targetEndpoint with the value(s) from https://developer.amazon.com/en-US/docs/alexa/smapi/skill-manifest.html#api-enumeration or events to target events endpoint. Defaults to api endpoints from skill manifest if not specified.
           "artifactsS3": { // custom s3 configuration to upload skill build artifact (zip, jar,etc)
             "bucketName": "{bucketName}", // custom bucket name to store artifacts
             "bucketKey": "{bucketKey.zip}" // custom bucket object key

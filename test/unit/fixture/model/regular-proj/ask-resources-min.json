@@ -1,0 +1,23 @@
+{
+  "askcliResourcesobjectVersion": "1.0",
+  "profiles": {
+    "default": {
+      "skillMetadata": {
+        "src": "./skillPackage"
+      },
+      "code": {
+        "default": {
+          "src": "./awsStack/lambda-NA/src"
+        }
+      },
+      "skillInfrastructure": {
+        "type": "@ask-cli/cfn-deployer",
+        "userConfig": {
+          "runtime": "nodejs10.x",
+          "handler": "index.handler",
+          "template": "./awsStacks/skill-infra.yaml"
+        }
+      }
+    }
+  }
+}

@@ -54,6 +54,13 @@ Resources:
       FunctionName: !GetAtt AlexaSkillFunction.Arn
       Principal: alexa-appkit.amazon.com
       EventSourceToken: !Ref SkillId
+  AlexaSkillFunctionEventPermissionSmartHome:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:invokeFunction
+      FunctionName: !GetAtt AlexaSkillFunction.Arn
+      Principal: alexa-connectedhome.amazon.com
+      EventSourceToken: !Ref SkillId
   AlexaSkillFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
