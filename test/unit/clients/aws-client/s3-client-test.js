@@ -566,6 +566,24 @@ describe('Clients test - s3 client test', () => {
         });
     });
 
+    describe('# function retryBucketVersionOperations tests', () => {
+        it('| when status code 404 should set retryable property to true', () => {
+            const response = { httpResponse: { statusCode: 404 }, error: {} };
+            const s3Client = new S3Client(TEST_CONFIGURATION);
+
+            s3Client.retryBucketVersionOperations(response);
+            expect(response.error.retryable).equal(true);
+        });
+
+        it('| when status code is not 404 should not set retryable property to true', () => {
+            const response = { httpResponse: { statusCode: 200 }, error: {} };
+            const s3Client = new S3Client(TEST_CONFIGURATION);
+
+            s3Client.retryBucketVersionOperations(response);
+            expect(response.error.retryable).equal(undefined);
+        });
+    });
+
     afterEach(() => {
         sinon.restore();
     });
