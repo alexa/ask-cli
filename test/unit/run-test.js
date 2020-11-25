@@ -23,6 +23,9 @@ process.env.ASK_SHARE_USAGE = false;
     // commands
     '@test/unit/commands/option-validator-test',
     '@test/unit/commands/abstract-command-test',
+    // command - autocomplete
+    '@test/unit/commands/autocomplete/index-test',
+    '@test/unit/commands/autocomplete/helper-test',
     // command - util
     '@test/unit/commands/util/git-credentials-helper/index-test',
     '@test/unit/commands/util/generate-lwa-tokens/index-test',

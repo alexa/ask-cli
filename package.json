@@ -35,7 +35,7 @@
     "prepublishOnly": "babel lib -d lib; babel bin -d bin",
     "pre-release": "standard-version",
     "prism": "prism",
-    "postinstall": "node postinstall.js"
+    "postinstall": "node bin/ask-autocomplete.js reload; node postinstall.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
@@ -58,6 +58,7 @@
     "listr": "^0.14.3",
     "module-alias": "^2.1.0",
     "mustache": "^4.0.1",
+    "omelette": "^0.4.15-1",
     "open": "^7.0.3",
     "ora": "^3.4.0",
     "portscanner": "^2.1.1",
