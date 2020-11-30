@@ -92,7 +92,8 @@ describe('Commands deploy test - command class test', () => {
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
-                    expect(err.message).equal('File invalidPath not exists.');
+                    expect(err.message).includes('File invalidPath not exists.');
+                    expect(err.message).includes('please run \'ask util upgrade-project\'');
                     expect(errorStub.callCount).equal(0);
                     expect(infoStub.callCount).equal(0);
                     expect(warnStub.callCount).equal(1);
