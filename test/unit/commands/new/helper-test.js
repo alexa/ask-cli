@@ -159,7 +159,8 @@ describe('Commands new test - helper test', () => {
                 helper.loadSkillProjectModel(TEST_SKILL_FOLDER_NAME, TEST_PROFILE);
             } catch (e) {
                 // verify
-                expect(e.message).equal(`File ${FIXTURE_RESOURCES_CONFIG_FILE_PATH} not exists.`);
+                expect(e.message).includes(`File ${FIXTURE_RESOURCES_CONFIG_FILE_PATH} not exists.`);
+                expect(e.message).includes('please run \'ask util upgrade-project\'');
             }
         });
 
