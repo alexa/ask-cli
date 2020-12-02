@@ -112,6 +112,7 @@ process.env.ASK_SHARE_USAGE = false;
     // view
     '@test/unit/view/messenger-test',
     '@test/unit/view/json-view-test',
+    '@test/unit/view/prompt-view-test',
     '@test/unit/view/spinner-view-test',
     '@test/unit/view/multi-tasks-view-test',
     '@test/unit/view/cli-repl-view-test',
