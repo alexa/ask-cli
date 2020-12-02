@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+const fs = require('fs');
 const inquirer = require('inquirer');
 const sinon = require('sinon');
 
@@ -19,6 +20,7 @@ function validateInquirerConfig(stub, expectedConfig) {
 describe('View test - prompt view test', () => {
     const TEST_ERROR = 'init error';
     let infoStub;
+    let accessSyncStub;
 
     describe('# validate ui.getProjectFolderName', () => {
         beforeEach(() => {
@@ -27,6 +29,7 @@ describe('View test - prompt view test', () => {
             sinon.stub(Messenger, 'getInstance').returns({
                 info: infoStub
             });
+            accessSyncStub = sinon.stub(fs, 'accessSync');
         });
 
         afterEach(() => {
@@ -93,6 +96,19 @@ describe('View test - prompt view test', () => {
                 // verify
                 expect(inquirer.prompt.args[0][0][0].validate(TEST_DEFAULT_NAME))
                     .equal(TEST_EMPTY_ERROR);
+                done();
+            });
+        });
+        it('| user does not have read/write to project folder, expect return error message string', (done) => {
+            // setup
+            const TEST_DEFAULT_NAME = 'some-folder';
+            inquirer.prompt.resolves({ projectFolderName: TEST_DEFAULT_NAME });
+            accessSyncStub.throws('Some error');
+            // call
+            ui.getProjectFolderName(TEST_DEFAULT_NAME, () => {
+                // verify
+                expect(inquirer.prompt.args[0][0][0].validate(TEST_DEFAULT_NAME))
+                    .include('No write access inside of the folder');
                 done();
             });
         });
