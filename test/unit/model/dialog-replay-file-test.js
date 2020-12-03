@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
-const yaml = require('@src/model/yaml-parser');
 
 const DialogReplayFile = require('@src/model/dialog-replay-file');
 
@@ -166,7 +165,7 @@ describe('Model test - dialog replay file test', () => {
                     dialogReplayFile = new DialogReplayFile(NOT_EXISTING_DIALOG_REPLAY_FILE_PATH);
                 } catch (error) {
                     // verify
-                    expect(error).equal(`Failed to parse .json file ${NOT_EXISTING_DIALOG_REPLAY_FILE_PATH}.`
+                    expect(error).equal(`Failed to parse file: ${NOT_EXISTING_DIALOG_REPLAY_FILE_PATH}.`
                     + `\nFile ${NOT_EXISTING_DIALOG_REPLAY_FILE_PATH} not exists.`);
                 }
             });
@@ -179,14 +178,14 @@ describe('Model test - dialog replay file test', () => {
                     dialogReplayFile = new DialogReplayFile(INVALID_JSON_DIALOG_REPLAY_FILE_PATH);
                 } catch (error) {
                     // verify
-                    expect(error).equal(`Failed to parse .json file ${INVALID_JSON_DIALOG_REPLAY_FILE_PATH}.`
+                    expect(error).equal(`Failed to parse file: ${INVALID_JSON_DIALOG_REPLAY_FILE_PATH}.`
                     + `\n${TEST_ERROR}`);
                 }
             });
 
             it('| test JSON file path extension', () => {
                 // setup
-                sinon.stub(fs, 'readFileSync').returns('{"skillId":"amzn1.ask.skill.1234567890"}');
+                sinon.stub(fs, 'readJsonSync').returns({ skillId: 'amzn1.ask.skill.1234567890' });
 
                 // call
                 dialogReplayFile = new DialogReplayFile(DIALOG_REPLAY_FILE_JSON_PATH);
@@ -195,46 +194,6 @@ describe('Model test - dialog replay file test', () => {
                 expect(dialogReplayFile.content).deep.equal({
                     skillId: 'amzn1.ask.skill.1234567890'
                 });
-            });
-
-            it('| test YAML file path extension', () => {
-                // setup
-                const YAML_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.yaml');
-                const yamlStub = sinon.stub(yaml, 'load');
-
-                // call
-                dialogReplayFile = new DialogReplayFile(YAML_FILE_PATH);
-
-                // verify
-                expect(yamlStub.calledOnce).equal(true);
-            });
-
-            it('| test YML file path extension', () => {
-                // setup
-                const YML_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.yml');
-                const ymlStub = sinon.stub(yaml, 'load');
-
-                // call
-                dialogReplayFile = new DialogReplayFile(YML_FILE_PATH);
-
-                // verify
-                expect(ymlStub.calledOnce).equal(true);
-            });
-
-            it(' throws error if neither JSON nor YAML/YML file path extension', () => {
-                // setup
-                sinon.stub(DialogReplayFile.prototype, 'doesFileExist');
-                sinon.stub(fs, 'accessSync');
-                const UNSUPPORTED_EXTENSION_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.random');
-
-                try {
-                    // call
-                    dialogReplayFile = new DialogReplayFile(UNSUPPORTED_EXTENSION_FILE_PATH);
-                } catch (error) {
-                    // verify
-                    expect(error).equal(`Failed to parse .random file ${UNSUPPORTED_EXTENSION_FILE_PATH}.`
-                    + '\nASK CLI does not support this file type.');
-                }
             });
         });
 
@@ -287,49 +246,6 @@ describe('Model test - dialog replay file test', () => {
 
                 // verify
                 expect(writeFileStub.calledOnce).equal(true);
-            });
-
-            it('| test YAML file path extension', () => {
-                // setup
-                const YAML_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.yaml');
-                const yamlStub = sinon.stub(yaml, 'dump');
-
-                // call
-                dialogReplayFile = new DialogReplayFile(YAML_FILE_PATH);
-                dialogReplayFile.writeContentToFile('', YAML_FILE_PATH);
-
-                // verify
-                expect(yamlStub.calledOnce).equal(true);
-            });
-
-            it('| test YML file path extension', () => {
-                // setup
-                const YML_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.yml');
-                const ymlStub = sinon.stub(yaml, 'dump');
-
-                // call
-                dialogReplayFile = new DialogReplayFile(YML_FILE_PATH);
-                dialogReplayFile.writeContentToFile('', YML_FILE_PATH);
-
-                // verify
-                expect(ymlStub.calledOnce).equal(true);
-            });
-
-            it(' throws error if neither JSON nor YAML/YML file path extension', () => {
-                // setup
-                sinon.stub(DialogReplayFile.prototype, 'doesFileExist');
-                sinon.stub(fs, 'accessSync');
-                const UNSUPPORTED_EXTENSION_FILE_PATH = path.join(FIXTURE_PATH, 'yaml-config.random');
-
-                try {
-                    // call
-                    dialogReplayFile = new DialogReplayFile(UNSUPPORTED_EXTENSION_FILE_PATH);
-                    dialogReplayFile.writeContentToFile('', UNSUPPORTED_EXTENSION_FILE_PATH);
-                } catch (error) {
-                    // verify
-                    expect(error).equal(`Failed to write to file ${UNSUPPORTED_EXTENSION_FILE_PATH}.`
-                    + '\nASK CLI does not support this file type.');
-                }
             });
         });
     });

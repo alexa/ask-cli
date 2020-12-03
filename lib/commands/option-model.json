@@ -43,13 +43,9 @@
   },
   "replay": {
     "name": "replay",
-    "description": "Specify a replay file to simulate dialog with Alexa",
+    "description": "Specify a replay file (JSON file) to simulate dialog with Alexa",
     "alias": "r",
-    "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "REGEX",
-      "regex": "^[./]?[\\w\\-. /]+\\.(json)"
-    }]
+    "stringInput": "REQUIRED"
   },
   "save-skill-io": {
     "name": "save-skill-io",

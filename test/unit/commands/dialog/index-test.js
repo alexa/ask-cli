@@ -4,6 +4,7 @@ const path = require('path');
 
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const DialogCommand = require('@src/commands/dialog');
+const DialogReplayFile = require('@src/model/dialog-replay-file');
 const helper = require('@src/commands/dialog/helper');
 const httpClient = require('@src/clients/http-client');
 const InteractiveMode = require('@src/commands/dialog/interactive-mode');
@@ -216,6 +217,23 @@ describe('Commands Dialog test - command class test', () => {
                     expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                     expect(config.stage).equal('development');
                     expect(config.userInputs).deep.equal(['hello', 'world']);
+                    done();
+                });
+            });
+
+            it('| returns error when initialization of DialogReplayFile fails', (done) => {
+                // setup
+                const TEST_CMD_WITH_VALUES = {
+                    stage: '',
+                    replay: DIALOG_REPLAY_FILE_JSON_PATH
+                };
+                const error = 'error';
+                sinon.stub(profileHelper, 'runtimeProfile').returns(TEST_PROFILE);
+                sinon.stub(DialogReplayFile.prototype, 'readFileContent').throws(new Error(error));
+                // call
+                instance._getDialogConfig(TEST_CMD_WITH_VALUES, (err) => {
+                    // verify
+                    expect(err.message).eq(error);
                     done();
                 });
             });
