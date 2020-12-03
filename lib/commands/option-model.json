@@ -37,7 +37,7 @@
   },
   "skill-id": {
     "name": "skill-id",
-    "description": "The skill ID.",
+    "description": "Skill id",
     "alias": "s",
     "stringInput": "REQUIRED"
   },
@@ -64,7 +64,7 @@
   },
   "stage": {
     "name": "stage",
-    "description": "Stage for skill.",
+    "description": "Skill stage",
     "alias": "g",
     "stringInput": "REQUIRED",
     "rule": [{
