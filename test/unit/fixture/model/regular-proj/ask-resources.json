@@ -22,6 +22,11 @@
           "runtime": "nodejs10.x",
           "handler": "index.handler",
           "template": "./awsStacks/skill-infra.yaml",
+          "targetEndpoint": [
+            "custom",
+            "events",
+            "smartHome"
+          ],
           "regionOverrides": {
             "NA": {
               "awsRegion": "us-east-1",

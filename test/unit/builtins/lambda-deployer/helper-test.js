@@ -8,6 +8,7 @@ const helper = require('@src/builtins/deploy-delegates/lambda-deployer/helper');
 const IAMClient = require('@src/clients/aws-client/iam-client');
 const LambdaClient = require('@src/clients/aws-client/lambda-client');
 const Manifest = require('@src/model/manifest');
+const ResourcesConfig = require('@src/model/resources-config');
 
 describe('Builtins test - lambda-deployer helper.js test', () => {
     const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'manifest.json');
@@ -450,7 +451,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             });
         });
 
-        it('| no Lambda found, create Lambda function, add Alexa Permission and get Function revisionId pass, expect Lambda data return.', (done) => {
+        it('| no Lambda found, create Lambda function, add Alexa Permission for target domains'
+        + ' and get Function revisionId pass, expect Lambda data return.', (done) => {
             // setup
             const TEST_LAMBDA_DATA = {
                 FunctionArn: TEST_FUNCTION_ARN,
@@ -463,6 +465,41 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             };
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
+
+            // call
+            helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
+                // verify
+                expect(res).deep.equal({
+                    isAllStepSuccess: true,
+                    isCodeDeployed: true,
+                    lambdaResponse: {
+                        arn: TEST_FUNCTION_ARN,
+                        lastModified: TEST_LAST_MODIFIED,
+                        revisionId: TEST_UPDATED_REVISION_ID
+                    }
+                });
+                done();
+            });
+        });
+
+        it('| no Lambda found, create Lambda function, add Alexa Permission for domains from skill '
+        + 'manifest and get Function revisionId pass, expect Lambda data return.', (done) => {
+            // setup
+            const TEST_LAMBDA_DATA = {
+                FunctionArn: TEST_FUNCTION_ARN,
+                LastModified: TEST_LAST_MODIFIED
+            };
+            const TEST_GET_FUNCTION_RESPONSE = {
+                Configuration: {
+                    RevisionId: TEST_UPDATED_REVISION_ID,
+                }
+            };
+            sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
+            sinon.stub(aws, 'Lambda');
+            sinon.stub(ResourcesConfig.prototype, 'getTargetEndpoints').returns([]);
             sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
