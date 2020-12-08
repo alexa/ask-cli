@@ -244,22 +244,6 @@ describe('Controller test - dialog controller test', () => {
             expect(warnStub.args[0][0]).equal(`Unable to validate arguments: "${malFormedAppendQuitArgument}". ${RECORD_FORMAT}`);
         });
 
-        it('| file is not of JSON type', () => {
-            // setup
-            const warnStub = sinon.stub();
-            sinon.stub(Messenger, 'getInstance').returns({
-                warn: warnStub
-            });
-            sinon.stub(DialogReplView.prototype, 'registerRecordCommand');
-            DialogReplView.prototype.registerRecordCommand.callsArgWith(0, 'file.yml');
-
-            // call
-            dialogController.setupSpecialCommands(dialogReplView, () => {});
-
-            // verify
-            expect(warnStub.args[0][0]).equal("File should be of type '.json'");
-        });
-
         it('| replay file creation throws error', (done) => {
             // setup
             const infoStub = sinon.stub().throws(new Error(TEST_MSG));
