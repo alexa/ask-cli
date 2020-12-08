@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.21.0](https://github.com/alexa/ask-cli/compare/v2.20.0...v2.21.0) (2020-12-08)
+
+
+### Features
+
+* add targetEndpoint property to ask-resources.json ([#340](https://github.com/alexa/ask-cli/issues/340)) ([12ad68f](https://github.com/alexa/ask-cli/commit/12ad68ff762e6d0f67cf4b85aa38c2a94b009df1))
+
+
+### Bug Fixes
+
+* add explicit check for folder permissions to create a project ([647c826](https://github.com/alexa/ask-cli/commit/647c82641ed4c148161f4a1d2de9741b4092e169))
+* change default stdio of builder child process to inherit to see error messages ([d936f20](https://github.com/alexa/ask-cli/commit/d936f20b08f7dc6ef6b7e4d613952cd9dc50b4f2))
+* removing restriction for replay file to have .json extension ([#354](https://github.com/alexa/ask-cli/issues/354)) ([09f6270](https://github.com/alexa/ask-cli/commit/09f6270912debe4673cd81d60c566e956216b4a1))
+
 ## [2.20.0](https://github.com/alexa/ask-cli/compare/v2.19.3...v2.20.0) (2020-11-10)
 
 
