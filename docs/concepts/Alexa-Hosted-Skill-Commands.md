@@ -102,11 +102,29 @@ Unlike in CLI v1, running `ask deploy` on hosted skills will no longer trigger s
 Instead, `$ git push` sends the latest source code to Lambda.  It also deploys skill-package changes such as the interaction model, skill manifest and in-skill products.
 
 ## DEPLOYMENT STEPS:
-* Push to deploy skill code and reosurces:
+* Push to deploy skill code and resources:
 	* `$ git push`
-  * Pushing in `master` branch deploys "lambda" folder to user's `development` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
-  * Pushing in `prod` branch deploys "lambda" folder to user's `live` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
+  * Pushing to `master` branch deploys "lambda" folder to user's `development` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
+  * Pushing to `prod` branch deploys "lambda" folder to user's `live` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
 
+
+Note: dev branch is only used to be displayed in the web console. You only need to push to dev branch if you want to sync version that is displayed in the web console.
+
+When you receive the following warning: "The master branch of your skill is ahead of the dev version. To re-enable the code editor, you need to use the ASK CLI to merge the remote master branch to dev and push.", you need to use following steps to sync your master branch back to dev:
+
+```
+git checkout dev
+git pull --rebase
+git merge master
+# fix any merge conflicts if you have
+git push --no-verify
+```
+  
+## DEVELOPMENT CONSOLE, BRANCHES AND STAGES
+
+* dev branch corresponds to the code you see in the web console editor.
+* master branch corresponds to development stage. When you click "Deploy" in the web console, dev branch is merged to master (deployment to development stage).
+* prod branch corresponds to live stage. When you click "Promote to live" in the web console, master branch is merged to prod (deployment to live stage).
 
 ## Git Pre-push Hook
 
