@@ -4272,9 +4272,9 @@ download the skill package to &quot;skill-package&quot; folder in current direct
 
 <dl>
     <dt>-s, --skill-id <skill-id></dt>
-    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dd markdown="span">[REQUIRED] Skill id.</dd>
     <dt>-g, --stage <stage></dt>
-    <dd markdown="span">[REQUIRED] Stage for skill.</dd>
+    <dd markdown="span">[REQUIRED] Skill stage.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
@@ -4293,7 +4293,7 @@ Get the task definition details specified by the taskName and version.
 
 <dl>
     <dt>-s, --skill-id <skill-id></dt>
-    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dd markdown="span">[REQUIRED] Skill id.</dd>
     <dt>--task-name <task-name></dt>
     <dd markdown="span">[REQUIRED] Name of a task.</dd>
     <dt>--task-version <task-version></dt>
@@ -4316,7 +4316,7 @@ List the tasks summary information based on keywords or provider skillId. If bot
 
 <dl>
     <dt>-s, --skill-id <skill-id></dt>
-    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dd markdown="span">[REQUIRED] Skill id.</dd>
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] Next token if the result is paginated.</dd>
     <dt>--max-results <max-results></dt>
