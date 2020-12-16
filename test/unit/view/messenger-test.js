@@ -64,8 +64,7 @@ describe('View test - messenger file test', () => {
             sinon.stub(fs, 'writeFileSync');
         });
 
-        it('| debug function correctly push message to buffer, and can display message on debug mode', () => {
-            const stub = sinon.stub(console, 'warn');
+        it('| debug function correctly push message to buffer', () => {
             const expectedItem = {
                 time: TEST_TIME,
                 operation: 'DEBUG',
@@ -78,7 +77,6 @@ describe('View test - messenger file test', () => {
 
             // verify
             expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
-            expect(stub.args[0][0]).equal(chalk`{gray [Debug]: ${TEST_MESSAGE}}`);
 
             // clear
             Messenger.getInstance().dispose();
@@ -330,6 +328,42 @@ describe('View test - messenger file test', () => {
 
             // restore console.log first, otherwise cannot print test result to console
             console.log.restore();
+        });
+
+        it('| flushDebugMessages should output to console debug messages', () => {
+            const logStub = sinon.stub(console, 'log');
+
+            const message1 = 'test1';
+            const message2 = 'test2';
+            const infoMessage = 'info';
+
+            Messenger.getInstance().debug(message1);
+            Messenger.getInstance().debug(message2);
+            Messenger.getInstance().info(infoMessage);
+            Messenger.getInstance().debug();
+
+            Messenger.getInstance().flushDebugMessages();
+
+            // verify
+            expect(logStub.callCount).eq(3);
+            expect(logStub.args[0][0]).eq(infoMessage);
+            expect(logStub.args[1][0]).eq(message1);
+            expect(logStub.args[2][0]).eq(message2);
+
+            // restore console.log first, otherwise cannot print test result to console
+            console.log.restore();
+        });
+
+        it('| setDoDebug should only add event listener once', () => {
+            Messenger.getInstance().setDoDebug(true);
+            Messenger.getInstance().setDoDebug(true);
+
+            const flushDebugListener = Messenger.getInstance().flushDebugMessages;
+            const listeners = process.listeners('exit').filter(l => l === flushDebugListener);
+
+            expect(listeners.length).eq(1);
+
+            Messenger.getInstance().dispose();
         });
 
         afterEach(() => {

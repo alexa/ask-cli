@@ -5,6 +5,7 @@ const queryString = require('querystring');
 const proxyquire = require('proxyquire');
 
 const httpClient = require('@src/clients/http-client');
+const HttpClient = require('@src/clients/http-client-promise');
 const LWAClient = require('@src/clients/lwa-auth-code-client');
 const CONSTANTS = require('@src/utils/constants');
 const jsonView = require('@src/view/json-view');
@@ -212,6 +213,36 @@ describe('# Clients test - LWA OAuth2 client test', () => {
                 });
                 done();
             });
+        });
+
+        afterEach(() => {
+            sinon.restore();
+        });
+    });
+
+    describe('# test getAccessToken', () => {
+        const mockResponse = { access_token: 'Atza|test', token_type: 'bearer', expires_in: 3600 };
+
+        it('| should refresh access token and return token object', async () => {
+            sinon.stub(HttpClient.prototype, 'invoke').resolves({ body: JSON.stringify(mockResponse) });
+            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
+
+            const result = await lwaClient.getAccessToken('test');
+
+            expect(result.access_token).eq(mockResponse.access_token);
+            expect(result.token_type).eq(mockResponse.token_type);
+            expect(result.expires_in).eq(mockResponse.expires_in);
+            expect(new Date(result.expires_at)).instanceOf(Date);
+        });
+
+        it('| should throw error and show hint to run ask configure', () => {
+            sinon.stub(HttpClient.prototype, 'invoke').rejects(new Error('test'));
+            const lwaClient = new LWAClient(TEST_BASIC_CONFIGURATION);
+
+            return lwaClient.getAccessToken('test')
+                .catch(err => {
+                    expect(err.message).includes('please run "ask configure"');
+                });
         });
 
         afterEach(() => {

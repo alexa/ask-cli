@@ -34,6 +34,9 @@ describe('Smapi test - smapiCommandHandler function', () => {
         statusCode: 200
     };
 
+    const flatParamsMapSimple = new Map([
+        ['skillid', { name: 'skillId' }]]);
+
     const flatParamsMap = new Map([
         ['skillid', { name: 'skillId' }],
         ['somejson', { name: 'someJson', json: true }],
@@ -44,8 +47,9 @@ describe('Smapi test - smapiCommandHandler function', () => {
 
     const commanderToApiCustomizationMap = new Map();
     let cmdObj;
-
-    const clientStub = { apiConfiguration: { apiEndpoint: null } };
+    let withRequestInterceptorsStub;
+    let withResponseInterceptorsStub;
+    let clientStub;
 
     const modelInterceptor = {
         operations: new Map([[commandName, { params: [] }]]),
@@ -53,15 +57,18 @@ describe('Smapi test - smapiCommandHandler function', () => {
     };
 
     beforeEach(() => {
+        withRequestInterceptorsStub = sinon.stub();
+        withResponseInterceptorsStub = sinon.stub();
+        clientStub = { apiConfiguration: { apiEndpoint: null },
+            withRequestInterceptors: withRequestInterceptorsStub,
+            withResponseInterceptors: withResponseInterceptorsStub };
         cmdObj = {
             opts() {
                 return { skillId, someNumber, someBoolean, someJson: JSON.stringify(jsonValue), someArray: arrayValueStr };
             },
             _name: commandName
         };
-        sinon.stub(AuthorizationController.prototype, '_getAuthClientInstance').returns(
-            { config: {} }
-        );
+        sinon.stub(AuthorizationController.prototype, 'getAccessToken').returns('Atza|test');
         sinon.stub(profileHelper, 'runtimeProfile').returns('test');
         sinon.stub(AppConfig.prototype, '_validateFilePath');
         sinon.stub(AppConfig.prototype, 'read');
@@ -76,6 +83,15 @@ describe('Smapi test - smapiCommandHandler function', () => {
             + 'someNonPopulatedProperty, someArray, simulationsApiRequest) { return 0};';
         sinon.stub(BeforeSendProcessor.prototype, 'processAll');
         sinon.stub(CustomSmapiClientBuilder.prototype, 'client').returns(clientStub);
+    });
+
+    it('| should send smapi command with correct parameter mapping when body param is not present', async () => {
+        await smapiCommandHandler(apiOperationName, flatParamsMapSimple, commanderToApiCustomizationMap, cmdObj, modelInterceptor);
+
+        const expectedParams = [null, skillId, null, null, null];
+        const calledParams = clientStub[sdkFunctionName].args[0];
+
+        expect(calledParams).eql(expectedParams);
     });
 
     it('| should send smapi command with correct parameter mapping', async () => {
@@ -138,30 +154,6 @@ describe('Smapi test - smapiCommandHandler function', () => {
         const calledParams = clientStub[sdkFunctionName].args[0];
 
         expect(calledParams).eql(expectedParams);
-    });
-
-    it('| should display debug message when debug flag is passed', async () => {
-        const cmdObjDebug = {
-            opts() {
-                return { debug: true, skillId };
-            },
-            _name: commandName
-        };
-
-        const messengerStub = sinon.stub(Messenger, 'displayMessage');
-
-        await smapiCommandHandler(apiOperationName, flatParamsMap, commanderToApiCustomizationMap, cmdObjDebug, modelInterceptor);
-
-        expect(messengerStub.args[0]).eql(['INFO', 'Operation: someApiOperation']);
-        expect(messengerStub.args[1]).eql(['INFO', 'Payload:']);
-        expect(messengerStub.args[2])
-            .eql(['INFO', `${jsonView.toString({ someJson: null,
-                skillId,
-                someNonPopulatedProperty: null,
-                someArray: null,
-                simulationsApiRequest: {} })}\n`]);
-        expect(messengerStub.args[3]).eql(['INFO', 'Response:']);
-        expect(messengerStub.args[4]).eql(['INFO', jsonView.toString(fakeResponse)]);
     });
 
     it('| should display body, headers and status code when full response flag is passed', async () => {
