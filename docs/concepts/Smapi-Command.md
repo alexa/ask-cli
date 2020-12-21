@@ -196,7 +196,7 @@ Lists catalogs associated with a vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-catalog
@@ -223,7 +223,7 @@ Creates a new catalog based on information provided in the request.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-catalog
@@ -244,7 +244,7 @@ Returns information about a particular catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-catalogs-for-skill
@@ -269,7 +269,7 @@ Lists all the catalogs associated with a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### associate-catalog-with-skill
@@ -292,7 +292,7 @@ Associate skill with catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-uploads-for-catalog
@@ -317,7 +317,7 @@ Lists all the uploads for a particular catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-content-upload
@@ -340,7 +340,7 @@ Creates a new upload for a catalog and returns presigned upload parts for upload
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-content-upload-by-id
@@ -363,7 +363,7 @@ Gets detailed information about an upload which was created for a specific catal
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### complete-catalog-upload
@@ -391,7 +391,7 @@ Completes an upload. To be called after the file is uploaded to the backend data
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-subscribers-for-development-events
@@ -414,7 +414,7 @@ Lists the subscribers for a particular vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-subscriber-for-development-events
@@ -438,7 +438,7 @@ Creates a new subscriber resource for a vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-subscriber-for-development-events
@@ -459,7 +459,7 @@ Returns information about specified subscriber.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-subscriber-for-development-events
@@ -485,7 +485,7 @@ Updates the properties of a subscriber.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-subscriber-for-development-events
@@ -506,7 +506,7 @@ Deletes a specified subscriber.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-subscriptions-for-development-events
@@ -531,7 +531,7 @@ Lists all the subscriptions for a vendor&#x2F;subscriber depending on the query 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-subscription-for-development-events
@@ -557,7 +557,7 @@ Creates a new subscription for a subscriber. This needs to be authorized by the 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-subscription-for-development-events
@@ -578,7 +578,7 @@ Returns information about a particular subscription. Both, the vendor who create
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-subscription-for-development-events
@@ -604,7 +604,7 @@ Updates the mutable properties of a subscription. This needs to be authorized by
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-subscription-for-development-events
@@ -625,7 +625,7 @@ Deletes a particular subscription. Both, the vendor who created the subscriber a
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### generate-catalog-upload-url
@@ -648,7 +648,7 @@ Generates preSigned urls to upload data.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-catalog-upload
@@ -674,7 +674,7 @@ Creates a new upload for a catalog and returns location to track the upload proc
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-list-for-vendor
@@ -714,7 +714,7 @@ Get the list of in-skill products for the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-isp-for-vendor
@@ -738,7 +738,7 @@ Creates a new in-skill product for given vendorId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-list-for-skill-id
@@ -765,7 +765,7 @@ Get the list of in-skill products for the skillId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-definition
@@ -788,7 +788,7 @@ Returns the in-skill product definition for given productId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-isp-for-product
@@ -818,7 +818,7 @@ Updates in-skill product definition for given productId. Only development stage 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-isp-for-product
@@ -843,7 +843,7 @@ Deletes the in-skill product for given productId. Only development stage support
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-summary
@@ -866,7 +866,7 @@ Get the summary information for an in-skill product.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-isp-associated-skills
@@ -893,7 +893,7 @@ Get the associated skills for the in-skill product.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### associate-isp-with-skill
@@ -916,7 +916,7 @@ Associates an in-skill product with a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### disassociate-isp-with-skill
@@ -939,7 +939,7 @@ Disassociates an in-skill product from a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### reset-entitlement-for-product
@@ -962,7 +962,7 @@ Resets the entitlement(s) of the Product for the current user.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-account-linking-info
@@ -989,7 +989,7 @@ Get AccountLinking information for the skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-account-linking-info
@@ -1023,7 +1023,7 @@ Create AccountLinking information for the skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-account-linking-info
@@ -1050,7 +1050,7 @@ Delete AccountLinking information of a skill for the given stage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### generate-credentials-for-alexa-hosted-skill
@@ -1076,7 +1076,7 @@ Generates hosted skill repository credentials to access the hosted skill reposit
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-alexa-hosted-skill-metadata
@@ -1097,7 +1097,7 @@ Get Alexa hosted skill&#39;s metadata.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-alexa-hosted-skill-user-permissions
@@ -1118,7 +1118,7 @@ Get the current user permissions about Alexa hosted skill features.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-beta-test
@@ -1139,7 +1139,7 @@ Get beta test for a given Alexa skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-beta-test
@@ -1162,7 +1162,7 @@ Create a beta test for a given Alexa skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-beta-test
@@ -1185,7 +1185,7 @@ Update a beta test for a given Alexa skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### start-beta-test
@@ -1206,7 +1206,7 @@ Start a beta test for a given Alexa skill. System will send invitation emails to
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### end-beta-test
@@ -1227,7 +1227,7 @@ End a beta test for a given Alexa skill. System will revoke the entitlement of e
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-list-of-testers
@@ -1252,7 +1252,7 @@ List all testers in a beta test for the given Alexa skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### add-testers-to-beta-test
@@ -1276,7 +1276,7 @@ Add testers to a beta test for the given Alexa skill.  System will send invitati
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### remove-testers-from-beta-test
@@ -1300,7 +1300,7 @@ Remove testers from a beta test for the given Alexa skill.  System will send acc
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### send-reminder-to-testers
@@ -1324,7 +1324,7 @@ Send reminder to the testers in a beta test for the given Alexa skill.  System w
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### request-feedback-from-testers
@@ -1348,7 +1348,7 @@ Request feedback from the testers in a beta test for the given Alexa skill.  Sys
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-certifications-list
@@ -1373,7 +1373,7 @@ Get list of all certifications available for a skill, including information abou
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-certification-review
@@ -1398,7 +1398,7 @@ Gets a specific certification resource. The response contains the review trackin
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-enablement-status
@@ -1421,7 +1421,7 @@ Checks whether an enablement exist for given skillId&#x2F;stage and customerId (
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-skill-enablement
@@ -1444,7 +1444,7 @@ Creates&#x2F;Updates the enablement for given skillId&#x2F;stage and customerId 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-skill-enablement
@@ -1467,7 +1467,7 @@ Deletes the enablement for given skillId&#x2F;stage and customerId (retrieved fr
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### profile-nlu
@@ -1496,7 +1496,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-utterance-data
@@ -1568,7 +1568,7 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model
@@ -1599,7 +1599,7 @@ The path params
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-metadata
@@ -1628,7 +1628,7 @@ Get the latest metadata for the interaction model resource for the given stage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-interaction-model
@@ -1664,7 +1664,7 @@ Creates an &#x60;InteractionModel&#x60; for the skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-catalogs
@@ -1689,7 +1689,7 @@ List all catalogs for the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-catalog
@@ -1712,7 +1712,7 @@ Create a new version of catalog within the given catalogId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-definition
@@ -1733,7 +1733,7 @@ get the catalog definition.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-catalog
@@ -1754,7 +1754,7 @@ Delete the catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-update-status
@@ -1777,7 +1777,7 @@ Get the status of catalog resource and its sub-resources for a given catalogId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-catalog
@@ -1802,7 +1802,7 @@ update description and vendorGuidance string for certain version of a catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-conflict-detection-job-status-for-interaction-model
@@ -1830,7 +1830,7 @@ This API returns the job status of conflict detection job for a specified intera
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-conflicts-for-interaction-model
@@ -1862,7 +1862,7 @@ This is a paginated API that retrieves results of conflict detection job for a s
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-catalog-versions
@@ -1891,7 +1891,7 @@ List all the historical versions of the given catalogId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-catalog-version
@@ -1918,7 +1918,7 @@ Create a new version of catalog entity for the given catalogId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-version
@@ -1941,7 +1941,7 @@ Get catalog version data of given catalog version.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-catalog-version
@@ -1964,7 +1964,7 @@ Delete catalog version.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-catalog-version
@@ -1989,7 +1989,7 @@ Update description and vendorGuidance string for certain version of a catalog.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-catalog-values
@@ -2016,7 +2016,7 @@ Get catalog values from the given catalogId &amp; version.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-version
@@ -2047,7 +2047,7 @@ Gets the specified version &#x60;InteractionModel&#x60; of a skill for the vendo
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-versions
@@ -2084,7 +2084,7 @@ Get the list of interactionModel versions of a skill for the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-slot-types
@@ -2109,7 +2109,7 @@ List all slot types for the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-slot-type
@@ -2133,7 +2133,7 @@ Create a new version of slot type within the given slotTypeId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-definition
@@ -2154,7 +2154,7 @@ Get the slot type definition.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-slot-type
@@ -2175,7 +2175,7 @@ Delete the slot type.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-build-status
@@ -2198,7 +2198,7 @@ Get the status of slot type resource and its sub-resources for a given slotTypeI
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-slot-type
@@ -2221,7 +2221,7 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-job-definitions-for-interaction-model
@@ -2244,7 +2244,7 @@ Retrieve a list of jobs associated with the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-job-definition-for-interaction-model
@@ -2268,7 +2268,7 @@ Creates a new Job Definition from the Job Definition request provided. This can 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-job-definition-for-interaction-model
@@ -2289,7 +2289,7 @@ Get the job definition for a given jobId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-job-definition-for-interaction-model
@@ -2310,7 +2310,7 @@ Delete the job definition for a given jobId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-job-status-for-interaction-model
@@ -2334,7 +2334,7 @@ Update the JobStatus to Enable or Disable a job.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-job-executions-for-interaction-model
@@ -2361,7 +2361,7 @@ List the execution history associated with the job definition, with default sort
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### cancel-next-job-execution-for-interaction-model
@@ -2384,7 +2384,7 @@ Cancel the next execution for the given job.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-interaction-model-slot-type-versions
@@ -2411,7 +2411,7 @@ List all slot type versions for the slot type id.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-interaction-model-slot-type-version
@@ -2437,7 +2437,7 @@ Create a new version of slot type entity for the given slotTypeId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-interaction-model-slot-type-version
@@ -2460,7 +2460,7 @@ Get slot type version data of given slot type version.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-interaction-model-slot-type-version
@@ -2483,7 +2483,7 @@ Delete slot type version.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-interaction-model-slot-type-version
@@ -2508,7 +2508,7 @@ Update description and vendorGuidance string for certain version of a slot type.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### invoke-skill
@@ -2537,7 +2537,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-manifest
@@ -2564,7 +2564,7 @@ Returns the skill manifest for given skillId and stage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-skill-manifest
@@ -2598,7 +2598,7 @@ Updates skill manifest for given skillId and stage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-metrics
@@ -2639,7 +2639,7 @@ Get analytic metrics report of skill usage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-private-distribution-account-id
@@ -2664,7 +2664,7 @@ Add an id to the private distribution accounts.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-private-distribution-account-id
@@ -2689,7 +2689,7 @@ Remove an id from the private distribution accounts.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-private-distribution-accounts
@@ -2716,7 +2716,7 @@ List private distribution accounts.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### publish-skill
@@ -2741,7 +2741,7 @@ If the skill is in certified stage, initiate publishing immediately or set a dat
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-publications
@@ -2765,7 +2765,7 @@ status of skill publishing.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### simulate-skill
@@ -2795,7 +2795,7 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-simulation
@@ -2820,7 +2820,7 @@ This API gets the result of a previously executed simulation. A successful respo
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### submit-skill-validation
@@ -2846,7 +2846,7 @@ This is an asynchronous API which allows a skill developer to execute various va
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-validations
@@ -2873,7 +2873,7 @@ This API gets the result of a previously executed validation. A successful respo
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-skills-for-vendor
@@ -2899,7 +2899,7 @@ Get the list of skills for the vendor.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-skill-for-vendor
@@ -2923,7 +2923,7 @@ Creates a new skill for given vendorId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-skill
@@ -2944,7 +2944,7 @@ Delete the skill and model for given skillId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-status
@@ -2969,7 +2969,7 @@ If this parameter is not specified, status for all the resources/sub-resources w
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-skill-credentials
@@ -2990,7 +2990,7 @@ Get the client credentials for the skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-ssl-certificates
@@ -3011,7 +3011,7 @@ Returns the ssl certificate sets currently associated with this skill. Sets cons
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-ssl-certificates
@@ -3037,7 +3037,7 @@ Updates the ssl certificates associated with this skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### submit-skill-for-certification
@@ -3063,7 +3063,7 @@ Submit the skill for certification.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### withdraw-skill-from-certification
@@ -3089,7 +3089,7 @@ Withdraws the skill from certification.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-versions-for-skill
@@ -3114,7 +3114,7 @@ Retrieve a list of all skill versions associated with this skill id.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### rollback-skill
@@ -3137,7 +3137,7 @@ Submit a target skill version to rollback to. Only one rollback or publish opera
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-rollback-for-skill
@@ -3160,7 +3160,7 @@ Get the rollback status of a skill given an associated rollbackRequestId. Use ~l
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-export-request-for-skill
@@ -3183,7 +3183,7 @@ Creates a new export for a skill with given skillId and stage.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-status-of-export-request
@@ -3204,7 +3204,7 @@ Get status for given exportId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-skill-package
@@ -3225,7 +3225,7 @@ Creates a new import for a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### import-skill-package
@@ -3250,7 +3250,7 @@ Creates a new import for a skill with given skillId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-import-status
@@ -3271,7 +3271,7 @@ Get status for given importId.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-upload-url
@@ -3290,7 +3290,7 @@ Creates a new uploadUrl.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### clone-locale
@@ -3323,7 +3323,7 @@ Creates a new clone locale workflow for a skill with given skillId, source local
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-clone-locale-status
@@ -3351,7 +3351,7 @@ If set to ~latest, request returns the status of the latest clone locale workflo
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-vendor-list
@@ -3370,7 +3370,7 @@ Get the list of Vendor information.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### query-development-audit-logs
@@ -3426,7 +3426,7 @@ The SMAPI Audit Logs API provides customers with an audit history of all SMAPI c
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-resource-schema
@@ -3451,7 +3451,7 @@ GetResourceSchema API provides schema for skill related resources. The schema re
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-nlu-evaluations
@@ -3482,7 +3482,7 @@ API which requests recently run nlu evaluations started by a vendor for a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-nlu-evaluations
@@ -3513,7 +3513,7 @@ The operation outputs an evaluationId which allows the retrieval of the current 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-nlu-evaluation
@@ -3536,7 +3536,7 @@ API which requests top level information about the evaluation like the current s
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-result-for-nlu-evaluations
@@ -3573,7 +3573,7 @@ Paginated API which returns the test case results of an evaluation. This should 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-nlu-annotation-sets
@@ -3600,7 +3600,7 @@ API which requests all the NLU annotation sets for a skill. Returns the annotati
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-nlu-annotation-set
@@ -3625,7 +3625,7 @@ This is an API that creates a new NLU annotation set with properties and returns
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-properties-for-nlu-annotation-sets
@@ -3648,7 +3648,7 @@ Return the properties for an NLU annotation set.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-properties-for-nlu-annotation-sets
@@ -3673,7 +3673,7 @@ API which updates the NLU annotation set properties. Currently, the only data ca
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-properties-for-nlu-annotation-sets
@@ -3696,7 +3696,7 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-annotations-for-nlu-annotation-sets
@@ -3721,7 +3721,7 @@ API which deletes the NLU annotation set. Developers cannot get&#x2F;list the de
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### update-annotations-for-nlu-annotation-sets
@@ -3751,7 +3751,7 @@ API which replaces the annotations in NLU annotation set.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-asr-annotation-sets
@@ -3776,7 +3776,7 @@ API which requests all the ASR annotation sets for a skill. Returns the annotati
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-asr-annotation-set
@@ -3799,7 +3799,7 @@ This is an API that creates a new ASR annotation set with a name and returns the
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-asr-annotation-set
@@ -3822,7 +3822,7 @@ Return the metadata for an ASR annotation set.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-asr-annotation-set
@@ -3847,7 +3847,7 @@ API which updates the ASR annotation set properties. Currently, the only data ca
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-asr-annotation-set
@@ -3870,7 +3870,7 @@ API which deletes the ASR annotation set. Developers cannot get&#x2F;list the de
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-annotations-for-asr-annotation-set
@@ -3900,7 +3900,7 @@ API which deletes the ASR annotation set. Developers cannot get&#x2F;list the de
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### set-annotations-for-asr-annotation-set
@@ -3928,7 +3928,7 @@ API that updates the annotaions in the annotation set.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-asr-evaluations
@@ -3963,7 +3963,7 @@ API that allows developers to get historical ASR evaluations they run before.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-asr-evaluation
@@ -3991,7 +3991,7 @@ This is an asynchronous API that starts an evaluation against the ASR model buil
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-asr-evaluation-status
@@ -4014,7 +4014,7 @@ API which requests high level information about the evaluation like the current 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### delete-asr-evaluation
@@ -4037,7 +4037,7 @@ API which enables the deletion of an evaluation.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-asr-evaluations-results
@@ -4070,7 +4070,7 @@ Paginated API which returns the test case results of an evaluation. This should 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-smarthome-capability-test-plans
@@ -4095,7 +4095,7 @@ List all the test plan names and ids for a given skill ID.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-smarthome-capablity-evaluation-results
@@ -4122,7 +4122,7 @@ Get test case results for an evaluation run.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-smart-home-capability-evaluation
@@ -4145,7 +4145,7 @@ Get top level information and status of a Smart Home capability evaluation.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### list-smarthome-capability-evaluations
@@ -4177,7 +4177,7 @@ List Smart Home capability evaluation runs for a skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### create-smarthome-capability-evaluation
@@ -4205,7 +4205,7 @@ Start a capability evaluation against a Smart Home skill.
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### invoke-skill-end-point
@@ -4236,7 +4236,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dt>--full-response</dt>
     <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### upload-catalog
@@ -4257,7 +4257,7 @@ upload a file for the catalog.
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### export-package
@@ -4278,7 +4278,7 @@ download the skill package to &quot;skill-package&quot; folder in current direct
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### get-task
@@ -4301,7 +4301,7 @@ Get the task definition details specified by the taskName and version.
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 ### search-task
@@ -4329,7 +4329,7 @@ List the tasks summary information based on keywords or provider skillId. If bot
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">[OPTIONAL] Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--debug</dt>
-    <dd markdown="span">[OPTIONAL] Enables the ASK CLI  to show debug messages in the output of the command.</dd>
+    <dd markdown="span">[OPTIONAL] Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
 
