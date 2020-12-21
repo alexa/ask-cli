@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.22.0](https://github.com/alexa/ask-cli/compare/v2.21.0...v2.22.0) (2020-12-21)
+
+
+### Features
+
+* add "run" command for local debugging support ([#325](https://github.com/alexa/ask-cli/issues/325)) ([592e35e](https://github.com/alexa/ask-cli/commit/592e35ec9b93476105fa594b2936c8fb536b3d51))
+
 ## [2.21.0](https://github.com/alexa/ask-cli/compare/v2.20.0...v2.21.0) (2020-12-08)
 
 
