@@ -69,7 +69,8 @@
     "simple-git": "^1.82.0",
     "tmp": "^0.1.0",
     "uuid": "^3.4.0",
-    "valid-url": "^1.0.9"
+    "valid-url": "^1.0.9",
+    "nodemon": "^2.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
