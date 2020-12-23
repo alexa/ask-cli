@@ -48,7 +48,7 @@ CLI provides user with an option to setup AWS profile or not. If user chooses to
 
 Upon successful completion of the creation of the IAM user, CLI expects the user to enter the generated `aws_access_key_id` and `aws_secret_access_key` into the command prompt. Upon completion of this process, CLI finishes the setup process by updating both `.aws/credentials` file and `.ask/cli_config` file with a confirmation message of the setup.
 
-The policies used in the creation of IAM role are `IAMFullAccess`, `AWSCloudFormationFullAccess`, `AmazonS3FullAccess` and `AWSLambdaFullAccess`. For more information on IAM roles and policies, refer to the documentation [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html).
+The policies used in the creation of IAM role are `IAMFullAccess`, `AWSCloudFormationFullAccess`, `AmazonS3FullAccess` and `AWSLambda_FullAccess`. For more information on IAM roles and policies, refer to the documentation [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html).
 
 
 ---

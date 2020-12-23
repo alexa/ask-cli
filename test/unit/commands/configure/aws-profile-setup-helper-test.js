@@ -35,7 +35,8 @@ describe('Command: Configure - AWS profile setup helper test', () => {
             CONSTANTS.AWS.IAM.USER.POLICY_ARN.IAM_FULL,
             CONSTANTS.AWS.IAM.USER.POLICY_ARN.CFN_FULL,
             CONSTANTS.AWS.IAM.USER.POLICY_ARN.S3_FULL,
-            CONSTANTS.AWS.IAM.USER.POLICY_ARN.LAMBDA_FULL
+            CONSTANTS.AWS.IAM.USER.POLICY_ARN.LAMBDA_FULL,
+            CONSTANTS.AWS.IAM.USER.POLICY_ARN.CLOUD_WATCH_FULL
         ]
     };
     const TEST_CREDENTIALS = { aws_access_key_id: 'accessKeyId', aws_secret_access_key: 'secretAccessKey' };
