@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.22.1](https://github.com/alexa/ask-cli/compare/v2.22.0...v2.22.1) (2021-01-04)
+
 ## [2.22.0](https://github.com/alexa/ask-cli/compare/v2.21.0...v2.22.0) (2020-12-21)
 
 
