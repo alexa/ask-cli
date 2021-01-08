@@ -45,7 +45,7 @@
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",
     "aws-sdk": "^2.288.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bunyan": "^1.8.12",
     "chalk": "2.4.2",
     "commander": "^4.1.1",
