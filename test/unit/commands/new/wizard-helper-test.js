@@ -89,7 +89,7 @@ describe('Commands new test - wizard helper test', () => {
             });
         });
 
-        it('| user input getSkillLocale fails, expect throw error', (done) => {
+        it.skip('| user input getSkillLocale fails, expect throw error', (done) => {
             // setup
             ui.selectSkillCodeLanguage.yields(null, TEST_LANGUAGE_RESPONSE);
             ui.getDeploymentType.yields(null, TEST_HOSTED_DEPLOYMENT);
