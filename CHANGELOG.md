@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.22.3](https://github.com/alexa/ask-cli/compare/v2.22.2...v2.22.3) (2021-01-19)
+
+
+### Bug Fixes
+
+* increase lambda default memory and timeout ([#371](https://github.com/alexa/ask-cli/issues/371)) ([5288974](https://github.com/alexa/ask-cli/commit/528897447f17a57f2eb0fbf73a680bdf437e2a8c))
+
 ### [2.22.2](https://github.com/alexa/ask-cli/compare/v2.22.1...v2.22.2) (2021-01-08)
 
 
