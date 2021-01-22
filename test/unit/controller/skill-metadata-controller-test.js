@@ -607,7 +607,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, '_createUploadUrl').callsArgWith(0, null, {
                 uploadUrl: TEST_UPLOAD_URL
             });
-            sinon.stub(zipUtils, 'createTempZip').callsArgWith(1, 'zipErr');
+            sinon.stub(zipUtils, 'createTempZip').callsArgWith(2, 'zipErr');
             // call
             skillMetaController.uploadSkillPackage(TEST_PATH, (err, res) => {
                 // verify
@@ -624,7 +624,7 @@ describe('Controller test - skill metadata controller test', () => {
             sinon.stub(SkillMetadataController.prototype, '_createUploadUrl').callsArgWith(0, null, {
                 uploadUrl: TEST_UPLOAD_URL
             });
-            sinon.stub(zipUtils, 'createTempZip').callsArgWith(1, null, TEST_PATH);
+            sinon.stub(zipUtils, 'createTempZip').callsArgWith(2, null, TEST_PATH);
             sinon.stub(fs, 'removeSync');
             sinon.stub(httpClient, 'putByUrl').callsArgWith(4, 'uploadErr');
             // call
@@ -642,7 +642,7 @@ describe('Controller test - skill metadata controller test', () => {
 
         it('| upload zip file meets error, expect callback error', (done) => {
             // setup
-            sinon.stub(zipUtils, 'createTempZip').callsArgWith(1, null, TEST_PATH);
+            sinon.stub(zipUtils, 'createTempZip').callsArgWith(2, null, TEST_PATH);
             sinon.stub(fs, 'readFileSync').withArgs(TEST_PATH).returns(TEST_FILE_CONTENT);
             sinon.stub(SkillMetadataController.prototype, '_createUploadUrl').callsArgWith(0, null, {
                 uploadUrl: TEST_UPLOAD_URL
@@ -666,7 +666,7 @@ describe('Controller test - skill metadata controller test', () => {
 
         it('| upload skill package succeeds, expect callback upload result', (done) => {
             // setup
-            sinon.stub(zipUtils, 'createTempZip').callsArgWith(1, null, TEST_PATH);
+            sinon.stub(zipUtils, 'createTempZip').callsArgWith(2, null, TEST_PATH);
             sinon.stub(fs, 'readFileSync').withArgs(TEST_PATH).returns(TEST_FILE_CONTENT);
             sinon.stub(SkillMetadataController.prototype, '_createUploadUrl').callsArgWith(0, null, {
                 uploadUrl: TEST_UPLOAD_URL
