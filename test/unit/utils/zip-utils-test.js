@@ -11,6 +11,7 @@ const CONSTANTS = require('@src/utils/constants');
 
 describe('Utils test - zip utility', () => {
     const TEST_SRC = 'TEST_SRC';
+    const TEST_OUTPUT_DIR = 'TEST_OUTPUT_DIR';
     const TEST_ERROR = 'TEST_ERROR';
     const TEST_ZIP_FILE_PATH = 'TEST_ZIP_FILE_PATH';
     const TEST_REMOTE_ZIP_URL = 'TEST_REMOTE_ZIP_URL';
@@ -21,7 +22,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(tmp, 'tmpNameSync').withArgs({
                 prefix: 'askcli_temp_',
                 postfix: '.zip',
-                dir: TEST_SRC
+                dir: TEST_OUTPUT_DIR
             }).callsFake(() => TEST_ZIP_FILE_PATH);
 
             new Messenger({});
@@ -34,9 +35,18 @@ describe('Utils test - zip utility', () => {
 
         it('| call back error when src file is not set', (done) => {
             // call
-            zipUtils.createTempZip(null, (error) => {
+            zipUtils.createTempZip(null, TEST_OUTPUT_DIR, (error) => {
                 // verify
                 expect(error).equal('Zip file path must be set.');
+                done();
+            });
+        });
+
+        it('| call back error when outputDir is not set', (done) => {
+            // call
+            zipUtils.createTempZip(TEST_SRC, null, (error) => {
+                // verify
+                expect(error).equal('Zip file output path must be set.');
                 done();
             });
         });
@@ -46,7 +56,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(fs, 'access').callsArgWith(2, TEST_ERROR);
 
             // call
-            zipUtils.createTempZip(TEST_SRC, (error) => {
+            zipUtils.createTempZip(TEST_SRC, TEST_OUTPUT_DIR, (error) => {
                 // verify
                 expect(error).equal(`File access error. ${TEST_ERROR}`);
                 done();
@@ -61,7 +71,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(Messenger.getInstance(), 'debug');
 
             // call
-            zipUtils.createTempZip(src, (error, response) => {
+            zipUtils.createTempZip(src, TEST_OUTPUT_DIR, (error, response) => {
                 // verify
                 expect(Messenger.getInstance().debug.args[0][0]).equal(`The source file ${src} has already been compressed. Skip the zipping`);
                 expect(error).equal(null);
@@ -78,7 +88,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(Messenger.getInstance(), 'debug');
 
             // call
-            zipUtils.createTempZip(src, (error, response) => {
+            zipUtils.createTempZip(src, TEST_OUTPUT_DIR, (error, response) => {
                 // verify
                 expect(Messenger.getInstance().debug.args[0][0]).equal(`The source file ${src} has already been compressed. Skip the zipping`);
                 expect(error).equal(null);
@@ -122,7 +132,7 @@ describe('Utils test - zip utility', () => {
                 });
                 archiveOnStub.callsArgWith(1, 'error');
                 // call
-                proxyZipUtils.createTempZip(TEST_SRC, (error, response) => {
+                proxyZipUtils.createTempZip(TEST_SRC, TEST_OUTPUT_DIR, (error, response) => {
                     // verify
                     expect(fs.createWriteStream.args[0][0]).equal(TEST_ZIP_FILE_PATH);
                     expect(error).equal('Archive error. error');
@@ -139,7 +149,7 @@ describe('Utils test - zip utility', () => {
                 });
                 writeStreamOnStub.callsArgWith(1);
                 // call
-                proxyZipUtils.createTempZip(TEST_SRC, (error, response) => {
+                proxyZipUtils.createTempZip(TEST_SRC, TEST_OUTPUT_DIR, (error, response) => {
                     // verify
                     expect(fs.createWriteStream.args[0][0]).equal(TEST_ZIP_FILE_PATH);
                     expect(archiveFileStub.args[0][0]).equal(TEST_SRC);
@@ -158,7 +168,7 @@ describe('Utils test - zip utility', () => {
                 });
                 writeStreamOnStub.callsArgWith(1);
                 // call
-                proxyZipUtils.createTempZip(TEST_SRC, (error, response) => {
+                proxyZipUtils.createTempZip(TEST_SRC, TEST_OUTPUT_DIR, (error, response) => {
                     // verify
                     expect(fs.createWriteStream.args[0][0]).equal(TEST_ZIP_FILE_PATH);
                     expect(archiveGlobStub.args[0][0]).equal('**/*');
