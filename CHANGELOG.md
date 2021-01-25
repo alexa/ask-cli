@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.22.4](https://github.com/alexa/ask-cli/compare/v2.22.3...v2.22.4) (2021-01-25)
+
+
+### Bug Fixes
+
+* move the temp zip file to .ask in order to integ with extension skill-pacakge validator feature ([#375](https://github.com/alexa/ask-cli/issues/375)) ([a3beab3](https://github.com/alexa/ask-cli/commit/a3beab33e23afd989a0cf6858cf9caf8fd202119))
+
 ### [2.22.3](https://github.com/alexa/ask-cli/compare/v2.22.2...v2.22.3) (2021-01-19)
 
 
