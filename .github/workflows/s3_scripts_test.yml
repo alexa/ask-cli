@@ -1,0 +1,43 @@
+name: 'S3 Scripts Test'
+on:
+  workflow_dispatch:
+    inputs:
+      s3_directory:
+        description: 'test hosted skill script'
+        required: true
+  push:
+    branches:
+      - s3_scripts_test
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  printInputs:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Home $HOME"
+        echo "S3 directory ${{ github.event.inputs.s3_directory }}"
+
+  build:
+   
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: git config --global user.email "ask-cli-test@amazon.com"
+    - run: git config --global user.name "Ask Cli Test"
+    - run: npm install
+    - run: npm link
+    - run: npm run functional-test
+      env:
+        ASK_VENDOR_ID: ${{ secrets.ASK_VENDOR_ID }}
+        ASK_REFRESH_TOKEN: ${{ secrets.ASK_REFRESH_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        DEBUG: true
+        ASK_S3_SCRIPTS_BASE_URL: ${{ github.event.inputs.s3_directory }}
