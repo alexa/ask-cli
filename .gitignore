@@ -24,6 +24,7 @@ test/temp
 .vagrant
 
 # java project
+target/
 .classpath
 .project
 .settings/
