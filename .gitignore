@@ -23,3 +23,7 @@ test/temp
 
 .vagrant
 
+# java project
+.classpath
+.project
+.settings/
