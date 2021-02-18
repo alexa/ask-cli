@@ -8,14 +8,14 @@ on:
 
 jobs:
   printInputs:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - run: |
         echo "Beta S3 bucket directory ${{ github.event.inputs.s3_directory }}"
 
   build:
    
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
