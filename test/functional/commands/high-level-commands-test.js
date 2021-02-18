@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const parallel = require('mocha.parallel');
+const path = require('path');
 const { run, KeySymbol, resetTempDirectory, deleteFolderInTempDirectory,
     getPathInTempDirectory, makeFolderInTempDirectory } = require('@test/test-utils');
 
@@ -17,8 +18,8 @@ parallel('high level commands test', () => {
     it('| should init new skill', async () => {
         const folderName = 'new-skill';
         deleteFolderInTempDirectory(folderName);
-        makeFolderInTempDirectory(`${folderName}/skill-package`);
-        makeFolderInTempDirectory(`${folderName}/lambda`);
+        makeFolderInTempDirectory(path.join(folderName, 'skill-package'));
+        makeFolderInTempDirectory(path.join(folderName, 'lambda'));
 
         const cwd = getPathInTempDirectory(folderName);
 
