@@ -31,8 +31,7 @@ describe('JavaMvnBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('mvn clean org.apache.maven.plugins:maven-'
-                + 'assembly-plugin:2.6:assembly -DdescriptorId=jar-with-dependencies package');
+                expect(execStub.args[0][0]).eql('mvn clean package assembly:single');
                 done();
             });
         });
@@ -44,8 +43,7 @@ describe('JavaMvnBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('mvn clean org.apache.maven.plugins:maven-'
-                + 'assembly-plugin:2.6:assembly -DdescriptorId=jar-with-dependencies package');
+                expect(execStub.args[0][0]).eql('mvn clean package assembly:single');
                 expect(debugStub.args[0][0]).eql('Building skill artifacts based on the pom.xml.');
                 expect(debugStub.args[1][0]).eql('Renaming the jar file some-path to buildFile.');
                 done();
