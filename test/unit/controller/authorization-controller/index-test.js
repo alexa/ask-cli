@@ -15,7 +15,6 @@ const LocalHostServer = require('@src/utils/local-host-server');
 const Messenger = require('@src/view/messenger');
 const SpinnerView = require('@src/view/spinner-view');
 
-
 describe('Controller test - Authorization controller test', () => {
     const DEFAULT_CLIENT_ID = CONSTANTS.LWA.CLI_INTERNAL_ONLY_LWA_CLIENT.CLIENT_ID;
     const DEFAULT_SCOPE = CONSTANTS.LWA.DEFAULT_SCOPES;
@@ -239,6 +238,75 @@ describe('Controller test - Authorization controller test', () => {
                     done();
                 });
             });
+        });
+    });
+
+    describe('# test getAccessToken', () => {
+        let getTokenStub;
+        let setTokenStub;
+        let writeStub;
+        const testEnvAccessToken = 'envAccessToken';
+        const testAccessToken = 'accessToken';
+
+        const authorizationController = new AuthorizationController(TEST_CONFIG);
+
+        beforeEach(() => {
+            getTokenStub = sinon.stub().returns({ access_token: testAccessToken });
+            setTokenStub = sinon.stub();
+            writeStub = sinon.stub();
+            sinon.stub(AppConfig, 'getInstance').returns({
+                getToken: getTokenStub,
+                setToken: setTokenStub,
+                write: writeStub
+            });
+        });
+
+        afterEach(() => {
+            sinon.restore();
+            delete process.env.ASK_REFRESH_TOKEN;
+            delete process.env.ASK_ACCESS_TOKEN;
+        });
+
+        it('| should return access token from env variable', async () => {
+            const profile = CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
+            process.env.ASK_ACCESS_TOKEN = testEnvAccessToken;
+
+            const result = await authorizationController.getAccessToken(profile);
+
+            expect(result).eq(testEnvAccessToken);
+        });
+
+        it('| should return access token from app config', async () => {
+            const profile = 'test';
+            sinon.stub(LWAClient.prototype, 'isValidToken').returns(true);
+
+            const result = await authorizationController.getAccessToken(profile);
+
+            expect(result).eq(testAccessToken);
+        });
+
+        it('| should return refresh access token and return new token', async () => {
+            const profile = 'test';
+            sinon.stub(LWAClient.prototype, 'isValidToken').returns(false);
+            sinon.stub(LWAClient.prototype, 'getAccessToken').returns({ access_token: testAccessToken });
+
+            const result = await authorizationController.getAccessToken(profile);
+
+            expect(result).eq(testAccessToken);
+            expect(setTokenStub.callCount).eq(1);
+            expect(writeStub.callCount).eq(1);
+        });
+
+        it('| should return refresh access token but not write to file when env profile is used', async () => {
+            const profile = CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
+            sinon.stub(LWAClient.prototype, 'isValidToken').returns(false);
+            sinon.stub(LWAClient.prototype, 'getAccessToken').returns({ access_token: testAccessToken });
+
+            const result = await authorizationController.getAccessToken(profile);
+
+            expect(result).eq(testAccessToken);
+            expect(setTokenStub.callCount).eq(0);
+            expect(writeStub.callCount).eq(0);
         });
     });
 
