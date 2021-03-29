@@ -1,0 +1,254 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "pizza skilllevel response",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "GetBuiltOwnPizzaIntent",
+          "samples": [
+            "build my own pizza",
+            "I need my own custom pizza",
+            "Add one more order",
+            "I want another pizza",
+            "build another pizza",
+            "create another pizza",
+            "build a pizza",
+            "place an order for a pizza",
+            "add another pizza to my order",
+            "add another custom pizza to my order"
+          ]
+        },
+        {
+          "name": "GetSpecialtyPizzaIntent",
+          "samples": [
+            "specialty pizzas",
+            "what are your specialty pizzas",
+            "list specialty pizzas"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "id": "Small",
+              "name": {
+                "value": "Small",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Medium",
+              "name": {
+                "value": "Medium",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Large",
+              "name": {
+                "value": "Large",
+                "synonyms": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crust",
+          "values": [
+            {
+              "id": "thin",
+              "name": {
+                "value": "thin",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "handmade",
+              "name": {
+                "value": "hand made",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Brooklyn",
+              "name": {
+                "value": "Brooklyn",
+                "synonyms": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "Topping",
+          "values": [
+            {
+              "id": "Bacon",
+              "name": {
+                "value": "Bacon",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "PhillySteak",
+              "name": {
+                "value": "Philly steak",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Mushroom",
+              "name": {
+                "value": "Mushroom",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Pepperoni",
+              "name": {
+                "value": "Pepperoni",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "BlackOlives",
+              "name": {
+                "value": "black olives",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Beef",
+              "name": {
+                "value": "Beef",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Tomatoes",
+              "name": {
+                "value": "Tomatoes",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Spinach",
+              "name": {
+                "value": "Spinach",
+                "synonyms": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cheese",
+          "values": [
+            {
+              "id": "NormalCheese",
+              "name": {
+                "value": "Normal",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "ExtraCheese",
+              "name": {
+                "value": "Extra",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "DoubleCheese",
+              "name": {
+                "value": "Double",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "NoCheese",
+              "name": {
+                "value": "No",
+                "synonyms": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "PizzaName",
+          "values": [
+            {
+              "id": "CheesePepperoni",
+              "name": {
+                "value": "Cheese Pepperoni",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "VeggieDelight",
+              "name": {
+                "value": "Veggie Delight",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "DeliciousMeat",
+              "name": {
+                "value": "Delicious Meat",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "SimplyCheese",
+              "name": {
+                "value": "Simply Cheese",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "Inhouse",
+              "name": {
+                "value": "Inhouse",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "MeatLovers",
+              "name": {
+                "value": "Meat Lovers",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "LargeSupremePizza",
+              "name": {
+                "value": "Large Supreme Pizza",
+                "synonyms": []
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

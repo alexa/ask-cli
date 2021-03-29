@@ -1,0 +1,201 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "ActionDeclaration",
+      "name": "test.dialogs.getWeather",
+      "arguments": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.US_CITY"
+          },
+          "defaultExpression": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.Nothing",
+            "arguments": null
+          }
+        },
+        {
+          "name": "date",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.DATE"
+          },
+          "defaultExpression": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.Nothing",
+            "arguments": null
+          }
+        }
+      ],
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "test.dialogs.WeatherResult"
+      }
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "test.dialogs.CityAndDate",
+      "properties": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.US_CITY"
+          },
+          "optional": false
+        },
+        {
+          "name": "date",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.DATE"
+          },
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "test.dialogs.WeatherResult",
+      "properties": []
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "test.dialogs.getWeatherEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "test.dialogs.CityAndDate"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "test.dialogs.CityAndDate"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "what's the weather {date} in {cityName}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "DialogDeclaration",
+      "name": "test.dialogs.Weather",
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.Nothing"
+      },
+      "samples": [
+        {
+          "kind": "Sample",
+          "expressions": [
+            {
+              "kind": "NameDeclaration",
+              "name": "cityAndDate",
+              "type": {
+                "kind": "TypeReference",
+                "name": "test.dialogs.CityAndDate"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.amazon.alexa.ask.conversations.expect",
+                "arguments": {
+                  "act": {
+                    "kind": "NameReference",
+                    "name": "com.amazon.alexa.ask.conversations.Invoke"
+                  },
+                  "event": {
+                    "kind": "NameReference",
+                    "name": "test.dialogs.getWeatherEvent"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "weatherResult",
+              "type": {
+                "kind": "TypeReference",
+                "name": "test.dialogs.WeatherResult"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "test.dialogs.getWeather",
+                "arguments": {
+                  "date": {
+                    "kind": "PropertyReference",
+                    "name": "date",
+                    "expression": {
+                      "kind": "NameReference",
+                      "name": "cityAndDate"
+                    }
+                  },
+                  "cityName": {
+                    "kind": "PropertyReference",
+                    "name": "cityName",
+                    "expression": {
+                      "kind": "NameReference",
+                      "name": "cityAndDate"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.response",
+              "arguments": {
+                "act": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Notify",
+                  "arguments": {
+                    "success": {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.schema.Boolean",
+                      "arguments": true
+                    },
+                    "actionName": {
+                      "kind": "NameReference",
+                      "name": "test.dialogs.getWeather"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.weather_apla"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

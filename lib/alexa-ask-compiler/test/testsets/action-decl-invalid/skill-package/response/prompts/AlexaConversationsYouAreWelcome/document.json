@@ -1,0 +1,21 @@
+{
+  "type": "APL-A",
+  "version": "0.1",
+  "mainTemplate": {
+    "parameters": [
+      "payload"
+    ],
+    "item": {
+      "type": "RandomSelector",
+      "description": "Change 'type' above to try different Selector Component Types like Sequential",
+      "items": [
+        {
+          "type": "Speech",
+          "contentType": "text",
+          "content": "You are welcome.",
+          "description": "Expand on 'items' array to add multiple prompts, use response template arguments by adding it to 'content' like this ${payload.input_argument_name} and add SSML by changing 'contentType' to 'SSML' and adding SSML to 'content' <amazon:effect name=\"whispered\">like that</amazon:effect>"
+        }
+      ]
+    }
+  }
+}

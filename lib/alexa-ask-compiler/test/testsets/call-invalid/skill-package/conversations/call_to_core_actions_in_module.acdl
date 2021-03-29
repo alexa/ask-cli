@@ -1,0 +1,26 @@
+namespace test.invalidcalls
+
+// Only "utterances()" action is supported in the module scope
+// TODO: Not very helpful error messages for all these actions below - NEED FIX
+// Also, some errors short circuit the validation hence, some of the statements below don't return any error messages today.
+confirmAction(confirmFlightBooking, bookFlight, {searchResult = searchFlighResult})
+
+confirmArgs([
+  {arguments = [searchFlights.arguments.fromCity], response = confirmFromCityPrompt},
+  {arguments = [searchFlights.arguments.toCity], response = confirmToCityPrompt},
+  {arguments = [searchFlights.arguments.startDate], response = confirmDatePrompt}
+])
+
+ensure(
+  {arguments = [searchFlights.arguments.fromCity], response = fromCityPrompt},
+  {arguments = [searchFlights.arguments.toCity], response = toCityPrompt},
+  {arguments = [searchFlights.arguments.startDate], response = datePrompt}
+)
+
+cityResponse = expect(Inform, InformCityEvent)
+
+ln = length("hello")
+
+response(weather_apla, Notify {actionName = getWeather}, payload = {weatherResult = weatherResult})
+
+sz = size(["a", "b"])

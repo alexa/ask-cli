@@ -1,0 +1,78 @@
+[
+  {
+    "type": "WARN",
+    "message": "No DISPLAY file\\(s\\) exist under dir: .*$"
+  },
+  {
+    "type": "ERROR",
+    "message": "Failed with 17 compilation errors - time elapsed [0-9]+ms$"
+  },
+  {
+    "type": "ERROR",
+    "message": ".* at line: 6, column: 48 : Unexpected token \"{\": extraneous input \\'{\\' expecting {'if', NUMBER_LITERAL, BOOL_LITERAL, STRING_LITERAL, 'nothing', NEWLINE, '\\(', '\\[', '\\!', IDENTIFIER}$"
+  },
+  {
+    "type": "ERROR",
+    "message": ".* at line: 6, column: 81 : Unexpected token \"}\": no viable alternative at input 'searchResult = searchFlighResult}'$"
+  },
+  {
+    "message": ".* at line: 6, column: 81 : Unexpected token \"}\": mismatched input \\'}\\' expecting NEWLINE$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 8, column: 0 : Unexpected token \"confirmArgs\": extraneous input 'confirmArgs' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 9, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 10, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 11, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 12, column: 0 : Unexpected token \"]\": extraneous input ']' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 14, column: 0 : Unexpected token \"ensure\": extraneous input 'ensure' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 15, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 16, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 17, column: 2 : Unexpected token \"{\": extraneous input '{' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 18, column: 0 : Unexpected token \"\\)\": extraneous input '\\)' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 20, column: 0 : Unexpected token \"cityResponse\": extraneous input 'cityResponse' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 22, column: 0 : Unexpected token \"ln\": extraneous input 'ln' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 24, column: 0 : Unexpected token \"response\": extraneous input 'response' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 26, column: 0 : Unexpected token \"sz\": extraneous input 'sz' expecting {<EOF>, NEWLINE}$",
+    "type": "ERROR"
+  }
+]

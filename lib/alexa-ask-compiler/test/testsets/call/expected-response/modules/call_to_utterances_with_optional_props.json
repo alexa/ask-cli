@@ -1,0 +1,70 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "TypeDeclaration",
+      "name": "test.calls.CityAndDate",
+      "properties": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.US_CITY"
+          },
+          "optional": false
+        },
+        {
+          "name": "date",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.DATE"
+          },
+          "optional": true
+        }
+      ]
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "test.calls.getWeatherEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "test.calls.CityAndDate"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "test.calls.CityAndDate"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "what's the weather {date} in {cityName}"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

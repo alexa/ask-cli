@@ -1,0 +1,5 @@
+namespace test.actionDeclaration
+
+import com.amazon.alexa.schema.Nothing
+
+action Nothing action_without_arguments()

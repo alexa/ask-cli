@@ -1,0 +1,27 @@
+namespace test.dialogs
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import com.amazon.alexa.schema.Nothing
+
+type CityAndDate {
+  US_CITY cityName
+  optional DATE date
+}
+type WeatherResult {}
+
+action WeatherResult getWeather(US_CITY cityName = nothing, DATE date = nothing)
+
+getWeatherEvent = utterances<CityAndDate>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)
+
+dialog Nothing Weather {
+  sample {
+    cityAndDate = expect(Invoke, getWeatherEvent)
+    weatherResult = getWeather(cityAndDate.cityName, cityAndDate.date)
+    response(prompts.weather_apla, Notify { actionName = getWeather, success = true })
+  }
+}

@@ -1,0 +1,7 @@
+namespace test.invalidDialogs
+
+import com.amazon.alexa.schema.Nothing
+
+dialog Nothing DialogA {
+
+}

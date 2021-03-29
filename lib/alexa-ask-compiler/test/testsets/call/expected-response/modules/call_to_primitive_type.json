@@ -1,0 +1,18 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "test.calls.primitive",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.String"
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.schema.String",
+        "arguments": "hello"
+      }
+    }
+  ]
+}

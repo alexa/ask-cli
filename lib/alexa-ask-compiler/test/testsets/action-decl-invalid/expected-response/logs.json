@@ -1,0 +1,14 @@
+[
+  {
+    "type": "WARN",
+    "message": "No DISPLAY file\\(s\\) exist under dir: .*$"
+  },
+  {
+    "type": "ERROR",
+    "message": "Failed with 1 compilation error - time elapsed [0-9]+ms$"
+  },
+  {
+    "type": "ERROR",
+    "message": ".* Type \"T\" is not defined.$"
+  }
+]

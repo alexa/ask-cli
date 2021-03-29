@@ -1,0 +1,7 @@
+namespace test.qualifiedName
+
+externalName = utterances<CityAndDateRequiredProps>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)

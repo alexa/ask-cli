@@ -1,0 +1,42 @@
+{
+  "name": "@alexa/ask-compiler",
+  "version": "0.0.1",
+  "description": "Alexa Skills Kit Project Compiler.",
+  "keywords": [
+    "alexa",
+    "skills",
+    "compiler"
+  ],
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx tsc",
+    "clean": "rm -rf ./dist",
+    "test": "mocha --require ts-node/register --watch-extensions ts 'test/**/*.ts' --timeout 10000",
+    "testw": "npm test -- -w",
+    "lint": "npx tslint src/**/*.ts && npx tslint test/**/*.ts",
+    "coverage": "npx nyc npm run test"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "commander": "^6.2.0",
+    "fs-extra": "^9.0.1",
+    "tslib": "^1.14.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/fs-extra": "^9.0.4",
+    "@types/lodash": "^4.14.166",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "lerna": "^3.22.1",
+    "lodash": "^4.17.20",
+    "mocha": "^8.1.3",
+    "nyc": "^15.1.0",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^9.0.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.1.2"
+  }
+}

@@ -1,0 +1,8 @@
+namespace test.typeDeclarations
+
+import com.amazon.ask.types.builtins.AMAZON.*
+
+type CityAndDateOptionalProps {
+  optional US_CITY cityName
+  optional DATE date
+}

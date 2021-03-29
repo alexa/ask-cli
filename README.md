@@ -12,20 +12,17 @@
 </p>
 
 
-The Alexa Skills Kit Command Line Interface (ask-cli) is used to create, manage, and deploy Alexa skills from the command line. Please see the full documentation from [ASK CLI quick start guide](https://developer.amazon.com/docs/smapi/quick-start-alexa-skills-kit-command-line-interface.html).
+The Alexa Skills Kit Command Line Interface (ask-cli-x) is used to create, manage, and deploy Alexa Conversation Skills with the Alexa Conversations Description Language(ACDL) from the command line. Please see the full documentation from [Create an Alexa Conversations Skill with ACDL](https://developer.amazon.com/en-US/docs/alexa/conversations/acdl-tutorial-create-skill.html).
 
-<p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-intro.gif" height="350" />
-</p>
+Note that Alexa Conversations Description Language (ACDL) is offered as a beta and may change as we receive feedbacks and iterate on the features. Alexa Conversations currently support en-US only.
 
-*Note:* To use ask-cli for `Alexa-Hosted skill`, please check our [instructions](https://github.com/alexa/ask-cli/blob/develop/docs/concepts/Alexa-Hosted-Skill-Commands.md) for the usage.
 
 ### Getting Started
 
 **1. Install CLI**
 
 ```
-$ npm install -g ask-cli
+$ npm install -g ask-cli-x
 ```
 
 
@@ -34,14 +31,10 @@ $ npm install -g ask-cli
 Before you can start using the ASK CLI, configure your ASK (and AWS) credentials:
 
 ```
-$ ask configure
+$ askx configure
 ```
 
 You’ll be prompted to sign into your Amazon developer account. If you choose to have your skill hosted by AWS, you’ll have the option of linking your AWS account as well.
-
-<p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-configure.gif" height="520" />
-</p>
 
 
 **3. Create new skill project**
@@ -49,54 +42,54 @@ You’ll be prompted to sign into your Amazon developer account. If you choose t
 Create a new skill project and follow the prompts from the command:
 
 ```
-$ ask new
+$ askx new
 ```
 
-You'll be asked to select a deployment method for your skill. Currently we support deployment via AWS CloudFormation (@ask-cli/cfn-deployer), deployment via AWS Lambda (@ask-cli/lambda-deployer), and deployment through Alexa-Hosted skill (@ask-cli/hosted-skill-deployer).
+You'll be asked to select the programming language, the hosting method, the template for your skill. You'll also be asked to enter a skill name or press enter to select the default skill name and enter a folder name or press enter to select the default folder name.
 
-<p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-new.gif" height="520" />
-</p>
+Your new skill project will provide a number of files and folders that make up the structure of an Alexa skill. 
 
-Your new skill project will provide a number of files and folders that make up the structure of an Alexa skill. Here is an overview on each of the files and folders that are created by default:
+**4. Compile the skill artifacts**
 
-| File/Folder       | Description  |
-| :--------------   | :----------- |
-| skill-package/    | Skill resources utilized by the ASK platform such as skill manifest, interaction models, and assets |
-| lambda/	          | Contains the source code for your skill that utilizes the ASK SDK |
-| infrastructure/   | Contains your CloudFormation definitions for deploying your skill to AWS |
-| ask-resources config     | Configuration for your Alexa skill project |
+In this step, you compile the skill artifacts.
 
-See the [ASK SDKs documentation](https://developer.amazon.com/docs/sdk/alexa-skills-kit-sdks.html) to learn more about how to build an Alexa skill.
+To compile the skill artifacts
+1. On a command line, navigate to your skill folder.
+2. Enter the following command.
+
+```
+$ askx compile
+```
 
 
-**4. Deploy Alexa skill**
+**5. Deploy Alexa skill**
 
 In order for Alexa to communicate with your skill code, it will need to be deployed and hosted on the cloud using this command.
 
 ```
-$ ask deploy
+$ askx deploy
 ```
 
 The deploy command performs the following steps:
 
 1. `skill-package/` resources will be zipped and uploaded to the ASK platform via SMAPI's [Skill Package Service](https://developer.amazon.com/docs/smapi/skill-package-api-reference.html).
 2. `lambda/` source files will be built and zipped for deployment to AWS. We currently support the build flows of npm for Nodejs, pip for Python and maven for Java developers.
-3. `infrastructure/` definitions will be used to provision resources on AWS. The `lambda/`'s zip file from the previous step will be deployed to the provisioned AWS Lambda function. The gif below shows the deployment using `@ask-cli/cfn-deployer`, you can also try other deployers as they serve different purposes.
+3. `infrastructure/` definitions will be used to provision resources on AWS. The `lambda/`'s zip file from the previous step will be deployed to the provisioned AWS Lambda function.
 
-<p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-deploy.gif" height="520" />
-</p>
+**6. Read about the package structure and artifacts**
+
+While your skill deploys, you can familiarize yourself with the package contents in [Understand the Directory Structure of ACDL](https://developer.amazon.com/en-US/docs/alexa/conversations/acdl-understand-directory-structure.html).
 
 
-**5. Dialog with what you build**
+**7. Test the skill**
 
-To test while developing your skill locally, or quickly showcase your skill ideas, or even build end-to-end testing, you can use CLI's dialog command.
+After your skill deploys, you can run it by using the ASK CLI as follows.
+
+To run you skill by using the ASK CLI
+
+1. After your skill deploys, get the skill ID from the deployment information that the command line displays.
+2. To run your skill by using the Alexa simulator, enter the following command on the command line.
 
 ```
-$ ask dialog
+$ askx dialog -s <your-skill-id> -l en-US -g development
 ```
-
-<p align="center">
-  <img align="center" src="https://ask-cli-static-content.s3-us-west-2.amazonaws.com/document-assets/v2-ask-cli-dialog.gif" height="520" />
-</p>

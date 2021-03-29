@@ -1,0 +1,26 @@
+namespace test.qualifiedName
+import com.amazon.ask.types.builtins.AMAZON.*
+
+type CityAndDateRequiredProps {
+  US_CITY cityName
+  DATE date
+}
+
+getWeatherEventRequiredProps = utterances<CityAndDateRequiredProps>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)
+
+getWeatherEventRequiredProps = utterances<CityAndDateRequiredProps>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)
+
+// External name should also cause duplicate name error 
+externalName = utterances<CityAndDateRequiredProps>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)

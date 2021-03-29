@@ -1,0 +1,18 @@
+[
+  {
+    "type": "WARN",
+    "message": "No DISPLAY file\\(s\\) exist under dir: .*$"
+  },
+  {
+    "type": "ERROR",
+    "message": "Failed with 2 compilation errors - time elapsed [0-9]+ms$"
+  },
+  {
+    "type": "ERROR",
+    "message": ".*/qualified_name_decl_duplicate_names.acdl at line: 15, column: 0 : The name \"getWeatherEventRequiredProps\" already exists and cannot be declared again.$"
+  },
+  {
+    "type": "ERROR",
+    "message": ".*/qualified_name_decl_duplicate_names.acdl at line: 22, column: 0 : The name \"externalName\" already exists and cannot be declared again.$"
+  }
+]

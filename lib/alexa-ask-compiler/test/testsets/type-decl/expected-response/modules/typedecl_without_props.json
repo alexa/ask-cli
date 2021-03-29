@@ -1,0 +1,10 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "TypeDeclaration",
+      "name": "test.typeDeclarations.TypeWithoutProps",
+      "properties": []
+    }
+  ]
+}

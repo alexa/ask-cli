@@ -1,0 +1,189 @@
+namespace com.pizzabot
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import com.amazon.alexa.schema.List
+import com.amazon.alexa.schema.Nothing
+import prompts.*
+import slotTypes.*
+
+//Type declarations
+type PizzaDetails {
+    List<Topping> toppingList
+    Size size
+    Crust crust
+    Cheese cheese
+}
+
+type PizzaOrder {
+    PizzaName name
+    NUMBER quantity
+    PizzaDetails pizzaDetails
+}
+
+type SpecialtyPizzaDetails {
+    PizzaName pizzaName
+}
+
+type CrustType {
+    Crust crust
+}
+
+type CheeseType {
+    Cheese cheese
+}
+
+type SizeType {
+    Size size
+}
+
+type ToppingList {
+    List<Topping> toppingList
+}
+
+type PizzaOrderPayload {
+    PizzaOrder pizzaOrder
+}
+
+type PizzaNameListPayload {
+    List<PizzaName> specialtyPizzaList
+}
+
+type PizzaDetailsPayload {
+    PizzaDetails pizzaDetails
+}
+
+type PizzaNamePayload {
+    PizzaName pizzaName
+}
+
+// Action declarations
+action PizzaOrder BuildOwnPizza(List<Topping> toppingList, Size size, Crust crust, Cheese cheese)
+action List<PizzaName> GetSpecialtyPizzaList()
+action PizzaDetails GetSpecialtyPizzaDetails(PizzaName pizzaName)
+
+//Utterance set declarations
+buildOwnPizzaEvent = utterances<PizzaDetails>([
+    "build my own pizza",
+    "build a {size} size pizza",
+    "build my own pizza with {cheese} cheese",
+    "build my own pizza with {crust} crust",
+    "build my own pizza with {toppingList} toppings",
+    "build a {size} size pizza with {cheese} cheese",
+    "build a {size} size pizza with {crust} crust",
+    "build a {size} size pizza with {toppingList} toppings",
+    "build my own pizza with {cheese} cheese and {crust} crust",
+    "build my own pizza with {cheese} cheese and {toppingList} toppings",
+    "build my own pizza with {crust} crust and {toppingList} toppings",
+    "add a {size} size pizza with {cheese} cheese and {toppingList} toppings",
+    "add a {size} size pizza on {crust} crust with {toppingList} toppings",
+    "add a pizza on {crust} crust with {toppingList} toppings and {cheese} cheese",
+    "Give me a {size} size pizza on {crust} crust and {cheese} cheese",
+    "I need a {size} size pizza on {crust} crust and {cheese} cheese with {toppingList} toppings"
+])
+
+//No types used in the utterance samples, so we can leave the type parameter of the UtteranceEvent type and
+//the type argument to the utterances() action empty
+getSpecialtyPizzaListEvent = utterances([
+    "specialty pizzas",
+    "what are your specialty pizzas?",
+    "list specialty pizzas",
+    "what are your specialty pizzas?",
+    "What are today's specialty Pizzas"
+])
+
+//Declare samples separately rather than inline
+specialtyPizzaDetailsSamples = [
+    "{pizzaName}",
+    "Tell me about {pizzaName}",
+    "what's in {pizzaName}",
+    "what is {pizzaName}"
+]
+
+//Plug in the name of the sample list
+requestSpecialtyPizzaDetailsEvent = utterances<SpecialtyPizzaDetails>(specialtyPizzaDetailsSamples)
+
+informCheeseEvent = utterances<CheeseType>([
+    "{cheese}",
+    "I need {cheese}",
+    "Please add {cheese}"
+])
+
+informCrustEvent = utterances<CrustType>([
+    "{crust}",
+    "{crust} please",
+    "I need {crust}"
+])
+
+informSizeEvent = utterances<SizeType>([
+    "{size}",
+    "{size} please",
+    "I need a {size} pizza"
+])
+
+informToppingListEvent = utterances<ToppingList>([
+    "{toppingList}",
+    "I need {toppingList}",
+    "Please add {toppingList}"
+])
+
+affirmEvent = utterances([
+    "yes",
+    "sure",
+    "alright"
+])
+
+dialog Nothing OrderPizza {
+
+    // the build-own-pizza conversation
+    sample {
+        //Event expression expecting an invocation from the user with the "buildOwnPizzaEvent" utterances
+        //Initializes name "buildPizzaRequest" as the return of the expect() action (in this case, type PizzaDetails)
+        //See the Utterances.acdl file and the declaration of the expect() action in the ACDL Core Library for more information
+        buildPizzaRequest = expect(Invoke, buildOwnPizzaEvent) 
+        
+        //Optional initialization of intermediate names for ease of reference later
+        toppingList = buildPizzaRequest.toppingList
+        pizzaSize = buildPizzaRequest.size
+        crust = buildPizzaRequest.crust
+        cheese = buildPizzaRequest.cheese
+
+        ensure(
+           RequestArguments {arguments = [BuildOwnPizza.arguments.toppingList], response = request_topping_list_apla},
+           RequestArguments {arguments = [BuildOwnPizza.arguments.size], response = request_size_apla},
+           RequestArguments {arguments = [BuildOwnPizza.arguments.crust], response = request_crust_apla},
+           RequestArguments {arguments = [BuildOwnPizza.arguments.cheese], response = request_cheese_apla}
+        )
+
+        confirmArgs([
+           ConfirmArguments {arguments = [BuildOwnPizza.arguments.cheese], response = confirm_cheese_apla},
+           ConfirmArguments {arguments = [BuildOwnPizza.arguments.crust], response = confirm_crust_apla},
+           ConfirmArguments {arguments = [BuildOwnPizza.arguments.size], response = confirm_size_apla}
+        ])
+
+        // confirm build pizza api call
+        confirmAction(confirm_build_own_pizza_apla, BuildOwnPizza, PizzaDetails {toppingList = toppingList, size = pizzaSize, crust = crust, cheese = cheese})
+        //API call to BuildOwnPizza
+        pizzaOrder = BuildOwnPizza(toppingList, pizzaSize, crust, cheese)
+
+        // Alexa response with what is returned from the BuildOwnPizza call
+        response(build_own_pizza_apla, Notify {actionName = BuildOwnPizza}, payload = PizzaOrderPayload {pizzaOrder = pizzaOrder})
+    }
+
+    // the order-specialty-pizza conversation
+    sample {
+        expect(Invoke, getSpecialtyPizzaListEvent)
+        specialtyPizzaList = GetSpecialtyPizzaList()
+        response(get_specialty_pizza_list_apla, Notify {actionName = GetSpecialtyPizzaList}, 
+            Offer {actionName = GetSpecialtyPizzaDetails, arguments = [GetSpecialtyPizzaDetails.arguments.pizzaName]}, 
+            payload = PizzaNameListPayload {specialtyPizzaList = specialtyPizzaList})
+
+        specialtyPizzaDetailsRequest = expect(Inform, requestSpecialtyPizzaDetailsEvent)
+        pizzaName = specialtyPizzaDetailsRequest.pizzaName
+        response(confirm_pizza_name_apla, ConfirmArgs {arguments = [GetSpecialtyPizzaDetails.arguments.pizzaName]}, payload = PizzaNamePayload {pizzaName = pizzaName})
+        expect(Affirm, affirmEvent)
+        ensure(RequestArguments {arguments = [GetSpecialtyPizzaDetails.arguments.pizzaName], response = request_speciality_pizza_name_apla})
+        pizzaDetails = GetSpecialtyPizzaDetails(pizzaName)
+        response(get_specialty_pizza_details_apla, Notify {actionName = GetSpecialtyPizzaDetails}, payload = PizzaDetailsPayload {pizzaDetails = pizzaDetails})
+    }
+}

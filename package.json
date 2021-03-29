@@ -1,9 +1,9 @@
 {
-  "name": "ask-cli",
-  "version": "2.22.4",
+  "name": "ask-cli-x",
+  "version": "2.22.4-beta.0",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
-    "ask": "bin/ask.js"
+    "askx": "bin/askx.js"
   },
   "engines": {
     "node": ">=8.3.0"
@@ -35,7 +35,8 @@
     "prepublishOnly": "babel lib -d lib; babel bin -d bin",
     "pre-release": "standard-version",
     "prism": "prism",
-    "postinstall": "node postinstall.js"
+    "postinstall": "node postinstall.js",
+    "private-release": "zip -r ./ask-cli-x.zip . -x '*.git*' -x '*node_modules*' -x 'package-lock.json'"
   },
   "dependencies": {
     "adm-zip": "^0.4.13",
@@ -50,6 +51,8 @@
     "chalk": "2.4.2",
     "commander": "^4.1.1",
     "date-fns": "^2.7.0",
+    "del": "^6.0.0",
+    "del-cli": "^3.0.1",
     "folder-hash": "^3.0.0",
     "fs-extra": "^2.1.0",
     "inquirer": "^6.2.0",
@@ -96,11 +99,7 @@
     "standard-version": "^8.0.1"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run test:report"
-    }
+    "hooks": {}
   },
   "nyc": {
     "check-coverage": true,

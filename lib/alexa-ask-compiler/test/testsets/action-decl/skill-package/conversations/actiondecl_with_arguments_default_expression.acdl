@@ -1,0 +1,8 @@
+namespace test.actionDeclaration
+
+import slotTypes.CityName
+import com.amazon.alexa.schema.Nothing
+
+// Action with arguments with default expression Nothing
+// Only Nothing is supported as defaultExpression today
+action Nothing action_with_arguments_default_expression(CityName cityName = nothing)

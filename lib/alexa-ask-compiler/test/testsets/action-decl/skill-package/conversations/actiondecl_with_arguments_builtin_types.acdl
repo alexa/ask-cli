@@ -1,0 +1,9 @@
+namespace test.actionDeclaration
+
+import com.amazon.ask.types.builtins.AMAZON.*
+import com.amazon.alexa.schema.Nothing
+
+/**
+ * Action with builtin types based argument
+ */
+action Nothing action_with_arguments(US_CITY cityName, DATE date)

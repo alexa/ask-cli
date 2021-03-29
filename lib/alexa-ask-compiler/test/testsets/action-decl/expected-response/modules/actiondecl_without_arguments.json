@@ -1,0 +1,13 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "ActionDeclaration",
+      "name": "test.actionDeclaration.action_without_arguments",
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.Nothing"
+      }
+    }
+  ]
+}

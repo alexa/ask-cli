@@ -1,0 +1,14 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "my weather bot",
+      "intents": [],
+      "types": [
+        {
+          "name": "CityName",
+          "values": []
+        }
+      ]
+    }
+  }
+}

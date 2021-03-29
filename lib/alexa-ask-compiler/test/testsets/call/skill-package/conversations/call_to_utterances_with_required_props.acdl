@@ -1,0 +1,15 @@
+namespace test.calls
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.ask.types.builtins.AMAZON.*
+
+type CityAndDateRequiredProps {
+  US_CITY cityName
+  DATE date
+}
+
+getWeatherEventRequiredProps = utterances<CityAndDateRequiredProps>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)

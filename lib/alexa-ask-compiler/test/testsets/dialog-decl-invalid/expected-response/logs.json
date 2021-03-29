@@ -1,0 +1,18 @@
+[
+  {
+    "type": "WARN",
+    "message": "No DISPLAY file\\(s\\) exist under dir: .*$"
+  },
+  {
+    "type": "ERROR",
+    "message": "Failed with 2 compilation errors - time elapsed [0-9]+ms$"
+  },
+  {
+    "message": ".* at line: 7, column: 0 : Unexpected token \"}\": extraneous input '}' expecting {'sample', NEWLINE}$",
+    "type": "ERROR"
+  },
+  {
+    "message": ".* at line: 8, column: 0 : Unexpected token \"<EOF>\": extraneous input '<EOF>' expecting {'sample', NEWLINE}$",
+    "type": "ERROR"
+  }
+]

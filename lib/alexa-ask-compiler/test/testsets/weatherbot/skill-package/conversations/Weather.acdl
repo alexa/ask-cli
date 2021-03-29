@@ -1,0 +1,53 @@
+namespace test.weeatherbot
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import com.amazon.alexa.schema.Nothing
+import prompts.weather_apla
+import prompts.request_city_apla
+import prompts.request_date_apla
+
+type CityAndDate {
+    US_CITY cityName
+    DATE date
+}
+
+type WeatherResultPayload {
+    WeatherResult weatherResult
+}
+
+getWeatherEvent = utterances<CityAndDate>(
+    [
+        "What's the weather {date} in {cityName}",
+        "what is the weather {date}",
+        "How is the weather {date}",
+        "How is weather in {cityName} {date}",
+        "how is weather",
+        "can you please give me weather report for {date}"
+    ]
+)
+
+type WeatherResult {
+    US_CITY cityName
+    NUMBER highTemp
+    NUMBER lowTemp
+}
+
+action WeatherResult getWeather(US_CITY cityName, DATE date)
+
+dialog Nothing Weather {
+    sample {
+        weatherRequest = expect(Invoke, getWeatherEvent)
+
+        ensure(
+           RequestArguments {arguments = [getWeather.arguments.cityName], response = request_city_apla},
+           RequestArguments {arguments = [getWeather.arguments.date], response = request_date_apla},
+           RequestArguments {arguments = [getWeather.arguments.cityName, getWeather.arguments.date], response = request_city_apla}
+        )
+
+        weatherResult = getWeather(weatherRequest.cityName, weatherRequest.date)
+
+        response(weather_apla, Notify {actionName = getWeather}, 
+           payload = WeatherResultPayload {weatherResult = weatherResult})
+    }
+}

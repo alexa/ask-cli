@@ -1,0 +1,15 @@
+namespace test.calls
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.ask.types.builtins.AMAZON.*
+
+type CityAndDate {
+  US_CITY cityName
+  optional DATE date
+}
+
+getWeatherEvent = utterances<CityAndDate>(
+  [
+    "what's the weather {date} in {cityName}"
+  ]
+)

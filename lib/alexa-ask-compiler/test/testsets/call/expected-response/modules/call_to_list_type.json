@@ -1,0 +1,41 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "test.calls.x",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.List",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.String"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.schema.List",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.String"
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "hello"
+          },
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "world"
+          }
+        ]
+      }
+    }
+  ]
+}

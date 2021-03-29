@@ -1,0 +1,1594 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "ActionDeclaration",
+      "name": "com.pizzabot.BuildOwnPizza",
+      "arguments": [
+        {
+          "name": "toppingList",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.List",
+            "arguments": [
+              {
+                "kind": "TypeReference",
+                "name": "slotTypes.Topping"
+              }
+            ]
+          }
+        },
+        {
+          "name": "size",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Size"
+          }
+        },
+        {
+          "name": "crust",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Crust"
+          }
+        },
+        {
+          "name": "cheese",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Cheese"
+          }
+        }
+      ],
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.pizzabot.PizzaOrder"
+      }
+    },
+    {
+      "kind": "ActionDeclaration",
+      "name": "com.pizzabot.GetSpecialtyPizzaList",
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.List",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "slotTypes.PizzaName"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "ActionDeclaration",
+      "name": "com.pizzabot.GetSpecialtyPizzaDetails",
+      "arguments": [
+        {
+          "name": "pizzaName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.PizzaName"
+          }
+        }
+      ],
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.pizzabot.PizzaDetails"
+      }
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaDetails",
+      "properties": [
+        {
+          "name": "toppingList",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.List",
+            "arguments": [
+              {
+                "kind": "TypeReference",
+                "name": "slotTypes.Topping"
+              }
+            ]
+          },
+          "optional": false
+        },
+        {
+          "name": "size",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Size"
+          },
+          "optional": false
+        },
+        {
+          "name": "crust",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Crust"
+          },
+          "optional": false
+        },
+        {
+          "name": "cheese",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Cheese"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaOrder",
+      "properties": [
+        {
+          "name": "name",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.PizzaName"
+          },
+          "optional": false
+        },
+        {
+          "name": "quantity",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.NUMBER"
+          },
+          "optional": false
+        },
+        {
+          "name": "pizzaDetails",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.PizzaDetails"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.SpecialtyPizzaDetails",
+      "properties": [
+        {
+          "name": "pizzaName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.PizzaName"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.CrustType",
+      "properties": [
+        {
+          "name": "crust",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Crust"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.CheeseType",
+      "properties": [
+        {
+          "name": "cheese",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Cheese"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.SizeType",
+      "properties": [
+        {
+          "name": "size",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.Size"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.ToppingList",
+      "properties": [
+        {
+          "name": "toppingList",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.List",
+            "arguments": [
+              {
+                "kind": "TypeReference",
+                "name": "slotTypes.Topping"
+              }
+            ]
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaOrderPayload",
+      "properties": [
+        {
+          "name": "pizzaOrder",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.PizzaOrder"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaNameListPayload",
+      "properties": [
+        {
+          "name": "specialtyPizzaList",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.List",
+            "arguments": [
+              {
+                "kind": "TypeReference",
+                "name": "slotTypes.PizzaName"
+              }
+            ]
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaDetailsPayload",
+      "properties": [
+        {
+          "name": "pizzaDetails",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.PizzaDetails"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "TypeDeclaration",
+      "name": "com.pizzabot.PizzaNamePayload",
+      "properties": [
+        {
+          "name": "pizzaName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.PizzaName"
+          },
+          "optional": false
+        }
+      ]
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.buildOwnPizzaEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.PizzaDetails"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.PizzaDetails"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build a {size} size pizza"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {cheese} cheese"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {crust} crust"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build a {size} size pizza with {cheese} cheese"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build a {size} size pizza with {crust} crust"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build a {size} size pizza with {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {cheese} cheese and {crust} crust"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {cheese} cheese and {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "build my own pizza with {crust} crust and {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "add a {size} size pizza with {cheese} cheese and {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "add a {size} size pizza on {crust} crust with {toppingList} toppings"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "add a pizza on {crust} crust with {toppingList} toppings and {cheese} cheese"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "Give me a {size} size pizza on {crust} crust and {cheese} cheese"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "I need a {size} size pizza on {crust} crust and {cheese} cheese with {toppingList} toppings"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.getSpecialtyPizzaListEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.Thing"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.Thing"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "specialty pizzas"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "what are your specialty pizzas?"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "list specialty pizzas"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "what are your specialty pizzas?"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "What are today's specialty Pizzas"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.specialtyPizzaDetailsSamples",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.List",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.String"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.schema.List",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.String"
+          }
+        ],
+        "arguments": [
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "{pizzaName}"
+          },
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "Tell me about {pizzaName}"
+          },
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "what's in {pizzaName}"
+          },
+          {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.String",
+            "arguments": "what is {pizzaName}"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.requestSpecialtyPizzaDetailsEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.SpecialtyPizzaDetails"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.SpecialtyPizzaDetails"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "NameReference",
+            "name": "com.pizzabot.specialtyPizzaDetailsSamples"
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.informCheeseEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.CheeseType"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.CheeseType"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{cheese}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "I need {cheese}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "Please add {cheese}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.informCrustEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.CrustType"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.CrustType"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{crust}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{crust} please"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "I need {crust}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.informSizeEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.SizeType"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.SizeType"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{size}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{size} please"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "I need a {size} pizza"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.informToppingListEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.ToppingList"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.pizzabot.ToppingList"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "{toppingList}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "I need {toppingList}"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "Please add {toppingList}"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "QualifiedNameDeclaration",
+      "name": "com.pizzabot.affirmEvent",
+      "type": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.ask.conversations.UtteranceEvent",
+        "arguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.Thing"
+          }
+        ]
+      },
+      "expression": {
+        "kind": "Call",
+        "name": "com.amazon.alexa.ask.conversations.utterances",
+        "genericArguments": [
+          {
+            "kind": "TypeReference",
+            "name": "com.amazon.alexa.schema.Thing"
+          }
+        ],
+        "arguments": {
+          "samples": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.List",
+            "genericArguments": [
+              {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.String"
+              }
+            ],
+            "arguments": [
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "yes"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "sure"
+              },
+              {
+                "kind": "Call",
+                "name": "com.amazon.alexa.schema.String",
+                "arguments": "alright"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "DialogDeclaration",
+      "name": "com.pizzabot.OrderPizza",
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.Nothing"
+      },
+      "samples": [
+        {
+          "kind": "Sample",
+          "expressions": [
+            {
+              "kind": "NameDeclaration",
+              "name": "buildPizzaRequest",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.pizzabot.PizzaDetails"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.amazon.alexa.ask.conversations.expect",
+                "arguments": {
+                  "act": {
+                    "kind": "NameReference",
+                    "name": "com.amazon.alexa.ask.conversations.Invoke"
+                  },
+                  "event": {
+                    "kind": "NameReference",
+                    "name": "com.pizzabot.buildOwnPizzaEvent"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "toppingList",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.List",
+                "arguments": [
+                  {
+                    "kind": "TypeReference",
+                    "name": "slotTypes.Topping"
+                  }
+                ]
+              },
+              "expression": {
+                "kind": "PropertyReference",
+                "name": "toppingList",
+                "expression": {
+                  "kind": "NameReference",
+                  "name": "buildPizzaRequest"
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "pizzaSize",
+              "type": {
+                "kind": "TypeReference",
+                "name": "slotTypes.Size"
+              },
+              "expression": {
+                "kind": "PropertyReference",
+                "name": "size",
+                "expression": {
+                  "kind": "NameReference",
+                  "name": "buildPizzaRequest"
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "crust",
+              "type": {
+                "kind": "TypeReference",
+                "name": "slotTypes.Crust"
+              },
+              "expression": {
+                "kind": "PropertyReference",
+                "name": "crust",
+                "expression": {
+                  "kind": "NameReference",
+                  "name": "buildPizzaRequest"
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "cheese",
+              "type": {
+                "kind": "TypeReference",
+                "name": "slotTypes.Cheese"
+              },
+              "expression": {
+                "kind": "PropertyReference",
+                "name": "cheese",
+                "expression": {
+                  "kind": "NameReference",
+                  "name": "buildPizzaRequest"
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.ensure",
+              "arguments": {
+                "requestArgs": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Args",
+                  "genericArguments": [
+                    {
+                      "kind": "TypeReference",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments"
+                    }
+                  ],
+                  "arguments": [
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.request_topping_list_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "toppingList",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.request_size_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "size",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.request_crust_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "crust",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.request_cheese_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "cheese",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.confirmArgs",
+              "arguments": {
+                "confirmArgs": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.schema.List",
+                  "genericArguments": [
+                    {
+                      "kind": "TypeReference",
+                      "name": "com.amazon.alexa.ask.conversations.ConfirmArguments"
+                    }
+                  ],
+                  "arguments": [
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.ConfirmArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.confirm_cheese_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "cheese",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.ConfirmArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.confirm_crust_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "crust",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.ConfirmArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.confirm_size_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "size",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.BuildOwnPizza"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.confirmAction",
+              "arguments": {
+                "payload": {
+                  "kind": "Call",
+                  "name": "com.pizzabot.PizzaDetails",
+                  "arguments": {
+                    "size": {
+                      "kind": "NameReference",
+                      "name": "pizzaSize"
+                    },
+                    "toppingList": {
+                      "kind": "NameReference",
+                      "name": "toppingList"
+                    },
+                    "crust": {
+                      "kind": "NameReference",
+                      "name": "crust"
+                    },
+                    "cheese": {
+                      "kind": "NameReference",
+                      "name": "cheese"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.confirm_build_own_pizza_apla"
+                },
+                "actionName": {
+                  "kind": "NameReference",
+                  "name": "com.pizzabot.BuildOwnPizza"
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "pizzaOrder",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.pizzabot.PizzaOrder"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.pizzabot.BuildOwnPizza",
+                "arguments": {
+                  "size": {
+                    "kind": "NameReference",
+                    "name": "pizzaSize"
+                  },
+                  "toppingList": {
+                    "kind": "NameReference",
+                    "name": "toppingList"
+                  },
+                  "crust": {
+                    "kind": "NameReference",
+                    "name": "crust"
+                  },
+                  "cheese": {
+                    "kind": "NameReference",
+                    "name": "cheese"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.response",
+              "arguments": {
+                "act": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Notify",
+                  "arguments": {
+                    "actionName": {
+                      "kind": "NameReference",
+                      "name": "com.pizzabot.BuildOwnPizza"
+                    }
+                  }
+                },
+                "payload": {
+                  "kind": "Call",
+                  "name": "com.pizzabot.PizzaOrderPayload",
+                  "arguments": {
+                    "pizzaOrder": {
+                      "kind": "NameReference",
+                      "name": "pizzaOrder"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.build_own_pizza_apla"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Sample",
+          "expressions": [
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.expect",
+              "arguments": {
+                "act": {
+                  "kind": "NameReference",
+                  "name": "com.amazon.alexa.ask.conversations.Invoke"
+                },
+                "event": {
+                  "kind": "NameReference",
+                  "name": "com.pizzabot.getSpecialtyPizzaListEvent"
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "specialtyPizzaList",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.amazon.alexa.schema.List",
+                "arguments": [
+                  {
+                    "kind": "TypeReference",
+                    "name": "slotTypes.PizzaName"
+                  }
+                ]
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.pizzabot.GetSpecialtyPizzaList"
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.response",
+              "arguments": {
+                "act": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Notify",
+                  "arguments": {
+                    "actionName": {
+                      "kind": "NameReference",
+                      "name": "com.pizzabot.GetSpecialtyPizzaList"
+                    }
+                  }
+                },
+                "payload": {
+                  "kind": "Call",
+                  "name": "com.pizzabot.PizzaNameListPayload",
+                  "arguments": {
+                    "specialtyPizzaList": {
+                      "kind": "NameReference",
+                      "name": "specialtyPizzaList"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.get_specialty_pizza_list_apla"
+                },
+                "nextAct": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Offer",
+                  "arguments": {
+                    "arguments": {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.schema.List",
+                      "genericArguments": [
+                        {
+                          "kind": "TypeReference",
+                          "name": "com.amazon.alexa.ask.conversations.Argument"
+                        }
+                      ],
+                      "arguments": [
+                        {
+                          "kind": "PropertyReference",
+                          "name": "pizzaName",
+                          "expression": {
+                            "kind": "PropertyReference",
+                            "name": "arguments",
+                            "expression": {
+                              "kind": "NameReference",
+                              "name": "com.pizzabot.GetSpecialtyPizzaDetails"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "actionName": {
+                      "kind": "NameReference",
+                      "name": "com.pizzabot.GetSpecialtyPizzaDetails"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "specialtyPizzaDetailsRequest",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.pizzabot.SpecialtyPizzaDetails"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.amazon.alexa.ask.conversations.expect",
+                "arguments": {
+                  "act": {
+                    "kind": "NameReference",
+                    "name": "com.amazon.alexa.ask.conversations.Inform"
+                  },
+                  "event": {
+                    "kind": "NameReference",
+                    "name": "com.pizzabot.requestSpecialtyPizzaDetailsEvent"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "pizzaName",
+              "type": {
+                "kind": "TypeReference",
+                "name": "slotTypes.PizzaName"
+              },
+              "expression": {
+                "kind": "PropertyReference",
+                "name": "pizzaName",
+                "expression": {
+                  "kind": "NameReference",
+                  "name": "specialtyPizzaDetailsRequest"
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.response",
+              "arguments": {
+                "act": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.ConfirmArgs",
+                  "arguments": {
+                    "arguments": {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.schema.List",
+                      "genericArguments": [
+                        {
+                          "kind": "TypeReference",
+                          "name": "com.amazon.alexa.ask.conversations.Argument"
+                        }
+                      ],
+                      "arguments": [
+                        {
+                          "kind": "PropertyReference",
+                          "name": "pizzaName",
+                          "expression": {
+                            "kind": "PropertyReference",
+                            "name": "arguments",
+                            "expression": {
+                              "kind": "NameReference",
+                              "name": "com.pizzabot.GetSpecialtyPizzaDetails"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "payload": {
+                  "kind": "Call",
+                  "name": "com.pizzabot.PizzaNamePayload",
+                  "arguments": {
+                    "pizzaName": {
+                      "kind": "NameReference",
+                      "name": "pizzaName"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.confirm_pizza_name_apla"
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.expect",
+              "arguments": {
+                "act": {
+                  "kind": "NameReference",
+                  "name": "com.amazon.alexa.ask.conversations.Affirm"
+                },
+                "event": {
+                  "kind": "NameReference",
+                  "name": "com.pizzabot.affirmEvent"
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.ensure",
+              "arguments": {
+                "requestArgs": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Args",
+                  "genericArguments": [
+                    {
+                      "kind": "TypeReference",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments"
+                    }
+                  ],
+                  "arguments": [
+                    {
+                      "kind": "Call",
+                      "name": "com.amazon.alexa.ask.conversations.RequestArguments",
+                      "arguments": {
+                        "response": {
+                          "kind": "NameReference",
+                          "name": "prompts.request_speciality_pizza_name_apla"
+                        },
+                        "arguments": {
+                          "kind": "Call",
+                          "name": "com.amazon.alexa.schema.List",
+                          "genericArguments": [
+                            {
+                              "kind": "TypeReference",
+                              "name": "com.amazon.alexa.ask.conversations.Argument"
+                            }
+                          ],
+                          "arguments": [
+                            {
+                              "kind": "PropertyReference",
+                              "name": "pizzaName",
+                              "expression": {
+                                "kind": "PropertyReference",
+                                "name": "arguments",
+                                "expression": {
+                                  "kind": "NameReference",
+                                  "name": "com.pizzabot.GetSpecialtyPizzaDetails"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "kind": "NameDeclaration",
+              "name": "pizzaDetails",
+              "type": {
+                "kind": "TypeReference",
+                "name": "com.pizzabot.PizzaDetails"
+              },
+              "expression": {
+                "kind": "Call",
+                "name": "com.pizzabot.GetSpecialtyPizzaDetails",
+                "arguments": {
+                  "pizzaName": {
+                    "kind": "NameReference",
+                    "name": "pizzaName"
+                  }
+                }
+              }
+            },
+            {
+              "kind": "Call",
+              "name": "com.amazon.alexa.ask.conversations.response",
+              "arguments": {
+                "act": {
+                  "kind": "Call",
+                  "name": "com.amazon.alexa.ask.conversations.Notify",
+                  "arguments": {
+                    "actionName": {
+                      "kind": "NameReference",
+                      "name": "com.pizzabot.GetSpecialtyPizzaDetails"
+                    }
+                  }
+                },
+                "payload": {
+                  "kind": "Call",
+                  "name": "com.pizzabot.PizzaDetailsPayload",
+                  "arguments": {
+                    "pizzaDetails": {
+                      "kind": "NameReference",
+                      "name": "pizzaDetails"
+                    }
+                  }
+                },
+                "response": {
+                  "kind": "NameReference",
+                  "name": "prompts.get_specialty_pizza_details_apla"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

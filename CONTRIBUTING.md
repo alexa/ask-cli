@@ -65,7 +65,7 @@ We follow semantic versioning. Currently, we are not considering pull requests w
             "type": "node",
             "request": "launch",
             "name": "SMAPI COMMAND",
-            "program": "${workspaceFolder}/bin/ask-smapi.js",
+            "program": "${workspaceFolder}/bin/askx-smapi.js",
             "args": ["list-skills-for-vendor"],
             "console": "integratedTerminal"
         }

@@ -1,0 +1,29 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "ActionDeclaration",
+      "name": "test.actionDeclaration.action_with_arguments",
+      "arguments": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.US_CITY"
+          }
+        },
+        {
+          "name": "date",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.DATE"
+          }
+        }
+      ],
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.Nothing"
+      }
+    }
+  ]
+}

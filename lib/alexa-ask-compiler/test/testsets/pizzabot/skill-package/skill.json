@@ -1,0 +1,37 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Sample Short Description",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "hello",
+            "help"
+          ],
+          "name": "pizza_bot",
+          "description": "Sample Full Description"
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "dialogManagement": {
+          "sessionStartDelegationStrategy": {
+            "target": "AMAZON.Conversations"
+          },
+          "dialogManagers": [
+            {
+              "type": "AMAZON.Conversations"
+            }
+          ]
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

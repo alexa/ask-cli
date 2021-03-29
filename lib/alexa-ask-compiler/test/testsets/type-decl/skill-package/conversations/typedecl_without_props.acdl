@@ -1,0 +1,18 @@
+namespace test.typeDeclarations
+
+type TypeWithoutProps {}
+
+/*
+Unsupported cases:
+
+type TypeWithGenericArg<T> {
+  T cityName
+}
+
+type TypeWithMultipleGenericArg<P,Q> {
+  P p
+  Q q
+}
+
+type TypeWithExtensions : TypeWithoutProps {}
+*/

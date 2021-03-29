@@ -1,0 +1,27 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "TypeDeclaration",
+      "name": "test.typeDeclarations.CityAndDateRequiredProps",
+      "properties": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.US_CITY"
+          },
+          "optional": false
+        },
+        {
+          "name": "date",
+          "type": {
+            "kind": "TypeReference",
+            "name": "com.amazon.ask.types.builtins.AMAZON.DATE"
+          },
+          "optional": false
+        }
+      ]
+    }
+  ]
+}

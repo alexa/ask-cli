@@ -1,0 +1,1 @@
+{"version":3,"file":"decompiler.d.ts","sourceRoot":"","sources":["../../src/decompiler/decompiler.ts"],"names":[],"mappings":"AAIA,OAAO,EAAE,eAAe,EAAE,gBAAgB,EAAsB,MAAM,UAAU,CAAC;AAOjF,qBAAa,UAAU;IACb,SAAS,CAAC,eAAe,EAAE,eAAe,GAAG,OAAO,CAAC,gBAAgB,CAAC;IAkC5E,OAAO,CAAC,eAAe,CAQtB;IAGD,OAAO,CAAC,cAAc,CAcrB;CACJ"}

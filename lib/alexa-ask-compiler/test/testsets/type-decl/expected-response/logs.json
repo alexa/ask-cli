@@ -1,0 +1,10 @@
+[
+  {
+    "type": "WARN",
+    "message": "No DISPLAY file\\(s\\) exist under dir: .*$"
+  },
+  {
+    "type": "SUCCESS",
+    "message": "Compiled Skill Artifacts successfully in [0-9]+ms$"
+  }
+]

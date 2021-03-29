@@ -1,0 +1,27 @@
+{
+  "schema": "https://amazonalexa.com/ask/2020/12/Module",
+  "expressions": [
+    {
+      "kind": "ActionDeclaration",
+      "name": "test.actionDeclaration.action_with_arguments_default_expression",
+      "arguments": [
+        {
+          "name": "cityName",
+          "type": {
+            "kind": "TypeReference",
+            "name": "slotTypes.CityName"
+          },
+          "defaultExpression": {
+            "kind": "Call",
+            "name": "com.amazon.alexa.schema.Nothing",
+            "arguments": null
+          }
+        }
+      ],
+      "returnType": {
+        "kind": "TypeReference",
+        "name": "com.amazon.alexa.schema.Nothing"
+      }
+    }
+  ]
+}
