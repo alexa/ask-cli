@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.22.4-beta.2](https://github.com/alexa/ask-cli/compare/v2.22.4...v2.22.4-beta.2) (2021-03-29)
+
+
+### Bug Fixes
+
+* bump package version to "2.22.4-beta.1" which is the current public version ([2736dec](https://github.com/alexa/ask-cli/commit/2736dec874885d144d329102e12735d00b61658d))
+* multiple bug fixes ([eb1a778](https://github.com/alexa/ask-cli/commit/eb1a778600696917b1176a97516b47b82825702b))
+* **lambda:** added comment about character calculation ([56cc5ab](https://github.com/alexa/ask-cli/commit/56cc5abfedf9e2aaa1959974d2b991949a106abd))
+* **lambda:** fixed previous comment ([b1bbb2c](https://github.com/alexa/ask-cli/commit/b1bbb2c735895c5fbb0802fc732df2e38120f1fc))
+* **lambda:** Removed ternary operator ([33fcf1f](https://github.com/alexa/ask-cli/commit/33fcf1f62eebc50eef785e47f352b266785de440))
+* **lambda:** truncating the skill name for lambda role creation ([67d6538](https://github.com/alexa/ask-cli/commit/67d65386d1634cee820be38119b55bf1474ddf5a))
+
 ### [2.22.4](https://github.com/alexa/ask-cli/compare/v2.22.3...v2.22.4) (2021-01-25)
 
 
