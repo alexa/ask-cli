@@ -335,7 +335,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         const TEST_HANDLER = 'handler';
         const TEST_CREATE_OPTIONS = {
             profile: TEST_PROFILE,
-            awsProfile: TEST_AWS_REGION,
+            awsProfile: TEST_PROFILE,
             alexaRegion: TEST_ALEXA_REGION,
             awsRegion: TEST_AWS_REGION,
             skillId: TEST_SKILL_ID,
@@ -378,7 +378,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             const TEST_CREATE_FUNCTION_ERROR = 'createLambdaFunction error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, TEST_CREATE_FUNCTION_ERROR);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(4, TEST_CREATE_FUNCTION_ERROR);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
                 // verify
@@ -401,8 +401,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             const stubTestFunc = sinon.stub(LambdaClient.prototype, 'createLambdaFunction');
-            stubTestFunc.onCall(0).callsArgWith(7, TEST_CREATE_FUNCTION_ERROR);
-            stubTestFunc.onCall(1).callsArgWith(7, null, TEST_LAMBDA_DATA);
+            stubTestFunc.onCall(0).callsArgWith(4, TEST_CREATE_FUNCTION_ERROR);
+            stubTestFunc.onCall(1).callsArgWith(4, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
@@ -420,7 +420,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             const TEST_ADD_PERMISSION_ERROR = 'addAlexaPermissionByDomain error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(4, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
@@ -439,7 +439,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             const TEST_REVISION_ID_ERROR = 'getFunctionRevisionId error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(4, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, TEST_REVISION_ID_ERROR);
 
@@ -465,7 +465,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             };
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(4, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
 
@@ -500,7 +500,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             sinon.stub(ResourcesConfig.prototype, 'getTargetEndpoints').returns([]);
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(4, null, TEST_LAMBDA_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
             sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
 
@@ -540,7 +540,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
-            sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(4, TEST_UPDATE_CONGIF_ERROR);
+            sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(3, TEST_UPDATE_CONGIF_ERROR);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
                 // verify
@@ -569,7 +569,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
-            sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(4, null, TEST_UPDATE_CONFIG_DATA);
+            sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(3, null, TEST_UPDATE_CONFIG_DATA);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, data) => {
                 // verify
