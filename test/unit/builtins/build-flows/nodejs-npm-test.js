@@ -27,7 +27,7 @@ describe('NodeJsNpmBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('npm install --production --quite');
+                expect(execStub.args[0][0]).eql('npm ci --production --silent');
                 expect(createZipStub.callCount).eql(1);
                 done();
             });
@@ -40,7 +40,7 @@ describe('NodeJsNpmBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('npm install --production');
+                expect(execStub.args[0][0]).eql('npm ci --production');
                 expect(debugStub.args[0][0]).eql('Installing NodeJS dependencies based on the package.json.');
                 done();
             });

@@ -45,10 +45,10 @@ display_debug() {
 }
 
 install_dependencies() {
-  [[ $DO_DEBUG == true ]] && display_debug "Installing NodeJS dependencies based on the package.json." 
-  [[ $DO_DEBUG == false ]] && QQ=true # decide if quiet flag will be appended
+  [[ $DO_DEBUG == true ]] && display_debug "Installing NodeJS dependencies based on the package.json."
+  [[ $DO_DEBUG == false ]] && QQ=true # decide if silent flag will be appended
 
-  npm install --production ${QQ:+--quiet}
+  npm ci --production ${QQ:+--silent}
   return $?
 }
 
