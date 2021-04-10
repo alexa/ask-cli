@@ -83,9 +83,9 @@ function Install-Dependencies() {
         Show-Log "Installing skill dependencies based on package.json."
     }
     process {
-        $DepCmd = "npm install --production"
+        $DepCmd = "npm ci --production"
         if (-not $Verbose) {
-            $DepCmd += " --quiet"
+            $DepCmd += " --silent"
         }
         Invoke-Expression -Command $DepCmd
         if(!($LASTEXITCODE -eq 0)) {
