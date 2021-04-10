@@ -126,6 +126,9 @@ describe('Builtins test - cfn-deployer index test', () => {
                             key: 'someKey.zip'
                         }
                     }
+                },
+                deployRegions: {
+                    default: 'us-east-1'
                 }
             };
             getAWSProfileStub = sinon.stub(awsUtil, 'getAWSProfile').returns('some profile');
