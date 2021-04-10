@@ -122,8 +122,8 @@ describe('Builtins test - cfn-deployer index test', () => {
                     default: {
                         stackId,
                         s3: {
-                            bucket: 'someName',
-                            key: 'someKey.zip'
+                            bucket: bucketName,
+                            key: bucketKey
                         }
                     }
                 },
@@ -139,6 +139,7 @@ describe('Builtins test - cfn-deployer index test', () => {
             deployStackStub = sinon.stub(Helper.prototype, 'deployStack').resolves({ StackId: stackId });
             waitForStackDeployStub = sinon.stub(Helper.prototype, 'waitForStackDeploy');
         });
+
         it('should deploy', (done) => {
             waitForStackDeployStub.resolves({ endpointUri, stackInfo: { Outputs: [] } });
 
@@ -204,6 +205,26 @@ describe('Builtins test - cfn-deployer index test', () => {
                 expectedErrorOutput.resultMessage = `The CloudFormation deploy failed for Alexa region "${alexaRegion}": ${errorMessage}`;
                 expect(err).eql(null);
                 expect(result).eql(expectedErrorOutput);
+                done();
+            });
+        });
+
+        it('should skip deploy', (done) => {
+            const deployRegion = 'default';
+            const skipRegion = 'NA';
+            deployOptions.alexaRegion = skipRegion;
+            deployOptions.deployRegions[skipRegion] = deployOptions.deployRegions[deployRegion];
+            deployOptions.deployState[skipRegion] = deployOptions.deployState[deployRegion];
+            expectedOutput = {
+                ...expectedErrorOutput,
+                isDeploySkipped: true,
+                deployRegion,
+                resultMessage: `The CloudFormation deploy for Alexa region "${skipRegion}" is same as "${deployRegion}".`
+            };
+
+            Deployer.invoke({}, deployOptions, (err, result) => {
+                expect(err).eql(null);
+                expect(result).eql(expectedOutput);
                 done();
             });
         });
