@@ -646,20 +646,21 @@ describe('Controller test - skill infrastructure controller test', () => {
     });
 
     describe('# test class method: _updateResourcesConfig', () => {
-        const TEST_REGION_LIST = ['default'];
-        const TEST_DEPLOY_RESULT = {
-            default: {
-                endpoint: {
-                    url: 'TEST_URL'
-                },
-                lastDeployHash: 'TEST_HASH',
-                deployState: {}
-            }
-        };
+        let TEST_REGION_LIST, TEST_DEPLOY_RESULT;
 
         const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
 
         beforeEach(() => {
+            TEST_REGION_LIST = ['default'];
+            TEST_DEPLOY_RESULT = {
+                default: {
+                    endpoint: {
+                        url: 'TEST_URL'
+                    },
+                    lastDeployHash: 'TEST_HASH',
+                    deployState: {}
+                }
+            };
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             sinon.stub(fse, 'writeFileSync');
         });
@@ -670,8 +671,6 @@ describe('Controller test - skill infrastructure controller test', () => {
         });
 
         it('| update resources config correctly', () => {
-            // setup
-            sinon.stub(hashUtils, 'getHash').callsArgWith(1, 'hash error');
             // call
             skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
             // verify
@@ -679,6 +678,34 @@ describe('Controller test - skill infrastructure controller test', () => {
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {} });
             expect(fse.writeFileSync.callCount).equal(2);
         });
+
+        it('| update resources config using previous state for unreported regions', () => {
+            // setup
+            TEST_REGION_LIST = ['default', 'NA'];
+            ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(TEST_PROFILE, 'NA', 'TEST_HASH');
+            ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, { default: {}, NA: {} });
+            // call
+            skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
+            // verify
+            expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'NA')).equal('TEST_HASH');
+            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {}, NA: {} });
+            expect(fse.writeFileSync.callCount).equal(2);
+        });
+
+        it('| update resources config with no previous state for unreported regions', () => {
+            // setup
+            TEST_REGION_LIST = ['default', 'NA'];
+            ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(TEST_PROFILE, 'NA', undefined);
+            ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, undefined);
+            // call
+            skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
+            // verify
+            expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'NA')).equal(undefined);
+            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {}, NA: undefined });
+            expect(fse.writeFileSync.callCount).equal(2);
+        });
+
+
     });
 
     describe('# test class method: _ensureSkillManifestGotUpdated', () => {
