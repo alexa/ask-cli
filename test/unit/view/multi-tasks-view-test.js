@@ -1,13 +1,12 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const Listr = require('listr');
-const events = require('events');
+const { EventEmitter } = require('events');
 const { Observable } = require('rxjs');
 const CliError = require('@src/exceptions/cli-error');
 const MultiTasksView = require('@src/view/multi-tasks-view');
 
 const { ListrReactiveTask } = MultiTasksView;
-const { EventEmitter } = events;
 
 describe('View test - MultiTasksView test', () => {
     const TEST_TASK_HANDLE = () => 'taskHandle';
@@ -63,14 +62,31 @@ describe('View test - MultiTasksView test', () => {
             // setup
             const multiTasks = new MultiTasksView(TEST_OPTIONS);
             const newTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
-            sinon.stub(Listr.prototype, 'run').rejects({ errors: ['error 1', { resultMessage: 'error 2' }, new Error('error 3')] });
+            sinon.stub(Listr.prototype, 'run').rejects({ errors: ['error 1', new Error('error 2')] });
             sinon.stub(ListrReactiveTask.prototype, 'execute');
             multiTasks._listrTasks.push(newTask);
             // call
             multiTasks.start((err, res) => {
                 // verify
                 expect(res).equal(undefined);
-                expect(err.error).eql(new CliError('error 1\nerror 2\nerror 3'));
+                expect(err.error).eql(new CliError('error 1\nerror 2'));
+                expect(ListrReactiveTask.prototype.execute.callCount).equal(1);
+                done();
+            });
+        });
+
+        it('| task start trigger execute and taskRunner run fails with partial context', (done) => {
+            // setup
+            const multiTasks = new MultiTasksView(TEST_OPTIONS);
+            const newTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(Listr.prototype, 'run').rejects({ errors: ['error'], context: { result: 'partial' } });
+            sinon.stub(ListrReactiveTask.prototype, 'execute');
+            multiTasks._listrTasks.push(newTask);
+            // call
+            multiTasks.start((err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).deep.equal({ error: new CliError('error'), partialResult: { result: 'partial' } });
                 expect(ListrReactiveTask.prototype.execute.callCount).equal(1);
                 done();
             });
@@ -99,6 +115,10 @@ describe('View test - ListReactiveTask test', () => {
     const TEST_TASK_HANDLE = () => 'taskHandle';
     const TEST_TASK_ID = 'taskId';
 
+    afterEach(() => {
+        sinon.restore();
+    });
+
     describe('# inspect correctness for constructor', () => {
         it('| initiate as a ListrReactiveTask class', () => {
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
@@ -110,46 +130,52 @@ describe('View test - ListReactiveTask test', () => {
     });
 
     describe('# test class method: reporter getter', () => {
+        it('| getter function returns skipTask method which emit "skip" event', () => {
+            // setup
+            const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            const emitStub = sinon.stub(rxTask._eventEmitter, 'emit');
+            // call
+            rxTask.reporter.skipTask('skippedReason');
+            // verify
+            expect(emitStub.args[0][0]).equal('skip');
+            expect(emitStub.args[0][1]).equal('skippedReason');
+        });
+
         it('| getter function returns updateStatus method which emit "status" event', () => {
             // setup
-            const emitStub = sinon.stub(events.EventEmitter.prototype, 'emit');
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            const emitStub = sinon.stub(rxTask._eventEmitter, 'emit');
             // call
             rxTask.reporter.updateStatus('statusUpdate');
             // verify
             expect(emitStub.args[0][0]).equal('status');
             expect(emitStub.args[0][1]).equal('statusUpdate');
-            sinon.restore();
         });
     });
 
     describe('# test class method: execute', () => {
         it('| execute task handle but callback with error, expect emit error event', () => {
             // setup
-            const emitStub = sinon.stub(events.EventEmitter.prototype, 'emit');
-            const taskHandleStub = sinon.stub();
-            taskHandleStub.callsArgWith(1, 'errorMessage');
+            const taskHandleStub = sinon.stub().callsArgWith(1, 'errorMessage');
             const rxTask = new ListrReactiveTask(taskHandleStub, TEST_TASK_ID);
+            const emitStub = sinon.stub(rxTask._eventEmitter, 'emit');
             // call
             rxTask.execute();
             // verify
             expect(emitStub.args[0][0]).equal('error');
             expect(emitStub.args[0][1]).equal('errorMessage');
-            sinon.restore();
         });
 
-        it('| execute task handle but callback with error, expect emit error event', () => {
+        it('| execute task handle with result, expect emit complete event', () => {
             // setup
-            const emitStub = sinon.stub(events.EventEmitter.prototype, 'emit');
-            const taskHandleStub = sinon.stub();
-            taskHandleStub.callsArgWith(1, null, { result: 'pass' });
+            const taskHandleStub = sinon.stub().callsArgWith(1, null, { result: 'pass' });
             const rxTask = new ListrReactiveTask(taskHandleStub, TEST_TASK_ID);
+            const emitStub = sinon.stub(rxTask._eventEmitter, 'emit');
             // call
             rxTask.execute();
             // verify
             expect(emitStub.args[0][0]).equal('complete');
             expect(emitStub.args[0][1]).deep.equal({ result: 'pass' });
-            sinon.restore();
         });
     });
 
@@ -178,8 +204,8 @@ describe('View test - ListReactiveTask test', () => {
             const subscribeStub = {
                 next: sinon.stub()
             };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('status').callsArgWith(1, 'statusUpdate');
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('status').callsArgWith(1, 'statusUpdate');
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
@@ -192,55 +218,51 @@ describe('View test - ListReactiveTask test', () => {
             const subscribeStub = {
                 error: sinon.stub()
             };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('error').callsArgWith(1, 'error comes');
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('error').callsArgWith(1, 'error');
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
             // verify
-            expect(subscribeStub.error.args[0][0]).equal('error comes');
+            expect(subscribeStub.error.args[0][0]).equal('error');
         });
 
-        it('| when "error" event emit with error.message, expect subscriber to call "error"', () => {
+        it('| when "error" event emit, expect subscriber to call "error" with partial result', () => {
             // setup
-            const TEST_ERROR_OBJ = {
-                resultMessage: 'error'
-            };
             const subscribeStub = {
                 error: sinon.stub()
             };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('error').callsArgWith(1, TEST_ERROR_OBJ);
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('error').callsArgWith(1, { message: 'error', context: 'partial'});
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
             // verify
-            expect(subscribeStub.error.args[0][0]).deep.equal(TEST_ERROR_OBJ);
+            expect(subscribeStub.error.args[0][0]).deep.equal({ message: 'error', context: 'partial'});
+            expect(TEST_CONTEXT[TEST_TASK_ID]).equal('partial');
         });
 
-        it('| when "error" event emit with error object structure, expect subscriber to call "error" and set context', () => {
-            // setup
-            const TEST_ERROR_OBJ = {
-                resultMessage: 'error',
-                deployState: 'state'
-            };
-            const subscribeStub = {
-                error: sinon.stub()
-            };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('error').callsArgWith(1, TEST_ERROR_OBJ);
-            const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
-            // call
-            const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
-            obsv._subscribe(subscribeStub);
-            // verify
-            expect(subscribeStub.error.args[0][0]).deep.equal(TEST_ERROR_OBJ);
-        });
-
-        it('| when "title" event emit, expect subscriber to call "title"', () => {
+        it('| when "skip" event emit, expect task to call "skip"', () => {
             // setup
             const subscribeStub = {};
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('title').callsArgWith(1, 'new title');
+            const TEST_TASK = {
+              skip: sinon.stub()
+            }
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('skip').callsArgWith(1, 'skippedReason');
+            // call
+            const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
+            obsv._subscribe(subscribeStub);
+            // verify
+            expect(TEST_TASK.skip.calledOnce).equal(true);
+            expect(TEST_TASK.skip.args[0][0]).equal('skippedReason');
+        });
+
+        it('| when "title" event emit, expect task title to be set', () => {
+            // setup
+            const subscribeStub = {};
+            const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('title').callsArgWith(1, 'new title');
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
@@ -253,8 +275,8 @@ describe('View test - ListReactiveTask test', () => {
             const subscribeStub = {
                 complete: sinon.stub()
             };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('complete').callsArgWith(1);
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('complete').callsArgWith(1);
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
@@ -267,8 +289,8 @@ describe('View test - ListReactiveTask test', () => {
             const subscribeStub = {
                 complete: sinon.stub()
             };
-            sinon.stub(events.EventEmitter.prototype, 'on').withArgs('complete').callsArgWith(1, 'done');
             const rxTask = new ListrReactiveTask(TEST_TASK_HANDLE, TEST_TASK_ID);
+            sinon.stub(rxTask._eventEmitter, 'on').withArgs('complete').callsArgWith(1, 'done');
             // call
             const obsv = rxTask.buildObservable()(TEST_CONTEXT, TEST_TASK);
             obsv._subscribe(subscribeStub);
