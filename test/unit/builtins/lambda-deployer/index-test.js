@@ -16,6 +16,9 @@ describe('Builtins test - lambda-deployer index.js test', () => {
     const TEST_SKILL_NAME = 'skill_name';
     const TEST_IAM_ROLE_ARN = 'IAM role arn';
     const NULL_PROFILE = 'null';
+    const LAMBDA_ARN = 'lambda_arn';
+    const LAST_MODIFIED = 'last_modified';
+    const REVISION_ID = '1';
 
     describe('# test class method: bootstrap', () => {
         afterEach(() => {
@@ -104,33 +107,6 @@ Please run "ask configure" to re-configure your porfile.`;
             });
         });
 
-        it('| alexaRegion is set correctly but not primary deployRegion in multi-regions environment, expect deploy skipped message return', (done) => {
-            // setup
-            const TEST_OPTIONS_WITH_MULTI_REGIONS = {
-                profile: TEST_PROFILE,
-                alexaRegion: TEST_ALEXA_REGION_NA,
-                skillId: '',
-                skillName: TEST_SKILL_NAME,
-                code: {},
-                userConfig: {},
-                deployState: {},
-                deployRegions: {
-                  [TEST_ALEXA_REGION_DEFAULT]: TEST_AWS_REGION_DEFAULT,
-                  [TEST_ALEXA_REGION_NA]: TEST_AWS_REGION_NA
-                }
-            };
-            const TEST_SKIPPED_RESPONSE = `The lambda deploy for Alexa region "${TEST_ALEXA_REGION_NA}" is same as "${TEST_ALEXA_REGION_DEFAULT}"`;
-            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
-            // call
-            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITH_MULTI_REGIONS, (err, res) => {
-                // verify
-                expect(res.isDeploySkipped).equal(true);
-                expect(res.deployRegion).equal(TEST_ALEXA_REGION_DEFAULT);
-                expect(res.resultMessage).equal(TEST_SKIPPED_RESPONSE);
-                expect(err).equal(null);
-                done();
-            });
-        });
 
         it('| alexaRegion is set correctly, validate Lambda deploy state fails, expect an error message return', (done) => {
             // setup
@@ -183,9 +159,6 @@ Please run "ask configure" to re-configure your porfile.`;
 
         it('| deploy IAM role passes, deploy Lambda config fails, expect all data, except endpoint, and an error message returned', (done) => {
             // setup
-            const LAMBDA_ARN = 'lambda_arn';
-            const LAST_MODIFIED = 'last_modified';
-            const REVISION_ID = '1';
             const TEST_ERROR = 'LambdaFunction error message';
             const TEST_ERROR_MESSAGE_RESPONSE = `The lambda deploy failed for Alexa region "default": ${TEST_ERROR}`;
             const LAMDBA_RESPONSE = {
@@ -217,9 +190,6 @@ Please run "ask configure" to re-configure your porfile.`;
 
         it('| deploy IAM role and Lambda Function pass, expect correct data return', (done) => {
             // setup
-            const LAMBDA_ARN = 'lambda_arn';
-            const LAST_MODIFIED = 'last_modified';
-            const REVISION_ID = '1';
             const TEST_SUCCESS_RESPONSE = `The lambda deploy succeeded for Alexa region "${TEST_ALEXA_REGION_DEFAULT}" \
 with output Lambda ARN: ${LAMBDA_ARN}.`;
             const LAMDBA_RESPONSE = {
@@ -242,6 +212,67 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
                 expect(res.endpoint.uri).equal(LAMBDA_ARN);
                 expect(res.deployState.iamRole).equal(TEST_IAM_ROLE_ARN);
                 expect(res.deployState.lambda).deep.equal(LAMDBA_RESPONSE);
+                expect(res.resultMessage).equal(TEST_SUCCESS_RESPONSE);
+                expect(err).equal(null);
+                done();
+            });
+        });
+
+        it('| not primary deployRegion in multi-regions environment, expect deploy skipped message return', (done) => {
+            // setup
+            const TEST_OPTIONS_WITH_MULTI_REGIONS = {
+                ...TEST_OPTIONS,
+                alexaRegion: TEST_ALEXA_REGION_NA,
+                deployRegions: {
+                  [TEST_ALEXA_REGION_DEFAULT]: TEST_AWS_REGION_DEFAULT,
+                  [TEST_ALEXA_REGION_NA]: TEST_AWS_REGION_NA
+                }
+            };
+            const TEST_SKIPPED_RESPONSE = `The lambda deploy for Alexa region "${TEST_ALEXA_REGION_NA}" is same as "${TEST_ALEXA_REGION_DEFAULT}"`;
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITH_MULTI_REGIONS, (err, res) => {
+                // verify
+                expect(res.isDeploySkipped).equal(true);
+                expect(res.deployRegion).equal(TEST_ALEXA_REGION_DEFAULT);
+                expect(res.resultMessage).equal(TEST_SKIPPED_RESPONSE);
+                expect(err).equal(null);
+                done();
+            });
+        });
+
+        it('| not primary deployRegion in multi-regions setup but different current deploy state, expect deploy not to be skipped', (done) => {
+            // setup
+            const TEST_OPTIONS_WITH_MULTI_REGIONS = {
+                ...TEST_OPTIONS,
+                alexaRegion: TEST_ALEXA_REGION_NA,
+                deployState: {
+                  [TEST_ALEXA_REGION_DEFAULT]: 'deploy_state_default',
+                  [TEST_ALEXA_REGION_NA]: 'deploy_state_na'
+                },
+                deployRegions: {
+                  [TEST_ALEXA_REGION_DEFAULT]: TEST_AWS_REGION_DEFAULT,
+                  [TEST_ALEXA_REGION_NA]: TEST_AWS_REGION_NA
+                }
+            };
+            const TEST_SUCCESS_RESPONSE = `The lambda deploy succeeded for Alexa region "${TEST_ALEXA_REGION_NA}" \
+with output Lambda ARN: ${LAMBDA_ARN}.`;
+            const TEST_LAMBDA_RESULT = {
+                isAllStepSuccess: true,
+                isCodeDeployed: true,
+                lambdaResponse: { arn: LAMBDA_ARN }
+            };
+            sinon.stub(awsUtil, 'getAWSProfile').withArgs(TEST_PROFILE).returns(TEST_PROFILE);
+            sinon.stub(helper, 'loadLambdaInformation').callsArgWith(2, null, TEST_VALIDATED_DEPLOY_STATE);
+            sinon.stub(helper, 'deployIAMRole').callsArgWith(2, null, TEST_IAM_ROLE_ARN);
+            sinon.stub(helper, 'deployLambdaFunction').callsArgWith(2, null, TEST_LAMBDA_RESULT);
+            // call
+            lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITH_MULTI_REGIONS, (err, res) => {
+                // verify
+                expect(res.isAllStepSuccess).equal(true);
+                expect(res.isCodeDeployed).equal(true);
+                expect(res.isDeploySkipped).equal(undefined);
+                expect(res.deployRegion).equal(undefined);
                 expect(res.resultMessage).equal(TEST_SUCCESS_RESPONSE);
                 expect(err).equal(null);
                 done();
