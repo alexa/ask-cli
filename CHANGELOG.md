@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.22.4-beta.3](https://github.com/alexa/ask-cli/compare/v2.22.4-beta.2...v2.22.4-beta.3) (2021-04-23)
+
+
+### Bug Fixes
+
+* update compiler-1.0.jar based on ACDLCompiler ([1b501da](https://github.com/alexa/ask-cli/commit/1b501da7a296e4e2cac8f6a7d6ab1cf74f660a17))
+* updating rmdirSync -> removeSync to fail silently when folder not present ([1feb35d](https://github.com/alexa/ask-cli/commit/1feb35d5e6a7b74f0e718c8ef9504b00f10978d7))
+
 ### [2.22.4-beta.2](https://github.com/alexa/ask-cli/compare/v2.22.4...v2.22.4-beta.2) (2021-03-29)
 
 
