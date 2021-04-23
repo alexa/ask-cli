@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs-extra";
 
 import { CompilerInput, CompilerOutput, CompilerResponse } from "../types";
-import { ASK_COMPILER  } from "../util/consts";
+import { ASK_COMPILER, TEN_MEGA_BYTES  } from "../util/consts";
 import { logger } from '../util/logger';
 import { verifyJava } from '../util/verifyJava';
 import { printLogs } from '../util/printLogs';
@@ -17,7 +17,7 @@ export class Compiler {
       logger.info(`Skill package directory: ${compilerInput.rootDir}`)
 
       const command = `java -jar ${path.join(__dirname, "../../lib/compiler-1.0.jar")} ${compilerInput.rootDir}`;
-      const compilerResponse : CompilerResponse = JSON.parse(execSync(command, { encoding: 'utf8' }));
+      const compilerResponse : CompilerResponse = JSON.parse(execSync(command, { encoding: 'utf8', maxBuffer: TEN_MEGA_BYTES }));
 
       if (compilerResponse.status === 'PASSED') {
           this._saveACIRFiles(compilerResponse.files, compilerInput.outDir);

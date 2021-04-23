@@ -1,9 +1,8 @@
 import { execSync } from "child_process";
 import path from "path";
 import fs from "fs-extra";
-
 import { DecompilerInput, DecompilerOutput, DecompilerResponse } from "../types";
-import { ASK_DECOMPILER, ACDL_PATH, BUILD } from "../util/consts";
+import { ASK_DECOMPILER, ACDL_PATH, BUILD, TEN_MEGA_BYTES } from "../util/consts";
 import { logger } from '../util/logger';
 import { verifyJava } from '../util/verifyJava';
 
@@ -22,7 +21,7 @@ export class Decompiler {
                 return {};
             }
             const command = `java -jar ${path.join(__dirname, "../../lib/compiler-1.0.jar")} ${decompilerInput.rootDir} decompile`;
-            const decompilerResponse : DecompilerResponse = JSON.parse(execSync(command, { encoding: 'utf8' }));
+            const decompilerResponse : DecompilerResponse = JSON.parse(execSync(command, { encoding: 'utf8' , maxBuffer: TEN_MEGA_BYTES }));
             if (decompilerResponse.status === 'PASSED') {
                 // creates build/ folder if doesn't exist
                 fs.mkdirSync(path.join(decompilerInput.rootDir, `${BUILD}`), { recursive: true });

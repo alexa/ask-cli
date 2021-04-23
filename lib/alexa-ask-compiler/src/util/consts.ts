@@ -8,3 +8,4 @@ export const BUILD = 'build';
 // GENERAL
 export const ASK_COMPILER = "ask-compiler";
 export const ASK_DECOMPILER = 'ask-decompiler';
+export const TEN_MEGA_BYTES = 1000 * 1000 * 10;
