@@ -1,8 +1,8 @@
-const path = require('path');
+import path from 'path';
 
-const CONSTANTS = require('@src/utils/constants');
+import * as CONSTANTS from '@src/utils/constants';
 
-const BUILT_IN_DEPLOY_DELEGATES = {
+export const builtin = {
     [CONSTANTS.DEPLOYER_TYPE.CFN.NAME]: {
         location: 'cfn-deployer',
         description: CONSTANTS.DEPLOYER_TYPE.CFN.DESCRIPTION,
@@ -52,13 +52,16 @@ const BUILT_IN_DEPLOY_DELEGATES = {
  *                      result.endpoint         the endpoint field following the definition of skill.json, usually contains the url for the endpoint
  *                      result.deployState      the result of deploy to be tracked in ask-resources config
  */
-class DeployDelegate {
+export default class DeployDelegate {
+    private type: string;
+    private instance: any;
+
     /**
      * Constructor for wrapping the deploy delegate instance to enforce its contract with ask-cli.
      * @param {String} type the deploy delegate type name
      * @param {Object} instance the instance for the deploy delegate
      */
-    constructor(type, instance) {
+    constructor(type: string, instance: any) {
         this.type = type;
         this.instance = instance;
         this._validateDeployDelegateMethods();
@@ -68,7 +71,7 @@ class DeployDelegate {
      * Wrapper of deployDelegate's bootstrap method
      * @param {Function} callback
      */
-    bootstrap(options, callback) {
+    bootstrap(options: any, callback:  Function) {
         if (!this.instance) {
             return callback('[Fatal]: Please instantiate the DeployDelegate class before using.');
         }
@@ -81,7 +84,7 @@ class DeployDelegate {
      * @param {Object} options Invoke options { profile, alexaRegion, skillId, skillName, code, userConfig, deployState }
      * @param {Function} callback
      */
-    invoke(reporter, options, callback) {
+    invoke(reporter: any, options: any, callback: Function) {
         if (!this.instance) {
             return callback('[Fatal]: Please instantiate the DeployDelegate class before using.');
         }
@@ -92,7 +95,7 @@ class DeployDelegate {
      * Validate if the response from DeployDelegate is following the contract between ask-cli and DeployDelegate.
      * @param {Object} deployResult the result from deployDelegate's invoke.
      */
-    validateDeployDelegateResponse(deployResult) {
+    validateDeployDelegateResponse(deployResult: any) {
         if (!deployResult) {
             throw new Error('[Error]: Deploy result should not be empty.');
         }
@@ -140,10 +143,10 @@ class DeployDelegate {
  * @param {String} type deploy delegate type
  * @param {Function} callback (error, deployDelegateInstance)
  */
-function loadDeployDelegate(type, callback) {
-    if (typeof type === 'string' && BUILT_IN_DEPLOY_DELEGATES[type]) {
+export function loadDeployDelegate(type: string, callback: Function) {
+    if (typeof type === 'string' && builtin[type]) {
         let dd;
-        const builtinLocation = BUILT_IN_DEPLOY_DELEGATES[type].location;
+        const builtinLocation = builtin[type].location;
         try {
             const modulePath = path.join(__dirname, '..', '..', 'builtins', 'deploy-delegates', builtinLocation);
             dd = new DeployDelegate(type, require(modulePath)); // eslint-disable-line global-require
@@ -161,7 +164,3 @@ function loadDeployDelegate(type, callback) {
         });
     }
 }
-
-module.exports = DeployDelegate;
-module.exports.load = loadDeployDelegate;
-module.exports.builtin = BUILT_IN_DEPLOY_DELEGATES;

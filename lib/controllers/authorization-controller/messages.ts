@@ -1,11 +1,11 @@
-module.exports.AUTH_MESSAGE = 'Switch to "Login with Amazon" page and sign-in with your Amazon developer credentials.\n'
+export const AUTH_MESSAGE = 'Switch to "Login with Amazon" page and sign-in with your Amazon developer credentials.\n'
 + 'If your browser did not open the page, try to run the command again with "--no-browser" option.\n';
 
-module.exports.PORT_OCCUPIED_WARN_MESSAGE = '[Warn]: 9090 port on localhost has been occupied, '
+export const PORT_OCCUPIED_WARN_MESSAGE = '[Warn]: 9090 port on localhost has been occupied, '
 + 'ask-cli cannot start a local server for receiving authorization code.\nPlease either abort any processes running on port 9090\n'
 + 'or add `--no-browser` flag to the command as an alternative approach.';
 
-module.exports.ASK_SIGN_IN_SUCCESS_MESSAGE = `
+export const ASK_SIGN_IN_SUCCESS_MESSAGE = `
 <html>
     <head>
         <title>ask-cli Login with Amazon</title>
@@ -29,7 +29,7 @@ module.exports.ASK_SIGN_IN_SUCCESS_MESSAGE = `
 </html>
 `;
 
-module.exports.ASK_SIGN_IN_FAILURE_MESSAGE = (error) => `
+export const ASK_SIGN_IN_FAILURE_MESSAGE = (error?: Error) => `
 <html>
     <head>
         <title>ask-cli Login with Amazon</title>
@@ -53,4 +53,4 @@ module.exports.ASK_SIGN_IN_FAILURE_MESSAGE = (error) => `
 </html>
 `;
 
-module.exports.ASK_ENV_VARIABLES_ERROR_MESSAGE = 'Could not find either of the environment variables: ASK_ACCESS_TOKEN, ASK_REFRESH_TOKEN';
+export const ASK_ENV_VARIABLES_ERROR_MESSAGE = 'Could not find either of the environment variables: ASK_ACCESS_TOKEN, ASK_REFRESH_TOKEN';

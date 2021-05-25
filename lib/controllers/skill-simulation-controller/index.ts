@@ -1,28 +1,46 @@
-const R = require('ramda');
-const DialogSaveSkillIoFile = require('@src/model/dialog-save-skill-io-file');
-const SmapiClient = require('@src/clients/smapi-client');
-const jsonView = require('@src/view/json-view');
-const CONSTANTS = require('@src/utils/constants');
-const Retry = require('@src/utils/retry-utility');
+import R from 'ramda';
+import DialogSaveSkillIoFile from '@src/model/dialog-save-skill-io-file';
+import SmapiClient from '@src/clients/smapi-client';
+import jsonView from '@src/view/json-view';
+import * as CONSTANTS from '@src/utils/constants';
+import { retry } from '@src/utils/retry-utility';
 
-module.exports = class SkillSimulationController {
+export interface ISkillSimulationController {
+    skillId: any;
+    locale: string;
+    stage: string;
+    profile: string;
+    saveSkillIo: string;
+    debug: boolean;
+    smapiClient?: SmapiClient;
+};
+
+export default class SkillSimulationController {
+    private _profile: string;
+    private _doDebug: boolean;
+    private _smapiClient: any;
+    protected _skillId: any;
+    protected _locale: string;
+    private _stage: string;
+    protected _skillIOInstance: DialogSaveSkillIoFile;
+
     /**
      * Constructor for SkillSimulationController
      * @param {Object} configuration { profile, doDebug }
      * @throws {Error} if configuration is invalid for dialog.
      */
-    constructor(configuration) {
+    constructor(configuration: ISkillSimulationController) {
         if (configuration === undefined) {
             throw 'Cannot have an undefined configuration.';
         }
         const { skillId, locale, stage, profile, saveSkillIo, debug, smapiClient } = configuration;
-        this.profile = profile;
-        this.doDebug = debug;
-        this.smapiClient = smapiClient || new SmapiClient({ profile: this.profile, doDebug: this.doDebug });
-        this.skillId = skillId;
-        this.locale = locale;
-        this.stage = stage;
-        this.skillIOInstance = new DialogSaveSkillIoFile(saveSkillIo);
+        this._profile = profile;
+        this._doDebug = debug;
+        this._smapiClient = smapiClient || new SmapiClient({ profile: this._profile, doDebug: this._doDebug });
+        this._skillId = skillId;
+        this._locale = locale;
+        this._stage = stage;
+        this._skillIOInstance = new DialogSaveSkillIoFile(saveSkillIo);
     }
 
     /**
@@ -31,9 +49,9 @@ module.exports = class SkillSimulationController {
      * @param {Boolean} newSession Boolean to specify to FORCE_NEW_SESSION
      * @param {Function} callback callback to execute upon a response.
      */
-    startSkillSimulation(utterance, newSession, callback) {
-        this.skillIOInstance.startInvocation({ utterance, newSession });
-        this.smapiClient.skill.test.simulateSkill(this.skillId, this.stage, utterance, newSession, this.locale, (err, res) => {
+    startSkillSimulation(utterance: string, newSession: boolean, callback: Function) {
+        this._skillIOInstance.startInvocation({ utterance, newSession });
+        (this._smapiClient.skill as any).test.simulateSkill(this._skillId, this._stage, utterance, newSession, this._locale, (err?: Error, res?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -50,14 +68,14 @@ module.exports = class SkillSimulationController {
      * @param {String} simulationId simulation ID associated to the current simulation.
      * @param {Function} callback  function to execute upon a response.
      */
-    getSkillSimulationResult(simulationId, callback) {
+    getSkillSimulationResult(simulationId: string, callback: Function) {
         const retryConfig = {
             factor: CONSTANTS.CONFIGURATION.RETRY.GET_SIMULATE_STATUS.FACTOR,
             maxRetry: CONSTANTS.CONFIGURATION.RETRY.GET_SIMULATE_STATUS.MAX_RETRY,
             base: CONSTANTS.CONFIGURATION.RETRY.GET_SIMULATE_STATUS.MIN_TIME_OUT
         };
-        const retryCall = (loopCallback) => {
-            this.smapiClient.skill.test.getSimulation(this.skillId, simulationId, this.stage, (pollErr, pollResponse) => {
+        const retryCall = (loopCallback: Function) => {
+            this._smapiClient.skill.test.getSimulation(this._skillId, simulationId, this._stage, (pollErr?: Error, pollResponse?: any) => {
                 if (pollErr) {
                     return loopCallback(pollErr);
                 }
@@ -67,15 +85,15 @@ module.exports = class SkillSimulationController {
                 loopCallback(null, pollResponse);
             });
         };
-        const shouldRetryCondition = (retryResponse) => {
+        const shouldRetryCondition = (retryResponse: any) => {
             const status = R.view(R.lensPath(['body', 'status']), retryResponse);
             return !status || status === CONSTANTS.SKILL.SIMULATION_STATUS.IN_PROGRESS;
         };
-        Retry.retry(retryConfig, retryCall, shouldRetryCondition, (err, res) => {
+        retry(retryConfig, retryCall, shouldRetryCondition, (err?: Error, res?: any) => {
             if (err) {
                 return callback(err);
             }
-            this.skillIOInstance.endInvocation({ body: res.body });
+            this._skillIOInstance.endInvocation({ body: res.body });
             if (!res.body.status) {
                 return callback(`Failed to get status for simulation id: ${simulationId}.`
                     + 'Please run again using --debug for more details.');

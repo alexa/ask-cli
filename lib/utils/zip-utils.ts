@@ -8,11 +8,6 @@ import httpClient from '@src/clients/http-client';
 import Messenger from '@src/view/messenger';
 import * as CONSTANTS from '@src/utils/constants';
 
-module.exports = {
-    createTempZip,
-    unzipRemoteZipFile
-};
-
 type ZipCallback = (error?: Error | string, filePath?: string) => void;
 type UnzipCallback = (err?: Error) => void;
 
@@ -86,3 +81,8 @@ function unzipRemoteZipFile(url: string, targetPath: string, doDebug: boolean, c
         callback();
     });
 }
+
+export default {
+    createTempZip,
+    unzipRemoteZipFile
+};

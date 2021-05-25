@@ -1,40 +1,49 @@
-const R = require('ramda');
-const async = require('async');
-const querystring = require('querystring');
-const AuthorizationController = require('@src/controllers/authorization-controller');
-const DynamicConfig = require('@src/utils/dynamic-config');
-const httpClient = require('@src/clients/http-client');
-const CONSTANTS = require('@src/utils/constants');
+import R from 'ramda';
+import async from 'async';
+import querystring from 'querystring';
+import AuthorizationController from '@src/controllers/authorization-controller';
+import DynamicConfig from '@src/utils/dynamic-config';
+import httpClient from '@src/clients/http-client';
+import * as CONSTANTS from '@src/utils/constants';
 
-const accountLinkingApi = require('./resources/account-linking');
-const catalogApi = require('./resources/catalog');
-const historyApi = require('./resources/history');
-const ispApi = require('./resources/isp');
-const manifestApi = require('./resources/manifest');
-const interactionModelApi = require('./resources/interaction-model');
-const privateSkillApi = require('./resources/private-skill');
-const skillPackageApi = require('./resources/skill-package');
-const skillApi = require('./resources/skill');
-const testApi = require('./resources/test');
-const vendorApi = require('./resources/vendor');
-const evaluationsApi = require('./resources/evaluations');
-const alexaHostedApi = require('./resources/alexa-hosted');
-const betaTestApi = require('./resources/beta-test');
-const publishingApi = require('./resources/publishing');
-const taskApi = require('./resources/task');
+import accountLinkingApi from './resources/account-linking';
+import catalogApi from './resources/catalog';
+import historyApi from './resources/history';
+import ispApi from './resources/isp';
+import manifestApi from './resources/manifest';
+import interactionModelApi from './resources/interaction-model';
+import privateSkillApi from './resources/private-skill';
+import skillPackageApi from './resources/skill-package';
+import skillApi from './resources/skill';
+import testApi from './resources/test';
+import vendorApi from './resources/vendor';
+import evaluationsApi from './resources/evaluations';
+import alexaHostedApi from './resources/alexa-hosted';
+import betaTestApi from './resources/beta-test';
+import publishingApi from './resources/publishing';
+import taskApi from './resources/task';
 
 const JSON_PROPERTIES = ['_links'];
 
 /**
  * Class for Alexa Skill Management API Service (SMAPI) client
  */
-module.exports = class SmapiClient {
+export default class SmapiClient {
+    profile: string;
+    doDebug: boolean;
+    skill: any;
+    skillPackage: any;
+    vendor: any;
+    isp: any;
+    catalog: any;
+    task: any;
+
     /**
      * Constructor for SmapiClient with "profile" for authorization and "doDebug" for client setting
      * @param {object} configuration | profile
      *                               | doDebug
      */
-    constructor(configuration) {
+    constructor(configuration: any) {
         this.profile = configuration.profile;
         this.doDebug = configuration.doDebug;
         this._smapiRequest = this._smapiRequest.bind(this);
@@ -64,30 +73,31 @@ module.exports = class SmapiClient {
      * @param {string} url
      * @param {function} callback
      */
-    smapiRedirectRequestWithUrl(url, callback) {
+    smapiRedirectRequestWithUrl(url: string, callback: Function) {
         const EMPTY_HEADERS = {};
         const method = CONSTANTS.HTTP_REQUEST.VERB.GET;
         const NULL_PAYLOAD = null;
-        const requestOptions = {
+        const requestOptions: any = {
             url,
             method,
             headers: EMPTY_HEADERS,
             body: NULL_PAYLOAD,
         };
-        const authorizationController = new AuthorizationController({
+        const cfg: any = {
             auth_client_type: 'LWA',
             doDebug: this.doDebug
-        });
-        authorizationController.tokenRefreshAndRead(this.profile, (tokenErr, token) => {
+        };
+        const authorizationController = new AuthorizationController(cfg);
+        authorizationController.tokenRefreshAndRead(this.profile, (tokenErr: Error, token: string) => {
             if (tokenErr) {
                 return callback(tokenErr);
             }
             requestOptions.headers.authorization = token;
-            httpClient.request(requestOptions, 'REDIRECT_URL', this.doDebug, (reqErr, reqResponse) => {
+            httpClient.request(requestOptions, 'REDIRECT_URL', this.doDebug, (reqErr: Error, reqResponse: any) => {
                 if (reqErr) {
                     return callback(reqErr);
                 }
-                _normalizeSmapiResponse(reqResponse, (handleErr, smapiResponse) => {
+                _normalizeSmapiResponse(reqResponse, (handleErr: Error, smapiResponse: any) => {
                     callback(handleErr, handleErr ? null : smapiResponse);
                 });
             });
@@ -102,17 +112,19 @@ module.exports = class SmapiClient {
      * @param {Function} responseHandle Handle to extract list result in each page. Return { nextToken, listResult } from each response.
      * @param {Function} callback (err, aggregatedListResult)
      */
-    listWithAutoPagination(callApiTrack, callArgv, responseAccessor, responseHandle, callback) {
-        const result = {};
+    listWithAutoPagination(callApiTrack: any, callArgv: any, responseAccessor: string, responseHandle: Function, callback: Function) {
+        const result: any = {};
         result[responseAccessor] = [];
-        const queryParams = {
+        const queryParams: any = {
             maxResults: CONSTANTS.SMAPI.DEFAULT_MAX_RESULT_PER_PAGE,
         };
-        const smapiMethod = R.path(callApiTrack, this);
+        const smapiMethod: any = R.path(callApiTrack, this);
+
+        const cb: any = (err: Error, res: any) => callback(err, err ? null : res);
 
         async.doWhilst(
-            (loopCallback) => {
-                smapiMethod(...callArgv, queryParams, (err, res) => {
+            (loopCallback: any) => {
+                smapiMethod(...callArgv, queryParams, (err: Error, res: any) => {
                     if (err) {
                         return loopCallback(err, null);
                     }
@@ -127,7 +139,7 @@ module.exports = class SmapiClient {
                 });
             },
             () => queryParams.nextToken,
-            (err, res) => callback(err, err ? null : res)
+            cb
         );
     }
 
@@ -142,7 +154,16 @@ module.exports = class SmapiClient {
      * @param {Object} payload Payload body
      * @param {Function} callback (err, requestResponse)
      */
-    _smapiRequest(apiName, method, version, urlPath, queryParams, headers, payload, callback) {
+    _smapiRequest(
+        apiName: string,
+        method: string,
+        version: string,
+        urlPath: string,
+        queryParams: any,
+        headers: any,
+        payload: any,
+        callback: Function
+    ) {
         const qs = querystring.stringify(queryParams) && `?${querystring.stringify(queryParams)}`;
         const smapiEndpoint = DynamicConfig.smapiBaseUrl;
         const requestOptions = {
@@ -152,20 +173,21 @@ module.exports = class SmapiClient {
             body: payload,
             json: !!payload
         };
-        const authorizationController = new AuthorizationController({
+        const cfg: any = {
             auth_client_type: 'LWA',
             doDebug: this.doDebug
-        });
-        authorizationController.tokenRefreshAndRead(this.profile, (tokenErr, token) => {
+        };
+        const authorizationController = new AuthorizationController(cfg);
+        authorizationController.tokenRefreshAndRead(this.profile, (tokenErr: Error, token: any) => {
             if (tokenErr) {
                 return callback(tokenErr);
             }
             requestOptions.headers.authorization = token;
-            httpClient.request(requestOptions, apiName, this.doDebug, (reqErr, reqResponse) => {
+            httpClient.request(requestOptions, apiName, this.doDebug, (reqErr: Error, reqResponse: any) => {
                 if (reqErr) {
                     return callback(reqErr);
                 }
-                _normalizeSmapiResponse(reqResponse, (normalizeErr, smapiResponse) => {
+                _normalizeSmapiResponse(reqResponse, (normalizeErr: Error, smapiResponse: any) => {
                     callback(normalizeErr, normalizeErr ? null : smapiResponse);
                 });
             });
@@ -178,7 +200,7 @@ module.exports = class SmapiClient {
  * @param {Object} reqResponse the response from SMAPI
  * @param {Function} callback (error, { statusCode, body, headers })
  */
-function _normalizeSmapiResponse(reqResponse, callback) {
+function _normalizeSmapiResponse(reqResponse: any, callback: Function) {
     let parsedResponseBody;
     try {
         _validateSmapiResponse(reqResponse);
@@ -200,7 +222,7 @@ function _normalizeSmapiResponse(reqResponse, callback) {
  *
  * @param {Object} reqResponse the response from SMAPI
  */
-function _validateSmapiResponse(reqResponse) {
+function _validateSmapiResponse(reqResponse: any) {
     if (reqResponse.statusCode >= 300 && !reqResponse.body) {
         throw `[Fatal]: SMAPI error code ${reqResponse.statusCode}. No response body from the service request.`;
     }
@@ -217,7 +239,7 @@ function _validateSmapiResponse(reqResponse) {
  * function to clean up properties (such as _links) from the response body.
  * @param {Object} reqResponseBody
  */
-function _cleanResponseBody(reqResponseBody) {
+function _cleanResponseBody(reqResponseBody: any) {
     if (reqResponseBody) {
         Object.keys(reqResponseBody).forEach((key) => {
             if (JSON_PROPERTIES.includes(key)) {

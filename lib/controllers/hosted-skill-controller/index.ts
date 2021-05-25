@@ -1,19 +1,31 @@
-const fs = require('fs-extra');
-const os = require('os');
-const path = require('path');
+import fs from 'fs-extra';
+import os from 'os';
+import path from 'path';
 
-const SmapiClient = require('@src/clients/smapi-client');
-const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
-const CONSTANTS = require('@src/utils/constants');
-const DynamicConfig = require('@src/utils/dynamic-config');
-const jsonView = require('@src/view/json-view');
-const Messenger = require('@src/view/messenger');
+import SmapiClient from '@src/clients/smapi-client';
+import SkillMetadataController from '@src/controllers/skill-metadata-controller';
+import * as CONSTANTS from '@src/utils/constants';
+import DynamicConfig from '@src/utils/dynamic-config';
+import jsonView from '@src/view/json-view';
+import Messenger from '@src/view/messenger';
 
-const cloneFlow = require('./clone-flow');
-const helper = require('./helper.js');
+import cloneFlow from './clone-flow';
+import helper from './helper';
 
-module.exports = class HostedSkillController {
-    constructor(configuration) {
+export interface IHostedSkillController {
+    profile: string;
+    doDebug: boolean;
+    smapiClient: SmapiClient;
+    skillMetaController: SkillMetadataController;
+};
+
+export default class HostedSkillController {
+    private profile: string;
+    private doDebug: boolean;
+    private smapiClient: any;
+    private skillMetaController: SkillMetadataController;
+
+    constructor(configuration: IHostedSkillController) {
         const { profile, doDebug } = configuration;
         this.profile = profile;
         this.doDebug = doDebug;
@@ -26,8 +38,8 @@ module.exports = class HostedSkillController {
      * @param {JSON} hostedSkillPayload the JSON representation of the skill, and provides Alexa with all of the metadata required
      * @param {callback} callback { error, response }
      */
-    createSkill(hostedSkillPayload, callback) {
-        this.smapiClient.skill.alexaHosted.createHostedSkill(hostedSkillPayload, (createErr, createRes) => {
+    createSkill(hostedSkillPayload: any, callback: Function) {
+        this.smapiClient.skill.alexaHosted.createHostedSkill(hostedSkillPayload, (createErr?: Error, createRes?:any) => {
             if (createErr) {
                 return callback(createErr);
             }
@@ -35,11 +47,11 @@ module.exports = class HostedSkillController {
                 return callback(jsonView.toString(createRes.body));
             }
             const { skillId } = createRes.body;
-            helper.pollingSkillStatus(this.smapiClient, skillId, (pollErr, pollRes) => {
+            helper.pollingSkillStatus(this.smapiClient, skillId, (pollErr?: Error, pollRes?: any) => {
                 if (pollErr) {
                     return callback(pollErr);
                 }
-                helper.handleSkillStatus(pollRes, skillId, (handleErr) => {
+                helper.handleSkillStatus(pollRes, skillId, (handleErr?: Error) => {
                     callback(handleErr, skillId);
                 });
             });
@@ -53,12 +65,12 @@ module.exports = class HostedSkillController {
      * @param {string} projectPath The skill project folder path
      * @param {callback} callback { error, response }
      */
-    clone(skillId, skillName, projectPath, callback) {
+    clone(skillId: string, skillName: string, projectPath: string, callback: Function) {
         if (fs.existsSync(projectPath)) {
             return callback(`${projectPath} directory already exists.`);
         }
         // 0. get hosted skill info
-        this.getHostedSkillMetadata(skillId, (metadataErr, metadata) => {
+        this.getHostedSkillMetadata(skillId, (metadataErr?: Error, metadata?: any) => {
             if (metadataErr) {
                 return callback(metadataErr);
             }
@@ -67,12 +79,12 @@ module.exports = class HostedSkillController {
             // 2. clone project, set up git
             cloneFlow.cloneProjectFromGit(projectPath, skillId, skillName, this.profile, metadata.repository.url, this.doDebug);
             // 3. check skill-package content
-            cloneFlow.doSkillPackageExist(skillName, projectPath, skillId, (checkErr, doExist) => {
+            cloneFlow.doSkillPackageExist(skillName, projectPath, skillId, (checkErr?: Error, doExist?: any) => {
                 if (checkErr) {
                     return callback(checkErr);
                 }
                 if (!doExist) {
-                    this.skillMetaController.getSkillPackage(projectPath, skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (exportErr) => {
+                    this.skillMetaController.getSkillPackage(projectPath, skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (exportErr?: Error) => {
                         if (exportErr) {
                             return callback(exportErr);
                         }
@@ -92,8 +104,8 @@ module.exports = class HostedSkillController {
      * @param {string} skillId The skill id
      * @param {callback} callback { error, response }
      */
-    getHostedSkillMetadata(skillId, callback) {
-        this.smapiClient.skill.alexaHosted.getAlexaHostedSkillMetadata(skillId, (err, response) => {
+    getHostedSkillMetadata(skillId: string, callback: Function) {
+        this.smapiClient.skill.alexaHosted.getAlexaHostedSkillMetadata(skillId, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -111,8 +123,8 @@ module.exports = class HostedSkillController {
      * @param {string} permissionType The permission enum type
      * @param {callback} callback { error, response }
      */
-    getHostedSkillPermission(vendorId, permissionType, callback) {
-        this.smapiClient.skill.alexaHosted.getHostedSkillPermission(vendorId, permissionType, (err, response) => {
+    getHostedSkillPermission(vendorId: string, permissionType: string, callback: Function) {
+        this.smapiClient.skill.alexaHosted.getHostedSkillPermission(vendorId, permissionType, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -130,12 +142,12 @@ module.exports = class HostedSkillController {
      * @param {string} skillId The skill id
      * @param {callback} callback { error, response }
      */
-    checkSkillStatus(skillId, callback) {
-        helper.pollingSkillStatus(this.smapiClient, skillId, (pollErr, pollRes) => {
+    checkSkillStatus(skillId: string, callback: Function) {
+        helper.pollingSkillStatus(this.smapiClient, skillId, (pollErr?: Error, pollRes?: any) => {
             if (pollErr) {
                 return callback(pollErr);
             }
-            helper.handleSkillStatus(pollRes, skillId, (handleErr) => {
+            helper.handleSkillStatus(pollRes, skillId, (handleErr?: Error) => {
                 if (handleErr) {
                     return callback(handleErr);
                 }
@@ -149,8 +161,8 @@ module.exports = class HostedSkillController {
      * @param {string} skillId The skill ID
      * @param {callback} callback { error, response }
      */
-    deleteSkill(skillId, callback) {
-        this.smapiClient.skill.deleteSkill(skillId, (err) => {
+    deleteSkill(skillId: string, callback: Function) {
+        this.smapiClient.skill.deleteSkill(skillId, (err?: Error) => {
             if (err) {
                 return callback(err);
             }
@@ -163,14 +175,14 @@ module.exports = class HostedSkillController {
      * @param {String} folderName the project folder name
      * @param {callback} callback { error, response }
      */
-    downloadAskScripts(folderName, callback) {
+    downloadAskScripts(folderName: string, callback: Function) {
         const askFolderPath = path.join(os.homedir(), CONSTANTS.FILE_PATH.ASK.HIDDEN_FOLDER);
         fs.ensureDirSync(askFolderPath);
-        this.updateAskSystemScripts((err) => {
+        this.updateAskSystemScripts((err?: Error) => {
             if (err) {
                 return callback(err);
             }
-            this.updateSkillPrePushScript(folderName, (prePushErr) => callback(prePushErr || null));
+            this.updateSkillPrePushScript(folderName, (prePushErr: any) => callback(prePushErr || null));
         });
     }
 
@@ -178,18 +190,18 @@ module.exports = class HostedSkillController {
      * To update all ASK system-wide scripts from S3
      * @param {callback} callback { error, response }
      */
-    updateAskSystemScripts(callback) {
+    updateAskSystemScripts(callback: Function) {
         const askFolderPath = path.join(os.homedir(), CONSTANTS.FILE_PATH.ASK.HIDDEN_FOLDER);
         fs.ensureDirSync(askFolderPath);
-        helper.downloadAuthInfoScript((authInfoErr) => {
+        helper.downloadAuthInfoScript((authInfoErr?: Error) => {
             if (authInfoErr) {
                 return callback(authInfoErr);
             }
-            helper.downloadAskPrePushScript((prePushErr) => {
+            helper.downloadAskPrePushScript((prePushErr?: Error) => {
                 if (prePushErr) {
                     return callback(prePushErr);
                 }
-                helper.downloadGitCredentialHelperScript((credentialErr) => callback(credentialErr || null));
+                helper.downloadGitCredentialHelperScript((credentialErr?: Error) => callback(credentialErr || null));
             });
         });
     }
@@ -199,12 +211,12 @@ module.exports = class HostedSkillController {
      * @param {String} folderName the project folder name
      * @param {callback} callback { error, response }
      */
-    updateSkillPrePushScript(folderName, callback) {
+    updateSkillPrePushScript(folderName: string, callback: Function) {
         const prePushUrl = DynamicConfig.s3Scripts.prePush;
         const filePath = path.join(folderName,
             CONSTANTS.HOSTED_SKILL.HIDDEN_GIT_FOLDER.NAME,
             CONSTANTS.HOSTED_SKILL.HIDDEN_GIT_FOLDER.HOOKS.NAME,
             CONSTANTS.HOSTED_SKILL.HIDDEN_GIT_FOLDER.HOOKS.PRE_PUSH);
-        helper.downloadScriptFromS3(prePushUrl, filePath, (downloadErr) => callback(downloadErr || null));
+        helper.downloadScriptFromS3(prePushUrl, filePath, (downloadErr?: Error) => callback(downloadErr || null));
     }
 };

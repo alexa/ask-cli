@@ -1,6 +1,6 @@
 import open from 'open';
 import portscanner from 'portscanner';
-import url, { URL, URLSearchParams } from 'url';
+import { URL, URLSearchParams } from 'url';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import LWAAuthCodeClient from '@src/clients/lwa-auth-code-client';
@@ -11,7 +11,7 @@ import stringUtils from '@src/utils/string-utils';
 import Messenger from '@src/view/messenger';
 import SpinnerView from '@src/view/spinner-view';
 
-import messages from './messages';
+import * as messages from './messages';
 
 const getAppConfig = () => AppConfig.getInstance() as AppConfig;
 

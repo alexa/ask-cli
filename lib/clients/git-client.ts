@@ -1,21 +1,24 @@
-const { execSync } = require('child_process');
-const fs = require('fs-extra');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs-extra';
+import path from 'path';
 
-const CLiError = require('@src/exceptions/cli-error');
-const Messenger = require('@src/view/messenger');
+import CLiError from '@src/exceptions/cli-error';
+import Messenger from '@src/view/messenger';
 
 /**
  * Class for git commands management
  */
-module.exports = class GitClient {
+export default class GitClient {
+    projectPath: string;
+    verbosityOptions: any;
+
     /**
      * Constructor for GitClient with projectPath and verbosity options
      * @param {string} projectPath the path of a project
      * @param {object} verbosityOptions | showOutput
      *                                  | showCommand
      */
-    constructor(projectPath, verbosityOptions) {
+    constructor(projectPath: string, verbosityOptions: any) {
         this.projectPath = projectPath;
         this.verbosityOptions = verbosityOptions;
     }
@@ -38,7 +41,7 @@ module.exports = class GitClient {
      * @param {string} credentialScriptExecution the command to execute the git-credential-helper
      * @param {string} hostUrl the host url to apply to the credential helper
      */
-    configureCredentialHelper(credentialScriptExecution, hostUrl) {
+    configureCredentialHelper(credentialScriptExecution: string, hostUrl: string) {
         const commands = [
             `git config --local credential.${hostUrl}.helper ""`,
             `git config --local --add credential.${hostUrl}.helper "!${credentialScriptExecution}"`,
@@ -56,7 +59,7 @@ module.exports = class GitClient {
      * Add a new remote in the directory your repository is stored at
      * @param {String} repoUrl a remote url
      */
-    addOrigin(repoUrl) {
+    addOrigin(repoUrl: string) {
         const commands = [`git remote add origin ${repoUrl}`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -85,7 +88,7 @@ module.exports = class GitClient {
      * Execute git checkout to switch branch or restore working tree files
      * @param {string} branch the branch name
      */
-    checkoutBranch(branch) {
+    checkoutBranch(branch: string) {
         const commands = [`git checkout ${branch}${this.verbosityOptions.showOutput === false ? ' --quiet' : ''}`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -102,7 +105,7 @@ module.exports = class GitClient {
      * @param {string} branch the branch name
      * @param {string} folderName the directory folder name
      */
-    clone(cloneUrl, branch, folderName) {
+    clone(cloneUrl: string, branch: string, folderName: string) {
         const commands = [`git clone --branch ${branch} ${cloneUrl} "${folderName}" ${this.verbosityOptions.showOutput === false ? ' --quiet' : ''}`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -116,7 +119,7 @@ module.exports = class GitClient {
      * Set up or update a gitignore file
      * @param {Array} filesToIgnore the list of files to ignore for git
      */
-    setupGitIgnore(filesToIgnore) {
+    setupGitIgnore(filesToIgnore: string[]) {
         const gitignorePath = path.join(this.projectPath, '.gitignore');
         if (fs.existsSync(gitignorePath) === false) {
             fs.writeFileSync(gitignorePath, `${filesToIgnore.join('\n')}`);
@@ -135,7 +138,7 @@ module.exports = class GitClient {
      * Execute git add to add file contents to the index
      * @param {string} file the file to add content from
      */
-    add(file) {
+    add(file: string) {
         const commands = [`git add "${file}"`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -150,7 +153,7 @@ module.exports = class GitClient {
      * Execute git delete to delete a local branch
      * @param {string} file the file to add content from
      */
-    deleteBranch(branch) {
+    deleteBranch(branch: string) {
         const commands = [`git branch -d ${branch}`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -164,7 +167,7 @@ module.exports = class GitClient {
      * Execute git merge to join two development histories together
      * @param {String} branch the development branch
      */
-    merge(branch) {
+    merge(branch: string) {
         const commands = [`git merge ${branch}`];
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -198,7 +201,7 @@ module.exports = class GitClient {
      * @param {String} commit2 the second commit
      * @param {callback} callback { error }
      */
-    countCommitDifference(commit1, commit2) {
+    countCommitDifference(commit1: string, commit2: string) {
         const command = `git rev-list --count ${commit1}...${commit2}`;
         const options = {
             showStdOut: this.verbosityOptions.showOutput,
@@ -213,7 +216,7 @@ module.exports = class GitClient {
         }
     }
 
-    _execCommands(commands, options) {
+    _execCommands(commands: string[], options: any) {
         for (const command of commands) {
             try {
                 this._execChildProcessSync(command, options);
@@ -223,9 +226,9 @@ module.exports = class GitClient {
         }
     }
 
-    _execChildProcessSync(command, options) {
+    _execChildProcessSync(command: string, options: any) {
         const { showOutput, showStdErr, showCommand, workingDir } = options;
-        const execOptions = {
+        const execOptions: any = {
             stdio: [null, showOutput ? 1 : null, showStdErr ? 2 : null],
             shell: true,
             windowsHide: true

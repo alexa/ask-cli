@@ -1,9 +1,9 @@
-const uuid = require('uuid/v4');
-const axios = require('axios');
-const AppConfig = require('@src/model/app-config');
-const profileHelper = require('@src/utils/profile-helper');
-const { METRICS } = require('@src/utils/constants');
-const pck = require('../../../package.json');
+import { v4 as uuid } from 'uuid';
+import axios, { AxiosInstance } from 'axios';
+import AppConfig, { getAppConfig } from '@src/model/app-config';
+import profileHelper from '@src/utils/profile-helper';
+import { METRICS } from '@src/utils/constants';
+import pck from '../../../package.json';
 
 const MetricActionResult = {
     SUCCESS: 'Success',
@@ -11,12 +11,21 @@ const MetricActionResult = {
 };
 
 class MetricAction {
+    endTime: any;
+    failureMessage: string;
+    name: string;
+    result: any;
+    startTime: Date;
+    type: string;
+    id: string;
+    _ended: boolean;
+
     /**
      * @constructor
      * @param {string} name - The action name.
      * @param {string} type - The action type.
      */
-    constructor(name, type) {
+    constructor(name: string, type: string) {
         this.endTime = null;
         this.failureMessage = '';
         this.name = name;
@@ -31,7 +40,7 @@ class MetricAction {
      * Closes action
      * @param {Error|string} [error=null] error - Error object or string indicating error.
      */
-    end(error = null) {
+    end(error: Error | null = null) {
         if (this._ended) return;
 
         // if Error object extract error message,
@@ -61,6 +70,12 @@ class MetricAction {
 }
 
 class MetricClient {
+    httpClient: AxiosInstance;
+    serverUrl: string;
+    postRetries: number;
+    enabled: boolean;
+    data: any;
+
     /**
      * @constructor
      */
@@ -90,7 +105,7 @@ class MetricClient {
      * @param {string} type - The action type
      * @return {MetricAction}
      */
-    startAction(name, type) {
+    startAction(name: string, type: string) {
         const action = new MetricAction(name, type);
         this.data.actions.push(action);
         return action;
@@ -110,12 +125,12 @@ class MetricClient {
      * @param {Error|string} [error=null] error - Error object or string indicating error.
      * @returns {Promise<{success: boolean}>}
      */
-    sendData(error = null) {
+    sendData(error: Error | string | null = null) {
         if (!this.enabled) {
             this.data.actions = [];
             return new Promise(resolve => resolve({ success: true }));
         }
-        this.data.actions.forEach(action => action.end(error));
+        this.data.actions.forEach((action: any) => action.end(error));
         return this._upload()
             .then(() => {
                 this.data.actions = [];
@@ -146,8 +161,8 @@ class MetricClient {
         return this._retry(this.postRetries, postPromise);
     }
 
-    _retry(retries, fn) {
-        return fn().catch(err => (retries > 1 ? this._retry(retries - 1, fn) : Promise.reject(err)));
+    _retry(retries: number, fn: Function) {
+        return fn().catch((err: Error) => (retries > 1 ? this._retry(retries - 1, fn) : Promise.reject(err)));
     }
 
     _isEnabled() {
@@ -156,13 +171,13 @@ class MetricClient {
         if (!AppConfig.configFileExists()) return false;
 
         new AppConfig();
-        return AppConfig.getInstance().getShareUsage();
+        return getAppConfig().getShareUsage();
     }
 
     _getMachineId() {
         if (!this.enabled) return;
         if (profileHelper.isEnvProfile()) return 'all_environmental';
-        const appConfig = AppConfig.getInstance();
+        const appConfig = getAppConfig();
         if (!appConfig.getMachineId()) {
             appConfig.setMachineId(uuid());
             appConfig.write();
@@ -172,4 +187,7 @@ class MetricClient {
     }
 }
 
-module.exports = { MetricClient, MetricActionResult };
+export default {
+    MetricClient,
+    MetricActionResult
+};

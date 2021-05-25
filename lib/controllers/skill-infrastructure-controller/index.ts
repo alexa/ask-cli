@@ -1,20 +1,33 @@
-const R = require('ramda');
-const path = require('path');
+import R from 'ramda';
+import path from 'path';
 
-const SkillMetadataController = require('@src/controllers/skill-metadata-controller');
-const ResourcesConfig = require('@src/model/resources-config');
-const Manifest = require('@src/model/manifest');
-const MultiTasksView = require('@src/view/multi-tasks-view');
-const Messenger = require('@src/view/messenger');
-const hashUtils = require('@src/utils/hash-utils');
-const stringUtils = require('@src/utils/string-utils');
-const SpinnerView = require('@src/view/spinner-view');
-const profileHelper = require('@src/utils/profile-helper');
+import SkillMetadataController from '@src/controllers/skill-metadata-controller';
+import ResourcesConfig from '@src/model/resources-config';
+import Manifest from '@src/model/manifest';
+import MultiTasksView from '@src/view/multi-tasks-view';
+import Messenger from '@src/view/messenger';
+import hashUtils from '@src/utils/hash-utils';
+import stringUtils from '@src/utils/string-utils';
+import SpinnerView from '@src/view/spinner-view';
+import profileHelper from '@src/utils/profile-helper';
 
-const DeployDelegate = require('./deploy-delegate');
+import { loadDeployDelegate } from './deploy-delegate';
 
-module.exports = class SkillInfrastructureController {
-    constructor(configuration) {
+const getResourcesConfig = () => ResourcesConfig.getInstance() as ResourcesConfig;
+const getManifest = () => Manifest.getInstance() as Manifest;
+
+export interface ISkillInfrastructureController {
+    profile: string;
+    doDebug: boolean;
+    ignoreHash: boolean;
+};
+
+export default class SkillInfrastructureController {
+    private profile: string;
+    private doDebug: boolean;
+    private ignoreHash: boolean;
+
+    constructor(configuration: ISkillInfrastructureController) {
         const { profile, doDebug, ignoreHash } = configuration;
         this.profile = profile;
         this.doDebug = doDebug;
@@ -26,30 +39,30 @@ module.exports = class SkillInfrastructureController {
      * @param {String} workspacePath The path to the new skill's workspace
      * @param {Function} callback (error)
      */
-    bootstrapInfrastructures(workspacePath, callback) {
-        const infraType = ResourcesConfig.getInstance().getSkillInfraType(this.profile);
+    bootstrapInfrastructures(workspacePath: string, callback: Function) {
+        const infraType = getResourcesConfig().getSkillInfraType(this.profile);
         if (!stringUtils.isNonBlankString(infraType)) {
             return process.nextTick(() => {
                 callback('[Error]: Please set the "type" field for your skill infrastructures.');
             });
         }
         // 1.Prepare the loading of deploy delegate
-        DeployDelegate.load(infraType, (loadErr, deployDelegate) => {
+        loadDeployDelegate(infraType, (loadErr?: Error, deployDelegate?: any) => {
             if (loadErr) {
                 return callback(loadErr);
             }
             // 2.Call bootstrap method from deploy delegate
             const bootstrapOptions = {
                 profile: this.profile,
-                userConfig: ResourcesConfig.getInstance().getSkillInfraUserConfig(this.profile),
+                userConfig: getResourcesConfig().getSkillInfraUserConfig(this.profile),
                 workspacePath
             };
-            deployDelegate.bootstrap(bootstrapOptions, (bootsErr, bootstrapResult) => {
+            deployDelegate.bootstrap(bootstrapOptions, (bootsErr?: Error, bootstrapResult?: any) => {
                 if (bootsErr) {
                     return callback(bootsErr);
                 }
                 const { userConfig } = bootstrapResult;
-                ResourcesConfig.getInstance().setSkillInfraUserConfig(this.profile, userConfig);
+                getResourcesConfig().setSkillInfraUserConfig(this.profile, userConfig);
                 callback();
             });
         });
@@ -59,20 +72,20 @@ module.exports = class SkillInfrastructureController {
      * Entry method for skill infrastructure deployment based on the deploy delegate type.
      * @param {Function} callback
      */
-    deployInfrastructure(callback) {
-        const infraType = ResourcesConfig.getInstance().getSkillInfraType(this.profile);
+    deployInfrastructure(callback: Function) {
+        const infraType = getResourcesConfig().getSkillInfraType(this.profile);
         // 1.Prepare the loading of deploy delegate
-        DeployDelegate.load(infraType, (loadErr, deployDelegate) => {
+        loadDeployDelegate(infraType, (loadErr?: Error, deployDelegate?: any) => {
             if (loadErr) {
                 return callback(loadErr);
             }
             // 2.Trigger regional deployment using deploy delegate
-            this.deployInfraToAllRegions(deployDelegate, (deployErr, deployResult) => {
+            this.deployInfraToAllRegions(deployDelegate, (deployErr?: Error, deployResult?: any) => {
                 if (deployErr) {
                     return callback(deployErr);
                 }
                 // 3.Post deploy skill manifest update
-                this.updateSkillManifestWithDeployResult(deployResult, (postUpdateErr) => {
+                this.updateSkillManifestWithDeployResult(deployResult, (postUpdateErr?: Error) => {
                     if (postUpdateErr) {
                         return callback(postUpdateErr);
                     }
@@ -88,14 +101,14 @@ module.exports = class SkillInfrastructureController {
      * @param {Function} callback (error, invokeResult)
      *                            invokeResult: { $region: { endpoint: { url }, lastDeployHash, deployState } }
      */
-    deployInfraToAllRegions(dd, callback) {
-        const skillName = stringUtils.filterNonAlphanumeric(Manifest.getInstance().getSkillName())
+    deployInfraToAllRegions(dd: any, callback: Function) {
+        const skillName = stringUtils.filterNonAlphanumeric(getManifest().getSkillName())
             || stringUtils.filterNonAlphanumeric(path.basename(process.cwd()));
         if (!stringUtils.isNonBlankString(skillName)) {
             return callback('[Error]: Failed to parse the skill name used to decide the CloudFormation stack name. '
                 + 'Please make sure your skill name or skill project folder basename contains alphanumeric characters.');
         }
-        const regionsList = ResourcesConfig.getInstance().getCodeRegions(this.profile);
+        const regionsList = getResourcesConfig().getCodeRegions(this.profile);
         if (!regionsList || regionsList.length === 0) {
             return callback('[Warn]: Skip the infrastructure deployment, as the "code" field has not been set in the resources config file.');
         }
@@ -109,7 +122,7 @@ module.exports = class SkillInfrastructureController {
         // 2.register each regional task into MultiTasksView
         regionsList.forEach((region) => {
             const taskTitle = `Deploy Alexa skill infrastructure for region "${region}"`;
-            const taskHandle = (reporter, taskCallback) => {
+            const taskHandle = (reporter: any, taskCallback: any) => {
                 this._deployInfraByRegion(reporter, dd, region, skillName, taskCallback);
             };
             multiTasksView.loadTask(taskHandle, taskTitle, region);
@@ -139,37 +152,38 @@ module.exports = class SkillInfrastructureController {
      * @param {Object} rawDeployResult deploy result from invoke: { $region: { endpoint: { url }, lastDeployHash, deployState } }
      * @param {Function} callback (error)
      */
-    updateSkillManifestWithDeployResult(rawDeployResult, callback) {
-        const targetEndpoints = ResourcesConfig.getInstance().getTargetEndpoints(this.profile);
+    updateSkillManifestWithDeployResult(rawDeployResult: any, callback: Function) {
+        const targetEndpoints = getResourcesConfig().getTargetEndpoints(this.profile);
         // for backward compatibility, defaulting to api from skill manifest if targetEndpoints is not defined
-        const domains = targetEndpoints.length ? targetEndpoints : Object.keys(Manifest.getInstance().getApis());
+        const domains = targetEndpoints.length ? targetEndpoints : Object.keys(getManifest().getApis());
         // 1.update local skill.json file: update the "uri" in all target endpoints for each region
-        domains.forEach((domain) => {
+        domains.forEach((domain: string) => {
             R.keys(rawDeployResult).forEach((region) => {
+                const regionStr = region as string;
                 if (domain === Manifest.endpointTypes.EVENTS) {
-                    Manifest.getInstance().setEventsEndpointByRegion(region, rawDeployResult[region].endpoint);
+                    getManifest().setEventsEndpointByRegion(regionStr, rawDeployResult[region].endpoint);
                 } else {
-                    Manifest.getInstance().setApisEndpointByDomainRegion(domain, region, rawDeployResult[region].endpoint);
+                    getManifest().setApisEndpointByDomainRegion(domain, regionStr, rawDeployResult[region].endpoint);
                 }
             });
         });
 
-        Manifest.getInstance().write();
+        getManifest().write();
         // 2.compare with current hash result to decide if skill.json file need to be updated
         // (the only possible change in skillMetaSrc during the infra deployment is the skill.json's uri change)
-        hashUtils.getHash(ResourcesConfig.getInstance().getSkillMetaSrc(this.profile), (hashErr, currentHash) => {
+        hashUtils.getHash(getResourcesConfig().getSkillMetaSrc(this.profile), (hashErr?: Error, currentHash?: any) => {
             if (hashErr) {
                 return callback(hashErr);
             }
-            if (currentHash === ResourcesConfig.getInstance().getSkillMetaLastDeployHash(this.profile)) {
+            if (currentHash === getResourcesConfig().getSkillMetaLastDeployHash(this.profile)) {
                 return callback();
             }
             // 3.re-upload skill package
-            this._ensureSkillManifestGotUpdated((manifestUpdateErr) => {
+            this._ensureSkillManifestGotUpdated((manifestUpdateErr?: Error) => {
                 if (manifestUpdateErr) {
                     return callback(manifestUpdateErr);
                 }
-                ResourcesConfig.getInstance().setSkillMetaLastDeployHash(this.profile, currentHash);
+                getResourcesConfig().setSkillMetaLastDeployHash(this.profile, currentHash);
                 Messenger.getInstance().info('  The api endpoints of skill.json have been updated from the skill infrastructure deploy results.');
                 callback();
             });
@@ -185,29 +199,30 @@ module.exports = class SkillInfrastructureController {
      * @param {Function} callback (error, invokeResult)
      *                   callback.error can be a String or { message, context } Object which passes back the partial deploy result
      */
-    _deployInfraByRegion(reporter, dd, alexaRegion, skillName, callback) {
-        const regionConfig = {
+    _deployInfraByRegion(reporter: any, dd: any, alexaRegion: string, skillName: string, callback: Function) {
+        const build = getResourcesConfig().getCodeBuildByRegion(this.profile, alexaRegion) as any;
+        const regionConfig: any = {
             profile: this.profile,
             ignoreHash: this.ignoreHash,
             alexaRegion,
-            skillId: ResourcesConfig.getInstance().getSkillId(this.profile),
+            skillId: getResourcesConfig().getSkillId(this.profile),
             skillName,
             code: {
-                codeBuild: ResourcesConfig.getInstance().getCodeBuildByRegion(this.profile, alexaRegion).file,
+                codeBuild: build.file,
                 isCodeModified: null
             },
-            userConfig: ResourcesConfig.getInstance().getSkillInfraUserConfig(this.profile),
-            deployState: ResourcesConfig.getInstance().getSkillInfraDeployState(this.profile)
+            userConfig: getResourcesConfig().getSkillInfraUserConfig(this.profile),
+            deployState: getResourcesConfig().getSkillInfraDeployState(this.profile)
         };
         // 1.calculate the lastDeployHash for current code folder and compare with the one in record
-        const lastDeployHash = ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(this.profile, regionConfig.alexaRegion);
+        const lastDeployHash = getResourcesConfig().getCodeLastDeployHashByRegion(this.profile, regionConfig.alexaRegion);
         hashUtils.getHash(regionConfig.code.codeBuild, (hashErr, currentHash) => {
             if (hashErr) {
                 return callback(hashErr);
             }
             regionConfig.code.isCodeModified = currentHash !== lastDeployHash;
             // 2.trigger the invoke function from deploy delegate
-            dd.invoke(reporter, regionConfig, (invokeErr, invokeResult) => {
+            dd.invoke(reporter, regionConfig, (invokeErr?: Error, invokeResult?: any) => {
                 if (invokeErr) {
                     return callback(invokeErr);
                 }
@@ -226,21 +241,22 @@ module.exports = class SkillInfrastructureController {
      * Update the the ask resources config and the deploy state.
      * @param {Object} rawDeployResult deploy result from invoke: { $region: deploy-delegate's response }
      */
-    _updateResourcesConfig(rawDeployResult) {
-        const newDeployState = {};
+    _updateResourcesConfig(rawDeployResult: any) {
+        const newDeployState: any = {};
         R.keys(rawDeployResult).forEach((alexaRegion) => {
-            newDeployState[alexaRegion] = rawDeployResult[alexaRegion].deployState;
-            ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(this.profile, alexaRegion, rawDeployResult[alexaRegion].lastDeployHash);
+            const region = alexaRegion as string;
+            newDeployState[region] = rawDeployResult[region].deployState;
+            getResourcesConfig().setCodeLastDeployHashByRegion(this.profile, region, rawDeployResult[region].lastDeployHash);
         });
-        ResourcesConfig.getInstance().setSkillInfraDeployState(this.profile, newDeployState);
-        ResourcesConfig.getInstance().write();
+        getResourcesConfig().setSkillInfraDeployState(this.profile, newDeployState);
+        getResourcesConfig().write();
     }
 
     /**
      * Make sure the skill manifest is updated successfully by deploying the skill package
      * @param {Function} callback
      */
-    _ensureSkillManifestGotUpdated(callback) {
+    _ensureSkillManifestGotUpdated(callback: Function) {
         const spinner = new SpinnerView();
         spinner.start('Updating skill package from the skill infrastructure deploy results.');
         let vendorId, skillMetaController;
@@ -251,7 +267,7 @@ module.exports = class SkillInfrastructureController {
             spinner.terminate();
             return callback(err);
         }
-        skillMetaController.deploySkillPackage(vendorId, this.ignoreHash, (deployErr) => {
+        skillMetaController.deploySkillPackage(vendorId, this.ignoreHash, (deployErr?: Error) => {
             spinner.terminate();
             if (deployErr) {
                 return callback(deployErr);

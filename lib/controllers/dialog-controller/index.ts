@@ -1,19 +1,27 @@
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const R = require('ramda');
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import R from 'ramda';
 
-const stringUtils = require('@src/utils/string-utils');
-const Messenger = require('@src/view/messenger');
-const responseParser = require('@src/controllers/dialog-controller/simulation-response-parser');
-const SkillSimulationController = require('@src/controllers/skill-simulation-controller');
+import stringUtils from '@src/utils/string-utils';
+import Messenger from '@src/view/messenger';
+import responseParser from '@src/controllers/dialog-controller/simulation-response-parser';
+import SkillSimulationController, { ISkillSimulationController } from '@src/controllers/skill-simulation-controller';
 
 const RECORD_FORMAT = 'Please use the format: ".record <fileName>" or ".record <fileName> --append-quit"';
-module.exports = class DialogController extends SkillSimulationController {
+
+export interface IDialogController extends ISkillSimulationController {
+    newSession: any;
+};
+
+export default class DialogController extends SkillSimulationController {
+    private newSession: any;
+    private utteranceCache: string[];
+
     /**
      * Constructor for DialogModeController.
      * @param {Object} configuration | config object includes information such as skillId, locale, profile, stage.
      */
-    constructor(configuration) {
+    constructor(configuration: IDialogController) {
         super(configuration);
         this.newSession = configuration.newSession === false ? configuration.newSession : true;
         this.utteranceCache = [];
@@ -25,9 +33,9 @@ module.exports = class DialogController extends SkillSimulationController {
      * @param {Object} replView Dialog command's repl view.
      * @param {Function} replCallback
      */
-    evaluateUtterance(input, replView, replCallback) {
+    evaluateUtterance(input: string, replView: any, replCallback: Function) {
         replView.startProgressSpinner('Sending simulation request to Alexa...');
-        this.startSkillSimulation(input.trim(), (startErr, startResponse) => {
+        this.startSkillSimulation(input.trim(), this.newSession, (startErr?: Error, startResponse?: any) => {
             if (startErr) {
                 replView.terminateProgressSpinner();
                 Messenger.getInstance().error(startErr);
@@ -40,7 +48,7 @@ module.exports = class DialogController extends SkillSimulationController {
                 replView.updateProgressSpinner('Waiting for the simulation response...');
                 const simulationId = R.view(R.lensPath(['body', 'id']), startResponse);
 
-                this.getSkillSimulationResult(simulationId, (getErr, getResponse) => {
+                this.getSkillSimulationResult(simulationId, (getErr?: Error, getResponse?: any) => {
                     replView.terminateProgressSpinner();
                     if (getErr) {
                         Messenger.getInstance().error(getErr);
@@ -50,7 +58,7 @@ module.exports = class DialogController extends SkillSimulationController {
                             this.clearSession();
                         }
                         const captions = responseParser.getCaption(getResponse.body);
-                        captions.forEach((caption) => {
+                        captions.forEach((caption: any) => {
                             Messenger.getInstance().info(chalk.yellow.bold('Alexa > ') + caption);
                         });
                     }
@@ -65,8 +73,8 @@ module.exports = class DialogController extends SkillSimulationController {
      * @param {Object} dialogReplView dialog command's repl view.
      * @param {Function} callback
      */
-    setupSpecialCommands(dialogReplView, callback) {
-        dialogReplView.registerRecordCommand((recordArgs) => {
+    setupSpecialCommands(dialogReplView: any, callback: Function) {
+        dialogReplView.registerRecordCommand((recordArgs: string) => {
             const recordArgsList = recordArgs.trim().split(' ');
             if (!stringUtils.isNonBlankString(recordArgs) || recordArgsList.length > 2) {
                 return Messenger.getInstance().warn(`Incorrect format. ${RECORD_FORMAT}`);
@@ -88,7 +96,7 @@ module.exports = class DialogController extends SkillSimulationController {
         });
         const self = this;
         dialogReplView.registerQuitCommand(() => {
-            self.skillIOInstance.save();
+            self._skillIOInstance.save();
         });
     }
 
@@ -97,14 +105,14 @@ module.exports = class DialogController extends SkillSimulationController {
      * @param {Array} recordArgsList
      * @param {String} recordCommandFormat
      */
-    _validateRecordCommandInput(recordArgsList) {
+    _validateRecordCommandInput(recordArgsList: string[], recordCommandFormat: string) {
         const filePath = recordArgsList[0];
         const appendQuitArgument = recordArgsList[1];
         let shouldAppendQuit = false;
 
         if (stringUtils.isNonBlankString(appendQuitArgument)) {
             if (appendQuitArgument !== '--append-quit') {
-                Messenger.getInstance().warn(`Unable to validate arguments: "${appendQuitArgument}". ${RECORD_FORMAT}`);
+                Messenger.getInstance().warn(`Unable to validate arguments: "${appendQuitArgument}". ${recordCommandFormat}`);
                 return {};
             }
             shouldAppendQuit = true;
@@ -118,11 +126,11 @@ module.exports = class DialogController extends SkillSimulationController {
      * @param {Function} onSuccess callback to execute upon a successful request.
      * @param {Function} onError callback to execute upon a failed request.
      */
-    startSkillSimulation(utterance, callback) {
+    startSkillSimulation(utterance: string, newSession: any, callback: Function) {
         super.startSkillSimulation(
             utterance,
-            this.newSession,
-            (err, response) => {
+            newSession,
+            (err?: Error, response?: any) => {
                 if (response) {
                     this.utteranceCache.push(utterance);
                 }
@@ -137,8 +145,8 @@ module.exports = class DialogController extends SkillSimulationController {
      * @param {Function} onSuccess callback to execute upon a successful request.
      * @param {Function} onError callback to execute upon a failed request.
      */
-    getSkillSimulationResult(simulationId, callback) {
-        super.getSkillSimulationResult(simulationId, (err, response) => {
+    getSkillSimulationResult(simulationId: string, callback: Function) {
+        super.getSkillSimulationResult(simulationId, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -163,11 +171,11 @@ module.exports = class DialogController extends SkillSimulationController {
      * Function to create replay file.
      * @param {String} filename name of file to save replay JSON.
      */
-    createReplayFile(filename, utterances) {
+    createReplayFile(filename: string, utterances: any) {
         if (stringUtils.isNonBlankString(filename)) {
             const content = {
-                skillId: this.skillId,
-                locale: this.locale,
+                skillId: this._skillId,
+                locale: this._locale,
                 type: 'text',
                 userInput: utterances
             };

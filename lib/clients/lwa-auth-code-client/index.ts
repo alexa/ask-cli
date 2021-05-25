@@ -1,19 +1,45 @@
-const R = require('ramda');
-const { URL } = require('url');
-const queryString = require('querystring');
-const addSeconds = require('date-fns/addSeconds');
-const isAfter = require('date-fns/isAfter');
-const parseISO = require('date-fns/parseISO');
+import R from 'ramda';
+import { URL } from 'url';
+import queryString from 'querystring';
+import addSeconds from 'date-fns/addSeconds';
+import isAfter from 'date-fns/isAfter';
+import parseISO from 'date-fns/parseISO';
 
-const httpClient = require('@src/clients/http-client');
-const CONSTANTS = require('@src/utils/constants');
-const DynamicConfig = require('@src/utils/dynamic-config');
-const stringUtils = require('@src/utils/string-utils');
-const jsonView = require('@src/view/json-view');
-const CliError = require('@src/exceptions/cli-error');
+import httpClient from '@src/clients/http-client';
+import * as CONSTANTS from '@src/utils/constants';
+import DynamicConfig from '@src/utils/dynamic-config';
+import stringUtils from '@src/utils/string-utils';
+import jsonView from '@src/view/json-view';
+import CliError from '@src/exceptions/cli-error';
 
-module.exports = class LWAAuthCodeClient {
-    constructor(config) {
+interface IConfig {
+    tokenPath: string;
+    tokenHost: any;
+    redirectUri: string;
+    clientId: string;
+    clientConfirmation: any;
+    doDebug: boolean;
+    scope?: string;
+    state?: number;
+    authorizePath: string;
+    authorizeHost: any;
+};
+
+export interface ILWAAuthCodeClient {
+    doDebug: boolean;
+    redirectUri: string;
+    state?: number;
+    scope?: string;
+    clientId: any;
+    clientConfirmation: any;
+    authorizeHost: any;
+    tokenHost: any;
+};
+
+export default class LWAAuthCodeClient {
+    config: IConfig;
+
+    constructor(config: ILWAAuthCodeClient) {
         this.config = this._handleDefaultLwaAuthCodeConfiguration(config);
     }
 
@@ -22,7 +48,7 @@ module.exports = class LWAAuthCodeClient {
      * @param {Function} callback (err, accessToken)
      * @returns accessToken | Used for request validation in skill development process.
      */
-    getAccessTokenUsingAuthCode(authCode, callback) {
+    getAccessTokenUsingAuthCode(authCode: string, callback: Function) {
         const url = new URL(this.config.tokenPath, this.config.tokenHost);
         const body = {
             grant_type: 'authorization_code',
@@ -37,7 +63,7 @@ module.exports = class LWAAuthCodeClient {
             body,
             json: !!body
         };
-        httpClient.request(options, 'GET_ACCESS_TOKEN', this.config.doDebug, (err, response) => {
+        httpClient.request(options, 'GET_ACCESS_TOKEN', this.config.doDebug, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -55,7 +81,7 @@ module.exports = class LWAAuthCodeClient {
      * @param {Function} callback (err, token)
      * @returns accessToken | a new access token.
      */
-    refreshToken(token, callback) {
+    refreshToken(token: any, callback: Function) {
         const url = new URL(this.config.tokenPath, this.config.tokenHost);
         const body = {
             grant_type: 'refresh_token',
@@ -69,7 +95,7 @@ module.exports = class LWAAuthCodeClient {
             body,
             json: !!body
         };
-        httpClient.request(options, 'GET_ACCESS_TOKEN_USING_REFRESH_TOKEN', this.config.doDebug, (err, response) => {
+        httpClient.request(options, 'GET_ACCESS_TOKEN_USING_REFRESH_TOKEN', this.config.doDebug, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
@@ -95,7 +121,7 @@ module.exports = class LWAAuthCodeClient {
      * @param {Object} token
      * @returns boolean | checks validity of a given token
      */
-    isValidToken(token) {
+    isValidToken(token: any) {
         return !isAfter(new Date(), parseISO(token.expires_at));
     }
 
@@ -103,7 +129,7 @@ module.exports = class LWAAuthCodeClient {
      * @returns {String} authorization code URL
      */
     generateAuthorizeUrl() {
-        const queryParams = {
+        const queryParams: any = {
             response_type: 'code',
             client_id: this.config.clientId,
             state: this.config.state
@@ -123,7 +149,7 @@ module.exports = class LWAAuthCodeClient {
      * @returns {Object} config | sets default values if some of the values are missing.
      * @private
      */
-    _handleDefaultLwaAuthCodeConfiguration(authConfig) {
+    _handleDefaultLwaAuthCodeConfiguration(authConfig: ILWAAuthCodeClient) {
         const { doDebug, redirectUri } = authConfig;
         const authorizePath = CONSTANTS.LWA.DEFAULT_AUTHORIZE_PATH;
         const tokenPath = CONSTANTS.LWA.DEFAULT_TOKEN_PATH;
@@ -138,7 +164,7 @@ module.exports = class LWAAuthCodeClient {
         return { clientId, clientConfirmation, authorizeHost, tokenHost, authorizePath, tokenPath, scope, state, redirectUri, doDebug };
     }
 
-    _getExpiresAt(expiresIn) {
+    _getExpiresAt(expiresIn: string) {
         return addSeconds(new Date(), Number.parseInt(expiresIn, 10));
     }
 };

@@ -1,27 +1,39 @@
-const R = require('ramda');
-const fs = require('fs-extra');
-const path = require('path');
+import R from 'ramda';
+import fs from 'fs-extra';
+import path from 'path';
 
-const retryUtils = require('@src/utils/retry-utility');
-const ResourcesConfig = require('@src/model/resources-config');
-const SmapiClient = require('@src/clients/smapi-client/index.js');
-const httpClient = require('@src/clients/http-client');
-const Manifest = require('@src/model/manifest');
-const Messenger = require('@src/view/messenger');
-const jsonView = require('@src/view/json-view');
-const stringUtils = require('@src/utils/string-utils');
-const zipUtils = require('@src/utils/zip-utils');
-const hashUtils = require('@src/utils/hash-utils');
-const CONSTANTS = require('@src/utils/constants');
-const CLiError = require('@src/exceptions/cli-error');
-const CLiWarn = require('@src/exceptions/cli-warn');
+import { retry } from '@src/utils/retry-utility';
+import ResourcesConfig from '@src/model/resources-config';
+import SmapiClient from '@src/clients/smapi-client/index.js';
+import httpClient from '@src/clients/http-client';
+import Manifest from '@src/model/manifest';
+import Messenger from '@src/view/messenger';
+import jsonView from '@src/view/json-view';
+import stringUtils from '@src/utils/string-utils';
+import zipUtils from '@src/utils/zip-utils';
+import hashUtils from '@src/utils/hash-utils';
+import * as CONSTANTS from '@src/utils/constants';
+import CLiError from '@src/exceptions/cli-error';
+import CLiWarn from '@src/exceptions/cli-warn';
 
-module.exports = class SkillMetadataController {
+const getResourcesConfig = () => ResourcesConfig.getInstance() as ResourcesConfig;
+const getManifest = () => Manifest.getInstance() as Manifest;
+
+export interface ISkillMetadataController {
+    profile: string;
+    doDebug: boolean;
+};
+
+export default class SkillMetadataController {
+    private profile: string;
+    private doDebug: boolean;
+    private smapiClient: SmapiClient;
+
     /**
      * Constructor for SkillMetadataController
      * @param {Object} configuration { profile, doDebug }
      */
-    constructor(configuration) {
+    constructor(configuration: ISkillMetadataController) {
         const { profile, doDebug } = configuration;
         this.smapiClient = new SmapiClient({ profile, doDebug });
         this.profile = profile;
@@ -33,9 +45,9 @@ module.exports = class SkillMetadataController {
      * @param {String} vendorId
      * @param {Function} callback (error)
      */
-    deploySkillPackage(vendorId, ignoreHash, callback) {
+    deploySkillPackage(vendorId: string, ignoreHash: boolean, callback: Function) {
         // 1.get valid skillMetada src path
-        const skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(this.profile);
+        const skillPackageSrc = getResourcesConfig().getSkillMetaSrc(this.profile);
         if (!stringUtils.isNonBlankString(skillPackageSrc)) {
             return callback('Skill package src is not found in ask-resources.json.');
         }
@@ -44,24 +56,24 @@ module.exports = class SkillMetadataController {
         }
 
         // 2.compare hashcode between current and previous status to decide if necessary to upload
-        hashUtils.getHash(skillPackageSrc, (hashErr, currentHash) => {
+        hashUtils.getHash(skillPackageSrc, (hashErr?: Error, currentHash?: any) => {
             if (hashErr) {
                 return callback(hashErr);
             }
-            const lastDeployHash = ResourcesConfig.getInstance().getSkillMetaLastDeployHash(this.profile);
+            const lastDeployHash = getResourcesConfig().getSkillMetaLastDeployHash(this.profile);
             if (!ignoreHash && stringUtils.isNonBlankString(lastDeployHash) && lastDeployHash === currentHash) {
                 return callback('The hash of current skill package folder does not change compared to the last deploy hash result, '
                 + 'CLI will skip the deploy of skill package.');
             }
 
             // 3.call smapiClient to create/upload skillPackage
-            const skillId = ResourcesConfig.getInstance().getSkillId(this.profile);
-            this.putSkillPackage(skillId, skillId ? null : vendorId, (putErr, currentSkillId) => {
+            const skillId = getResourcesConfig().getSkillId(this.profile);
+            this.putSkillPackage(skillId, (skillId ? null : vendorId) as string, (putErr?: Error, currentSkillId?: any) => {
                 if (putErr) {
                     return callback(putErr);
                 }
-                ResourcesConfig.getInstance().setSkillId(this.profile, currentSkillId);
-                ResourcesConfig.getInstance().setSkillMetaLastDeployHash(this.profile, currentHash);
+                getResourcesConfig().setSkillId(this.profile, currentSkillId);
+                getResourcesConfig().setSkillMetaLastDeployHash(this.profile, currentHash);
                 callback();
             });
         });
@@ -71,7 +83,7 @@ module.exports = class SkillMetadataController {
      * Validates domain info
      */
     validateDomain() {
-        const domainInfo = Manifest.getInstance().getApis();
+        const domainInfo = getManifest().getApis();
         if (!domainInfo || R.isEmpty(domainInfo)) {
             throw new CLiError('Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.');
         }
@@ -80,8 +92,9 @@ module.exports = class SkillMetadataController {
         if (domainList.length !== 1) {
             throw new CLiWarn('Skill with multiple api domains cannot be enabled. Skip the enable process.');
         }
-        if (CONSTANTS.SKILL.DOMAIN.CAN_ENABLE_DOMAIN_LIST.indexOf(domainList[0]) === -1) {
-            throw new CLiWarn(`Skill api domain "${domainList[0]}" cannot be enabled. Skip the enable process.`);
+        const domain = domainList[0] as string;
+        if (CONSTANTS.SKILL.DOMAIN.CAN_ENABLE_DOMAIN_LIST.indexOf(domain) === -1) {
+            throw new CLiWarn(`Skill api domain "${domain}" cannot be enabled. Skip the enable process.`);
         }
     }
 
@@ -90,19 +103,19 @@ module.exports = class SkillMetadataController {
      * if not, it will enable the skill by calling smapi enableSkill function.
      * @param {Function} callback (err, null)
      */
-    enableSkill(callback) {
-        const skillId = ResourcesConfig.getInstance().getSkillId(this.profile);
+    enableSkill(callback: Function) {
+        const skillId = getResourcesConfig().getSkillId(this.profile);
         if (!stringUtils.isNonBlankString(skillId)) {
             return callback(`[Fatal]: Failed to find the skillId for profile [${this.profile}],
  please make sure the skill metadata deployment has succeeded with result of a valid skillId.`);
         }
 
-        this.smapiClient.skill.getSkillEnablement(skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (err, response) => {
+        this.smapiClient.skill.getSkillEnablement(skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (err?: Error, response?: any) => {
             if (err) {
                 return callback(err);
             }
             if (response.statusCode === CONSTANTS.HTTP_REQUEST.STATUS_CODE.NOT_FOUND) {
-                this.smapiClient.skill.enableSkill(skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (enableErr, enableResponse) => {
+                this.smapiClient.skill.enableSkill(skillId, CONSTANTS.SKILL.STAGE.DEVELOPMENT, (enableErr?: Error, enableResponse?: any) => {
                     if (enableErr) {
                         return callback(enableErr);
                     }
@@ -131,21 +144,21 @@ module.exports = class SkillMetadataController {
      * @param {String} vendorId
      * @param {Function} callback (error, skillId)
      */
-    putSkillPackage(skillId, vendorId, callback) {
+    putSkillPackage(skillId: string, vendorId: string, callback: Function) {
         // 1.zip and upload skill package
-        const skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(this.profile);
-        this.uploadSkillPackage(skillPackageSrc, (uploadErr, uploadResult) => {
+        const skillPackageSrc = getResourcesConfig().getSkillMetaSrc(this.profile);
+        this.uploadSkillPackage(skillPackageSrc, (uploadErr?: Error, uploadResult?: any) => {
             if (uploadErr) {
                 return callback(uploadErr);
             }
             // 2.import skill package with upload URL
-            this._importPackage(skillId, vendorId, uploadResult.uploadUrl, (importErr, importResponse) => {
+            this._importPackage(skillId, vendorId, uploadResult.uploadUrl, (importErr?: Error, importResponse?: any) => {
                 if (importErr) {
                     return callback(importErr);
                 }
                 const importId = path.basename(importResponse.headers.location);
                 // 3.poll for the skill package import status
-                this._pollImportStatus(importId, (pollErr, pollResponse) => {
+                this._pollImportStatus(importId, (pollErr?: Error, pollResponse?: any) => {
                     if (pollErr) {
                         return callback(pollErr);
                     }
@@ -166,16 +179,16 @@ module.exports = class SkillMetadataController {
      * @param {String stage
      * @param {Function} callback
      */
-    getSkillPackage(rootFolder, skillId, stage, callback) {
+    getSkillPackage(rootFolder: string, skillId: string, stage: string, callback: Function) {
         // 1.request to export skill package
-        this._exportPackage(skillId, stage, (exportErr, exportResponse) => {
+        this._exportPackage(skillId, stage, (exportErr?: Error, exportResponse?: any) => {
             if (exportErr) {
                 return callback(exportErr);
             }
             const exportId = path.basename(R.view(R.lensPath(['headers', 'location']), exportResponse));
 
             // 2.poll for the skill package export status
-            this._pollExportStatus(exportId, (pollErr, pollResponse) => {
+            this._pollExportStatus(exportId, (pollErr?: Error, pollResponse?: any) => {
                 if (pollErr) {
                     return callback(pollErr);
                 }
@@ -196,22 +209,22 @@ module.exports = class SkillMetadataController {
      * @param {String} skillPackageSrc
      * @param {Function} callback (err, { uploadUrl, expiresAt })
      */
-    uploadSkillPackage(skillPackageSrc, callback) {
+    uploadSkillPackage(skillPackageSrc: string, callback: Function) {
         // 1.create upload URL for CLI to upload
-        this._createUploadUrl((createUploadErr, createUploadResult) => {
+        this._createUploadUrl((createUploadErr?: Error, createUploadResult?: any) => {
             if (createUploadErr) {
                 return callback(createUploadErr);
             }
             // 2.zip skill package
             const outputDir = path.join(process.cwd(), '.ask');
-            zipUtils.createTempZip(skillPackageSrc, outputDir, (zipErr, zipFilePath) => {
+            zipUtils.createTempZip(skillPackageSrc, outputDir, (zipErr: any, zipFilePath: any) => {
                 if (zipErr) {
                     return callback(zipErr);
                 }
                 // 3.upload zip file
                 const uploadPayload = fs.readFileSync(zipFilePath);
                 const operation = 'upload-skill-package';
-                httpClient.putByUrl(createUploadResult.uploadUrl, uploadPayload, operation, this.doDebug, (uploadErr, uploadResponse) => {
+                httpClient.putByUrl(createUploadResult.uploadUrl, uploadPayload, operation, this.doDebug, (uploadErr?: Error, uploadResponse?: any) => {
                     fs.removeSync(zipFilePath);
                     if (uploadErr) {
                         return callback(uploadErr);
@@ -233,14 +246,14 @@ module.exports = class SkillMetadataController {
      * @returns { [languageName]: iModelPath } where languageName is in the format of xx-YY
      */
     getInteractionModelLocales() {
-        const skillPackagePath = path.join(process.cwd(), ResourcesConfig.getInstance().getSkillMetaSrc(this.profile));
+        const skillPackagePath = path.join(process.cwd(), getResourcesConfig().getSkillMetaSrc(this.profile));
         const iModelFolderPath = path.join(skillPackagePath, CONSTANTS.FILE_PATH.SKILL_PACKAGE.INTERACTION_MODEL, 'custom');
         const supportedLocaleFiles = fs.readdirSync(iModelFolderPath).filter((file) => {
             const fileExt = path.extname(file);
             const fileNameNoExt = path.basename(file, fileExt);
             return fileExt === '.json' && R.includes(fileNameNoExt, R.keys(CONSTANTS.ALEXA.LANGUAGES));
         });
-        const result = {};
+        const result: any = {};
         supportedLocaleFiles.forEach((file) => {
             const fileNameNoExt = path.basename(file, path.extname(file));
             result[fileNameNoExt] = path.join(iModelFolderPath, file);
@@ -252,8 +265,8 @@ module.exports = class SkillMetadataController {
      * Wrapper for smapi createUpload function
      * @param {Function} callback (err, { uploadUrl, expiresAt })
      */
-    _createUploadUrl(callback) {
-        this.smapiClient.skillPackage.createUpload((createErr, createResponse) => {
+    _createUploadUrl(callback: Function) {
+        this.smapiClient.skillPackage.createUpload((createErr?: Error, createResponse?: any) => {
             if (createErr) {
                 return callback(createErr);
             }
@@ -274,8 +287,8 @@ module.exports = class SkillMetadataController {
      * @param {String} location
      * @param {Function} callback (err, importResponse)
      */
-    _importPackage(skillId, vendorId, location, callback) {
-        this.smapiClient.skillPackage.importPackage(skillId, vendorId, location, (importErr, importResponse) => {
+    _importPackage(skillId: string, vendorId: string, location: string, callback: Function) {
+        this.smapiClient.skillPackage.importPackage(skillId, vendorId, location, (importErr?: Error, importResponse?: any) => {
             if (importErr) {
                 return callback(importErr);
             }
@@ -292,8 +305,8 @@ module.exports = class SkillMetadataController {
      * @param {String} stage
      * @param {Function} callback
      */
-    _exportPackage(skillId, stage, callback) {
-        this.smapiClient.skillPackage.exportPackage(skillId, stage, (exportErr, exportResponse) => {
+    _exportPackage(skillId: string, stage: string, callback: Function) {
+        this.smapiClient.skillPackage.exportPackage(skillId, stage, (exportErr?: Error, exportResponse?: any) => {
             if (exportErr) {
                 return callback(exportErr);
             }
@@ -309,14 +322,14 @@ module.exports = class SkillMetadataController {
      * @param {String} importId
      * @param {Function} callback (err, lastImportStatus)
      */
-    _pollImportStatus(importId, callback) {
+    _pollImportStatus(importId: string, callback: Function) {
         const retryConfig = {
             base: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_IMPORT_STATUS.MIN_TIME_OUT,
             factor: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_IMPORT_STATUS.FACTOR,
             maxRetry: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_IMPORT_STATUS.MAX_RETRY
         };
-        const retryCall = (loopCallback) => {
-            this.smapiClient.skillPackage.getImportStatus(importId, (pollErr, pollResponse) => {
+        const retryCall = (loopCallback: Function) => {
+            this.smapiClient.skillPackage.getImportStatus(importId, (pollErr?: Error, pollResponse?: any) => {
                 if (pollErr) {
                     return loopCallback(pollErr);
                 }
@@ -326,8 +339,9 @@ module.exports = class SkillMetadataController {
                 loopCallback(null, pollResponse);
             });
         };
-        const shouldRetryCondition = retryResponse => retryResponse.body.status === CONSTANTS.SKILL.PACKAGE_STATUS.IN_PROGRESS;
-        retryUtils.retry(retryConfig, retryCall, shouldRetryCondition, (err, res) => callback(err, err ? null : res));
+        const shouldRetryCondition = (retryResponse: any) => retryResponse.body.status === CONSTANTS.SKILL.PACKAGE_STATUS.IN_PROGRESS;
+
+        retry(retryConfig, retryCall, shouldRetryCondition, (err?: Error, res?: any) => callback(err, err ? null : res));
     }
 
     /**
@@ -335,14 +349,14 @@ module.exports = class SkillMetadataController {
      * @param {String} exportId
      * @param {Function} callback (err, lastExportStatus)
      */
-    _pollExportStatus(exportId, callback) {
+    _pollExportStatus(exportId: string, callback: Function) {
         const retryConfig = {
             base: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_EXPORT_STATUS.MIN_TIME_OUT,
             factor: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_EXPORT_STATUS.FACTOR,
             maxRetry: CONSTANTS.CONFIGURATION.RETRY.GET_PACKAGE_EXPORT_STATUS.MAX_RETRY
         };
-        const retryCall = (loopCallback) => {
-            this.smapiClient.skillPackage.getExportStatus(exportId, (pollErr, pollResponse) => {
+        const retryCall = (loopCallback: Function) => {
+            this.smapiClient.skillPackage.getExportStatus(exportId, (pollErr?: Error, pollResponse?: any) => {
                 if (pollErr) {
                     return loopCallback(pollErr);
                 }
@@ -352,7 +366,7 @@ module.exports = class SkillMetadataController {
                 loopCallback(null, pollResponse);
             });
         };
-        const shouldRetryCondition = retryResponse => retryResponse.body.status === CONSTANTS.SKILL.PACKAGE_STATUS.IN_PROGRESS;
-        retryUtils.retry(retryConfig, retryCall, shouldRetryCondition, (err, res) => callback(err, err ? null : res));
+        const shouldRetryCondition = (retryResponse: any) => retryResponse.body.status === CONSTANTS.SKILL.PACKAGE_STATUS.IN_PROGRESS;
+        retry(retryConfig, retryCall, shouldRetryCondition, (err?: Error, res?: any) => callback(err, err ? null : res));
     }
 };

@@ -1,22 +1,13 @@
-const fs = require('fs-extra');
-const https = require('https');
-const os = require('os');
-const path = require('path');
-const R = require('ramda');
+import fs from 'fs-extra';
+import https from 'https';
+import os from 'os';
+import path from 'path';
+import R from 'ramda';
 
-const CONSTANTS = require('@src/utils/constants');
-const DynamicConfig = require('@src/utils/dynamic-config');
-const retryUtils = require('@src/utils/retry-utility');
-const jsonView = require('@src/view/json-view');
-
-module.exports = {
-    pollingSkillStatus,
-    handleSkillStatus,
-    downloadAuthInfoScript,
-    downloadAskPrePushScript,
-    downloadGitCredentialHelperScript,
-    downloadScriptFromS3
-};
+import * as CONSTANTS from '@src/utils/constants';
+import DynamicConfig from '@src/utils/dynamic-config';
+import { retry } from '@src/utils/retry-utility';
+import jsonView from '@src/view/json-view';
 
 const RETRY_OPTION = {
     base: 500,
@@ -24,7 +15,7 @@ const RETRY_OPTION = {
     maxRetry: 5
 };
 
-function pollingSkillStatus(smapiClient, skillId, callback) {
+function pollingSkillStatus(smapiClient: any, skillId: string, callback: Function) {
     const retryConfig = {
         base: 1000,
         factor: 1.2,
@@ -33,8 +24,8 @@ function pollingSkillStatus(smapiClient, skillId, callback) {
     const RESOURCE_LIST = [CONSTANTS.SKILL.RESOURCES.MANIFEST,
         CONSTANTS.HOSTED_SKILL.RESOURCES.PROVISIONING,
         CONSTANTS.SKILL.RESOURCES.INTERACTION_MODEL];
-    const retryCall = (loopCallback) => {
-        smapiClient.skill.getSkillStatus(skillId, RESOURCE_LIST, (statusErr, statusResponse) => {
+    const retryCall = (loopCallback: Function) => {
+        smapiClient.skill.getSkillStatus(skillId, RESOURCE_LIST, (statusErr?: Error, statusResponse?: any) => {
             if (statusErr) {
                 return loopCallback(statusErr);
             }
@@ -49,7 +40,7 @@ function pollingSkillStatus(smapiClient, skillId, callback) {
         interactionModel: {},
         hostedSkillProvisioning: {}
     };
-    const shouldRetryCondition = (retryResponse) => {
+    const shouldRetryCondition = (retryResponse: any) => {
         const response = retryResponse.body;
         statusTracker.manifest = R.view(R.lensPath([CONSTANTS.HOSTED_SKILL.RESOURCES.MANIFEST, 'lastUpdateRequest', 'status']), response);
         if (response[CONSTANTS.HOSTED_SKILL.RESOURCES.INTERACTION_MODEL]) {
@@ -66,10 +57,10 @@ function pollingSkillStatus(smapiClient, skillId, callback) {
                 && statusTracker.interactionModel === CONSTANTS.HOSTED_SKILL.INTERACTION_MODEL_STATUS.SUCCESS
                 && statusTracker.hostedSkillProvisioning === CONSTANTS.HOSTED_SKILL.PROVISIONING_STATUS.SUCCESS);
     };
-    retryUtils.retry(retryConfig, retryCall, shouldRetryCondition, err => callback(err, err ? null : statusTracker));
+    retry(retryConfig, retryCall, shouldRetryCondition, (err?: Error) => callback(err, err ? null : statusTracker));
 }
 
-function handleSkillStatus(response, skillId, callback) {
+function handleSkillStatus(response: any, skillId: string, callback: Function) {
     if (!response) {
         return callback('Response from the creation of hosted skill is not valid.');
     }
@@ -97,15 +88,15 @@ function handleSkillStatus(response, skillId, callback) {
     }
 }
 
-function downloadAuthInfoScript(callback) {
+function downloadAuthInfoScript(callback: Function) {
     const authInfoUrl = DynamicConfig.s3Scripts.authInfo;
     const authInfoPath = path.join(os.homedir(),
         CONSTANTS.FILE_PATH.ASK.HIDDEN_FOLDER,
         CONSTANTS.FILE_PATH.ASK.AUTH_INFO);
-    this.downloadScriptFromS3(authInfoUrl, authInfoPath, (err) => callback(err || null));
+    downloadScriptFromS3(authInfoUrl, authInfoPath, (err: Error) => callback(err || null));
 }
 
-function downloadAskPrePushScript(callback) {
+function downloadAskPrePushScript(callback: Function) {
     const askScriptUrl = DynamicConfig.s3Scripts.askPrePush;
     const scriptFolderPath = path.join(os.homedir(),
         CONSTANTS.FILE_PATH.ASK.HIDDEN_FOLDER,
@@ -115,10 +106,10 @@ function downloadAskPrePushScript(callback) {
         CONSTANTS.FILE_PATH.ASK.SCRIPTS_FOLDER.NAME,
         CONSTANTS.FILE_PATH.ASK.SCRIPTS_FOLDER.ASK_PRE_PUSH);
     fs.ensureDirSync(scriptFolderPath);
-    this.downloadScriptFromS3(askScriptUrl, askFilePath, (err) => callback(err || null));
+    downloadScriptFromS3(askScriptUrl, askFilePath, (err?: Error) => callback(err || null));
 }
 
-function downloadGitCredentialHelperScript(callback) {
+function downloadGitCredentialHelperScript(callback: Function) {
     const credentialScriptUrl = DynamicConfig.s3Scripts.gitCredentialHelper;
     const scriptFolderPath = path.join(os.homedir(),
         CONSTANTS.FILE_PATH.ASK.HIDDEN_FOLDER,
@@ -128,12 +119,12 @@ function downloadGitCredentialHelperScript(callback) {
         CONSTANTS.FILE_PATH.ASK.SCRIPTS_FOLDER.NAME,
         CONSTANTS.FILE_PATH.ASK.SCRIPTS_FOLDER.GIT_CREDENTIAL_HELPER);
     fs.ensureDirSync(scriptFolderPath);
-    this.downloadScriptFromS3(credentialScriptUrl, credentialFilePath, (err) => callback(err || null));
+    downloadScriptFromS3(credentialScriptUrl, credentialFilePath, (err?: Error) => callback(err || null));
 }
 
-function downloadScriptFromS3(scriptUrl, filePath, callback) {
+function downloadScriptFromS3(scriptUrl: string, filePath: string, callback: Function) {
     const DOWNLOADED = 'downloaded';
-    const retryCall = (loopCallback) => {
+    const retryCall = (loopCallback: Function) => {
         const writeStream = fs.createWriteStream(filePath);
         https.get(scriptUrl, (res) => {
             res.pipe(writeStream);
@@ -141,10 +132,19 @@ function downloadScriptFromS3(scriptUrl, filePath, callback) {
                 fs.chmodSync(filePath, '700');
                 loopCallback(null, DOWNLOADED);
             });
-        }).on('error', (err) => {
+        }).on('error', (err: string) => {
             loopCallback(new Error(err));
         });
     };
-    const shouldRetryCondition = retryResponse => retryResponse !== DOWNLOADED;
-    retryUtils.retry(RETRY_OPTION, retryCall, shouldRetryCondition, (err, res) => callback(err, err ? null : res));
+    const shouldRetryCondition = (retryResponse: any) => retryResponse !== DOWNLOADED;
+    retry(RETRY_OPTION, retryCall, shouldRetryCondition, (err?: Error, res?: any) => callback(err, err ? null : res));
 }
+
+export default {
+    pollingSkillStatus,
+    handleSkillStatus,
+    downloadAuthInfoScript,
+    downloadAskPrePushScript,
+    downloadGitCredentialHelperScript,
+    downloadScriptFromS3
+};

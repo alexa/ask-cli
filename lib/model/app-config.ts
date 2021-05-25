@@ -10,6 +10,8 @@ const defaultFilePath = path.join(os.homedir(), CONSTANTS.FILE_PATH.ASK.HIDDEN_F
 // instance which stores the singleton
 let instance: AppConfig | null = null;
 
+export const getAppConfig = () => AppConfig.getInstance() as AppConfig;
+
 export default class AppConfig extends ConfigFile {
     private _isEnvProfile?: boolean;
 

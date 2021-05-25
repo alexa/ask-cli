@@ -1,24 +1,19 @@
-const SmapiClient = require('@src/clients/smapi-client');
-const AuthorizationController = require('@src/controllers/authorization-controller');
-const jsonView = require('@src/view/json-view');
-const Messenger = require('@src/view/messenger');
-const CONSTANTS = require('@src/utils/constants');
+import SmapiClient from '@src/clients/smapi-client';
+import AuthorizationController from '@src/controllers/authorization-controller';
+import jsonView from '@src/view/json-view';
+import Messenger from '@src/view/messenger';
+import * as CONSTANTS from '@src/utils/constants';
 
-const messages = require('./messages');
-const ui = require('./ui');
-
-module.exports = {
-    setupAskToken,
-    setupVendorId
-};
+import messages from './messages';
+import ui from './ui';
 
 /**
  * Initiates access token setup to be used in future requests.
  * @param {Object} config
  * @param {Function} callback
  */
-function setupAskToken(config, callback) {
-    _getAccessToken(config, (accessTokenError, accessToken) => {
+function setupAskToken(config: any, callback: Function) {
+    _getAccessToken(config, (accessTokenError: Error, accessToken: string) => {
         if (accessTokenError) {
             return callback(accessTokenError);
         }
@@ -32,19 +27,20 @@ function setupAskToken(config, callback) {
  * @param {Function} callback
  * @private
  */
-function _getAccessToken(config, callback) {
-    const authorizationController = new AuthorizationController(_buildAuthorizationConfiguration(config));
+function _getAccessToken(config: any, callback: Function) {
+    const cfg: any = _buildAuthorizationConfiguration(config);
+    const authorizationController = new AuthorizationController(cfg);
     if (!config.needBrowser) {
         const authorizeUrl = authorizationController.getAuthorizeUrl();
         Messenger.getInstance().info(`Paste the following url to your browser:\n    ${authorizeUrl}`);
-        ui.getAuthCode((error, authCode) => {
+        ui.getAuthCode((error: Error, authCode: any) => {
             if (error) {
                 return callback(error);
             }
-            authorizationController.getAccessTokenUsingAuthCode(authCode, (err, accessToken) => callback(err, err == null ? accessToken : err));
+            authorizationController.getAccessTokenUsingAuthCode(authCode, (err: Error, accessToken: any) => callback(err, err == null ? accessToken : err));
         });
     } else {
-        authorizationController.getTokensByListeningOnPort((err, accessToken) => callback(err, err == null ? accessToken : err));
+        authorizationController.getTokensByListeningOnPort((err: Error, accessToken: any) => callback(err, err == null ? accessToken : err));
     }
 }
 
@@ -54,12 +50,12 @@ function _getAccessToken(config, callback) {
  * @param {Function} callback
  * @private
  */
-function setupVendorId(config, callback) {
-    _getVendorInfo(config, (err, vendorInfo) => {
+function setupVendorId(config: any, callback: Function) {
+    _getVendorInfo(config, (err: Error, vendorInfo: any) => {
         if (err) {
             return callback(err);
         }
-        _selectVendorId(vendorInfo, (vendorIdError, vendorId) => {
+        _selectVendorId(vendorInfo, (vendorIdError: Error, vendorId: any) => {
             if (vendorIdError) {
                 return callback(vendorIdError);
             }
@@ -74,13 +70,13 @@ function setupVendorId(config, callback) {
  * @param {Function} callback
  * @private
  */
-function _getVendorInfo(config, callback) {
+function _getVendorInfo(config: any, callback: Function) {
     const smapiClient = new SmapiClient({
         profile: config.askProfile,
         doDebug: config.debug
     });
 
-    smapiClient.vendor.listVendors((err, response) => {
+    smapiClient.vendor.listVendors((err: Error, response: any) => {
         if (err) {
             return callback(err);
         }
@@ -97,7 +93,7 @@ function _getVendorInfo(config, callback) {
  * @param {Array} vendorInfo
  * @param {Function} callback
  */
-function _selectVendorId(vendorInfo, callback) {
+function _selectVendorId(vendorInfo: any, callback: Function) {
     if (!vendorInfo) {
         return callback(messages.VENDOR_INFO_FETCH_ERROR);
     }
@@ -115,7 +111,7 @@ function _selectVendorId(vendorInfo, callback) {
         });
         break;
     default:
-        ui.chooseVendorId(LIST_PAGE_SIZE, vendorInfo, (error, vendorId) => callback(error, error === null ? vendorId : error));
+        ui.chooseVendorId(LIST_PAGE_SIZE, vendorInfo, (error: Error, vendorId: any) => callback(error, error === null ? vendorId : error));
     }
 }
 
@@ -124,7 +120,7 @@ function _selectVendorId(vendorInfo, callback) {
  * @param {Object} config
  * @private
  */
-function _buildAuthorizationConfiguration(config) {
+function _buildAuthorizationConfiguration(config: any) {
     return {
         config,
         scopes: CONSTANTS.LWA.DEFAULT_SCOPES,
@@ -134,3 +130,8 @@ function _buildAuthorizationConfiguration(config) {
         doDebug: config.doDebug
     };
 }
+
+export default {
+    setupAskToken,
+    setupVendorId
+};

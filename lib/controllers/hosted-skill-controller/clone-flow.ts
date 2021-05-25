@@ -1,21 +1,15 @@
-const fs = require('fs-extra');
-const os = require('os');
-const path = require('path');
-const R = require('ramda');
+import fs from 'fs-extra';
+import os from 'os';
+import path from 'path';
+import R from 'ramda';
 
-const GitClient = require('@src/clients/git-client');
-const ResourcesConfig = require('@src/model/resources-config');
-const CONSTANTS = require('@src/utils/constants');
-const Messenger = require('@src/view/messenger');
-const SpinnerView = require('@src/view/spinner-view');
+import GitClient from '@src/clients/git-client';
+import ResourcesConfig, { getResourcesConfig } from '@src/model/resources-config';
+import * as CONSTANTS from '@src/utils/constants';
+import Messenger from '@src/view/messenger';
+import SpinnerView from '@src/view/spinner-view';
 
 const filesToIgnore = ['lambda/node_modules', '.ask/', 'ask-resources.json'];
-
-module.exports = {
-    generateProject,
-    cloneProjectFromGit,
-    doSkillPackageExist
-};
 
 /**
  * To generate local skill project folder and ask-resources.json
@@ -25,24 +19,24 @@ module.exports = {
  * @param {JSON} metadata The Alexa hosted skill metadata
  * @param {string} profile The current profile
  */
-function generateProject(projectPath, skillId, skillName, metadata, profile) {
+function generateProject(projectPath: string, skillId: string, skillName: string, metadata: any, profile: string) {
     _generateProjectDirectory(projectPath);
     _updateAskResources(projectPath, skillId, metadata, profile);
     Messenger.getInstance().info(`\nProject directory for ${skillName} created at\n\t${projectPath}`);
 }
 
-function _generateProjectDirectory(projectPath) {
+function _generateProjectDirectory(projectPath: string) {
     const askResourcesPath = path.join(projectPath, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG);
-    const askResourcesJson = R.clone(ResourcesConfig.BASE);
+    const askResourcesJson = R.clone((ResourcesConfig as any).BASE);
     fs.mkdirSync(projectPath);
     fs.writeJSONSync(askResourcesPath, askResourcesJson, { spaces: CONSTANTS.CONFIGURATION.JSON_DISPLAY_INDENT });
 }
 
-function _updateAskResources(projectPath, skillId, metadata, profile) {
+function _updateAskResources(projectPath: string, skillId: string, metadata: any, profile: string) {
     new ResourcesConfig(path.join(projectPath, CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
-    ResourcesConfig.getInstance().setSkillId(profile, skillId);
-    ResourcesConfig.getInstance().setSkillInfraType(profile, '@ask-cli/hosted-skill-deployer');
-    ResourcesConfig.getInstance().write();
+    getResourcesConfig().setSkillId(profile, skillId);
+    getResourcesConfig().setSkillInfraType(profile, '@ask-cli/hosted-skill-deployer');
+    getResourcesConfig().write();
 }
 
 /**
@@ -54,7 +48,7 @@ function _updateAskResources(projectPath, skillId, metadata, profile) {
  * @param {string} repositoryUrl The git url
  * @param {boolean} doDebug is debug mode or not
  */
-function cloneProjectFromGit(projectPath, skillId, skillName, profile, repositoryUrl, doDebug) {
+function cloneProjectFromGit(projectPath: string, skillId: string, skillName: string, profile: string, repositoryUrl: string, doDebug: boolean) {
     const verbosityOptions = {
         showCommand: !!doDebug,
         showOutput: !!doDebug
@@ -63,7 +57,7 @@ function cloneProjectFromGit(projectPath, skillId, skillName, profile, repositor
     Messenger.getInstance().info(`\nLambda code for ${skillName} created at\n\t./lambda`);
 }
 
-function _gitCloneWorkflow(projectPath, repositoryUrl, verbosityOptions, skillId, profile) {
+function _gitCloneWorkflow(projectPath: string, repositoryUrl: string, verbosityOptions: any, skillId: string, profile: string) {
     const verbose = verbosityOptions.showCommand;
     const progressSpinner = new SpinnerView();
     if (!verbose) {
@@ -86,7 +80,8 @@ function _gitCloneWorkflow(projectPath, repositoryUrl, verbosityOptions, skillId
     if (verbose) {
         Messenger.getInstance().info('- Fetching git repo...');
     }
-    gitClient.fetchAll(projectPath, verbosityOptions);
+    // The original passed projectPath and verbosityOptions as params, but fetchAll() takes 0 args.
+    gitClient.fetchAll();
 
     if (verbose) {
         Messenger.getInstance().info('- Checking out master branch...');
@@ -109,7 +104,7 @@ function _gitCloneWorkflow(projectPath, repositoryUrl, verbosityOptions, skillId
     }
 }
 
-function _makeBranchesVisible(gitClient) {
+function _makeBranchesVisible(gitClient: GitClient) {
     const branchesToCheckout = ['prod', 'master'];
     branchesToCheckout.forEach((branch) => {
         gitClient.checkoutBranch(branch);
@@ -125,7 +120,7 @@ function _makeBranchesVisible(gitClient) {
  * @param {string} skillId The skill id
  * @param {callback} callback { error, response }
  */
-function doSkillPackageExist(skillName, projectPath, skillId, callback) {
+function doSkillPackageExist(skillName: string, projectPath: string, skillId: string, callback: Function) {
     const skillPackagePath = path.join(projectPath, 'skill-package');
     if (fs.existsSync(skillPackagePath)) {
         return callback(null, true);
@@ -151,3 +146,9 @@ function doSkillPackageExist(skillName, projectPath, skillId, callback) {
     }
     callback(null, true);
 }
+
+export default {
+    generateProject,
+    cloneProjectFromGit,
+    doSkillPackageExist
+};

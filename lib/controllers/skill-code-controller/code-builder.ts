@@ -1,11 +1,11 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
-const CustomBuildFlow = require('@src/builtins/build-flows/custom');
-const JavaMvnBuildFlow = require('@src/builtins/build-flows/java-mvn');
-const NodeJsNpmBuildFlow = require('@src/builtins/build-flows/nodejs-npm');
-const PythonPipBuildFlow = require('@src/builtins/build-flows/python-pip');
-const ZipOnlyBuildFlow = require('@src/builtins/build-flows/zip-only');
+import CustomBuildFlow from '@src/builtins/build-flows/custom';
+import JavaMvnBuildFlow from '@src/builtins/build-flows/java-mvn';
+import NodeJsNpmBuildFlow from '@src/builtins/build-flows/nodejs-npm';
+import PythonPipBuildFlow from '@src/builtins/build-flows/python-pip';
+import ZipOnlyBuildFlow from '@src/builtins/build-flows/zip-only';
 
 // order is important
 const BUILD_FLOWS = [
@@ -16,12 +16,29 @@ const BUILD_FLOWS = [
     ZipOnlyBuildFlow
 ];
 
-class CodeBuilder {
+interface IBuild {
+    folder: string;
+    file: string;
+};
+
+export interface ICodeBuilder {
+    src: string;
+    build: IBuild;
+    doDebug: boolean;
+};
+
+export default class CodeBuilder {
+    private src: string;
+    private doDebug: boolean;
+    private build: IBuild;
+
+    BuildFlowClass: any;
+
     /**
      * Constructor for CodeBuilder
      * @param {Object} config { src, build, doDebug }, where build = { folder, file }.
      */
-    constructor(config) {
+    constructor(config: ICodeBuilder) {
         const { src, build, doDebug } = config;
         this.src = src;
         this.build = build;
@@ -34,7 +51,7 @@ class CodeBuilder {
      * Executes build flow
      * @param {Function} callback (error)
      */
-    execute(callback) {
+    execute(callback: Function) {
         try {
             this._setUpBuildFolder();
         } catch (fsErr) {
@@ -42,7 +59,7 @@ class CodeBuilder {
         }
         const options = { cwd: this.build.folder, src: this.src, buildFile: this.build.file, doDebug: this.doDebug };
         const builder = new this.BuildFlowClass(options);
-        builder.execute((error) => callback(error));
+        builder.execute((error?: Error) => callback(error));
     }
 
     _setUpBuildFolder() {
@@ -55,5 +72,3 @@ class CodeBuilder {
         this.BuildFlowClass = BUILD_FLOWS.find(flow => flow.canHandle({ src: this.src }));
     }
 }
-
-module.exports = CodeBuilder;

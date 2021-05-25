@@ -1,16 +1,11 @@
-const R = require('ramda');
-const requestLib = require('request');
+import R from 'ramda';
+import requestLib from 'request';
 
-const DynamicConfig = require('@src/utils/dynamic-config');
-const logger = require('@src/utils/logger-utility');
-const urlUtils = require('@src/utils/url-utils');
-const stringUtils = require('@src/utils/string-utils');
-const CONSTANTS = require('@src/utils/constants');
-
-module.exports = {
-    request,
-    putByUrl
-};
+import DynamicConfig from '@src/utils/dynamic-config';
+import logger from '@src/utils/logger-utility';
+import urlUtils from '@src/utils/url-utils';
+import stringUtils from '@src/utils/string-utils';
+import * as CONSTANTS from '@src/utils/constants';
 
 /**
  * Core CLI request function with User-Agent setting.
@@ -20,7 +15,7 @@ module.exports = {
  * @param {boolean} doDebug     define if debug info is needed
  * @param {function} callback
  */
-function request(options, operation, doDebug, callback) {
+function request(options: any, operation: string, doDebug: boolean, callback: Function) {
     // Validation of input parameters
     const requestOptions = R.clone(options);
     if (typeof operation !== 'string' || !operation.trim()) {
@@ -48,7 +43,7 @@ function request(options, operation, doDebug, callback) {
     requestOptions.headers['User-Agent'] = DynamicConfig.userAgent;
 
     // Make request
-    requestLib(requestOptions, (error, response) => {
+    requestLib(requestOptions, (error: string, response: any) => {
         if (doDebug) {
             logger.getInstance().debug(debugContentForResponse(operation, error, response));
         }
@@ -73,14 +68,14 @@ function request(options, operation, doDebug, callback) {
  * @param {Boolean} doDebug
  * @param {Function} callback
  */
-function putByUrl(url, payload, operation, doDebug, callback) {
+function putByUrl(url: string, payload: any, operation: string, doDebug: boolean, callback: Function) {
     const options = {
         url,
         method: CONSTANTS.HTTP_REQUEST.VERB.PUT,
         headers: {},
         body: payload
     };
-    request(options, operation, doDebug, (reqErr, reqResponse) => {
+    request(options, operation, doDebug, (reqErr: Error, reqResponse: any) => {
         callback(reqErr, reqResponse);
     });
 }
@@ -91,7 +86,7 @@ function putByUrl(url, payload, operation, doDebug, callback) {
  * @param {string} error
  * @param {object} response
  */
-function debugContentForResponse(operation, error, response) {
+function debugContentForResponse(operation: string, error: string, response: any) {
     return {
         activity: operation,
         error,
@@ -110,3 +105,8 @@ function debugContentForResponse(operation, error, response) {
         body: response.body
     };
 }
+
+export default {
+    request,
+    putByUrl
+};

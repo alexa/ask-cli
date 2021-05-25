@@ -17,6 +17,8 @@ export const BASE: any = {
     profiles: {}
 };
 
+export const getResourcesConfig = () => ResourcesConfig.getInstance() as ResourcesConfig;
+
 export default class ResourcesConfig {
     private _askResourcesPath: string = "";
     private _projectRootPath?: string;
@@ -113,6 +115,7 @@ export default class ResourcesConfig {
         return getAskStates().getCodeLastDeployHashByRegion(profile, region);
     }
 
+    // region = string | number?
     setCodeLastDeployHashByRegion(profile: string, region: string, hash: string) {
         getAskStates().setCodeLastDeployHashByRegion(profile, region, hash);
     }
