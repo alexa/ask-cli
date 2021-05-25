@@ -23,3 +23,5 @@ test/temp
 
 .vagrant
 
+dist/
+.tmp/

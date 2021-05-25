@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": [ "ESNext" ],
+    "noEmit": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@root/*": ["./*"],
+      "@src/*": ["./lib/*"],
+      "@test/*": ["./test/*"]
+    }
+  },
+  "include": [
+    "./lib/*",
+    "./bin/*"
+  ],
+  "exclude": [
+    "./dist/*"
+  ]
+}
