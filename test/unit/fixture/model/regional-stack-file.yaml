@@ -31,7 +31,7 @@ Resources:
         S3Bucket: endpoint.s3.bucket
         S3Key: endpoint.s3.key
         S3ObjectVersion: endpoint.s3.version
-      Runtime: nodejs10.x
+      Runtime: nodejs12.x
       MemorySize: 512
       Timeout: 60
   AlexaSkillFunctionEventPermission:

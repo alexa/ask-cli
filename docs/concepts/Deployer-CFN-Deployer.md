@@ -26,7 +26,7 @@ Here we are defining `ProjectName`, `Environment`, `UserTableName`.
       "skillInfrastructure": {
         "type": "@ask-cli/cfn-deployer",
         "userConfig": {
-          "runtime": "nodejs10.x",
+          "runtime": "nodejs12.x",
           "handler": "index.handler",
           "templatePath": "./infrastructure/cfn-deployer/skill-stack.yaml",
           "awsRegion": "us-west-2",
