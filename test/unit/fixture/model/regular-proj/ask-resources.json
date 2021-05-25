@@ -19,7 +19,7 @@
       "skillInfrastructure": {
         "type": "@ask-cli/cfn-deployer",
         "userConfig": {
-          "runtime": "nodejs10.x",
+          "runtime": "nodejs12.x",
           "handler": "index.handler",
           "template": "./awsStacks/skill-infra.yaml",
           "targetEndpoint": [
