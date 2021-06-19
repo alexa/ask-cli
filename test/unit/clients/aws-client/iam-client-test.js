@@ -12,7 +12,7 @@ describe('Clients test - iam client test', () => {
         awsRegion: TEST_AWS_REGION
     };
     const TEST_ROLE_ARN = 'iam_role_arn';
-    const TEST_SKILL_NAME = 'skill_name';
+    const TEST_ROLE_NAME = 'iam_role_name';
 
     afterEach(() => {
         sinon.restore();
@@ -91,7 +91,7 @@ describe('Clients test - iam client test', () => {
             const TEST_CREATE_ROLE_ERR = 'CREATE_ROLE_ERROR';
             sinon.stub(iamClient.client, 'createRole').callsArgWith(1, TEST_CREATE_ROLE_ERR);
             // call
-            iamClient.createBasicLambdaRole(TEST_SKILL_NAME, (err) => {
+            iamClient.createBasicLambdaRole(TEST_ROLE_NAME, (err) => {
                 // verify
                 expect(err).equal(TEST_CREATE_ROLE_ERR);
                 done();
@@ -108,7 +108,7 @@ describe('Clients test - iam client test', () => {
             };
             sinon.stub(iamClient.client, 'createRole').callsArgWith(1, null, TEST_CREATE_ROLE_RESPONSE);
             // call
-            iamClient.createBasicLambdaRole(TEST_SKILL_NAME, (err, data) => {
+            iamClient.createBasicLambdaRole(TEST_ROLE_NAME, (err, data) => {
                 // verify
                 expect(data.Role.Arn).equal(TEST_ROLE_ARN);
                 expect(err).equal(null);
