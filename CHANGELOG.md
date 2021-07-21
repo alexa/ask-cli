@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.23.0](https://github.com/alexa/ask-cli/compare/v2.22.4...v2.23.0) (2021-07-21)
+
+
+### Features
+
+* bump ask-smapi-model version ([6d1be5c](https://github.com/alexa/ask-cli/commit/6d1be5c0e7f5ff20cd1460938897c36b3e3f16e6))
+* expose simulation type field for dialog and simulation command to facilitate Dynamic Routing ([5cac3cf](https://github.com/alexa/ask-cli/commit/5cac3cf844401e7c4afc0519b875c1cbb54b5217))
+
+
+### Bug Fixes
+
+* **lambda:** added comment about character calculation ([56cc5ab](https://github.com/alexa/ask-cli/commit/56cc5abfedf9e2aaa1959974d2b991949a106abd))
+* **lambda:** fixed previous comment ([b1bbb2c](https://github.com/alexa/ask-cli/commit/b1bbb2c735895c5fbb0802fc732df2e38120f1fc))
+* **lambda:** Removed ternary operator ([33fcf1f](https://github.com/alexa/ask-cli/commit/33fcf1f62eebc50eef785e47f352b266785de440))
+* **lambda:** truncating the skill name for lambda role creation ([67d6538](https://github.com/alexa/ask-cli/commit/67d65386d1634cee820be38119b55bf1474ddf5a))
+* refactor to mark simulation.type as an optional field ([0688404](https://github.com/alexa/ask-cli/commit/0688404adf7cddd89f8cb4d1b60c942d4500495b))
+
 ### [2.22.4](https://github.com/alexa/ask-cli/compare/v2.22.3...v2.22.4) (2021-01-25)
 
 
