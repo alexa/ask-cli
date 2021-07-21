@@ -114,7 +114,7 @@ The path params
 | If the skill is in certified stage, initiate publishing immediately or set a date at which the skill can publish at. | [publish-skill](#publish-skill) |
 | Retrieves the latest skill publishing details of the certified stage of the skill. The publishesAtDate and
 status of skill publishing. | [get-skill-publications](#get-skill-publications) |
-| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
+| This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported. | [simulate-skill](#simulate-skill) |
 | This API gets the result of a previously executed simulation. A successful response will contain the status of the executed simulation. If the simulation successfully completed, the response will also contain information related to skill invocation. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. In cases where the simulation failed, the response will contain a status attribute indicating that a failure occurred and details about what was sent to the skill endpoint. Note that simulation results are stored for 10 minutes. A request for an expired simulation result will return a 404 HTTP status code. | [get-skill-simulation](#get-skill-simulation) |
 | This is an asynchronous API which allows a skill developer to execute various validations against their skill. | [submit-skill-validation](#submit-skill-validation) |
 | This API gets the result of a previously executed validation. A successful response will contain the status of the executed validation. If the validation successfully completed, the response will also contain information related to executed validations. In cases where requests to this API results in an error, the response will contain a description of the problem. In cases where the validation failed, the response will contain a status attribute indicating that a failure occurred. Note that validation results are stored for 60 minutes. A request for an expired validation result will return a 404 HTTP status code. | [get-skill-validations](#get-skill-validations) |
@@ -190,7 +190,7 @@ Lists catalogs associated with a vendor.
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
-    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dd markdown="span">[OPTIONAL].</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -261,7 +261,7 @@ Lists all the catalogs associated with a skill.
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
-    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dd markdown="span">[OPTIONAL].</dd>
     <dt>-s,--skill-id <skill-id></dt>
     <dd markdown="span">[REQUIRED] The skill ID.</dd>
     <dt>-p, --profile <profile></dt>
@@ -696,8 +696,7 @@ Get the list of in-skill products for the vendor.
     <dd markdown="span">[OPTIONAL] The list of in-skill product IDs that you wish to get the summary for. A maximum of 50 in-skill product IDs can be specified in a single listInSkillProducts call. Please note that this parameter must not be used with 'nextToken' and/or 'maxResults' parameter. 
 [MULTIPLE]: Values can be separated by comma.</dd>
     <dt>-g,--stage <stage></dt>
-    <dd markdown="span">[OPTIONAL] Filter in-skill products by specified stage. 
-[ENUM]: development,live.</dd>
+    <dd markdown="span">[OPTIONAL] Filter in-skill products by specified stage.</dd>
     <dt>--type <type></dt>
     <dd markdown="span">[OPTIONAL] Type of in-skill product to filter on. 
 [ENUM]: SUBSCRIPTION,ENTITLEMENT,CONSUMABLE.</dd>
@@ -708,7 +707,7 @@ Get the list of in-skill products for the vendor.
 [ENUM]: INCOMPLETE,COMPLETE,CERTIFICATION,PUBLISHED,SUPPRESSED.</dd>
     <dt>--is-associated-with-skill <is-associated-with-skill></dt>
     <dd markdown="span">[OPTIONAL] Filter in-skill products by whether or not they are associated to a skill. 
-[ENUM]: ASSOCIATED_WITH_SKILL,NO_SKILL_ASSOCIATIONS.</dd>
+[ENUM]: ASSOCIATED_WITH_SKILL,NO_SKILL_ASSOCIATIONS,NOT_ASSOCIATED_WITH_SKILL.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1106,12 +1105,12 @@ Get the current user permissions about Alexa hosted skill features.
 
 `get-alexa-hosted-skill-user-permissions` command format:
 
-`$ ask smapi get-alexa-hosted-skill-user-permissions <--permission <permission>> [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi get-alexa-hosted-skill-user-permissions <--hosted-skill-permission-type <hosted-skill-permission-type>> [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
 <dl>
-    <dt>--permission <permission></dt>
+    <dt>--hosted-skill-permission-type <hosted-skill-permission-type></dt>
     <dd markdown="span">[REQUIRED] The permission of a hosted skill feature that customer needs to check.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
@@ -1246,7 +1245,7 @@ List all testers in a beta test for the given Alexa skill.
     <dt>--next-token <next-token></dt>
     <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
     <dt>--max-results <max-results></dt>
-    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 500 results, you can add this parameter to your request. The response might contain fewer results than maxResults, but it will never contain more.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -1900,7 +1899,7 @@ Create a new version of catalog entity for the given catalogId.
 
 `create-interaction-model-catalog-version` command format:
 
-`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> [--source-type <source-type>] [--source-url <source-url>] [--description <description>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi create-interaction-model-catalog-version <-c|--catalog-id <catalog-id>> <--source-type <source-type>> <--source-url <source-url>> [--description <description>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -1908,9 +1907,9 @@ Create a new version of catalog entity for the given catalogId.
     <dt>-c,--catalog-id <catalog-id></dt>
     <dd markdown="span">[REQUIRED] Provides a unique identifier of the catalog.</dd>
     <dt>--source-type <source-type></dt>
-    <dd markdown="span">[OPTIONAL] Type of catalog.</dd>
+    <dd markdown="span">[REQUIRED] Type of catalog.</dd>
     <dt>--source-url <source-url></dt>
-    <dd markdown="span">[OPTIONAL] Url to the catalog reference.</dd>
+    <dd markdown="span">[REQUIRED] Url to the catalog reference.</dd>
     <dt>--description <description></dt>
     <dd markdown="span">[OPTIONAL] Description string for specific catalog version.</dd>
     <dt>-p, --profile <profile></dt>
@@ -2528,7 +2527,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
 [ENUM]: NA,EU,FE.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
-    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax) 
 [JSON]: Option value is JSON string, accepts JSON file by using either:
 - "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
 - "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
@@ -2770,11 +2769,11 @@ status of skill publishing.
 
 ### simulate-skill
 
-This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled  by the user of this API. Concurrent requests per user is currently not supported.
+This is an asynchronous API that simulates a skill execution in the Alexa eco-system given an utterance text of what a customer would say to Alexa. A successful response will contain a header with the location of the simulation resource. In cases where requests to this API results in an error, the response will contain an error code and a description of the problem. The skill being simulated must belong to and be enabled by the user of this API. Concurrent requests per user is currently not supported.
 
 `simulate-skill` command format:
 
-`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [-p| --profile <profile>] [--full-response] [--debug]`
+`$ ask smapi simulate-skill <-s|--skill-id <skill-id>> [-g|--stage <stage>] <--input-content <input-content>> <--device-locale <device-locale>> [--session-mode <session-mode>] [--simulation-type <simulation-type>] [-p| --profile <profile>] [--full-response] [--debug]`
 
 **Options**
 
@@ -2790,6 +2789,10 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
     <dt>--session-mode <session-mode></dt>
     <dd markdown="span">[OPTIONAL] Indicate the session mode of the current simulation is using. 
 [ENUM]: DEFAULT,FORCE_NEW_SESSION.</dd>
+    <dt>--simulation-type <simulation-type></dt>
+    <dd markdown="span">[OPTIONAL] String indicating the type of simulation request. Possible values are "DEFAULT" and "NFI_ISOLATED_SIMULATION". "DEFAULT" is used to proceed with the default skill simulation behavior. "NFI_ISOLATED_SIMULATION" is used to test the NFI(Name Free Interaction)
+ enabled skills in isolation. 
+[ENUM]: DEFAULT,NFI_ISOLATED_SIMULATION.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
     <dt>--full-response</dt>
@@ -4227,7 +4230,7 @@ This is a synchronous API that invokes the Lambda or third party HTTPS endpoint 
     <dd markdown="span">[REQUIRED] Region of endpoint to be called. 
 [ENUM]: NA,EU,FE,default.</dd>
     <dt>--skill-request-body <skill-request-body></dt>
-    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://tiny.amazon.com/1h8keglep/deveamazpublsolualexalexdocs) 
+    <dd markdown="span">[REQUIRED] ASK request body schema as defined in the public facing documentation (https://developer.amazon.com/en-US/docs/alexa/custom-skills/request-and-response-json-reference.html#request-body-syntax) 
 [JSON]: Option value is JSON string, accepts JSON file by using either:
 - "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
 - "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
