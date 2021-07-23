@@ -46,7 +46,7 @@ Running the init command without hosted-skill-id option will,
 * Prompts user whether to use AWS CloudFormation to deploy Lambda.
 	* If user selects `Y`, `cfn-deployer` will be used as the deployer type.
 	* Else, `lambda-deployer` will be used.
-* Prompts user for Lambda runtime. **Defaults to `nodejs10.x`**.
+* Prompts user for Lambda runtime. **Defaults to `nodejs12.x`**.
 * Prompts user for the entry point of Lambda function. **Defaults to `index.handler`**.
 
 * Once all the values have been entered by the user, CLI displays the resources configuration that has been entered by the user, and prompts user to confirm if the configuration looks correct.

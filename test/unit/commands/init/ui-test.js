@@ -272,7 +272,7 @@ describe('Commands init - UI test', () => {
                 validateInquirerConfig(inquirer.prompt.args[0][0][1], {
                     message: 'Lambda runtime: ',
                     type: 'input',
-                    default: 'nodejs10.x',
+                    default: 'nodejs12.x',
                 });
                 validateInquirerConfig(inquirer.prompt.args[0][0][2], {
                     message: 'Lambda handler: ',
