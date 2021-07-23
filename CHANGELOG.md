@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.24.0](https://github.com/alexa/ask-cli/compare/v2.23.0...v2.24.0) (2021-07-23)
+
+
+### Features
+
+* bump ask-smapi-model to v1.17.0 ([16e098f](https://github.com/alexa/ask-cli/commit/16e098fb7e423eb98b22cf84b0915fec265048ff))
+* change Alexa Hosted skill runtime to Node.js 12 ([#402](https://github.com/alexa/ask-cli/issues/402)) ([831d7e1](https://github.com/alexa/ask-cli/commit/831d7e1f64e94de223608c42c46f6e4984544ab0))
+
 ## [2.23.0](https://github.com/alexa/ask-cli/compare/v2.22.4...v2.23.0) (2021-07-21)
 
 
