@@ -504,7 +504,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should get alexa hosted skill user permissions', async () => {
-        const args = [subCmd, 'get-alexa-hosted-skill-user-permissions', '--permission', 'somePermission'];
+        const args = [subCmd, 'get-alexa-hosted-skill-user-permissions', '--hosted-skill-permission-type', 'somePermission'];
         addCoveredCommand(args);
         const result = await run(cmd, args, options);
         expect(result).be.an('object');
@@ -631,7 +631,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should create interaction model catalog version', async () => {
-        const args = [subCmd, 'create-interaction-model-catalog-version', '-c', catalogId, '--description', 'someDescription'];
+        const args = [subCmd, 'create-interaction-model-catalog-version', '-c', catalogId, '--sourceType', 'catalogType', '--sourceUrl', 'catalogUrl', '--description', 'someDescription'];
         addCoveredCommand(args);
         const result = await run(cmd, args, { ...options, parse: false });
         expect(result).include('Command executed successfully!');
