@@ -631,7 +631,7 @@ parallel('smapi command test', () => {
     });
 
     it('| should create interaction model catalog version', async () => {
-        const args = [subCmd, 'create-interaction-model-catalog-version', '-c', catalogId, '--sourceType', 'catalogType', '--sourceUrl', 'catalogUrl', '--description', 'someDescription'];
+        const args = [subCmd, 'create-interaction-model-catalog-version', '-c', catalogId, '--source-type', 'catalogType', '--source-url', 'catalogUrl', '--description', 'someDescription'];
         addCoveredCommand(args);
         const result = await run(cmd, args, { ...options, parse: false });
         expect(result).include('Command executed successfully!');
