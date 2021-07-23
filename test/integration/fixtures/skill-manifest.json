@@ -9,13 +9,13 @@
        },
        "apis":{
           "custom":{
- 
+
           }
        }
     },
     "hosting":{
        "alexaHosted":{
-          "runtime":"NODE_10_X"
+          "runtime":"NODE_12_X"
        }
     }
  }
