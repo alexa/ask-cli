@@ -240,7 +240,7 @@ describe('Commands Dialog test - command class test', () => {
                     expect(config.replay).equal(DIALOG_REPLAY_FILE_JSON_PATH);
                     expect(config.skillId).equal('amzn1.ask.skill.1234567890');
                     expect(config.stage).equal('development');
-                    expect(config.simulationType).equal('DEFAULT');
+                    expect(config.simulationType).equal(undefined);
                     expect(config.userInputs).deep.equal(['hello', 'world']);
                     done()
                 });
