@@ -22,7 +22,7 @@ Users will be asked the following questions to create a new skill:
 
 * Prompts user for `programming language`
 	* Select programming language
-	* AHS supports Python3.7 and Node10.x
+	* AHS supports Python3.7 and Node12.x
 * Prompts user for a method to host your skill's backend resources
 	* Select `Alexa-hosted skills`
 * Prompts user for `skill name`
