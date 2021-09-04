@@ -24,7 +24,6 @@
           "template": "./awsStacks/skill-infra.yaml",
           "targetEndpoint": [
             "custom",
-            "events",
             "smartHome"
           ],
           "regionOverrides": {
