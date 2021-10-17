@@ -92,6 +92,7 @@ describe('Builtins test - cfn-deployer index test', () => {
             };
             deployOptions = {
                 profile,
+                doDebug: false,
                 alexaRegion,
                 skillId: 'some skill id',
                 skillName: 'cf-skill',
@@ -128,6 +129,7 @@ describe('Builtins test - cfn-deployer index test', () => {
                 }
             };
             getAWSProfileStub = sinon.stub(awsUtil, 'getAWSProfile').returns('some profile');
+            sinon.stub(Helper.prototype, 'getSkillCredentials').resolves({ clientId: 'id', clientSecret: 'secret' });
             sinon.stub(Helper.prototype, 'createS3BucketIfNotExists').resolves();
             sinon.stub(Helper.prototype, 'enableS3BucketVersioningIfNotEnabled').resolves();
             sinon.stub(Helper.prototype, 'uploadToS3').resolves({ VersionId: s3VersionId });
@@ -135,6 +137,17 @@ describe('Builtins test - cfn-deployer index test', () => {
             waitForStackDeployStub = sinon.stub(Helper.prototype, 'waitForStackDeploy');
         });
         it('should deploy', (done) => {
+            waitForStackDeployStub.resolves({ endpointUri, stackInfo: { Outputs: [] } });
+
+            Deployer.invoke({}, deployOptions, (err, result) => {
+                expect(err).eql(null);
+                expect(result).eql(expectedOutput);
+                done();
+            });
+        });
+
+        it('should deploy with skill credentials', (done) => {
+            sinon.stub(fs, 'readFileSync').withArgs(templatePath, 'utf-8').returns('SkillClientId SkillClientSecret');
             waitForStackDeployStub.resolves({ endpointUri, stackInfo: { Outputs: [] } });
 
             Deployer.invoke({}, deployOptions, (err, result) => {
