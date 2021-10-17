@@ -51,6 +51,8 @@ In the `infrastructure/cfn-deployer/skill-stack.yaml` CloudFormation template fi
 1. Declare the parameters
 2. Modify the template to use the parameters
 
+Optionally, when including `SkillClientId` and `SkillClientSecret` parameters, the value of these parameters is directly retrieved from SMAPI based on the skill ID.
+
 Here you can see we are declaring `ProjectName`, `Environment`, `UserTableName` as string types.
 
 In the CF template we:
@@ -68,6 +70,10 @@ In the CF template we:
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   SkillId:
+    Type: String
+  SkillClientId:
+    Type: String
+  SkillClientSecret:
     Type: String
   LambdaRuntime:
     Type: String
