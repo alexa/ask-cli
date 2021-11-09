@@ -559,7 +559,6 @@ describe('Controller test - hosted skill controller test', () => {
     describe('# test class method: updateAskSystemScripts', () => {
         let hostedSkillController;
         const TEST_ERROR = 'error';
-        const TEST_FOLDER_NAME = 'folderName';
         beforeEach(() => {
             hostedSkillController = new HostedSkillController(TEST_CONFIGURATION);
         });

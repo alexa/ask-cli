@@ -112,7 +112,7 @@ This deployer is managing Lambda services by using the default settings to creat
   2. Deploy IAM Role. If IAM Role ARN is not present, create a default IAM Role with [basic Lambda role](https://github.com/alexa/ask-cli/blob/master/lib/utils/constants.js#L142). Else verify if the IAM Role ARN is a valid one.
   3. Deploy Lambda function.
      * If Lambda ARN is not present, the deployer will create the Lambda function by adding the event trigger.
-     * If Lambda ARN is present, the deloyer will update the Lambda function's code and configuration.
+     * If Lambda ARN is present, the deployer will update the Lambda function's code and configuration.
 
 Supported parameters in `userConfig`:
 * awsRegion
@@ -126,13 +126,13 @@ This deployer is implementing the idea of **Code as Infra** by using AWS CloudFo
 
 * bootstrap
   1. Resolve CLI's default AWS region by following the AWS definition for the [default region provider chain](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-region-selection.html#automatically-determine-the-aws-region-from-the-environment). Update this AWS default region into the `skillInfrastructure.userConfig`.
-  2. Download the default AWS CloudFormation template if no template file found. The default template creates invokable AWS Lambda function with very barebone services.
+  2. Download the default AWS CloudFormation template if no template file found. The default template creates invocable AWS Lambda function with very barebone services.
 * invoke
   1. Validate the state in front to make sure all the necessary information has been collected.
   2. Upload artifacts to S3 which is the code for Lambda function. The S3 bucket is version-enabled, so the version change is the main trigger that update the CloudFormation stack.
      * The S3 bucket is created in each AWS region where the stack gets deployed. This is because Lambda requires the code artifacts to exist in the same region. Here is the [bucket naming convention](https://github.com/alexa/ask-cli/blob/542ff381a349fe4e96bb94d5f194162b0be0d005/lib/clients/aws-client/s3-client.js#L262-L268).
      * If the `lastDeployHash` doesn't change for the source skillCode, the deployer will not upload the code to S3, and thus no new version will be created.
-  3. Based on the presense of stackId, the deployer will create/update AWS CloudFormation stack for each region. The creation of a stack usually takes some time as new infrastructures are being provisioned; while the update of a stack resource is much faster as the update is executed based on the changeset. Please read more about the [CloudFormation update](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html).
+  3. Based on the presence of stackId, the deployer will create/update AWS CloudFormation stack for each region. The creation of a stack usually takes some time as new infrastructures are being provisioned; while the update of a stack resource is much faster as the update is executed based on the changeset. Please read more about the [CloudFormation update](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html).
   4. Polling stack status and real-time display the latest event message. Provide detailed resource-level reason message if any deployment of resource fails.
 
 Supported parameters in `userConfig`:

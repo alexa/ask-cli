@@ -214,7 +214,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| return error when dominInfo is not provided', () => {
+        it('| return error when domainInfo is not provided', () => {
             // setup
             Manifest.getInstance().setApis({});
             const expectedErrMessage = 'Skill information is not valid. Please make sure "apis" field in the skill.json is not empty.';
@@ -222,7 +222,7 @@ describe('Controller test - skill metadata controller test', () => {
             expect(() => skillMetaController.validateDomain()).to.throw(CliError, expectedErrMessage);
         });
 
-        it('| return error when dominInfo contains more than one domain', () => {
+        it('| return error when domainInfo contains more than one domain', () => {
             // setup
             Manifest.getInstance().setApis({
                 custom: {},
@@ -288,7 +288,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| when skill is not enabled, can callback error when enalbe skill fail', (done) => {
+        it('| when skill is not enabled, can callback error when enable skill fail', (done) => {
             // setup
             const getEnablementResponse = {
                 statusCode: 404,
@@ -393,7 +393,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| import skill pacakge faild, expect callback with error', (done) => {
+        it('| import skill package failed, expect callback with error', (done) => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(SkillMetadataController.prototype, 'uploadSkillPackage').callsArgWith(1, null, {
@@ -412,7 +412,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| poll skill pacakge faild, expect callback with error', (done) => {
+        it('| poll skill package failed, expect callback with error', (done) => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(SkillMetadataController.prototype, 'uploadSkillPackage').callsArgWith(1, null, {
@@ -432,7 +432,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| poll skill pacakge replies with non succeed result, expect callback with error response', (done) => {
+        it('| poll skill package replies with non succeed result, expect callback with error response', (done) => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(SkillMetadataController.prototype, 'uploadSkillPackage').callsArgWith(1, null, {
@@ -454,7 +454,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
         });
 
-        it('| poll skill pacakge finished, expect callback skillId', (done) => {
+        it('| poll skill package finished, expect callback skillId', (done) => {
             // setup
             ResourcesConfig.getInstance().setSkillMetaSrc(TEST_PROFILE, TEST_PATH);
             sinon.stub(SkillMetadataController.prototype, 'uploadSkillPackage').callsArgWith(1, null, {
