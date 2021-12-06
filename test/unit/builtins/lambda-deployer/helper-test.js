@@ -331,6 +331,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         const TEST_REVISION_ID = 'revision_id';
         const TEST_UPDATED_REVISION_ID = 'revision id';
         const TEST_FUNCTION_ARN = 'lambda function arn';
+        const TEST_FUNCTION_STATE = 'Active';
+        const TEST_LAST_UPDATE_STATUS = 'Successful';
         const TEST_RUNTIME = 'runtime';
         const TEST_HANDLER = 'handler';
         const TEST_CREATE_OPTIONS = {
@@ -358,10 +360,22 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             zipFilePath: TEST_ZIP_FILE_PATH,
             userConfig: { awsRegion: TEST_AWS_REGION, runtime: TEST_RUNTIME, handler: TEST_HANDLER },
             deployState: { lambda: {
-                arn: TEST_LAMBDA_ARN,
+                arn: TEST_FUNCTION_ARN,
                 lastModified: TEST_LAST_MODIFIED,
                 revisionId: TEST_REVISION_ID
             } }
+        };
+        const TEST_CREATE_DATA = {
+            FunctionArn: TEST_FUNCTION_ARN
+        };
+        const TEST_GET_DATA = {
+            Configuration: {
+                FunctionArn: TEST_FUNCTION_ARN,
+                LastModified: TEST_LAST_MODIFIED,
+                RevisionId: TEST_UPDATED_REVISION_ID,
+                State: TEST_FUNCTION_STATE,
+                LastUpdateStatus: TEST_LAST_UPDATE_STATUS
+            }
         };
 
         beforeEach(() => {
@@ -391,19 +405,15 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         + ' add Alexa Permission fails, expect an error return.', (done) => {
             // setup
             const RETRY_MESSAGE = 'The role defined for the function cannot be assumed by Lambda.';
-            const TEST_CREATE_FUNCTION_ERROR = {
-                message: RETRY_MESSAGE
-            };
-            const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN
-            };
+            const TEST_CREATE_FUNCTION_ERROR = { message: RETRY_MESSAGE };
             const TEST_ADD_PERMISSION_ERROR = 'addAlexaPermissionByDomain error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             const stubTestFunc = sinon.stub(LambdaClient.prototype, 'createLambdaFunction');
             stubTestFunc.onCall(0).callsArgWith(7, TEST_CREATE_FUNCTION_ERROR);
-            stubTestFunc.onCall(1).callsArgWith(7, null, TEST_LAMBDA_DATA);
+            stubTestFunc.onCall(1).callsArgWith(7, null, TEST_CREATE_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
                 // verify
@@ -412,16 +422,30 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             });
         }).timeout(10000);
 
+        it('| no Lambda found, create Lambda function passes but not in active state, expect an error return.', (done) => {
+            // setup
+            const TEST_GET_STATE_DATA = { Configuration: { State: 'Inactive' } };
+            const TEST_GET_STATE_ERROR = `Function [${TEST_FUNCTION_ARN}] state is Inactive.`;
+            sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
+            sinon.stub(aws, 'Lambda');
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_CREATE_DATA);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_STATE_DATA);
+            // call
+            helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
+                // verify
+                expect(err).equal(TEST_GET_STATE_ERROR);
+                done();
+            });
+        });
+
         it('| no Lambda found, create Lambda function passes, add Alexa Permission fails, expect an error return.', (done) => {
             // setup
-            const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN
-            };
             const TEST_ADD_PERMISSION_ERROR = 'addAlexaPermissionByDomain error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_CREATE_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
                 // verify
@@ -433,15 +457,14 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         it('| no Lambda found, create Lambda function and add Alexa Permission pass, get Function revisionId fails,'
         + ' expect an error return.', (done) => {
             // setup
-            const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN
-            };
             const TEST_REVISION_ID_ERROR = 'getFunctionRevisionId error';
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_CREATE_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
-            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, TEST_REVISION_ID_ERROR);
+            const stubTestFunc = sinon.stub(LambdaClient.prototype, 'getFunction');
+            stubTestFunc.onCall(0).callsArgWith(1, null, TEST_GET_DATA);
+            stubTestFunc.onCall(1).callsArgWith(1, TEST_REVISION_ID_ERROR);
 
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
@@ -454,20 +477,11 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         it('| no Lambda found, create Lambda function, add Alexa Permission for target domains'
         + ' and get Function revisionId pass, expect Lambda data return.', (done) => {
             // setup
-            const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN,
-                LastModified: TEST_LAST_MODIFIED
-            };
-            const TEST_GET_FUNCTION_RESPONSE = {
-                Configuration: {
-                    RevisionId: TEST_UPDATED_REVISION_ID,
-                }
-            };
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_CREATE_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
-            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
 
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
@@ -488,21 +502,12 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         it('| no Lambda found, create Lambda function, add Alexa Permission for domains from skill '
         + 'manifest and get Function revisionId pass, expect Lambda data return.', (done) => {
             // setup
-            const TEST_LAMBDA_DATA = {
-                FunctionArn: TEST_FUNCTION_ARN,
-                LastModified: TEST_LAST_MODIFIED
-            };
-            const TEST_GET_FUNCTION_RESPONSE = {
-                Configuration: {
-                    RevisionId: TEST_UPDATED_REVISION_ID,
-                }
-            };
             sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
             sinon.stub(aws, 'Lambda');
             sinon.stub(ResourcesConfig.prototype, 'getTargetEndpoints').returns([]);
-            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_LAMBDA_DATA);
+            sinon.stub(LambdaClient.prototype, 'createLambdaFunction').callsArgWith(7, null, TEST_CREATE_DATA);
             sinon.stub(LambdaClient.prototype, 'addAlexaPermissionByDomain').callsArgWith(3, null);
-            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_FUNCTION_RESPONSE);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
 
             // call
             helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
@@ -534,6 +539,22 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             });
         });
 
+        it('| an existing Lambda found, update function code passes but last update status failed, expect an error return.', (done) => {
+            // setup
+            const TEST_GET_UPDATE_STATUS_DATA = { Configuration: { State: 'Active', LastUpdateStatus: 'Failed' } };
+            const TEST_GET_UPDATE_STATUS_ERROR = `Function [${TEST_FUNCTION_ARN}] last update status is Failed.`;
+            sinon.stub(fs, 'readFileSync').withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
+            sinon.stub(aws, 'Lambda');
+            sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_UPDATE_STATUS_DATA);
+            // call
+            helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
+                // verify
+                expect(err).equal(TEST_GET_UPDATE_STATUS_ERROR);
+                done();
+            });
+        });
+
         it('| an existing Lambda found, update function code passes, update function configuration fails, expect an error return.', (done) => {
             // setup
             const TEST_UPDATE_CONGIF_ERROR = 'updateFunctionConfiguration error';
@@ -541,6 +562,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(aws, 'Lambda');
             sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
             sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(4, TEST_UPDATE_CONGIF_ERROR);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
                 // verify
@@ -549,9 +571,9 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
                     isAllStepSuccess: false,
                     isCodeDeployed: true,
                     lambdaResponse: {
-                        arn: undefined,
-                        lastModified: undefined,
-                        revisionId: TEST_REVISION_ID
+                        arn: TEST_FUNCTION_ARN,
+                        lastModified: TEST_LAST_MODIFIED,
+                        revisionId: TEST_UPDATED_REVISION_ID
                     },
                     resultMessage: TEST_UPDATE_CONGIF_ERROR
                 });
@@ -562,7 +584,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         it('| an existing Lambda found, update function code and update function configuration pass, expect updated lambda data return.', (done) => {
             // setup
             const TEST_UPDATE_CONFIG_DATA = {
-                FunctionArn: TEST_LAMBDA_ARN,
+                FunctionArn: TEST_FUNCTION_ARN,
                 LastModified: TEST_LAST_MODIFIED,
                 RevisionId: TEST_REVISION_ID
             };
@@ -570,6 +592,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             sinon.stub(aws, 'Lambda');
             sinon.stub(LambdaClient.prototype, 'updateFunctionCode').callsArgWith(3, null, { RevisionId: TEST_REVISION_ID });
             sinon.stub(LambdaClient.prototype, 'updateFunctionConfiguration').callsArgWith(4, null, TEST_UPDATE_CONFIG_DATA);
+            sinon.stub(LambdaClient.prototype, 'getFunction').callsArgWith(1, null, TEST_GET_DATA);
             // call
             helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, data) => {
                 // verify
@@ -577,9 +600,9 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
                     isAllStepSuccess: true,
                     isCodeDeployed: true,
                     lambdaResponse: {
-                        arn: TEST_LAMBDA_ARN,
+                        arn: TEST_FUNCTION_ARN,
                         lastModified: TEST_LAST_MODIFIED,
-                        revisionId: TEST_REVISION_ID
+                        revisionId: TEST_UPDATED_REVISION_ID
                     }
                 });
                 done();
