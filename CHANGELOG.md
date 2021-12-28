@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.25.0](https://github.com/alexa/ask-cli/compare/v2.24.1...v2.25.0) (2021-12-28)
+
+
+### Features
+
+* add cfn deployer skill credentials parameters ([ec9a605](https://github.com/alexa/ask-cli/commit/ec9a605ee15b84d9c8d0b95784e3e1c48b81ae01))
+* add new env var ASK_SKIP_LOCATION_HEADER_HINT to avoid sending non-err message to stderr ([#406](https://github.com/alexa/ask-cli/issues/406)) ([b6fb7b9](https://github.com/alexa/ask-cli/commit/b6fb7b95a42fcdf00c3003a70ba8742c7fd8ebb5))
+
+
+### Bug Fixes
+
+* update build flows python minor version regexp ([b08093b](https://github.com/alexa/ask-cli/commit/b08093b375ac7748e1c528f2d3af87c33c15648c))
+* use npm registry https url ([315716a](https://github.com/alexa/ask-cli/commit/315716a2f81e40fa50e3ab6576d86d4bc857bcbb))
+* use proper npm install quiet flag ([732a771](https://github.com/alexa/ask-cli/commit/732a771cb9d96f0af5b46f1b6b7d22221cfaa11c))
+* wait for lambda function state updates ([879377b](https://github.com/alexa/ask-cli/commit/879377b4abcc3bed152fc8e4cfcdd3d09e0b9ffe))
+
 ### [2.24.1](https://github.com/alexa/ask-cli/compare/v2.24.0...v2.24.1) (2021-08-03)
 
 
