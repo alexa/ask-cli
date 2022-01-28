@@ -1249,6 +1249,90 @@ parallel('smapi command test', () => {
         expect(result).be.an('object');
     });
 
+    it('| should list all experiments associated with this skill id', async () => {
+        const args = [subCmd, 'list-experiments', '-s', skillId,];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should create a new experiment for a skill', async () => {
+        const args = [subCmd, 'create-experiment', '-s', skillId, '--experiment-name', 1, '--experiment-description', 2, '--experiment-type', 3, '--experiment-planned-duration', 4, ' --experiment-exposure-percentage', 5, '--experiment-metric-configurations', 6];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should update an existing experiment for a skill', async () => {
+        const args = [subCmd, 'update-experiment', '-s', skillId, '--experiment-id', 1, '--experiment-description', 2, '--experiment-planned-duration', 3, '--experiment-exposure-percentage', 4, ' --experiment-metric-configurations', 5];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should retrieve an existing experiment for a skill', async () => {
+        const args = [subCmd, 'get-experiment', '-s', skillId, '--experiment-id', 1];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should delete an existing experiment for a skill', async () => {
+        const args = [subCmd, 'delete-experiment', '-s', skillId, '--experiment-id', 1];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should update the exposure of an experiment that is in CREATED or RUNNING state.', async () => {
+        const args = [subCmd, 'update-exposure', '-s', skillId, '--experiment-id', 1, '--exposure-percentage', 2];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should retrieve the current user\'s customer treatment override for an existing A/B Test experiment', async () => {
+        const args = [subCmd, 'get-customer-treatment-override', '-s', skillId, '--experiment-id', 1];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should add the requesting user\'s customer treatment override to an existing experiment.', async () => {
+        const args = [subCmd, 'set-customer-treatment-override', '-s', skillId, '--experiment-id', 1, '--treatment-id', 2];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should retrieve the current state of the experiment.', async () => {
+        const args = [subCmd, 'get-experiment-state', '-s', skillId, '--experiment-id', 1];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should request an action on the experiment to move it to the targetState.', async () => {
+        const args = [subCmd, 'manage-experiment-state', '-s', skillId, '--experiment-id', 1, '--target-state', 2];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should get a list of all metric snapshots associated with this experiment id.', async () => {
+        const args = [subCmd, 'list-experiment-metric-snapshots', '-s', skillId, '--experiment-id', 1];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
+    it('| should gets a list of all metric data associated with this experiment\'s metric snapshot.', async () => {
+        const args = [subCmd, 'get-experiment-metric-snapshot', '-s', skillId, '--experiment-id', 1, '--metric-snapshot-id', 2];
+        addCoveredCommand(args);
+        const result = await run(cmd, args, options);
+        expect(result).be.an('object');
+    });
+
     after(() => {
         mockSmapiServer.kill();
         mockLwaServer.kill();
