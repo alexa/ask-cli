@@ -11,7 +11,7 @@ const accountLinkingRequest = require('@test/integration/fixtures/account-linkin
 const interactionModel = require('@test/integration/fixtures/interaction-model.json');
 const annotationSet = require('@test/integration/fixtures/annotation-set.json');
 const jobDefinition = require('@test/integration/fixtures/job-definition.json');
-const experimentMetricConfigurations = require('@test/integration/fixtures/experiment-metric-configuration.json')
+const experimentMetricConfigurationModel = require('@test/integration/fixtures/experiment-metric-configuration.json')
 
 parallel.limit(8);
 
@@ -77,7 +77,7 @@ parallel('smapi command test', () => {
     const experimentPlannedDuration = 'P3W';
     const experimentExposurePercentage = '10';
     const targetState = 'ENABLED';
-    const experimentMetricConfigurations = JSON.stringify(experimentMetricConfigurations);
+    const experimentMetricConfigurations = JSON.stringify(experimentMetricConfigurationModel);
     const updateNluAnnotationSetAnnotationsRequest = JSON.stringify(annotationSet);
     const interactionModelJobDefinition = JSON.stringify(jobDefinition);
     const annotations = JSON.stringify(
@@ -1270,15 +1270,15 @@ parallel('smapi command test', () => {
     it('| should create a new experiment for a skill', async () => {
         const args = [subCmd, 'create-experiment', '-s', skillId, '--experiment-name', experimentName, '--experiment-description', experimentDescription, '--experiment-type', experimentType, '--experiment-planned-duration', experimentPlannedDuration, '--experiment-exposure-percentage', experimentExposurePercentage, '--experiment-metric-configurations', experimentMetricConfigurations];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should update an existing experiment for a skill', async () => {
         const args = [subCmd, 'update-experiment', '-s', skillId, '--experiment-id', experimentId, '--experiment-description', experimentDescription, '--experiment-planned-duration', experimentPlannedDuration, '--experiment-exposure-percentage', experimentExposurePercentage, '--experiment-metric-configurations', experimentMetricConfigurations];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args,  { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should retrieve an existing experiment for a skill', async () => {
@@ -1291,15 +1291,15 @@ parallel('smapi command test', () => {
     it('| should delete an existing experiment for a skill', async () => {
         const args = [subCmd, 'delete-experiment', '-s', skillId, '--experiment-id', experimentId];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args, { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should update the exposure of an experiment that is in CREATED or RUNNING state.', async () => {
         const args = [subCmd, 'update-exposure', '-s', skillId, '--experiment-id', experimentId, '--exposure-percentage', experimentExposurePercentage];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args,  { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should retrieve the current user\'s customer treatment override for an existing A/B Test experiment', async () => {
@@ -1312,8 +1312,8 @@ parallel('smapi command test', () => {
     it('| should add the requesting user\'s customer treatment override to an existing experiment.', async () => {
         const args = [subCmd, 'set-customer-treatment-override', '-s', skillId, '--experiment-id', experimentId, '--treatment-id', treatmentId];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args,  { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should retrieve the current state of the experiment.', async () => {
@@ -1326,8 +1326,8 @@ parallel('smapi command test', () => {
     it('| should request an action on the experiment to move it to the targetState.', async () => {
         const args = [subCmd, 'manage-experiment-state', '-s', skillId, '--experiment-id', experimentId, '--target-state', targetState];
         addCoveredCommand(args);
-        const result = await run(cmd, args, options);
-        expect(result).be.an('object');
+        const result = await run(cmd, args,  { ...options, parse: false });
+        expect(result).include('Command executed successfully!');
     });
 
     it('| should get a list of all metric snapshots associated with this experiment id.', async () => {
