@@ -16,6 +16,8 @@ describe('Commands deploy test - helper test', () => {
     const TEST_IGNORE_HASH = false;
     const TEST_VENDOR_ID = 'vendor';
     const TEST_DO_DEBUG = false;
+    const TEST_SHOULD_DEREFERENCE_SYMLINKS = true;
+    const TEST_NO_NPM_INSTALL = false;
     const TEST_OPTIONS = { profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH };
 
     describe('# test helper method - confirmProfile', () => {
@@ -97,7 +99,12 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillCodeController.prototype, 'buildCode').callsArgWith(0, 'error');
             // call
-            helper.buildSkillCode(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.buildSkillCode({
+                profile: TEST_PROFILE,
+                doDebug: TEST_DO_DEBUG,
+                shouldDereferenceSymlinks: TEST_SHOULD_DEREFERENCE_SYMLINKS,
+                noNPMInstall: TEST_NO_NPM_INSTALL
+            }, (err, res) => {
                 // verify
                 expect(err).equal('error');
                 expect(res).equal(undefined);
@@ -109,7 +116,12 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillCodeController.prototype, 'buildCode').callsArgWith(0);
             // call
-            helper.buildSkillCode(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.buildSkillCode({
+                profile: TEST_PROFILE,
+                doDebug: TEST_DO_DEBUG,
+                shouldDereferenceSymlinks: TEST_SHOULD_DEREFERENCE_SYMLINKS,
+                noNPMInstall: TEST_NO_NPM_INSTALL
+            }, (err, res) => {
                 // verify
                 expect(err).equal(null);
                 expect(res).equal(undefined);
@@ -127,7 +139,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillInfrastructureController.prototype, 'deployInfrastructure').callsArgWith(0, 'error');
             // call
-            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, TEST_IGNORE_HASH, (err, res) => {
+            helper.deploySkillInfrastructure({ profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH }, (err, res) => {
                 // verify
                 expect(err).equal('error');
                 expect(res).equal(undefined);
@@ -139,7 +151,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillInfrastructureController.prototype, 'deployInfrastructure').callsArgWith(0);
             // call
-            helper.deploySkillInfrastructure(TEST_PROFILE, TEST_DO_DEBUG, TEST_IGNORE_HASH, (err, res) => {
+            helper.deploySkillInfrastructure({ profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH }, (err, res) => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);
@@ -165,7 +177,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').callsArgWith(0, 'error');
             // call
-            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err) => {
+            helper.enableSkill({ profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG }, (err) => {
                 expect(err).equal('error');
                 expect(infoStub.args[0][0]).equal('\n==================== Enable Skill ====================');
                 done();
@@ -176,7 +188,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillMetadataController.prototype, 'validateDomain').throws('test-error');
             // call
-            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err) => {
+            helper.enableSkill({ profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG }, (err) => {
                 expect(err.name).equal('test-error');
                 expect(infoStub.args[0][0]).equal('\n==================== Enable Skill ====================');
                 done();
@@ -187,7 +199,7 @@ describe('Commands deploy test - helper test', () => {
             // setup
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').callsArgWith(0);
             // call
-            helper.enableSkill(TEST_PROFILE, TEST_DO_DEBUG, (err, res) => {
+            helper.enableSkill({ profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG }, (err, res) => {
                 // verify
                 expect(err).equal(undefined);
                 expect(res).equal(undefined);

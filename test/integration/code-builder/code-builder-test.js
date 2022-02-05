@@ -125,6 +125,53 @@ describe('code builder test', () => {
         });
     });
 
+    it('| should dereference symlinked files into build', (done) => {
+        const sourceDirName = 'with-symlinks';
+        const config = setUpTempFolder(sourceDirName);
+        const sourceDir = path.join(fixturesDirectory, sourceDirName);
+        sinon.stub(process, 'cwd').returns(sourceDir);
+
+        config.shouldDereferenceSymlinks = true;
+        const codeBuilder = new CodeBuilder(config);
+
+        codeBuilder.execute((err, res) => {
+            expect(err).eql(null);
+            expect(res).eql(undefined);
+            expect(fs.lstatSync(path.join(config.build.folder, 'symlinked-folder', 'symlinked-file.js')).isSymbolicLink()).eq(false);
+            done();
+        });
+    });
+
+    it('| should NOT dereference symlinked files into build', (done) => {
+        const sourceDirName = 'with-symlinks';
+        const config = setUpTempFolder(sourceDirName);
+        const sourceDir = path.join(fixturesDirectory, sourceDirName);
+        sinon.stub(process, 'cwd').returns(sourceDir);
+
+        const codeBuilder = new CodeBuilder(config);
+
+        codeBuilder.execute((err, res) => {
+            expect(err).eql(null);
+            expect(res).eql(undefined);
+            expect(fs.lstatSync(path.join(config.build.folder, 'symlinked-folder', 'symlinked-file.js')).isSymbolicLink()).eq(false);
+            done();
+        });
+    });
+
+    it('| should NOT run NPM install if this is an NPM project and noNPMInstall is true', (done) => {
+        const config = setUpTempFolder('nodejs-npm');
+
+        config.noNPMInstall = true;
+        const codeBuilder = new CodeBuilder(config);
+
+        codeBuilder.execute((err, res) => {
+            expect(err).eql(null);
+            expect(res).eql(undefined);
+            expect(() => fs.statSync(path.join(config.build.folder, 'node_modules'))).to.throw();
+            done();
+        });
+    });
+
     afterEach(() => {
         sinon.restore();
     });

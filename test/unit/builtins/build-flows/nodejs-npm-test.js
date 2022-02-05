@@ -27,7 +27,7 @@ describe('NodeJsNpmBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('npm install --production --quite');
+                expect(execStub.args[0][0]).eql('npm install --production --quiet');
                 expect(createZipStub.callCount).eql(1);
                 done();
             });
