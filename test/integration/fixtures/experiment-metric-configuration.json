@@ -1,0 +1,12 @@
+[
+    {
+        "name": "CPDR",
+        "metricTypes": ["KEY"],
+        "expectedChange": "DECREASE"
+    },
+    {
+        "name": "ISP_SALES_QUANTITY",
+        "metricTypes": ["KEY"],
+        "expectedChange": "INCREASE"
+    }
+]

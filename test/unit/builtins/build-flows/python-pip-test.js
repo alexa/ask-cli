@@ -23,7 +23,7 @@ describe('PythonPipBuildFlow test', () => {
         debugStub = sinon.stub(AbstractBuildFlow.prototype, 'debug');
         createZipStub = sinon.stub(AbstractBuildFlow.prototype, 'createZip').yields();
         platformStub = sinon.stub(process, 'platform').value('darwin');
-        checkVersionStub = sinon.stub(childProcess, 'spawnSync').returns({ output: ', Python 3.7.2 ,' });
+        checkVersionStub = sinon.stub(childProcess, 'spawnSync').returns({ output: ', Python 3.10.1 ,' });
     });
     describe('# inspect correctness of execute', () => {
         it('| should execute commands', (done) => {

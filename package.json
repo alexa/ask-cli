@@ -1,6 +1,6 @@
 {
   "name": "ask-cli",
-  "version": "2.24.1",
+  "version": "2.26.0",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
     "ask": "bin/ask.js"
@@ -40,7 +40,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "ask-smapi-model": "~1.17.0",
+    "ask-smapi-model": "~1.19.1",
     "ask-smapi-sdk": "^1.2.0",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",

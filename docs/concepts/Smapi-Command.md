@@ -64,6 +64,30 @@ Provides a number of subcommands that map 1:1 to the underlying API operations i
 | Creates/Updates the enablement for given skillId/stage and customerId (retrieved from Auth token). | [set-skill-enablement](#set-skill-enablement) |
 | Deletes the enablement for given skillId/stage and customerId (retrieved from Auth token). | [delete-skill-enablement](#delete-skill-enablement) |
 | This is a synchronous API that profiles an utterance against interaction model. | [profile-nlu](#profile-nlu) |
+| Gets a list of all experiments associated with this skill id. | [list-experiments](#list-experiments) |
+| Create a new experiment for a skill. | [create-experiment](#create-experiment) |
+| Updates an existing experiment for a skill.
+Can only be called while the experiment is in CREATED state. | [update-experiment](#update-experiment) |
+| Retrieves an existing experiment for a skill. | [get-experiment](#get-experiment) |
+| Deletes an existing experiment for a skill. | [delete-experiment](#delete-experiment) |
+| Updates the exposure of an experiment that is in CREATED or RUNNING state. | [update-exposure](#update-exposure) |
+| Retrieves the current user's customer treatment override for an existing A/B Test experiment.
+The current user must be under the same skill vendor of the requested skill id to have access to the resource. | [get-customer-treatment-override](#get-customer-treatment-override) |
+| Adds the requesting user's customer treatment override to an existing experiment.
+The current user must be under the same skill vendor of the requested skill id to have access to the resource.
+Only the current user can attempt to add the override of their own customer account to an experiment.
+Can only be called before the experiment is enabled. | [set-customer-treatment-override](#set-customer-treatment-override) |
+| Retrieves the current state of the experiment. | [get-experiment-state](#get-experiment-state) |
+| Requests an action on the experiment to move it to the targetState.
+Acceptable targetState values are:
+
+* `ENABLED`: Experiment configurations are deployed and customer overrides are enabled. Actual experiment has not started yet but customers with overrides set to T1 will see the T1 behavior. Initial state must be CREATED.
+* `RUNNING`: Starts the experiment with the configured exposure. Skill customers selected to be in the experiment will start contributing to the metric data. Initial state must be CREATED or ENABLED.
+* `STOPPED`: Stops the experiment by removing the experiment configurations. All customer treatment overrides are removed. Initial state must be ENABLED or RUNNING.
+             Final state for ENDPOINT_BASED experiments, no further action is taken by ASK. It is expected that the skill builder updates their endpoint code to make T1 the default live behavior. | [manage-experiment-state](#manage-experiment-state) |
+| Gets a list of all metric snapshots associated with this experiment id. The metric snapshots
+represent the metric data available for a time range. | [list-experiment-metric-snapshots](#list-experiment-metric-snapshots) |
+| Gets a list of all metric data associated with this experiment's metric snapshot. | [get-experiment-metric-snapshot](#get-experiment-metric-snapshot) |
 |  | [get-utterance-data](#get-utterance-data) |
 | Gets the `InteractionModel` for the skill in the given stage.
 The path params 
@@ -1498,6 +1522,354 @@ This is a synchronous API that profiles an utterance against interaction model.
     <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
 </dl>
 
+### list-experiments
+
+Gets a list of all experiments associated with this skill id.
+
+`list-experiments` command format:
+
+`$ ask smapi list-experiments <-s|--skill-id <skill-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### create-experiment
+
+Create a new experiment for a skill.
+
+`create-experiment` command format:
+
+`$ ask smapi create-experiment <-s|--skill-id <skill-id>> <--experiment-name <experiment-name>> <--experiment-description <experiment-description>> <--experiment-type <experiment-type>> <--experiment-planned-duration <experiment-planned-duration>> <--experiment-exposure-percentage <experiment-exposure-percentage>> <--experiment-metric-configurations <experiment-metric-configurations>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-name <experiment-name></dt>
+    <dd markdown="span">[REQUIRED] Name that developer assigns to the experiment for easier identification.</dd>
+    <dt>--experiment-description <experiment-description></dt>
+    <dd markdown="span">[REQUIRED] Hypothesis that developer provides to describe the experiment's purpose.</dd>
+    <dt>--experiment-type <experiment-type></dt>
+    <dd markdown="span">[REQUIRED] Type of the experiment which directly affects the skill version used for T1.
+C will always point to the skill version in the skill's LIVE stage regardless of experiment type. 
+[ENUM]: ENDPOINT_BASED.</dd>
+    <dt>--experiment-planned-duration <experiment-planned-duration></dt>
+    <dd markdown="span">[REQUIRED] The number of weeks the skill builder intends to run the experiment.
+Used for documentation purposes and by metric platform as a reference.
+Does not impact experiment execution.
+Format uses ISO-8601 representation of duration. (Example: 4 weeks = "P4W").</dd>
+    <dt>--experiment-exposure-percentage <experiment-exposure-percentage></dt>
+    <dd markdown="span">[REQUIRED] The percentage of unique customers that will be part of the skill experiment while the experiment is running.</dd>
+    <dt>--experiment-metric-configurations <experiment-metric-configurations></dt>
+    <dd markdown="span">[REQUIRED] List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction. 
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### update-experiment
+
+Updates an existing experiment for a skill.
+Can only be called while the experiment is in CREATED state.
+
+`update-experiment` command format:
+
+`$ ask smapi update-experiment <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> <--experiment-description <experiment-description>> <--experiment-planned-duration <experiment-planned-duration>> <--experiment-exposure-percentage <experiment-exposure-percentage>> <--experiment-metric-configurations <experiment-metric-configurations>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--experiment-description <experiment-description></dt>
+    <dd markdown="span">[REQUIRED] Hypothesis that developer provides to describe the experiment's purpose.</dd>
+    <dt>--experiment-planned-duration <experiment-planned-duration></dt>
+    <dd markdown="span">[REQUIRED] The number of weeks the skill builder intends to run the experiment.
+Used for documentation purposes and by metric platform as a reference.
+Does not impact experiment execution.
+Format uses ISO-8601 representation of duration. (Example: 4 weeks = "P4W").</dd>
+    <dt>--experiment-exposure-percentage <experiment-exposure-percentage></dt>
+    <dd markdown="span">[REQUIRED] The percentage of unique customers that will be part of the skill experiment while the experiment is running.</dd>
+    <dt>--experiment-metric-configurations <experiment-metric-configurations></dt>
+    <dd markdown="span">[REQUIRED] List of metric configurations that determine which metrics are key/guardrail metrics and the expected metric direction. 
+[JSON]: Option value is JSON string, accepts JSON file by using either:
+- "$(cat {filePath})", use "type" command to replace "cat" command in Windows.
+- "file:{filePath}", file descriptor with either absolute or relative file path.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-experiment
+
+Retrieves an existing experiment for a skill.
+
+`get-experiment` command format:
+
+`$ ask smapi get-experiment <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### delete-experiment
+
+Deletes an existing experiment for a skill.
+
+`delete-experiment` command format:
+
+`$ ask smapi delete-experiment <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### update-exposure
+
+Updates the exposure of an experiment that is in CREATED or RUNNING state.
+
+`update-exposure` command format:
+
+`$ ask smapi update-exposure <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> <--exposure-percentage <exposure-percentage>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--exposure-percentage <exposure-percentage></dt>
+    <dd markdown="span">[REQUIRED] The percentage of unique customers that will be part of the skill experiment while the experiment is running.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-customer-treatment-override
+
+Retrieves the current user&#39;s customer treatment override for an existing A&#x2F;B Test experiment.
+The current user must be under the same skill vendor of the requested skill id to have access to the resource.
+
+`get-customer-treatment-override` command format:
+
+`$ ask smapi get-customer-treatment-override <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### set-customer-treatment-override
+
+Adds the requesting user&#39;s customer treatment override to an existing experiment.
+The current user must be under the same skill vendor of the requested skill id to have access to the resource.
+Only the current user can attempt to add the override of their own customer account to an experiment.
+Can only be called before the experiment is enabled.
+
+`set-customer-treatment-override` command format:
+
+`$ ask smapi set-customer-treatment-override <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> <--treatment-id <treatment-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--treatment-id <treatment-id></dt>
+    <dd markdown="span">[REQUIRED] Treatment identifier for an experiment.
+
+* `C` - Control. The treatment that defines the existing skill experience.
+* `T1` - Treatment 1. The threatment that defines the experimental skill experience. 
+[ENUM]: C,T1.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-experiment-state
+
+Retrieves the current state of the experiment.
+
+`get-experiment-state` command format:
+
+`$ ask smapi get-experiment-state <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### manage-experiment-state
+
+Requests an action on the experiment to move it to the targetState.
+Acceptable targetState values are:
+
+* &#x60;ENABLED&#x60;: Experiment configurations are deployed and customer overrides are enabled. Actual experiment has not started yet but customers with overrides set to T1 will see the T1 behavior. Initial state must be CREATED.
+* &#x60;RUNNING&#x60;: Starts the experiment with the configured exposure. Skill customers selected to be in the experiment will start contributing to the metric data. Initial state must be CREATED or ENABLED.
+* &#x60;STOPPED&#x60;: Stops the experiment by removing the experiment configurations. All customer treatment overrides are removed. Initial state must be ENABLED or RUNNING.
+             Final state for ENDPOINT_BASED experiments, no further action is taken by ASK. It is expected that the skill builder updates their endpoint code to make T1 the default live behavior.
+
+`manage-experiment-state` command format:
+
+`$ ask smapi manage-experiment-state <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> <--target-state <target-state>> [--stopped-reason <stopped-reason>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--target-state <target-state></dt>
+    <dd markdown="span">[REQUIRED] These states are used to perform a transition action (Pilot, Start, Stop, Conclude) on the experiment.
+
+* `ENABLED`: Target state for the 'Pilot' action. Experiment configurations are deployed and customer overrides are activated. Actual experiment has not started yet.
+* `RUNNING`: Target state for the 'Start' action. Experiment has started with the configured exposure. Skill customers selected within the exposure are contributing to the metric data.
+* `STOPPED`: Target state for the 'Stop' action. Experiment has stopped and all experiment configurations have been removed. All customers will see the C behavior by default. 
+[ENUM]: ENABLED,RUNNING,STOPPED.</dd>
+    <dt>--stopped-reason <stopped-reason></dt>
+    <dd markdown="span">[OPTIONAL] The reason indicating why an exerpiment was stopped. If none is chosen then default to DEVELOPER_REQUEST.
+Only used when putting experiment into STOPPED state. 
+[ENUM]: EXPERIMENT_SUCCESS,EXPERIMENT_ISSUE.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### list-experiment-metric-snapshots
+
+Gets a list of all metric snapshots associated with this experiment id. The metric snapshots
+represent the metric data available for a time range.
+
+`list-experiment-metric-snapshots` command format:
+
+`$ ask smapi list-experiment-metric-snapshots <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> [--next-token <next-token>] [--max-results <max-results>] [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--next-token <next-token></dt>
+    <dd markdown="span">[OPTIONAL] When response to this API call is truncated (that is, isTruncated response element value is true), the response also includes the nextToken element. The value of nextToken can be used in the next request as the continuation-token to list the next set of objects. The continuation token is an opaque value that Skill Management API understands. Token has expiry of 24 hours.</dd>
+    <dt>--max-results <max-results></dt>
+    <dd markdown="span">[OPTIONAL] Sets the maximum number of results returned in the response body. If you want to retrieve fewer than upper limit of 50 results, you can add this parameter to your request. maxResults should not exceed the upper limit. The response might contain fewer results than maxResults, but it will never contain more. If there are additional results that satisfy the search criteria, but these results were not returned, the response contains isTruncated = true.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
+### get-experiment-metric-snapshot
+
+Gets a list of all metric data associated with this experiment&#39;s metric snapshot.
+
+`get-experiment-metric-snapshot` command format:
+
+`$ ask smapi get-experiment-metric-snapshot <-s|--skill-id <skill-id>> <--experiment-id <experiment-id>> <--metric-snapshot-id <metric-snapshot-id>> [-p| --profile <profile>] [--full-response] [--debug]`
+
+**Options**
+
+<dl>
+    <dt>-s,--skill-id <skill-id></dt>
+    <dd markdown="span">[REQUIRED] The skill ID.</dd>
+    <dt>--experiment-id <experiment-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment in a skill.</dd>
+    <dt>--metric-snapshot-id <metric-snapshot-id></dt>
+    <dd markdown="span">[REQUIRED] Identifies the experiment metric snapshot in a skill experiment. The metric snapshot
+represents metric data for a date range.</dd>
+    <dt>-p, --profile <profile></dt>
+    <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>
+    <dt>--full-response</dt>
+    <dd markdown="span">Returns body, headers and status code of the response as one object.</dd>
+    <dt>--debug</dt>
+    <dd markdown="span">Enables the ASK CLI to show debug messages in the output of the command.</dd>
+</dl>
+
 ### get-utterance-data
 
 
@@ -2790,8 +3162,7 @@ This is an asynchronous API that simulates a skill execution in the Alexa eco-sy
     <dd markdown="span">[OPTIONAL] Indicate the session mode of the current simulation is using. 
 [ENUM]: DEFAULT,FORCE_NEW_SESSION.</dd>
     <dt>--simulation-type <simulation-type></dt>
-    <dd markdown="span">[OPTIONAL] String indicating the type of simulation request. Possible values are "DEFAULT" and "NFI_ISOLATED_SIMULATION". "DEFAULT" is used to proceed with the default skill simulation behavior. "NFI_ISOLATED_SIMULATION" is used to test the NFI(Name Free Interaction)
- enabled skills in isolation. 
+    <dd markdown="span">[OPTIONAL] String indicating the type of simulation request. Possible values are "DEFAULT" and "NFI_ISOLATED_SIMULATION". "NFI_ISOLATED_SIMULATION" is used to test the NFI(Name Free Interaction) enabled skills in isolation. This field is reserved for testing Name Free Interactions(NFI). Skills that are eligible to add NFI can only use this field. To learn more, visit https://developer.amazon.com/en-US/docs/alexa/custom-skills/understand-name-free-interaction-for-custom-skills.html 
 [ENUM]: DEFAULT,NFI_ISOLATED_SIMULATION.</dd>
     <dt>-p, --profile <profile></dt>
     <dd markdown="span">Provides the ASK CLI profile to use. When you don't include this option, ASK CLI uses the default profile.</dd>

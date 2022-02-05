@@ -7,6 +7,8 @@ const CliCFNDeployerError = require('@src/exceptions/cli-cfn-deployer-error');
 const Helper = require('@src/builtins/deploy-delegates/cfn-deployer/helper');
 
 describe('Builtins test - cfn-deployer helper test', () => {
+    const profile = 'default';
+    const doDebug = false;
     const awsProfile = 'test';
     const awsRegion = 'test-region';
     const bucketName = 'some-bucket';
@@ -65,7 +67,7 @@ describe('Builtins test - cfn-deployer helper test', () => {
             updateStatus: updateStatusStub
         };
 
-        helper = new Helper(awsProfile, awsRegion, reporter);
+        helper = new Helper(profile, doDebug, awsProfile, awsRegion, reporter);
         sinon.stub(helper, 'sleep').resolves();
     });
 
@@ -81,7 +83,7 @@ describe('Builtins test - cfn-deployer helper test', () => {
     it('should create s3 bucket when the bucket does not exist in us-east-1', async () => {
         headBucketStub.returns({ promise: sinon.stub().rejects() });
 
-        helper = new Helper(awsProfile, 'us-east-1', reporter);
+        helper = new Helper(profile, doDebug, awsProfile, 'us-east-1', reporter);
         await helper.createS3BucketIfNotExists(bucketName);
 
         expect(headBucketStub.callCount).eq(1);
@@ -210,6 +212,25 @@ describe('Builtins test - cfn-deployer helper test', () => {
         return helper.waitForStackDeploy(stackId).catch(err => {
             expect(err).instanceOf(CliCFNDeployerError);
             expect(err.message).includes('We could not find details for deploy error');
+        });
+    });
+
+    it('should get skill credentials successful', async () => {
+        const credentials = { clientId: 'id', clientSecret: 'secret' };
+        const response = { body: { skillMessagingCredentials: credentials } };
+        sinon.stub(helper.smapiClient.skill, 'getSkillCredentials').yields(null, response);
+
+        const result = await helper.getSkillCredentials('skill-id');
+
+        expect(result).eql(credentials);
+    });
+
+    it('should get skill credentials failure', async () => {
+        const error = 'some failure reason';
+        sinon.stub(helper.smapiClient.skill, 'getSkillCredentials').yields(error);
+
+        return helper.getSkillCredentials('skill-id').catch(err => {
+          expect(err).eql(error);
         });
     });
 
