@@ -187,6 +187,42 @@ describe('Controller test - Authorization controller test', () => {
                 });
             });
 
+            it('| non-environment profile, env refresh token', (done) => {
+                process.env.ASK_REFRESH_TOKEN = TEST_ENV_REFRESH_TOKEN;
+                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, null, VALID_ACCESS_TOKEN);
+                httpClient.request.callsArgWith(3, null, TEST_RESPONSE);
+
+                authorizationController.tokenRefreshAndRead(TEST_PROFILE, (error, accessToken) => {
+                    expect(error).eq(null);
+                    expect(accessToken).to.deep.eq(TEST_RESPONSE.body.access_token);
+                    done();
+                });
+            });
+
+            it('| non-environment profile, valid env access token', (done) => {
+                process.env.ASK_ACCESS_TOKEN = TEST_ENV_ACCESS_TOKEN;
+                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, null, VALID_ACCESS_TOKEN);
+                httpClient.request.callsArgWith(3, null, TEST_RESPONSE);
+
+                authorizationController.tokenRefreshAndRead(TEST_PROFILE, (error, accessToken) => {
+                    expect(error).eq(null);
+                    expect(accessToken).to.deep.eq(TEST_ENV_ACCESS_TOKEN);
+                    done();
+                });
+            });
+
+            it('| non-environment profile, invalid env refresh token', (done) => {
+                process.env.ASK_ACCESS_TOKEN = TEST_ENV_ACCESS_TOKEN;
+                sinon.stub(AuthorizationController.prototype, '_getRefreshTokenAndUpdateConfig').callsArgWith(2, null, VALID_ACCESS_TOKEN);
+                httpClient.request.callsArgWith(3, null, TEST_RESPONSE);
+
+                authorizationController.tokenRefreshAndRead(TEST_PROFILE, (error, accessToken) => {
+                    expect(error).eq(null);
+                    expect(accessToken).to.deep.eq(TEST_ENV_ACCESS_TOKEN);
+                    done();
+                });
+            });
+
             it('| environment profile, invalid refresh token, valid access token', (done) => {
                 // setup
                 process.env.ASK_ACCESS_TOKEN = TEST_ENV_ACCESS_TOKEN;
