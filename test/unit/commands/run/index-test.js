@@ -167,7 +167,7 @@ describe('Commands Run test - command class test', () => {
                 instance._getSkillRunFlow('fooSkillId', 'fooProfile', CONSTANTS.ALEXA.REGION.DEFAULT, false, false,
                     false, CONSTANTS.RUN.DEFAULT_DEBUG_PORT, 'fooToken', CONSTANTS.ALEXA.REGION.NA, (err) => {
                         // verify
-                        expect(err.message).eq('Cannot read property \'includes\' of undefined');
+                        expect(err.message).eq(`Failed to obtain runtime from userConfig in project resource file ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
                         done();
                     });
             });
@@ -239,7 +239,7 @@ describe('Commands Run test - command class test', () => {
         it('| getAlexaHostedSkillMetadata empty response', (done) => {
             sinon.stub(smapiClient.skill.alexaHosted, 'getAlexaHostedSkillMetadata').yields(null, {});
             instance._getHostedSkillRuntime(smapiClient, 'fooSkillId', (err) => {
-                expect(err.message).eq('Cannot read property \'alexaHosted\' of undefined');
+                expect(err.message).eq('Received an empty response body from getAlexaHostedSkillMetadata');
                 done();
             });
         });
