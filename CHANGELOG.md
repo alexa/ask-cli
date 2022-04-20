@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.27.0](https://github.com/alexa/ask-cli/compare/v2.26.0...v2.27.0) (2022-04-20)
+
+
+### Features
+
+* bump ask-smapi-model to v1.19.7 and update Github Actions ([#431](https://github.com/alexa/ask-cli/issues/431)) ([bd990d7](https://github.com/alexa/ask-cli/commit/bd990d7db70c06a2d8d6dbb55afdbe1f67fbfb9e))
+
 ## [2.26.0](https://github.com/alexa/ask-cli/compare/v2.25.0...v2.26.0) (2022-01-28)
 
 
