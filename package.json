@@ -40,7 +40,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
-    "ask-smapi-model": "~1.19.1",
+    "ask-smapi-model": "~1.19.7",
     "ask-smapi-sdk": "^1.2.0",
     "async": "^2.1.5",
     "aws-profile-handler": "2.0.3",
@@ -58,6 +58,7 @@
     "listr": "^0.14.3",
     "module-alias": "^2.1.0",
     "mustache": "^4.0.1",
+    "nodemon": "^2.0.4",
     "open": "^7.0.3",
     "ora": "^3.4.0",
     "portscanner": "^2.1.1",
@@ -69,8 +70,7 @@
     "simple-git": "^1.82.0",
     "tmp": "^0.1.0",
     "uuid": "^3.4.0",
-    "valid-url": "^1.0.9",
-    "nodemon": "^2.0.4"
+    "valid-url": "^1.0.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
