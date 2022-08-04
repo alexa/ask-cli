@@ -26,51 +26,66 @@ The `SkillInfrastructure` represents the configuration on how to deploy skill's 
 Please check the `skillInfrastructure` field in the example below for its representation in project config.
 
 # Project Config For Resources Management
-Below shows the example how CLI tracks user's config and the deployment states, using `@ask-cli/cfn-deployer` deployer as an example. 
+Below shows the example how CLI tracks user's config and the deployment states, using `@ask-cli/cfn-deployer` deployer as an example.
 
 ### ask-resources.json (this file is up to configure!)
 ```jsonc
 {
-  // each config is tracked specific to each profile
-  "profiles": {
-    "{profileName}": {
+  "profiles": {                             
+    "{profileName}": {                      // profile name-specific config
 
-      // skillMetadata tracks Alexa skill's build-time JSONs
-      "skillMetadata": {
-        "src": "./skill-package",         // the source folder for skill package (either relative path or absolute path)
-        "lastDeployHash": "{hashResult}"  // CLI internal data to optimize the deploy flow
+      "skillMetadata": {                    // Alexa skill metadata to deploy
+        "src": "./skill-package",           // source folder for skill package (either relative path or absolute path)
+        "lastDeployHash": "{hashResult}"    // CLI internal data to optimize the deploy flow
       },
 
-      // code owns Alexa skill code to be built and hosted
-      "code": {
+      "code": {                             // Alexa skill code to be built and hosted
         "default": {                        // region for the codebase
-          "src": "./code"                   // the source folder for codebase
+          "src": "./code"                   // source folder for codebase
         },
-        "{supportedRegion}": {              // the supported regions are always in sync with Alexa, which includes default, NA, EU, FE.
+        "{supportedRegion}": {              // supported regions are always in sync with Alexa, which includes default, NA, EU, FE.
           "src": "./code"
         }
       },
 
-      // skillInfrastructure tracks the settings and states for skill api-endpoint's deployer
-      "skillInfrastructure": {
-        "type": "@ask-cli/cfn-deployer",    // selected deployer to invoke when deploy
-        "userConfig": {                     // tracks settings for the deployer, deployer-specific
+      "skillInfrastructure": {              // Alexa skill infrastructure to deploy
+        "type": "@ask-cli/cfn-deployer",    // deployer type
+        "userConfig": {                     // deployer-specific config
           "awsRegion": "{aws-region}",
           "runtime": "{lambdaRuntime}",
           "handler": "{lambdaHandler}",
           "templatePath": "stack.yaml",
-          "targetEndpoint": ["alexaForBusiness", "custom", "flashBriefing", "health", "householdList", "music", "smartHome", "video", "events"], // set the targetEndpoint with the value(s) from https://developer.amazon.com/en-US/docs/alexa/smapi/skill-manifest.html#api-enumeration or events to target events endpoint. Defaults to api endpoints from skill manifest if not specified.
-          "artifactsS3": { // custom s3 configuration to upload skill build artifact (zip, jar,etc)
-            "bucketName": "{bucketName}", // custom bucket name to store artifacts
-            "bucketKey": "{bucketKey.zip}" // custom bucket object key
+          "targetEndpoint": [               // defaults to api names from skill manifest if not specified
+            "alexaForBusiness",
+            "custom",
+            "flashBriefing",
+            "health",
+            "householdList",
+            "music",
+            "smartHome",
+            "video"
+          ],
+          "skillEvents": {                  // skill events support for deployer endpoint(s)
+            "publications": [               // list of proactive event names
+              "{proactiveEventName1}",
+              ...
+            ],
+            "subscriptions": [              // list of skill/list event names
+              "{skillOrListEventName1}",
+              ...
+            ]
+          },
+          "artifactsS3": {                  // custom s3 configuration to upload skill build artifact (zip, jar, etc)
+            "bucketName": "{bucketName}",   // custom bucket name to store artifacts
+            "bucketKey": "{bucketKey.zip}"  // custom bucket object key
           },
           "cfn": {
-            "parameters": { // additional parameters to pass to the CloudFormation
+            "parameters": {                 // additional parameters to pass to the CloudFormation
               "SomeUserParameter1Key": "some value",
               "SomeUserParameter2Key": "another value"
             },
-            "capabilities": [ // additional capabilities to pass to the CloudFormation. CAPABILITY_IAM capability is always passed by default.
-              "CAPABILITY_NAMED_IAM"
+            "capabilities": [               // additional capabilities to pass to the CloudFormation
+              "CAPABILITY_NAMED_IAM"        // CAPABILITY_IAM is always passed by default
             ]
           }
         }
@@ -95,21 +110,21 @@ Below shows the example how CLI tracks user's config and the deployment states, 
         "default": {
           "lastDeployHash": "{hashResult}"  // CLI internal data to optimize the deploy flow
         },
-        "{supportedRegion}": {              // the supported regions are always in sync with Alexa, which includes default, NA, EU, FE.
+        "{supportedRegion}": {              // supported regions are always in sync with Alexa, which includes default, NA, EU, FE.
           "lastDeployHash": "{hashResult}"
         }
       },
 
       "skillInfrastructure": {
-        "@ask-cli/cfn-deployer": {          // selected deployer to invoke when deploy
-          "deployState": {                  // tracks states for the deployer to continuously deploy, deployer-specific
+        "@ask-cli/cfn-deployer": {          // deployer type
+          "deployState": {                  // deployer-specific states
             "default": {
               "s3": {
                 "bucket": "{bucket}",
                 "key": "{key}",
                 "objectVersion": "{version}"
               },
-              "outputs": [ // outputs from the CloudFormation deploy
+              "outputs": [                  // outputs from the CloudFormation deploy
                 {
                   "OutputKey": "{outputKey}",
                   "OutputValue": "{outputValue}",
@@ -121,8 +136,7 @@ Below shows the example how CLI tracks user's config and the deployment states, 
             "{supportedRegion}": { ... }
           }
         }
-      },
-      
+      }
     }
   }
 }

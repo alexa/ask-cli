@@ -387,16 +387,19 @@ describe('Controller test - skill infrastructure controller test', () => {
             sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
-            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
             const setApisEndpointByDomainRegionSpy = sinon.spy(Manifest.prototype, 'setApisEndpointByDomainRegion');
-
+            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
+            const setEventsPublicationsSpy = sinon.spy(Manifest.prototype, 'setEventsPublications');
+            const setEventsSubscriptionsSpy = sinon.spy(Manifest.prototype, 'setEventsSubscriptions');
             // call
             skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                expect(setEventsEndpointByRegionSpy.callCount).eq(2);
                 expect(setApisEndpointByDomainRegionSpy.callCount).eq(4);
+                expect(setEventsEndpointByRegionSpy.callCount).eq(0);
+                expect(setEventsPublicationsSpy.callCount).eq(0);
+                expect(setEventsSubscriptionsSpy.callCount).eq(0);
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal('TEST_HASH');
@@ -404,24 +407,62 @@ describe('Controller test - skill infrastructure controller test', () => {
             });
         });
 
-        it('| manifest update correctly without events endpoint, expect success message and new hash set', (done) => {
+        it('| manifest update correctly with events endpoint only, expect success message and new hash set', (done) => {
             // setup
             sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
-            sinon.stub(ResourcesConfig.prototype, 'getTargetEndpoints').returns(['custom', 'smartHome']);
-            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
+            sinon.stub(ResourcesConfig.prototype, 'getSkillEvents').returns({});
             const setApisEndpointByDomainRegionSpy = sinon.spy(Manifest.prototype, 'setApisEndpointByDomainRegion');
-
+            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
+            const setEventsPublicationsSpy = sinon.spy(Manifest.prototype, 'setEventsPublications');
+            const setEventsSubscriptionsSpy = sinon.spy(Manifest.prototype, 'setEventsSubscriptions');
             // call
             skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                expect(setEventsEndpointByRegionSpy.callCount).eq(0);
                 expect(setApisEndpointByDomainRegionSpy.callCount).eq(4);
+                expect(setEventsEndpointByRegionSpy.callCount).eq(2);
+                expect(setEventsPublicationsSpy.callCount).eq(0);
+                expect(setEventsSubscriptionsSpy.callCount).eq(0);
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getEventsEndpointByRegion('default').url).equal('TEST_URL1');
+                expect(Manifest.getInstance().getEventsEndpointByRegion('EU').url).equal('TEST_URL2');
+                expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal('TEST_HASH');
+                done();
+            });
+        });
+
+        it('| manifest update correctly with events properties, expect success message and new hash set', (done) => {
+            // setup
+            sinon.stub(AuthorizationController.prototype, 'tokenRefreshAndRead').callsArgWith(1);
+            sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
+            sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
+            sinon.stub(ResourcesConfig.prototype, 'getSkillEvents').returns({
+              publications: ["TEST_PUBLICATION"],
+              subscriptions: ["TEST_SUBSCRIPTION"]
+            });
+            const setApisEndpointByDomainRegionSpy = sinon.spy(Manifest.prototype, 'setApisEndpointByDomainRegion');
+            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
+            const setEventsPublicationsSpy = sinon.spy(Manifest.prototype, 'setEventsPublications');
+            const setEventsSubscriptionsSpy = sinon.spy(Manifest.prototype, 'setEventsSubscriptions');
+            // call
+            skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal(undefined);
+                expect(setApisEndpointByDomainRegionSpy.callCount).eq(4);
+                expect(setEventsEndpointByRegionSpy.callCount).eq(2);
+                expect(setEventsPublicationsSpy.callCount).eq(1);
+                expect(setEventsSubscriptionsSpy.callCount).eq(1);
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
+                expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getEventsEndpointByRegion('default').url).equal('TEST_URL1');
+                expect(Manifest.getInstance().getEventsEndpointByRegion('EU').url).equal('TEST_URL2');
+                expect(Manifest.getInstance().getEventsPublications()[0].eventName).equal('TEST_PUBLICATION');
+                expect(Manifest.getInstance().getEventsSubscriptions()[0].eventName).equal('TEST_SUBSCRIPTION');
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal('TEST_HASH');
                 done();
             });
@@ -433,16 +474,19 @@ describe('Controller test - skill infrastructure controller test', () => {
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, 'TEST_HASH');
             sinon.stub(SkillInfrastructureController.prototype, '_ensureSkillManifestGotUpdated').callsArgWith(0);
             sinon.stub(ResourcesConfig.prototype, 'getTargetEndpoints').returns([]);
-            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
             const setApisEndpointByDomainRegionSpy = sinon.spy(Manifest.prototype, 'setApisEndpointByDomainRegion');
-
+            const setEventsEndpointByRegionSpy = sinon.spy(Manifest.prototype, 'setEventsEndpointByRegion');
+            const setEventsPublicationsSpy = sinon.spy(Manifest.prototype, 'setEventsPublications');
+            const setEventsSubscriptionsSpy = sinon.spy(Manifest.prototype, 'setEventsSubscriptions');
             // call
             skillInfraController.updateSkillManifestWithDeployResult(TEST_DEPLOY_RESULT, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal(undefined);
-                expect(setEventsEndpointByRegionSpy.callCount).eq(0);
                 expect(setApisEndpointByDomainRegionSpy.callCount).eq(2);
+                expect(setEventsEndpointByRegionSpy.callCount).eq(0);
+                expect(setEventsPublicationsSpy.callCount).eq(0);
+                expect(setEventsSubscriptionsSpy.callCount).eq(0);
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'default').url).equal('TEST_URL1');
                 expect(Manifest.getInstance().getApisEndpointByDomainRegion('custom', 'EU').url).equal('TEST_URL2');
                 expect(ResourcesConfig.getInstance().getSkillMetaLastDeployHash(TEST_PROFILE)).equal('TEST_HASH');
