@@ -11,6 +11,7 @@ const Manifest = require('@src/model/manifest');
 const Messenger = require('@src/view/messenger');
 const profileHelper = require('@src/utils/profile-helper');
 const wizardHelper = require('@src/commands/new/wizard-helper');
+const CONSTANTS = require('@src/utils/constants');
 
 describe('Commands new test - command class test', () => {
     const FIXTURE_BASE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model');
@@ -183,7 +184,7 @@ describe('Commands new test - command class test', () => {
                     expect(err).equal(undefined);
                     expect(infoStub.args[0][0]).equal('Please follow the wizard to start your Alexa skill project ->');
                     expect(infoStub.args[1][0]).equal(`Hosted skill provisioning finished. Skill-Id: ${TEST_SKILL_ID}`);
-                    expect(infoStub.args[2][0]).equal(`Please follow the instructions at ${GIT_USAGE_HOSTED_SKILL_DOCUMENTATION}`
+                    expect(infoStub.args[2][0]).equal(`Please follow the instructions at ${CONSTANTS.GIT_USAGE_HOSTED_SKILL_DOCUMENTATION}`
                         + ' to learn more about the usage of "git" for Hosted skill.');
                     expect(warnStub.callCount).equal(0);
                     done();
