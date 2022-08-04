@@ -7,18 +7,16 @@ const LambdaClient = require('@src/clients/aws-client/lambda-client');
 describe('Clients test - lambda client test', () => {
     const TEST_AWS_PROFILE = 'TEST_AWS_PROFILE';
     const TEST_AWS_REGION = 'TEST_AWS_REGION';
-    const TEST_ALEXA_REGION = 'TEST_ALEXA_REGION';
     const TEST_CONFIGURATION = {
         awsProfile: TEST_AWS_PROFILE,
         awsRegion: TEST_AWS_REGION
     };
-    const TEST_SKILL_NAME = 'skill_name';
     const TEST_FUNCTION_ARN = 'function_arn';
     const TEST_SKILL_ID = 'skill_id';
     const TEST_REVISION_ID = 'revision_id';
-    const TEST_ZIPFILD = 'zipfile_path';
-    const TEST_RUNTIME = 'runtime';
-    const TEST_HANDLE = 'handler';
+    const TEST_ZIPFILE = 'zipfile_path';
+    const TEST_FUNCTION_NAME = 'function_name';
+    const TEST_FUNCTION_CONFIG = 'function_config';
 
     afterEach(() => {
         sinon.restore();
@@ -66,8 +64,7 @@ describe('Clients test - lambda client test', () => {
             const TEST_CREATE_FUNCTION_ERR = 'create_function_error';
             sinon.stub(lambdaClient.client, 'createFunction').callsArgWith(1, TEST_CREATE_FUNCTION_ERR);
             // call
-            lambdaClient.createLambdaFunction(TEST_SKILL_NAME, TEST_AWS_PROFILE, TEST_ALEXA_REGION,
-                TEST_IAM_ROLE, TEST_ZIPFILD, TEST_RUNTIME, TEST_HANDLE, (err) => {
+            lambdaClient.createLambdaFunction(TEST_FUNCTION_NAME, TEST_FUNCTION_CONFIG, TEST_IAM_ROLE, TEST_ZIPFILE, (err) => {
                 // verify
                     expect(err).equal(TEST_CREATE_FUNCTION_ERR);
                     done();
@@ -82,8 +79,7 @@ describe('Clients test - lambda client test', () => {
             };
             sinon.stub(lambdaClient.client, 'createFunction').callsArgWith(1, null, TEST_CREATE_FUNCTION_RESPONSE);
             // call
-            lambdaClient.createLambdaFunction(TEST_SKILL_NAME, TEST_AWS_PROFILE, TEST_ALEXA_REGION,
-                TEST_IAM_ROLE, TEST_ZIPFILD, TEST_RUNTIME, TEST_HANDLE, (err, data) => {
+            lambdaClient.createLambdaFunction(TEST_FUNCTION_NAME, TEST_FUNCTION_CONFIG, TEST_IAM_ROLE, TEST_ZIPFILE, (err, data) => {
                 // verify
                     expect(data.FunctionArn).equal(TEST_FUNCTION_ARN);
                     done();
@@ -185,7 +181,7 @@ describe('Clients test - lambda client test', () => {
             const TEST_UPDATE_CODE_ERR = 'UPDATE_CODE_ERROR';
             sinon.stub(lambdaClient.client, 'updateFunctionCode').callsArgWith(1, TEST_UPDATE_CODE_ERR);
             // call
-            lambdaClient.updateFunctionCode(TEST_ZIPFILD, TEST_FUNCTION_ARN, TEST_REVISION_ID, (err) => {
+            lambdaClient.updateFunctionCode(TEST_ZIPFILE, TEST_FUNCTION_ARN, TEST_REVISION_ID, (err) => {
                 // verify
                 expect(err).equal(TEST_UPDATE_CODE_ERR);
                 done();
@@ -200,7 +196,7 @@ describe('Clients test - lambda client test', () => {
             };
             sinon.stub(lambdaClient.client, 'updateFunctionCode').callsArgWith(1, null, TEST_UPDATE_CODE_RESPONSE);
             // call
-            lambdaClient.updateFunctionCode(TEST_ZIPFILD, TEST_FUNCTION_ARN, TEST_REVISION_ID, (err, data) => {
+            lambdaClient.updateFunctionCode(TEST_ZIPFILE, TEST_FUNCTION_ARN, TEST_REVISION_ID, (err, data) => {
                 // verify
                 expect(data.FunctionArn).equal(TEST_FUNCTION_ARN);
                 done();
@@ -215,7 +211,7 @@ describe('Clients test - lambda client test', () => {
             const TEST_UPDATE_CONFIG_ERR = 'UPDATE_CONFIG_ERROR';
             sinon.stub(lambdaClient.client, 'updateFunctionConfiguration').callsArgWith(1, TEST_UPDATE_CONFIG_ERR);
             // call
-            lambdaClient.updateFunctionConfiguration(TEST_FUNCTION_ARN, TEST_RUNTIME, TEST_HANDLE, TEST_REVISION_ID, (err) => {
+            lambdaClient.updateFunctionConfiguration(TEST_FUNCTION_ARN, TEST_FUNCTION_CONFIG, TEST_REVISION_ID, (err) => {
                 // verify
                 expect(err).equal(TEST_UPDATE_CONFIG_ERR);
                 done();
@@ -230,7 +226,7 @@ describe('Clients test - lambda client test', () => {
             };
             sinon.stub(lambdaClient.client, 'updateFunctionConfiguration').callsArgWith(1, null, TEST_UPDATE_CONFIG_RESPONSE);
             // call
-            lambdaClient.updateFunctionConfiguration(TEST_FUNCTION_ARN, TEST_RUNTIME, TEST_HANDLE, TEST_REVISION_ID, (err, data) => {
+            lambdaClient.updateFunctionConfiguration(TEST_FUNCTION_ARN, TEST_FUNCTION_CONFIG, TEST_REVISION_ID, (err, data) => {
                 // verify
                 expect(data.RevisionId).equal(TEST_REVISION_ID);
                 done();
