@@ -193,14 +193,12 @@ describe('Controller test - skill infrastructure controller test', () => {
 
     describe('# test class method: deployInfraToAllRegions', () => {
         const TEST_DD = {};
-        let ddStub;
         const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
 
         beforeEach(() => {
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             new Manifest(FIXTURE_MANIFEST_FILE_PATH);
-            ddStub = sinon.stub();
-            TEST_DD.validateDeployDelegateResponse = ddStub;
+            TEST_DD.validateDeployDelegateResponse = sinon.stub();
         });
 
         afterEach(() => {
@@ -265,7 +263,7 @@ describe('Controller test - skill infrastructure controller test', () => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('error');
-                expect(SkillInfrastructureController.prototype._updateResourcesConfig.args[0][0]).deep.equal({ NA: 'partial' });
+                expect(SkillInfrastructureController.prototype._updateResourcesConfig.args[0][1]).deep.equal({ NA: 'partial' });
                 done();
             });
         });
@@ -274,7 +272,7 @@ describe('Controller test - skill infrastructure controller test', () => {
             // setup
             sinon.stub(MultiTasksView.prototype, 'loadTask');
             sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0);
-            ddStub.throws(new Error('error'));
+            TEST_DD.validateDeployDelegateResponse.throws(new Error('error'));
             // call
             skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
                 // verify
@@ -302,6 +300,52 @@ describe('Controller test - skill infrastructure controller test', () => {
                 expect(MultiTasksView.prototype.loadTask.args[1][2]).equal('NA');
                 expect(MultiTasksView.prototype.loadTask.args[2][1]).equal('Deploy Alexa skill infrastructure for region "EU"');
                 expect(MultiTasksView.prototype.loadTask.args[2][2]).equal('EU');
+                done();
+            });
+        });
+
+        it('| deploy infra to all regions pass with skip, expect no error called back and skipped result updated', (done) => {
+            // setup
+            sinon.stub(SkillInfrastructureController.prototype, '_deployInfraByRegion');
+            sinon.stub(SkillInfrastructureController.prototype, '_updateResourcesConfig');
+            sinon.stub(MultiTasksView.prototype, 'loadTask');
+            sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0, null, {
+              default: 'success',
+              NA: { isDeploySkipped: true, deployRegion: 'default' },
+              EU: 'success'
+            });
+            // call
+            skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
+                // verify
+                expect(res).deep.equal({ default: 'success', NA: 'success', EU: 'success' });
+                expect(err).equal(null);
+                done();
+            });
+        });
+
+        it('| deploy infra to all regions fails partially with skip, expect error called back and skipped result updated', (done) => {
+            // setup
+            sinon.stub(SkillInfrastructureController.prototype, '_deployInfraByRegion');
+            sinon.stub(SkillInfrastructureController.prototype, '_updateResourcesConfig');
+            sinon.stub(MultiTasksView.prototype, 'loadTask');
+            sinon.stub(MultiTasksView.prototype, 'start').callsArgWith(0, {
+                error: 'error',
+                partialResult: {
+                    default: 'partial',
+                    NA: { isDeploySkipped: true, deployRegion: 'default' },
+                    EU: 'partial'
+                }
+            });
+            // call
+            skillInfraController.deployInfraToAllRegions(TEST_DD, (err, res) => {
+                // verify
+                expect(res).equal(undefined);
+                expect(err).equal('error');
+                expect(SkillInfrastructureController.prototype._updateResourcesConfig.args[0][1]).deep.equal({
+                  default: 'partial',
+                  NA: 'partial',
+                  EU: 'partial'
+                });
                 done();
             });
         });
@@ -496,11 +540,10 @@ describe('Controller test - skill infrastructure controller test', () => {
     });
 
     describe('# test class method: _deployInfraByRegion', () => {
-        let ddStub;
-        const TEST_REPORTER = {};
-        const TEST_DD = {};
+        let TEST_REPORTER, TEST_DD;
         const TEST_REGION = 'default';
         const TEST_SKILL_NAME = 'skillName';
+        const TEST_DEPLOY_REGIONS = { TEST_REGION: 'deployRegion' };
         const TEST_HASH = 'hash';
 
         const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
@@ -511,8 +554,10 @@ describe('Controller test - skill infrastructure controller test', () => {
             sinon.stub(fse, 'statSync').returns({
                 isDirectory: () => true
             });
-            ddStub = sinon.stub();
-            TEST_DD.invoke = ddStub;
+            TEST_REPORTER = {};
+            TEST_DD = {
+                invoke: sinon.stub()
+            };
         });
 
         afterEach(() => {
@@ -524,7 +569,7 @@ describe('Controller test - skill infrastructure controller test', () => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, 'hash error');
             // call
-            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('hash error');
@@ -536,13 +581,13 @@ describe('Controller test - skill infrastructure controller test', () => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
             ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(TEST_PROFILE, TEST_REGION, TEST_HASH);
-            ddStub.callsArgWith(2, 'invoke error');
+            TEST_DD.invoke.callsArgWith(2, 'invoke error');
             // call
-            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).equal('invoke error');
-                expect(ddStub.args[0][1].code.isCodeModified).equal(false);
+                expect(TEST_DD.invoke.args[0][1].code.isCodeModified).equal(false);
                 done();
             });
         });
@@ -550,12 +595,12 @@ describe('Controller test - skill infrastructure controller test', () => {
         it('| deploy delegate invoke passes with isCodeDeployed true, expect invoke result called back with currentHash', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, {
+            TEST_DD.invoke.callsArgWith(2, null, {
                 isCodeDeployed: true,
                 isAllStepSuccess: true
             });
             // call
-            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
                 // verify
                 expect(res).deep.equal({
                     isCodeDeployed: true,
@@ -570,14 +615,14 @@ describe('Controller test - skill infrastructure controller test', () => {
         it('| deploy delegate invoke passes, expect invoke result called back', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, {
+            TEST_DD.invoke.callsArgWith(2, null, {
                 isCodeDeployed: false,
                 isAllStepSuccess: true,
                 resultMessage: 'success',
                 deployState: {}
             });
             // call
-            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
                 // verify
                 expect(res).deep.equal({
                     isCodeDeployed: false,
@@ -590,25 +635,54 @@ describe('Controller test - skill infrastructure controller test', () => {
             });
         });
 
+        it('| deploy delegate invoke skipped, expect invoke result called back', (done) => {
+            // setup
+            sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
+            TEST_REPORTER.skipTask = sinon.stub();
+            TEST_DD.invoke.callsArgWith(2, null, {
+                isDeploySkipped: true,
+                resultMessage: 'skipped',
+                deployRegion: 'deployRegion',
+                deployState: {}
+            });
+            // call
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
+                // verify
+                expect(res).deep.equal({
+                    isDeploySkipped: true,
+                    resultMessage: 'skipped',
+                    deployRegion: 'deployRegion',
+                    deployState: {}
+                });
+                expect(err).equal(null);
+                expect(TEST_REPORTER.skipTask.calledOnce).equal(true);
+                expect(TEST_REPORTER.skipTask.args[0][0]).equal('skipped');
+                done();
+            });
+        });
+
         it('| deploy delegate invoke partial succeed with reasons called back, expect invoke result called back along with the message', (done) => {
             // setup
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
-            ddStub.callsArgWith(2, null, {
+            TEST_DD.invoke.callsArgWith(2, null, {
                 isCodeDeployed: true,
                 isAllStepSuccess: false,
                 resultMessage: 'partial fail',
                 deployState: {}
             });
             // call
-            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, (err, res) => {
+            skillInfraController._deployInfraByRegion(TEST_REPORTER, TEST_DD, TEST_REGION, TEST_SKILL_NAME, TEST_DEPLOY_REGIONS, (err, res) => {
                 // verify
                 expect(res).equal(undefined);
                 expect(err).deep.equal({
-                    isCodeDeployed: true,
-                    isAllStepSuccess: false,
-                    lastDeployHash: TEST_HASH,
-                    resultMessage: 'partial fail',
-                    deployState: {}
+                    message: 'partial fail',
+                    context: {
+                        isCodeDeployed: true,
+                        isAllStepSuccess: false,
+                        lastDeployHash: TEST_HASH,
+                        resultMessage: 'partial fail',
+                        deployState: {}
+                    }
                 });
                 done();
             });
@@ -616,19 +690,21 @@ describe('Controller test - skill infrastructure controller test', () => {
     });
 
     describe('# test class method: _updateResourcesConfig', () => {
-        const TEST_DEPLOY_RESULT = {
-            default: {
-                endpoint: {
-                    url: 'TEST_URL'
-                },
-                lastDeployHash: 'TEST_HASH',
-                deployState: {}
-            }
-        };
+        let TEST_REGION_LIST, TEST_DEPLOY_RESULT;
 
         const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
 
         beforeEach(() => {
+            TEST_REGION_LIST = ['default'];
+            TEST_DEPLOY_RESULT = {
+                default: {
+                    endpoint: {
+                        url: 'TEST_URL'
+                    },
+                    lastDeployHash: 'TEST_HASH',
+                    deployState: {}
+                }
+            };
             new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
             sinon.stub(fse, 'writeFileSync');
         });
@@ -639,15 +715,41 @@ describe('Controller test - skill infrastructure controller test', () => {
         });
 
         it('| update resources config correctly', () => {
-            // setup
-            sinon.stub(hashUtils, 'getHash').callsArgWith(1, 'hash error');
             // call
-            skillInfraController._updateResourcesConfig(TEST_DEPLOY_RESULT);
+            skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
             // verify
             expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'default')).equal('TEST_HASH');
             expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {} });
             expect(fse.writeFileSync.callCount).equal(2);
         });
+
+        it('| update resources config using previous state for unreported regions', () => {
+            // setup
+            TEST_REGION_LIST = ['default', 'NA'];
+            ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(TEST_PROFILE, 'NA', 'TEST_HASH');
+            ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, { default: {}, NA: {} });
+            // call
+            skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
+            // verify
+            expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'NA')).equal('TEST_HASH');
+            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {}, NA: {} });
+            expect(fse.writeFileSync.callCount).equal(2);
+        });
+
+        it('| update resources config with no previous state for unreported regions', () => {
+            // setup
+            TEST_REGION_LIST = ['default', 'NA'];
+            ResourcesConfig.getInstance().setCodeLastDeployHashByRegion(TEST_PROFILE, 'NA', undefined);
+            ResourcesConfig.getInstance().setSkillInfraDeployState(TEST_PROFILE, undefined);
+            // call
+            skillInfraController._updateResourcesConfig(TEST_REGION_LIST, TEST_DEPLOY_RESULT);
+            // verify
+            expect(ResourcesConfig.getInstance().getCodeLastDeployHashByRegion(TEST_PROFILE, 'NA')).equal(undefined);
+            expect(ResourcesConfig.getInstance().getSkillInfraDeployState(TEST_PROFILE)).deep.equal({ default: {}, NA: undefined });
+            expect(fse.writeFileSync.callCount).equal(2);
+        });
+
+
     });
 
     describe('# test class method: _ensureSkillManifestGotUpdated', () => {
@@ -700,6 +802,71 @@ describe('Controller test - skill infrastructure controller test', () => {
                 expect(err).equal(undefined);
                 done();
             });
+        });
+    });
+
+    describe('# test class method: _getAlexaDeployRegions', () => {
+        const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
+
+        it('| alexaRegion is default, userConfig awsRegion is set, expect awsRegion is retrieved correctly.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION = 'default';
+            const USER_CONFIG_AWS_REGION = 'sa-east-1';
+            const TEST_REGION_LIST = [TEST_ALEXA_REGION];
+            const TEST_USER_CONFIG = {
+                awsRegion: USER_CONFIG_AWS_REGION
+            };
+            // call
+            const deployRegions = skillInfraController._getAlexaDeployRegions(TEST_REGION_LIST, TEST_USER_CONFIG);
+            // verify
+            expect(deployRegions).deep.equal({ [TEST_ALEXA_REGION]: USER_CONFIG_AWS_REGION });
+            done();
+        });
+
+        it('| alexaRegion is default, userConfig awsRegion is NOT set, expect awsRegion is set based on Alexa and AWS region map.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION = 'default';
+            const MAPPING_ALEXA_DEFAULT_AWS_REGION = 'us-east-1';
+            const TEST_REGION_LIST = [TEST_ALEXA_REGION];
+            const TEST_USER_CONFIG = {};
+            // call
+            const deployRegions = skillInfraController._getAlexaDeployRegions(TEST_REGION_LIST, TEST_USER_CONFIG);
+            // verify
+            expect(deployRegions).deep.equal({ [TEST_ALEXA_REGION]: MAPPING_ALEXA_DEFAULT_AWS_REGION });
+            done();
+        });
+
+        it('| alexaRegion is not default, userConfig regionalOverrides awsRegion is set, expect awsRegion is retrieved correctly.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION_EU = 'EU';
+            const USER_CONFIG_AWS_REGION = 'eu-west-2';
+            const TEST_REGION_LIST = [TEST_ALEXA_REGION_EU];
+            const TEST_USER_CONFIG = {
+                regionalOverrides: {
+                    EU: {
+                        awsRegion: USER_CONFIG_AWS_REGION
+                    }
+                }
+            };
+            // call
+            const deployRegions = skillInfraController._getAlexaDeployRegions(TEST_REGION_LIST, TEST_USER_CONFIG);
+            // verify
+            expect(deployRegions).deep.equal({ [TEST_ALEXA_REGION_EU]: USER_CONFIG_AWS_REGION });
+            done();
+        });
+
+        it('| alexaRegion is not default, userConfig regionalOverrides awsRegion is NOT set, '
+        + 'expect awsRegion is set based on Alexa and AWS region map.', (done) => {
+            // setup
+            const TEST_ALEXA_REGION_EU = 'EU';
+            const MAPPING_ALEXA_EU_AWS_REGION = 'eu-west-1';
+            const TEST_REGION_LIST = [TEST_ALEXA_REGION_EU];
+            const TEST_USER_CONFIG = {};
+            // call
+            const deployRegions = skillInfraController._getAlexaDeployRegions(TEST_REGION_LIST, TEST_USER_CONFIG);
+            // verify
+            expect(deployRegions).deep.equal({ [TEST_ALEXA_REGION_EU]: MAPPING_ALEXA_EU_AWS_REGION });
+            done();
         });
     });
 });
