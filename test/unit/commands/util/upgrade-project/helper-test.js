@@ -411,7 +411,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
 
         it('| skillMetaController getSkillPackage fails, expect callback error', (done) => {
             // setup
-            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(3, TEST_ERROR);
+            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, TEST_ERROR);
             // call
             helper.downloadSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_PROFILE, TEST_DO_DEBUG, (err) => {
                 expect(err.includes(TEST_ERROR)).equal(true);
@@ -421,7 +421,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
 
         it('| skillMetaController getSkillPackage passes, hashUtils fails, expect error return', (done) => {
             // setup
-            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(3, null);
+            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, null);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, TEST_ERROR);
             // call
             helper.downloadSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_PROFILE, TEST_DO_DEBUG, (err) => {
@@ -434,7 +434,7 @@ You have multiple Lambda codebases for region ${TEST_REGION}, we will use "${TES
         it('| hashUtils passes, expect no error return', (done) => {
             // setup
             const TEST_HASH = 'hash';
-            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(3, null);
+            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, null);
             sinon.stub(hashUtils, 'getHash').callsArgWith(1, null, TEST_HASH);
             // call
             helper.downloadSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_PROFILE, TEST_DO_DEBUG, (err) => {

@@ -207,7 +207,7 @@ describe('Utils test - zip utility', () => {
             // setup
             sinon.stub(httpClient, 'request').callsArgWith(3, 'get error');
             // test
-            zipUtils.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+            zipUtils.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, false, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(TEST_REMOTE_ZIP_URL);
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
@@ -224,7 +224,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_REMOTE_ZIP_RESPONSE);
             stubRequest.throws('extract error');
             // test
-            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, false, (err) => {
                 // verify
                 expect(httpClient.request.args[0][0].url).equal(TEST_REMOTE_ZIP_URL);
                 expect(httpClient.request.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.GET);
@@ -242,7 +242,7 @@ describe('Utils test - zip utility', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_REMOTE_ZIP_RESPONSE);
             stubRequest.returns(null);
             // test
-            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, (err) => {
+            proxyZipUtil.unzipRemoteZipFile(TEST_REMOTE_ZIP_URL, TEST_ZIP_FILE_PATH, false, false, (err) => {
                 // verify
                 expect(stubRequest.args[0][0]).deep.equal(TEST_ZIP_FILE_PATH);
                 expect(err).equal(undefined);

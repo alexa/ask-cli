@@ -144,7 +144,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| skillMetaController getSkillPackage fails, expect callback error', (done) => {
             // setup
-            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(3, TEST_ERROR);
+            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, TEST_ERROR);
             // call
             hostedSkillHelper.downloadSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_PROFILE, TEST_DO_DEBUG, (err) => {
                 expect(err).equal(TEST_ERROR);
@@ -154,7 +154,7 @@ describe('Commands upgrade-project test - hosted skill helper test', () => {
 
         it('| skillMetaController getSkillPackage passes, hashUtils fails, expect no error return', (done) => {
             // setup
-            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(3, null);
+            sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, null);
             // call
             hostedSkillHelper.downloadSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_SKILL_STAGE, TEST_PROFILE, TEST_DO_DEBUG, (err) => {
                 // verify

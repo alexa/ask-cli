@@ -200,5 +200,11 @@
     "name": "watch",
     "description": "Uses nodemon to monitor changes and automatically restart the run session.",
     "stringInput": "NONE"
+  },
+  "export-package": {
+    "name": "export-package",
+    "description": "Downloads the skill-package usage the smapi export-package api rather than cloning from git.",
+    "alias": null,
+    "stringInput": "NONE"
   }
 }

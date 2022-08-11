@@ -494,7 +494,7 @@ describe('Controller test - skill metadata controller test', () => {
             // setup
             sinon.stub(SkillMetadataController.prototype, '_exportPackage').callsArgWith(2, 'exportErr');
             // call
-            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, false, (err, res) => {
                 // verify
                 expect(SkillMetadataController.prototype._exportPackage.args[0][0]).equal(TEST_SKILL_ID);
                 expect(SkillMetadataController.prototype._exportPackage.args[0][1]).equal(TEST_STAGE);
@@ -514,7 +514,7 @@ describe('Controller test - skill metadata controller test', () => {
             });
             sinon.stub(SkillMetadataController.prototype, '_pollExportStatus').callsArgWith(1, 'polling error');
             // call
-            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, false, (err, res) => {
                 // verify
                 expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
                 expect(res).equal(undefined);
@@ -539,9 +539,9 @@ describe('Controller test - skill metadata controller test', () => {
                     }
                 }
             });
-            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, 'unzip error');
+            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(4, 'unzip error');
             // call
-            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, false, (err, res) => {
                 // verify
                 expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
                 expect(res).equal(undefined);
@@ -566,9 +566,9 @@ describe('Controller test - skill metadata controller test', () => {
                     }
                 }
             });
-            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, null);
+            sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(4, null);
             // call
-            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, (err, res) => {
+            skillMetaController.getSkillPackage(TEST_ROOT_PATH, TEST_SKILL_ID, TEST_STAGE, false, (err, res) => {
                 // verify
                 expect(SkillMetadataController.prototype._pollExportStatus.args[0][0]).equal(TEST_EXPORT_ID);
                 expect(res).equal(undefined);

@@ -50,7 +50,7 @@ describe('Commands init test - command class test', () => {
         expect(instance.name()).equal('init');
         expect(instance.description()).equal('setup a new or existing Alexa skill project');
         expect(instance.requiredOptions()).deep.equal([]);
-        expect(instance.optionalOptions()).deep.equal(['hosted-skill-id', 'profile', 'debug']);
+        expect(instance.optionalOptions()).deep.equal(['hosted-skill-id', 'profile', 'debug', 'export-package']);
     });
 
     describe('validate command handle', () => {
@@ -541,7 +541,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, TEST_ERROR);
             // call
             instance.handle(TEST_CMD, (err) => {
                 // verify
@@ -573,7 +573,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, null);
             sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, TEST_ERROR);
             // call
             instance.handle(TEST_CMD, (err) => {
@@ -606,7 +606,7 @@ describe('Commands init test - command class test', () => {
             sinon.stub(httpClient, 'request').callsArgWith(3, null, GET_MANIFEST_RESPONSE); // stub getManifest request
             sinon.stub(ui, 'getProjectFolderName').callsArgWith(1, null, TEST_FOLDER_NAME);
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, null);
             sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, null);
             // call
             instance.handle(TEST_CMD, (err) => {
