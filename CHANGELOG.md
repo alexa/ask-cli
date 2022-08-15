@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.28.0](https://github.com/alexa/ask-cli/compare/v2.27.0...v2.28.0) (2022-08-15)
+
+
+### Features
+
+* add lambda deployer additional user config function parameters ([#392](https://github.com/alexa/ask-cli/issues/392)) ([39dbf5f](https://github.com/alexa/ask-cli/commit/39dbf5f4bd1b072fa34c277bfae6cb981542ba3c))
+* add skill events property to ask-resources.json ([#410](https://github.com/alexa/ask-cli/issues/410)) ([ccf7972](https://github.com/alexa/ask-cli/commit/ccf79728b07b785572c873999aa993435cd9ce07))
+
+
+### Bug Fixes
+
+* limit skill infrastructure deployment to one task per aws region ([#391](https://github.com/alexa/ask-cli/issues/391)) ([6143b02](https://github.com/alexa/ask-cli/commit/6143b020ae8ae0d04d9bac33b2af65f0c88af66b))
+
 ## [2.27.0](https://github.com/alexa/ask-cli/compare/v2.26.0...v2.27.0) (2022-04-20)
 
 
