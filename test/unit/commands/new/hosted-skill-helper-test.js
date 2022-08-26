@@ -418,7 +418,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(SpinnerView.prototype, 'start');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(process, 'cwd').returns('root/');
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, TEST_ERROR);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, TEST_ERROR);
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
                 // verify
@@ -434,7 +434,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(SpinnerView.prototype, 'start');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(process, 'cwd').returns('root/');
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, null);
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields(TEST_ERROR);
             // call
             hostedSkillHelper.createHostedSkill(HostedSkillController.prototype, TEST_USER_INPUT, TEST_VENDOR_ID, (err, res) => {
@@ -451,7 +451,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(SpinnerView.prototype, 'start');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(process, 'cwd').returns('root/');
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, null);
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, TEST_ERROR);
             // call
@@ -469,7 +469,7 @@ describe('Commands new test - hosted skill helper test', () => {
             sinon.stub(SpinnerView.prototype, 'start');
             sinon.stub(HostedSkillController.prototype, 'updateAskSystemScripts').callsArgWith(0, null);
             sinon.stub(process, 'cwd').returns('root/');
-            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(3, null);
+            sinon.stub(HostedSkillController.prototype, 'clone').callsArgWith(4, null);
             sinon.stub(SkillMetadataController.prototype, 'enableSkill').yields();
             sinon.stub(HostedSkillController.prototype, 'updateSkillPrePushScript').callsArgWith(1, null);
             // call
