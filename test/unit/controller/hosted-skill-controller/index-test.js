@@ -244,7 +244,7 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
@@ -262,7 +262,10 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                    `\nCloning project from git and exporting skill package from smapi for ${TEST_SKILL_NAME}`
+                );
+                expect(Messenger.getInstance().info.args[1][0]).equal(
+                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
@@ -279,8 +282,8 @@ describe('Controller test - hosted skill controller test', () => {
             // call
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
-                expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                expect(Messenger.getInstance().info.args[1][0]).equal(
+                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
