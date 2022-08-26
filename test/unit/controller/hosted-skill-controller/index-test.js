@@ -137,7 +137,7 @@ describe('Controller test - hosted skill controller test', () => {
             // setup
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(true);
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(`${TEST_PROJECT_PATH} directory already exists.`);
                 expect(res).equal(undefined);
                 done();
@@ -151,7 +151,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(httpClient, 'request').callsArgWith(3, TEST_ERROR); // stub getAlexaHostedSkillMetadata smapi request
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err.message).equal(TEST_METADATA_ERROR);
                 expect(res).equal(undefined);
                 done();
@@ -170,7 +170,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(fs, 'existsSync').withArgs(TEST_PROJECT_PATH).returns(false);
             sinon.stub(httpClient, 'request').callsArgWith(3, null, TEST_STATUS_ERROR); // stub getAlexaHostedSkillMetadata smapi request
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(jsonView.toString({ error: TEST_METADATA_ERROR }));
                 expect(res).equal(undefined);
                 done();
@@ -192,7 +192,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, TEST_SKILL_PACKAGE_ERROR);
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(TEST_SKILL_PACKAGE_ERROR);
                 expect(res).equal(undefined);
                 done();
@@ -207,7 +207,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(CloneFlow, 'cloneProjectFromGit');
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, true);
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
                     `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
@@ -226,7 +226,7 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null, false);
             sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, TEST_EXPORT_ERROR);
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(TEST_EXPORT_ERROR);
                 done();
             });
@@ -241,10 +241,10 @@ describe('Controller test - hosted skill controller test', () => {
             sinon.stub(CloneFlow, 'doSkillPackageExist').callsArgWith(3, null);
             sinon.stub(SkillMetadataController.prototype, 'getSkillPackage').callsArgWith(4, null);
             // call
-            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, false, (err, res) => {
+            hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_NOT_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
@@ -262,7 +262,7 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });
@@ -280,7 +280,7 @@ describe('Controller test - hosted skill controller test', () => {
             hostedSkillController.clone(TEST_SKILL_ID, TEST_SKILL_NAME, TEST_PROJECT_PATH, TEST_DO_EXPORT_PACKAGE, (err, res) => {
                 expect(err).equal(undefined);
                 expect(Messenger.getInstance().info.args[0][0]).equal(
-                    `\nSkill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
+                    `\nImported Skill schema and interactionModels for ${TEST_SKILL_NAME} created at\n\t./skill-package\n`
                 );
                 done();
             });

@@ -40,10 +40,11 @@ The user is not prompted for a `skill template`. The [Hello World Skill](https:/
 
 This command initializes Alexa Hosted Skills by cloning the project from the hosted skill service, downloading the latest Alexa skill package, and provide a git-ready environment. Developers can then checkout, pull from, and push to a remote Git repository from their local machines.
 
+If you make changes to the skill package such as the interaction model or publishing information on the Alexa Developer Console, these changes will not be reflected in your git repository. You will have to resync the skill-package which you could you do by running `ask init --hosted-skill-id <id> --export-package` and committing the changes that were made on the console.
 
 **STRUCTURE OF INIT COMMAND:**
 
-`ask init [--hosted-skill-id <hosted-skill-id>] [-p | --profile <profile>] [--debug] [-h | --help]`
+`ask init [--hosted-skill-id <hosted-skill-id>] [-p | --profile <profile>] [--debug] [--export-package] [-h | --help]`
 
 **OPTIONS DESCRIPTION:**
 
@@ -53,6 +54,7 @@ This command initializes Alexa Hosted Skills by cloning the project from the hos
 
 **debug**: Optional. Show debug messages.
 
+**export-package**: Optional. Downloads the skill-packages using `smapi export-package` behind the scenes. Use this if your git repository is not in sync with the skill-package.
 
 
 ## GIT CREDENTIALS

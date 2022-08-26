@@ -172,7 +172,7 @@ describe('Commands export-package test - command class test', () => {
                 sinon.stub(fs, 'existsSync').returns(false);
                 sinon.stub(httpClient, 'request').callsArgWith(3, null, EXPORT_RESPONSE); // stub smapi request
                 sinon.stub(helper, 'pollExportStatus').callsArgWith(2, null, POLL_RESPONSE);
-                sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, ERROR);
+                sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(4, ERROR);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify
@@ -188,7 +188,7 @@ describe('Commands export-package test - command class test', () => {
                 sinon.stub(fs, 'existsSync').returns(false);
                 sinon.stub(httpClient, 'request').callsArgWith(3, null, EXPORT_RESPONSE); // stub smapi request
                 sinon.stub(helper, 'pollExportStatus').callsArgWith(2, null, POLL_RESPONSE);
-                sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(3, null);
+                sinon.stub(zipUtils, 'unzipRemoteZipFile').callsArgWith(4, null);
                 // call
                 instance.handle(TEST_CMD, (err) => {
                     // verify

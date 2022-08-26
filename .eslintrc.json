@@ -8,7 +8,7 @@
     "rules": {
         "class-methods-use-this" : "off",
         "indent": ["error", 4],
-        "max-len": ["error", 150, 4],
+        "max-len": ["error", 165, 4],
         "import/no-unresolved":"off",
         "no-plusplus":"off",
         "no-underscore-dangle": 0,
