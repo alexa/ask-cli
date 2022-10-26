@@ -30,7 +30,7 @@
     "test:browser": "npm run test:report && open coverage/index.html",
     "integration-test": "mocha -t 180000 test/integration/run-test.js",
     "functional-test": "mocha -t 600000 --retries 2 test/functional/run-test.js",
-    "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
+    "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js --unhandled-rejections=strict",
     "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
     "prepublishOnly": "babel lib -d lib; babel bin -d bin",
     "pre-release": "standard-version",
