@@ -51,4 +51,9 @@ const cleanUp = async () => {
     console.log('done');
 };
 
-cleanUp();
+try {
+  cleanUp();
+} catch (error) {
+  core.setFailed(error.message);
+}
+
