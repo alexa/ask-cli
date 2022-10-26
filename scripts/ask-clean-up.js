@@ -53,7 +53,7 @@ const cleanUp = async () => {
 };
 
 try {
-  cleanUp();
+  await cleanUp();
 } catch (error) {
   console.log("---error");
   console.log(error.message);
