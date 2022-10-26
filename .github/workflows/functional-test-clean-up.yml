@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: '12.x'
     - run: npm install
-    - run: npm run functional-test:clean-up
+    - run: npm run functional-test:clean-up --unhandled-rejections=strict
       env:
         ASK_VENDOR_ID: ${{ secrets.ASK_VENDOR_ID }}
         ASK_REFRESH_TOKEN: ${{ secrets.ASK_REFRESH_TOKEN }}
