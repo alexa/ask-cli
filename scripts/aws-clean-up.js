@@ -56,6 +56,5 @@ const cleanUp = async () => {
     
     console.log('done');
 };
-core.setFailed("test");
-//cleanUp();
+cleanUp();
 
