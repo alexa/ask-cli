@@ -53,9 +53,9 @@ const cleanUp = async () => {
             console.error(r.reason);
         });
     }
-    core.setFailed("test");
+    
     console.log('done');
 };
-
-cleanUp();
+core.setFailed("test");
+//cleanUp();
 
