@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const core = require('@actions/core');
 
 const region = 'us-east-1';
 
@@ -47,10 +48,12 @@ const cleanUp = async () => {
 
     const rejected = [...stackResults, ...functionResults, ...bucketResults].filter(r => r.status === 'rejected');
     if (rejected.length) {
+        core.setFailed(rejected[0].reason);
         rejected.forEach(r => {
             console.error(r.reason);
         });
     }
+    core.setFailed("test");
     console.log('done');
 };
 
