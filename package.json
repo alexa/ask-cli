@@ -38,6 +38,7 @@
     "postinstall": "node postinstall.js"
   },
   "dependencies": {
+    "@actions/core": "^1.10.0",
     "adm-zip": "^0.4.13",
     "archiver": "^1.1.0",
     "ask-smapi-model": "~1.19.7",
