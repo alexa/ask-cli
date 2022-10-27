@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const core = require('@actions/core');
 
 const region = 'us-east-1';
 
@@ -56,4 +55,3 @@ const cleanUp = async () => {
     console.log('done');
 };
 cleanUp();
-core.setFailed("");
