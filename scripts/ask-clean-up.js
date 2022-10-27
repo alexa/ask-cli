@@ -5,7 +5,6 @@ const AppConfig = require('@src/model/app-config');
 const AuthorizationController = require('@src/controllers/authorization-controller');
 const CONSTANTS = require('@src/utils/constants');
 const DynamicConfig = require('@src/utils/dynamic-config');
-const core = require('@actions/core');
 
 new AppConfig();
 
