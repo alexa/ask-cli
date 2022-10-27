@@ -5,7 +5,6 @@ const region = 'us-east-1';
 const s3 = new AWS.S3();
 const cf = new AWS.CloudFormation({ region });
 const lambda = new AWS.Lambda({ region });
-const core = require('@actions/core');
 
 const prefix = 'ask-';
 
