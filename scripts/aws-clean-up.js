@@ -48,7 +48,6 @@ const cleanUp = async () => {
 
     const rejected = [...stackResults, ...functionResults, ...bucketResults].filter(r => r.status === 'rejected');
     if (rejected.length) {
-        core.setFailed(rejected[0].reason);
         rejected.forEach(r => {
             console.error(r.reason);
         });
