@@ -200,5 +200,15 @@
     "name": "watch",
     "description": "Uses nodemon to monitor changes and automatically restart the run session.",
     "stringInput": "NONE"
+  },
+  "dereference-symlinks": {
+    "name": "dereference-symlinks",
+    "description": "Copies symlinked files from code source as actual files instead of symlinks",
+    "stringInput": "NONE"
+  },
+  "no-npm-install": {
+    "name": "no-npm-install",
+    "description": "Skips running `npm install` before deploying code",
+    "stringInput": "NONE"
   }
 }

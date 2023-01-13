@@ -10,12 +10,16 @@ describe('Controller test - skill code controller test', () => {
     const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(process.cwd(), 'test', 'unit', 'fixture', 'model', 'regular-proj', 'ask-resources.json');
     const TEST_PROFILE = 'default'; // test file uses 'default' profile
     const TEST_DO_DEBUG = false;
+    const TEST_SHOULD_DEREFERENCE_SYMLINKS = false;
+    const TEST_NO_NPM_INSTALL = false;
     const TEST_CODE_SRC = './awsStack/lambda-NA/src';
     const TEST_EU_CODE_SRC = './awsStack/lambda-EU/src';
     const TEST_CODE_BUILD = 'build';
     const TEST_CONFIGURATION = {
         profile: TEST_PROFILE,
-        doDebug: TEST_DO_DEBUG
+        doDebug: TEST_DO_DEBUG,
+        shouldDereferenceSymlinks: TEST_SHOULD_DEREFERENCE_SYMLINKS,
+        noNPMInstall: TEST_NO_NPM_INSTALL
     };
 
     describe('# inspect correctness for constructor', () => {
