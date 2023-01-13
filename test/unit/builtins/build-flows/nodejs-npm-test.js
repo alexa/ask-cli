@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const fs = require('fs-extra');
 
 const AbstractBuildFlow = require('@src/builtins/build-flows/abstract-build-flow');
 const NodeJsNpmBuildFlow = require('@src/builtins/build-flows/nodejs-npm');
@@ -9,6 +10,7 @@ describe('NodeJsNpmBuildFlow test', () => {
     let execStub;
     let debugStub;
     let createZipStub;
+    let lockFileStub;
     beforeEach(() => {
         config = {
             cwd: 'cwd',
@@ -19,6 +21,7 @@ describe('NodeJsNpmBuildFlow test', () => {
         execStub = sinon.stub(AbstractBuildFlow.prototype, 'execCommand');
         debugStub = sinon.stub(AbstractBuildFlow.prototype, 'debug');
         createZipStub = sinon.stub(AbstractBuildFlow.prototype, 'createZip').yields();
+        lockFileStub = sinon.stub(fs, 'existsSync').returns(false);
     });
     describe('# inspect correctness of execute', () => {
         it('| should execute commands', (done) => {
@@ -27,7 +30,22 @@ describe('NodeJsNpmBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('npm install --production --quiet');
+                expect(buildFlow.env.NODE_ENV).eql('production');
+                expect(execStub.args[0][0]).eql('npm install --quiet');
+                expect(createZipStub.callCount).eql(1);
+                done();
+            });
+        });
+
+        it('| should execute commands with package lock file', (done) => {
+            lockFileStub.returns(true);
+            const buildFlow = new NodeJsNpmBuildFlow(config);
+
+            buildFlow.execute((err, res) => {
+                expect(err).eql(undefined);
+                expect(res).eql(undefined);
+                expect(buildFlow.env.NODE_ENV).eql('production');
+                expect(execStub.args[0][0]).eql('npm ci --quiet');
                 expect(createZipStub.callCount).eql(1);
                 done();
             });
@@ -40,8 +58,10 @@ describe('NodeJsNpmBuildFlow test', () => {
             buildFlow.execute((err, res) => {
                 expect(err).eql(undefined);
                 expect(res).eql(undefined);
-                expect(execStub.args[0][0]).eql('npm install --production');
+                expect(buildFlow.env.NODE_ENV).eql('production');
+                expect(execStub.args[0][0]).eql('npm install');
                 expect(debugStub.args[0][0]).eql('Installing NodeJS dependencies based on the package.json.');
+                expect(createZipStub.callCount).eql(1);
                 done();
             });
         });

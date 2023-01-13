@@ -122,10 +122,13 @@ describe('Builtins test - cfn-deployer index test', () => {
                     default: {
                         stackId,
                         s3: {
-                            bucket: 'someName',
-                            key: 'someKey.zip'
+                            bucket: bucketName,
+                            key: bucketKey
                         }
                     }
+                },
+                deployRegions: {
+                    default: 'us-east-1'
                 }
             };
             getAWSProfileStub = sinon.stub(awsUtil, 'getAWSProfile').returns('some profile');
@@ -136,6 +139,7 @@ describe('Builtins test - cfn-deployer index test', () => {
             deployStackStub = sinon.stub(Helper.prototype, 'deployStack').resolves({ StackId: stackId });
             waitForStackDeployStub = sinon.stub(Helper.prototype, 'waitForStackDeploy');
         });
+
         it('should deploy', (done) => {
             waitForStackDeployStub.resolves({ endpointUri, stackInfo: { Outputs: [] } });
 
@@ -201,6 +205,42 @@ describe('Builtins test - cfn-deployer index test', () => {
                 expectedErrorOutput.resultMessage = `The CloudFormation deploy failed for Alexa region "${alexaRegion}": ${errorMessage}`;
                 expect(err).eql(null);
                 expect(result).eql(expectedErrorOutput);
+                done();
+            });
+        });
+
+        it('should skip deploy when region is not primary deploy region', (done) => {
+            const deployRegion = 'default';
+            const skipRegion = 'NA';
+            deployOptions.alexaRegion = skipRegion;
+            deployOptions.deployRegions[skipRegion] = deployOptions.deployRegions[deployRegion];
+            deployOptions.deployState[skipRegion] = deployOptions.deployState[deployRegion];
+            expectedOutput = {
+                ...expectedErrorOutput,
+                isDeploySkipped: true,
+                deployRegion,
+                resultMessage: `The CloudFormation deploy for Alexa region "${skipRegion}" is same as "${deployRegion}".`
+            };
+
+            Deployer.invoke({}, deployOptions, (err, result) => {
+                expect(err).eql(null);
+                expect(result).eql(expectedOutput);
+                done();
+            });
+        });
+
+        it('should not skip deploy when region is not primary deploy region but has different deploy state', (done) => {
+            const deployRegion = 'default';
+            const currentRegion = 'NA';
+            waitForStackDeployStub.resolves({ endpointUri, stackInfo: { Outputs: [] } });
+            deployOptions.alexaRegion = currentRegion;
+            deployOptions.deployRegions[currentRegion] = deployOptions.deployRegions[deployRegion];
+            deployOptions.deployState[currentRegion] = { ...deployOptions.deployState[deployRegion], stackId: 'different stack id' };
+            expectedOutput.resultMessage = `The CloudFormation deploy succeeded for Alexa region "${currentRegion}" with output Lambda ARN: ${endpointUri}.`;
+
+            Deployer.invoke({}, deployOptions, (err, result) => {
+                expect(err).eql(null);
+                expect(result).eql(expectedOutput);
                 done();
             });
         });

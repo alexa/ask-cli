@@ -12,7 +12,7 @@ This document focuses on explaining the deploy command in details for each type 
 
 **ignore-hash**: Optional. Forces ASK CLI deploy skill package even if the hash of current skill package folder does not change.
 
-**target**: Optional. Specify which skill project resource to deploy. Available options: skill-metadata,skill-infrastructure. 
+**target**: Optional. Specify which skill project resource to deploy. Available options: skill-metadata,skill-infrastructure.
 
 **profile**: Optional. Specify a profile name to be used. Defaults to use `default` as the profile name, if this option or environmental variable `ASK_DEFAULT_PROFILE` is not set.
 
@@ -115,11 +115,16 @@ This deployer is managing Lambda services by using the default settings to creat
      * If Lambda ARN is present, the deloyer will update the Lambda function's code and configuration.
 
 Supported parameters in `userConfig`:
-* awsRegion
-* runtime: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details.
-* handler: The entry point for the Lambda function in your code.
-* sourceLambda: You can set the `userConfig.sourceLambda.arn` to specify an existing Lambda ARN to reuse. This will be the target Lambda function when you deploy.
-* regionalOverrides: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
+* `awsRegion`
+* `runtime`: Please see [AWS Lambda runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) for more details.
+* `handler`: The entry point for the Lambda function in your code.
+* `lambda.functionName`: The custom name for the Lambda function, otherwise ask cli will generate a unique name based on the skill, profile and region names.
+* `lambda.description`: The description for the Lambda function.
+* `lambda.memorySize`: The allocated memory size for the Lambda function. Defaults to 512 MB.
+* `lambda.timeout`: The timeout value for the Lambda function. Defaults to 15 seconds.
+* `lambda.environmentVariables`: The environment variables for the Lambda function.
+* `sourceLambda`: You can set the `userConfig.sourceLambda.arn` to specify an existing Lambda ARN to reuse. This will be the target Lambda function when you deploy.
+* `regionalOverrides`: You can set `regionalOverrides.{region}.{anyPropertiesAbove}` to override the parameters for a certain region.
 
 #### @ask-cli/cfn-deployer
 This deployer is implementing the idea of **Code as Infra** by using AWS CloudFormation. By using the CloudFormation template as the recipe, skill applications with similar infrastructure settings can simply share or extend existing template files. CloudFormation service also manages auto-rollback when a failure happens. Below shows the details of what this deployer does:
