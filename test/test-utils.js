@@ -16,6 +16,8 @@ const MockServerPort = {
 
 const tempDirectory = path.join(process.cwd(), 'test/temp');
 
+const fixturePluginDirectory = path.join(process.cwd(), 'test/fixture/pluginCommands');
+
 const resetTempDirectory = () => {
     fs.ensureDirSync(tempDirectory);
     fs.emptyDirSync(tempDirectory);
@@ -33,6 +35,12 @@ const makeFolderInTempDirectory = (folderPath) => {
     fs.ensureDirSync(fullPath);
     return fullPath;
 };
+
+const addFixtureDirectoryToPaths = (envPath) => {
+    var pluginDir = fixturePluginDirectory;
+    var pluginDuplicatesDir = path.join(fixturePluginDirectory, "duplicate");
+    return pluginDir + path.delimiter + pluginDuplicatesDir + path.delimiter + envPath;
+}
 
 const run = (cmd, args, options = {}) => {
     const inputs = options.inputs || [];
@@ -114,5 +122,6 @@ module.exports = {
     run,
     startMockSmapiServer,
     startMockLwaServer,
-    MockServerPort
+    MockServerPort,
+    addFixtureDirectoryToPaths
 };
