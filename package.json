@@ -1,18 +1,18 @@
 {
   "name": "ask-cli",
-  "version": "2.28.0",
+  "version": "2.29.0",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
-    "ask": "bin/ask.js"
+    "ask": "dist/bin/ask.js"
   },
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=12"
   },
   "license": "Apache 2.0",
   "repository": "alexa/ask-cli",
   "author": {
-    "name": "RonWang",
-    "email": "nongwang@amazon.com"
+    "name": "Alexa Skills Kit",
+    "email": "ask-tools@amazon.com"
   },
   "keywords": [
     "alexa",
@@ -24,110 +24,133 @@
     "deploy"
   ],
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha -t 10000 -u exports -R spec test/unit/run-test.js",
-    "test:watch": "node ./node_modules/mocha/bin/_mocha test/unit/run-test.js -w",
-    "test:report": "nyc --cache npm test && nyc report --reporter=html",
+    "build": "npm run clean && tsc && npm run copy:assets",
+    "clean": "rm -rf ./dist && rm -rf ./package",
+    "copy:assets": "copyfiles -u 1 lib/**/*.yaml dist/lib",
+    "test": "mocha -t 10000 -u bdd --require ts-node/register --require test/unit/run-test.js -R spec 'test/unit/{,**/}!(*.d).{ts,js}'",
+    "test:single": "mocha -t 10000 -u bdd --require ts-node/register --require test/unit/run-test.js -R spec ",
+    "test:fast": "TS_NODE_TRANSPILE_ONLY=true npm run test",
+    "test:watch": "mocha --require ts-node/register test/unit/run-test.js -w",
+    "test:report": "nyc npm run test",
     "test:browser": "npm run test:report && open coverage/index.html",
     "integration-test": "mocha -t 180000 test/integration/run-test.js",
-    "functional-test": "mocha -t 600000 --retries 2 test/functional/run-test.js",
+    "functional-test": "mocha -t 600000 -u bdd --require ts-node/register test/functional/run-test.js -R spec 'test/functional/{,**/}!(*.d).{ts,js}'",
     "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
-    "lint": "eslint lib/builtins lib/clients lib/commands lib/controllers lib/model lib/view",
-    "prepublishOnly": "babel lib -d lib; babel bin -d bin",
+    "format": "prettier --write .",
     "pre-release": "standard-version",
+    "prepare": "husky install",
     "prism": "prism",
-    "postinstall": "node postinstall.js"
+    "postinstall": "node ./dist/lib/postinstall.js || true",
+    "watch": "tsc --watch"
   },
   "dependencies": {
-    "@actions/core": "^1.10.0",
-    "adm-zip": "^0.4.13",
-    "archiver": "^1.1.0",
+    "@alexa/acdl": "^0.3.0",
+    "adm-zip": "^0.5.9",
+    "archiver": "^5.3.0",
     "ask-smapi-model": "~1.19.7",
-    "ask-smapi-sdk": "^1.2.0",
-    "async": "^2.1.5",
+    "ask-smapi-sdk": "^1.3.0",
+    "async": "^2.6.1",
     "aws-profile-handler": "2.0.3",
-    "aws-sdk": "^2.288.0",
-    "axios": "^0.21.1",
-    "bunyan": "^1.8.12",
-    "chalk": "2.4.2",
+    "aws-sdk": "^2.1111.0",
+    "axios": "^0.26.1",
+    "bunyan": "^1.8.15",
+    "chalk": "4.0.0",
     "commander": "^4.1.1",
-    "date-fns": "^2.7.0",
-    "folder-hash": "^3.0.0",
-    "fs-extra": "^2.1.0",
-    "inquirer": "^6.2.0",
-    "js-yaml": "^3.13.1",
-    "jsonfile": "^2.4.0",
+    "date-fns": "^2.28.0",
+    "folder-hash": "^4.0.2",
+    "fs-extra": "^10.0.1",
+    "inquirer": "^8.2.2",
+    "js-yaml": "^4.1.0",
+    "jsonfile": "^6.1.0",
+    "lint-staged": "^12.3.7",
     "listr": "^0.14.3",
-    "module-alias": "^2.1.0",
-    "mustache": "^4.0.1",
-    "nodemon": "^2.0.4",
-    "open": "^7.0.3",
+    "mustache": "^4.2.0",
+    "nodemon": "^2.0.15",
+    "open": "^8.4.0",
     "ora": "^3.4.0",
-    "portscanner": "^2.1.1",
-    "pretty-bytes": "^5.1.0",
-    "ramda": "^0.27.0",
-    "request": "^2.79.0",
-    "rxjs": "^6.5.2",
-    "semver": "^5.3.0",
-    "tmp": "^0.1.0",
-    "uuid": "^3.4.0",
+    "portscanner": "^2.2.0",
+    "pretty-bytes": "^5.6.0",
+    "ramda": "^0.28.0",
+    "request": "^2.88.2",
+    "rxjs": "^7.5.5",
+    "semver": "^7.3.6",
+    "tmp": "^0.2.1",
+    "uuid": "^8.3.2",
     "valid-url": "^1.0.9"
   },
+  "dependenciesComments": {
+    "chalk": "v5 onwards pure ESM https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c",
+    "ora": "v6 onwards is pure ESM",
+    "pretty-bytes": "v6 is pure ESM"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
-    "@stoplight/prism-cli": "^3.3.3",
-    "babel-plugin-module-resolver": "^4.0.0",
-    "chai": "^3.5.0",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@stoplight/prism-cli": "^4.8.0",
+    "@types/chai": "^4.3.0",
+    "@types/chai-as-promised": "^7.1.5",
+    "@types/chai-json-schema": "^1.4.6",
+    "@types/chai-uuid": "^1.0.2",
+    "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^8.2.1",
+    "@types/jsonfile": "^6.1.0",
+    "@types/mocha": "^9.1.1",
+    "@types/portscanner": "^2.1.1",
+    "@types/proxyquire": "^1.3.28",
+    "@types/ramda": "^0.28.7",
+    "@types/semver": "^7.3.9",
+    "@types/sinon": "^10.0.11",
+    "@types/sinon-chai": "^3.2.8",
+    "@types/uuid": "^8.3.4",
+    "@types/vscode": "^1.34.0",
+    "@types/listr": "0.14.4",
+    "@vscode/test-electron": "^1.6.1",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
     "chai-json-schema": "^1.5.1",
     "chai-uuid": "^1.0.6",
-    "coveralls": "^3.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "gulp": "^3.9.1",
-    "husky": "^4.2.3",
-    "mocha": "^3.2.0",
+    "copyfiles": "^2.4.1",
+    "husky": "^7.0.4",
+    "mocha": "^9.2.2",
+    "mocha-chai-jest-snapshot": "^1.1.3",
     "mocha.parallel": "^0.15.6",
-    "nyc": "^13.3.0",
-    "proxyquire": "^1.7.11",
-    "sinon": "^6.0.0",
-    "standard-version": "^8.0.1"
+    "npm-bundle": "3.0.3",
+    "npm-check-updates": "^12.5.8",
+    "nyc": "^15.1.0",
+    "postman-collection": "4.1.3",
+    "prettier": "^2.6.2",
+    "proxyquire": "^2.1.3",
+    "sinon": "^13.0.1",
+    "sinon-chai": "^3.7.0",
+    "standard-version": "^9.3.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm run test:report"
-    }
-  },
-  "nyc": {
-    "check-coverage": true,
-    "lines": 95,
-    "statements": 95,
-    "functions": 95,
-    "branches": 95,
-    "include": [
-      "lib/utils/string-utils.js",
-      "lib/utils/url-utils.js",
-      "lib/utils/zip-utils.js",
-      "lib/utils/hash-utils.js",
-      "lib/utils/retry-utility.js",
-      "lib/builtins/*",
-      "lib/clients/*",
-      "lib/model/*",
-      "lib/view/*",
-      "lib/controllers/*",
-      "lib/commands/*"
-    ],
-    "exclude": [
-      "lib/clients/aws-client/aws-util.js"
+  "lint-staged": {
+    "lib/{,**/}*.{ts,js}": [
+      "prettier --write"
     ]
   },
-  "_moduleAliases": {
-    "@root": ".",
-    "@src": "./lib",
-    "@test": "./test"
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "check-coverage": true,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80,
+    "all": true,
+    "include": [
+      "lib/**/!(*.test.*).[tj]s?(x)"
+    ],
+    "exclude": [
+      "test/**/*.*"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "coverage"
   }
 }

@@ -1,0 +1,34 @@
+namespace test
+
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.ask.types.builtins.AMAZON.Food
+
+type fruitNameShell {
+  Food fruitName
+}
+
+type paylaodCompleFruit {
+  Food fruitName
+}
+
+getFruitPriceEvent = utterances(
+  samples = [
+    "what is the price of the fruit",
+    "what is the price of fruit"
+  ]
+)
+
+informfruitNameEvent = utterances<fruitNameShell>(
+  samples = [
+    "{fruitName}",
+    "fruit name is {fruitName}",
+    "fruit is {fruitName}"
+  ]
+)
+
+affirmFruitAPIEvent = utterances(
+  samples = [
+    "uh huh",
+    "yup"
+  ]
+)

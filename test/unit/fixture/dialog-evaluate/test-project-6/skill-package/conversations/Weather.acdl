@@ -1,0 +1,139 @@
+namespace com.weatherbot
+
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.RequestArguments
+import com.amazon.alexa.ask.conversations.ensure
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.Thing
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import com.amazon.ask.types.builtins.AMAZON.US_CITY
+import prompts.request_city_apla
+import prompts.request_date_apla
+import prompts.weather_apla
+import slotTypes.myCustomCities
+
+type CityAndDate {
+  optional myCustomCities cityNameChanged
+  optional US_CITY cityName
+  optional DATE date
+}
+
+getWeatherEvent = utterances<CityAndDate>(
+  [
+    "What's the weather {date} in {cityNameChanged}",
+    "What's the weather {date} in {cityName}",
+    "what is the weather {date}",
+    "how is weather"
+  ]
+)
+
+type WeatherResult {
+  optional myCustomCities cityNameChanged
+  optional US_CITY cityName
+  NUMBER highTemp
+  NUMBER lowTemp
+}
+
+type ResponsePayload {
+  WeatherResult weatherResult
+}
+
+action WeatherResult getWeather(DATE date, US_CITY cityName = nothing, myCustomCities cityNameChanged = nothing)
+
+dialog Nothing Weather() {
+  sample {
+    weatherRequest = expect(
+      Invoke,
+      getWeatherEvent
+    )
+    ensure(
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.cityNameChanged
+          ],
+          response = request_city_apla
+        },
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.cityName
+          ],
+          response = request_city_apla
+        },
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.date
+          ],
+          response = request_date_apla
+        }
+    )
+    weatherResult = getWeather(
+      weatherRequest.date,
+      weatherRequest.cityName,
+      nothing
+    )
+    response(
+      weather_apla,
+      Notify {
+        actionName = getWeather
+      },
+      nothing,
+      ResponsePayload {
+        weatherResult = weatherResult
+      },
+      nothing
+    )
+  }
+  sample {
+    weatherRequest = expect(
+      Invoke,
+      getWeatherEvent
+    )
+    ensure(
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.cityNameChanged
+          ],
+          response = request_city_apla
+        },
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.cityName
+          ],
+          response = request_city_apla
+        },
+      RequestArguments<Thing> {
+          arguments = [
+            getWeather.arguments.date
+          ],
+          response = request_date_apla
+        }
+    )
+    weatherResult = getWeather(
+      weatherRequest.date,
+      nothing,
+      weatherRequest.cityNameChanged
+    )
+    response(
+      weather_apla,
+      Notify {
+        actionName = getWeather
+      },
+      nothing,
+      ResponsePayload {
+        weatherResult = weatherResult
+      },
+      nothing
+    )
+  }
+}
+
+dialog Nothing ComplexTest() {
+  sample {
+    Weather()
+  }
+}

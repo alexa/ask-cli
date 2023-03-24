@@ -1,9 +1,6 @@
 {
-    "skillId": "",
-    "locale": "",
-    "type": "text",
-    "userInput": [
-        "     ",
-        "world"
-    ]
+  "skillId": "",
+  "locale": "",
+  "type": "text",
+  "userInput": ["     ", "world"]
 }

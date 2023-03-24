@@ -1,0 +1,109 @@
+namespace com.dialogEleven
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import prompts.*
+import slotTypes.*
+
+// API Action
+
+action fruitNameApiResponseType fruitNameAPI(Color color = nothing, Food fruitName = nothing)
+
+action colorFruitNameResponseType colorFruitName(Color color)
+
+// UtteraceSets 
+
+InvokeEventOne = utterances(
+  samples = [
+    "i want to buy a fruit"
+  ]
+)
+
+InvokeEventTwo = utterances(
+  samples = [
+    "what is the price of the fruit",
+    "what is the price of fruit"
+  ]
+)
+
+informColorEvent = utterances<colorNameType>(
+  samples = [
+    "color {colorName}",
+    "color is {colorName}",
+    "{colorName}"
+  ]
+)
+
+affirmMultipleColorEvent = utterances(
+  samples = [
+    "do it"
+  ]
+)
+
+informfruitNameEvent = utterances<fruitNameType>(
+  samples = [
+    "{fruitName}",
+    "fruit name is {fruitName}",
+    "fruit is {fruitName}"
+  ]
+)
+
+// Type
+
+type fruitNameApiResponseType {
+  NUMBER price
+  Food fruitName
+}
+
+type colorFruitNameResponseType {
+  Color colorName
+  Food fruitName
+}
+
+type colorNameType {
+  Color colorName
+}
+
+type fruitNameType {
+  Food fruitName
+}
+
+type responsePayloadTypeOne {
+  colorFruitNameResponseType colorFruitNameResponse
+}
+type responsePayloadTypeTwo {
+  fruitNameApiResponseType fruitNameApiResponse
+}
+
+
+dialog Nothing dialogEleven() {
+
+  sample {
+    expect(act = Invoke, event = InvokeEventOne)
+    response(act = Request {  arguments = [ colorFruitName.arguments.color  ]}, 
+      response = MultiModalResponse {  apla = request_colorName_apla})
+    informColorMultipleEventRequest = expect(act = Inform,event = informColorEvent)
+    response(act = ConfirmAction {  actionName = colorFruitName}, 
+      payload = colorNameType {  colorName = informColorMultipleEventRequest.colorName}, 
+      response = MultiModalResponse {  apla = confirm_colorName_apla})
+    expect(act = Affirm, event = affirmMultipleColorEvent)
+    apiResponseOne = fruitNameAPI(color = informColorMultipleEventRequest.colorName)
+    ensure(requestArgs = [  RequestArguments {response = MultiModalResponse {apla = request_colorName_apla}, arguments = [fruitNameAPI.arguments.color]}])
+    apiResponseTwo = colorFruitName(color = informColorMultipleEventRequest.colorName)
+    response(act = Notify {  success = true,  actionName = colorFruitName}, 
+      payload = responsePayloadTypeOne {  colorFruitNameResponse = apiResponseTwo}, 
+      response = MultiModalResponse { apla = success_fruitNameAPI_apla})
+  }
+
+  sample {
+    expect(act = Invoke, event = InvokeEventTwo)
+    response(response = request_fruitName_apla, 
+      act = Request {  arguments = [    fruitNameAPI.arguments.fruitName  ]})
+    fruitNameEvent = expect(act = Inform, event = informfruitNameEvent)
+    apiResponse = fruitNameAPI(fruitName = fruitNameEvent.fruitName)
+    response(response = success_fruitNameAPI_apla, act = Notify {  actionName = fruitNameAPI}, 
+      payload = responsePayloadTypeTwo {  fruitNameApiResponse = apiResponse})
+  }
+
+}

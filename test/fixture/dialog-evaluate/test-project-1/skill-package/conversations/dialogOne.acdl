@@ -1,0 +1,72 @@
+namespace com.dialogOne
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import prompts.*
+import slotTypes.*
+
+// API Action
+
+action weatherResultType getWeather(DATE date, US_CITY cityName = nothing, 
+  myCustomCities cityNameChanged = nothing)
+
+// UtteraceSets 
+
+InvokeEvent = utterances<cityAndDateType>(
+  samples = [
+    "What's the weather {date} in {cityNameChanged}",
+    "What's the weather {date} in {cityName}",
+    "what is the weather {date}",
+    "how is weather"
+  ]
+)
+
+// Type
+
+type cityAndDateType {
+  optional myCustomCities cityNameChanged
+  optional US_CITY cityName
+  optional DATE date
+}
+
+type weatherResultType {
+  optional myCustomCities cityNameChanged
+  optional US_CITY cityName
+  NUMBER highTemp
+  NUMBER lowTemp
+}
+
+type responsePayloadType {
+  weatherResultType weatherResult
+}
+
+dialog Nothing dialogOne() {
+
+  sample {
+    weatherRequest = expect(act = Invoke, event = InvokeEvent)
+    ensure(requestArgs = [
+      RequestArguments {arguments = [getWeather.arguments.cityNameChanged], response = request_city_apla},
+      RequestArguments {arguments = [getWeather.arguments.cityName], response = request_city_apla},
+      RequestArguments {arguments = [getWeather.arguments.date], response = request_date_apla}
+      ]
+    )
+    apiResponse = getWeather(date = weatherRequest.date, cityName = weatherRequest.cityName)
+    response(response = success_weather_apla, act = Notify {actionName = getWeather}, 
+      payload = responsePayloadType {weatherResult = apiResponse})
+  }
+
+  sample {
+    weatherRequest = expect(act = Invoke, event = InvokeEvent)
+    ensure(requestArgs = [
+      RequestArguments {arguments = [getWeather.arguments.cityNameChanged], response = request_city_apla},
+      RequestArguments {arguments = [getWeather.arguments.cityName], response = request_city_apla},
+      RequestArguments {arguments = [getWeather.arguments.date], response = request_date_apla}
+      ]
+    )
+    apiResponse = getWeather(date = weatherRequest.date, cityNameChanged = weatherRequest.cityNameChanged)
+    response(response = success_weather_apla, act = Notify {actionName = getWeather}, 
+      payload = responsePayloadType {weatherResult = apiResponse})
+  }
+
+}

@@ -1,0 +1,34 @@
+namespace welcomeAPi
+
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import com.weatherbot.apis.welcomeApi
+import com.weatherbot.utteracesets.welcome
+import prompts.welcome_apla_custom
+
+type welcomeApiPayloads {
+  NUMBER result
+}
+
+dialog Nothing complex() {
+  sample {
+    expect(
+      Invoke,
+      welcome
+    )
+    resultDam = welcomeApi()
+    response(
+      welcome_apla_custom,
+      Notify {
+        actionName = welcomeApi
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+  }
+}

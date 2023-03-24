@@ -1,0 +1,89 @@
+namespace soaACDl
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmArgs
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.Color
+import com.weatherbot.apis.colorFruitName
+import com.weatherbot.apis.fruitNameAPI
+import com.weatherbot.types.result
+import com.weatherbot.utteracesets.MultipleDialogEvent
+import com.weatherbot.utteracesets.affirmMultipleColorEvent
+import com.weatherbot.utteracesets.informColorMultipleEvent
+import prompts.confirm_color_for_fruit_apla
+import prompts.request_colorName_multiple_apla
+import prompts.success_fruitPriceAPI_apla
+
+type payloadMultipleDialogEvent {
+  result result
+}
+
+type payloadsOAConfirmArgs {
+  Color colorName
+}
+
+dialog Nothing sOA() {
+  sample {
+    expect(
+      Invoke,
+      MultipleDialogEvent
+    )
+    response(
+      request_colorName_multiple_apla,
+      Request {
+        arguments = [
+          colorFruitName.arguments.colorName
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    colorEvent = expect(
+      Inform,
+      informColorMultipleEvent
+    )
+    response(
+      confirm_color_for_fruit_apla,
+      ConfirmArgs {
+        arguments = [
+          colorFruitName.arguments.colorName
+        ]
+      },
+      nothing,
+      payloadsOAConfirmArgs {
+        colorName = colorEvent.colorName
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      affirmMultipleColorEvent
+    )
+    resultEvent = colorFruitName(
+      colorEvent.colorName,
+      nothing
+    )
+    resultOne = fruitNameAPI(
+      nothing,
+      resultEvent.fruitName
+    )
+    response(
+      success_fruitPriceAPI_apla,
+      Notify {
+        actionName = fruitNameAPI
+      },
+      nothing,
+      payloadMultipleDialogEvent {
+        result = resultOne
+      },
+      nothing
+    )
+  }
+}

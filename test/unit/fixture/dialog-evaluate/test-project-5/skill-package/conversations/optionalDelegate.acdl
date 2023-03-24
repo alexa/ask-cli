@@ -1,0 +1,162 @@
+namespace optionalArgACDL
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmAction
+import com.amazon.alexa.ask.conversations.ConfirmArgs
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.MultiModalResponse
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.Thing
+import com.weatherbot.apis.favColorSign_Name
+import com.weatherbot.types.payloadConfirmActionConditionComplex
+import com.weatherbot.types.result_one
+import com.weatherbot.utteracesets.affirmFavColorEvent
+import com.weatherbot.utteracesets.informComplexNameEvent
+import prompts.confirmAction_complexNames_apla
+import prompts.confirmArgs_complexNames_apla
+import prompts.request_name_apla
+import prompts.success_favColorSign_Name_apla
+import slotTypes.complexNames
+
+type payloadResult_optional {
+  result_one result
+}
+
+type payloadResult_optional_name {
+  complexNames name
+}
+
+getFavColorEvent = utterances(
+  [
+    "what is my favourite color",
+    "tell my favourite color"
+  ]
+)
+
+getFavColorEventTwo = utterances(
+  [
+    "guess the color"
+  ]
+)
+
+dialog Nothing optiOnal() {
+  sample {
+    expect(
+      Invoke,
+      getFavColorEvent
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = request_name_apla
+      },
+      Request {
+        arguments = [
+          favColorSign_Name.arguments.name
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    ComplexNameEvent = expect(
+      Inform,
+      informComplexNameEvent
+    )
+    response(
+      confirmArgs_complexNames_apla,
+      ConfirmArgs {
+        arguments = [
+          favColorSign_Name.arguments.name
+        ]
+      },
+      nothing,
+      payloadConfirmActionConditionComplex {
+        name = ComplexNameEvent.name
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      affirmFavColorEvent
+    )
+    resultOne = favColorSign_Name(
+      ComplexNameEvent.name
+    )
+    response(
+      success_favColorSign_Name_apla,
+      Notify {
+        actionName = favColorSign_Name
+      },
+      nothing,
+      payloadResult_optional {
+        result = resultOne
+      },
+      nothing
+    )
+  }
+}
+
+type PAYLOAD_TYPE01 {
+  complexNames name
+}
+
+dialog Nothing optiOnalTwo() {
+  sample {
+    expect(
+      Invoke,
+      getFavColorEventTwo
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = request_name_apla
+      },
+      Request {
+        arguments = [
+          favColorSign_Name.arguments.name
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    ComplexNameEvent = expect(
+      Inform,
+      informComplexNameEvent
+    )
+    response(
+      confirmAction_complexNames_apla,
+      ConfirmAction {
+        actionName = favColorSign_Name
+      },
+      nothing,
+      payloadConfirmActionConditionComplex {
+        name = ComplexNameEvent.name
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      affirmFavColorEvent
+    )
+    result1 = favColorSign_Name(
+      ComplexNameEvent.name
+    )
+    response(
+      success_favColorSign_Name_apla,
+      Notify {
+        actionName = favColorSign_Name
+      },
+      nothing,
+      payloadResult_optional {
+        result = result1
+      },
+      nothing
+    )
+  }
+}

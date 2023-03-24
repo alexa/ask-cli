@@ -1,0 +1,87 @@
+namespace com.dialogFive
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import prompts.*
+import slotTypes.*
+
+// API Action
+
+action favColorSignNameResponseType favColorSign_Name(complexNames name)
+
+// UtteraceSets 
+
+InvokeEventOne = utterances(
+    samples = [
+      "what is my favourite color"
+    ]
+  )
+
+InvokeEventTwo = utterances(
+    samples = [
+      "guess the color"
+    ]
+)
+
+informComplexNameEvent = utterances<customNameType>(
+    samples = [
+      "{name}",
+      "name is {name}",
+      "i am {name}"
+    ]
+  )
+
+affirmFavColorEvent = utterances(
+    samples = [
+      "correct"
+    ]
+)  
+  
+// Type
+  
+type favColorSignNameResponseType {
+    Color colorName
+    complexNames name
+    signs sign
+ }
+ 
+type customNameType {
+    complexNames name
+}
+
+type responsePayloadType {
+  favColorSignNameResponseType favColorSignNameResponse
+}
+
+ dialog Nothing dialogFive() {
+
+    sample {
+      expect(act = Invoke, event = InvokeEventOne)
+      response(act = Request {arguments = [favColorSign_Name.arguments.name]}, 
+        response = MultiModalResponse<Thing> {  apla = request_name_apla})
+      ComplexNameEvent = expect(act = Inform, event = informComplexNameEvent)
+      response(response = confirmArgs_complexNames_apla, act = ConfirmArgs {arguments = [ favColorSign_Name.arguments.name ]},
+        payload = customNameType {name = ComplexNameEvent.name})
+      expect(act = Affirm, event = affirmFavColorEvent)
+      apiResponse = favColorSign_Name(name = ComplexNameEvent.name) 
+      response(response = success_favColorSign_Name_apla,act = Notify {  actionName = favColorSign_Name}, 
+        payload = responsePayloadType { favColorSignNameResponse = apiResponse})
+    }
+
+    sample {
+      expect(act = Invoke,event = InvokeEventTwo)
+      response(act = Request {  arguments = [    favColorSign_Name.arguments.name  ]}, 
+        response = MultiModalResponse<Thing> {  apla = request_name_apla})
+      ComplexNameEvent = expect(act = Inform,event = informComplexNameEvent)
+      response(response = confirmAction_complexNames_apla, act = ConfirmAction {actionName = favColorSign_Name}, 
+        payload = customNameType { name = ComplexNameEvent.name})
+      expect(act = Affirm,event = affirmFavColorEvent)
+      apiResponse = favColorSign_Name(name = ComplexNameEvent.name) 
+      response(response = success_favColorSign_Name_apla, act = Notify {  actionName = favColorSign_Name}, 
+        payload = responsePayloadType { favColorSignNameResponse = apiResponse})
+    }
+
+  }
+
+

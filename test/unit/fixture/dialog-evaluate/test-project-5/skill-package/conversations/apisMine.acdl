@@ -1,0 +1,50 @@
+namespace com.weatherbot.apis
+
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.Color
+import com.amazon.ask.types.builtins.AMAZON.Food
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import com.amazon.ask.types.builtins.AMAZON.US_CITY
+import com.weatherbot.types.bookCabResult
+import com.weatherbot.types.bookedFlightResult
+import com.weatherbot.types.result
+import com.weatherbot.types.result_one
+import com.weatherbot.types.resultthree
+import slotTypes.StringLiteral
+import slotTypes.city_name_one
+import slotTypes.city_name_two
+import slotTypes.complexNames
+import slotTypes.crust
+import slotTypes.pickUpFrom
+import slotTypes.size
+import slotTypes.toppings
+
+action result colorFruitNameAAA(Food fruitName = nothing)
+
+action resultthree colorFruitName(Color colorName, Food fruitName = nothing)
+
+action result fruitNameAPI(Color colorName = nothing, Food fruitName = nothing)
+
+action result fruitNameAPIAA(Color colorName)
+
+action NUMBER numberOfVisits()
+
+action NUMBER getCooler()
+
+action NUMBER welcomeApi()
+
+action Nothing getHeater()
+
+action result_one favColorSign_Name(complexNames name)
+
+action bookedFlightResult bookFlightAPI(city_name_one source, city_name_two destination)
+
+action bookCabResult bookCabAPI(pickUpFrom pickUpFrom, city_name_one dropTo)
+
+action Nothing secondEarthAPI()
+
+action StringLiteral OrderTwoToppingPizza(toppings second_topping, toppings first_topping, crust crust, size size = nothing)
+
+action Nothing satheesh(US_CITY citsy)
+
+action Nothing Satheesh(US_CITY citsy)

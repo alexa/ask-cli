@@ -10,13 +10,9 @@
             {
               "Effect": "Allow",
               "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
+                "Service": ["lambda.amazonaws.com"]
               },
-              "Action": [
-                "sts:AssumeRole"
-              ]
+              "Action": ["sts:AssumeRole"]
             }
           ]
         },
@@ -29,9 +25,7 @@
               "Statement": [
                 {
                   "Effect": "Allow",
-                  "Action": [
-                    "logs:*"
-                  ],
+                  "Action": ["logs:*"],
                   "Resource": "arn:aws:logs:*:*:*"
                 }
               ]

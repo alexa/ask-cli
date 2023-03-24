@@ -1,1 +1,1 @@
-console.log('node lambda code');
+console.log("node lambda code");

@@ -1,0 +1,92 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "dialogManagement": {
+          "dialogManagers": [
+            {
+              "type": "AMAZON.Conversations"
+            }
+          ],
+          "sessionStartDelegationStrategy": {
+            "target": "AMAZON.Conversations"
+          }
+        },
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:658396899051:function:47172cde-7bb8-4e42-8fdb-dc5138bdf323:Release_0"
+        },
+        "interfaces": [
+          {
+            "supportedViewports": [
+              {
+                "maxHeight": 480,
+                "maxWidth": 480,
+                "minHeight": 480,
+                "minWidth": 480,
+                "mode": "HUB",
+                "shape": "ROUND"
+              },
+              {
+                "maxHeight": 600,
+                "maxWidth": 1024,
+                "minHeight": 600,
+                "minWidth": 1024,
+                "mode": "HUB",
+                "shape": "RECTANGLE"
+              },
+              {
+                "maxHeight": 800,
+                "maxWidth": 1280,
+                "minHeight": 800,
+                "minWidth": 1280,
+                "mode": "HUB",
+                "shape": "RECTANGLE"
+              },
+              {
+                "maxHeight": 540,
+                "maxWidth": 960,
+                "minHeight": 540,
+                "minWidth": 960,
+                "mode": "TV",
+                "shape": "RECTANGLE"
+              }
+            ],
+            "type": "ALEXA_PRESENTATION_APL"
+          }
+        ],
+        "regions": {
+          "EU": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:eu-west-1:658396899051:function:47172cde-7bb8-4e42-8fdb-dc5138bdf323:Release_0"
+            }
+          },
+          "NA": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-east-1:658396899051:function:47172cde-7bb8-4e42-8fdb-dc5138bdf323:Release_0"
+            }
+          },
+          "FE": {
+            "endpoint": {
+              "uri": "arn:aws:lambda:us-west-2:658396899051:function:47172cde-7bb8-4e42-8fdb-dc5138bdf323:Release_0"
+            }
+          }
+        }
+      }
+    },
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": [],
+      "isAvailableWorldwide": true,
+      "locales": {
+        "en-US": {
+          "description": "Sample Full Description",
+          "examplePhrases": ["Alexa open hello world", "hello", "help"],
+          "name": "engineering test skill one",
+          "summary": "Sample Short Description"
+        }
+      },
+      "testingInstructions": "Sample Testing Instructions."
+    }
+  }
+}

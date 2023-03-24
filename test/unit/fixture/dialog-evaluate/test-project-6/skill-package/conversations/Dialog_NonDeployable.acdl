@@ -1,0 +1,90 @@
+namespace dialogs_non_deployable
+
+import apis.getEmployeeDetails
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import prompts.request_dob_getDate_apla
+import prompts.request_getEmploeeID_apla
+import prompts.request_name_apla
+import slotTypes.complexNames
+import types.complexResult
+import utteracesets.informComplexNameEvent
+import utteracesets.informDOBEvent
+import utteracesets.informEmployeeIDEvent
+
+dialog complexNames getName() {
+  sample {
+    response(
+      request_name_apla,
+      Request {
+        arguments = [
+          getEmployeeDetails.arguments.name1
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    complexNamesReturn = expect(
+      Inform,
+      informComplexNameEvent
+    )
+    complexNamesReturn.name
+  }
+}
+
+dialog NUMBER getEmploeeID() {
+  sample {
+    response(
+      request_getEmploeeID_apla,
+      Request {
+        arguments = [
+          getEmployeeDetails.arguments.emplyee1id
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    empID = expect(
+      Inform,
+      informEmployeeIDEvent
+    )
+    empID.emplyee1id
+  }
+}
+
+dialog DATE getDate() {
+  sample {
+    response(
+      request_dob_getDate_apla,
+      Request {
+        arguments = [
+          getEmployeeDetails.arguments.a_dateOfBirth
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    dobEvent = expect(
+      Inform,
+      informDOBEvent
+    )
+    dobEvent.a_dateOfBirth
+  }
+}
+
+dialog complexResult a_getEmployeeDetails(complexNames name1, NUMBER emplyee1id, DATE a_dateOfBirth) {
+  sample {
+    complexResultEvent = getEmployeeDetails(
+      name1,
+      emplyee1id,
+      a_dateOfBirth
+    )
+  }
+}

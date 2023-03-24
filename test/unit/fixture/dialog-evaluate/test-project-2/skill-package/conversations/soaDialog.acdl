@@ -1,0 +1,50 @@
+namespace soaACDl
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmArgs
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.Color
+import com.weatherbot.apis.colorFruitName
+import com.weatherbot.apis.fruitNameAPI
+import com.weatherbot.types.result
+import com.weatherbot.utteracesets.MultipleDialogEvent
+import com.weatherbot.utteracesets.affirmMultipleColorEvent
+import com.weatherbot.utteracesets.informColorMultipleEvent
+import prompts.confirm_color_for_fruit_apla
+import prompts.request_colorName_multiple_apla
+import prompts.success_fruitPriceAPI_apla
+import slotTypes.*
+import prompts.*
+import displays.*
+import com.weatherbot.utteracesets.*
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.weatherbot.types.*
+
+type payloadMultipleDialogEvent {
+  result result
+}
+
+type payloadsOAConfirmArgs {
+  Color colorName
+}
+
+dialog Nothing sOA() {
+  sample {
+    //   "i want to buy a fruit"
+    expect(act = Invoke,event = MultipleDialogEvent)
+    response(response = request_colorName_multiple_apla,act = Request {  arguments = [    colorFruitName.arguments.colorName  ]})
+    colorEvent = expect(act = Inform,event = informColorMultipleEvent)
+    response(response = confirm_color_for_fruit_apla,act = ConfirmArgs {  arguments = [    colorFruitName.arguments.colorName  ]},payload = payloadsOAConfirmArgs {  colorName = colorEvent.colorName})
+    expect(act = Affirm,event = affirmMultipleColorEvent)
+    resultEvent = colorFruitName(colorName = colorEvent.colorName)
+    resultOne = fruitNameAPI(fruitName = resultEvent.fruitName)
+    response(response = success_fruitPriceAPI_apla,act = Notify {  actionName = fruitNameAPI},payload = payloadMultipleDialogEvent {  result = resultOne})
+  }
+}

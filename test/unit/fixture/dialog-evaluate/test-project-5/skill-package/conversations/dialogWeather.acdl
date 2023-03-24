@@ -1,0 +1,9 @@
+namespace dialogWeather
+
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import slotTypes.customCity
+
+type payloadConfirmArgsDialogWeather {
+  optional customCity cityName
+  optional DATE date
+}

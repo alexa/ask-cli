@@ -1,0 +1,43 @@
+namespace types
+
+import com.amazon.ask.types.builtins.AMAZON.Color
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import com.amazon.ask.types.builtins.AMAZON.Food
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import slotTypes.complexNames
+import slotTypes.position
+import slotTypes.signs
+import slotTypes.*
+
+type result_one {
+  Color colorName
+  complexNames name
+  signs sign
+}
+
+type complexResult {
+  complexNames name1
+  DATE a_dateOfBirth
+  NUMBER emplyee1id
+  position position
+}
+
+type nameShell {
+  complexNames name
+}
+
+type dobshell {
+  DATE a_dateOfBirth
+}
+
+type employeeIDshell {
+  NUMBER emplyee1id
+}
+
+type fruitNameShell {
+  Food fruitName
+}
+/
+type colorEvent0 {
+  myColors colorName
+}

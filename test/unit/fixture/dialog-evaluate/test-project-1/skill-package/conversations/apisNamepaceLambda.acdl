@@ -1,0 +1,22 @@
+namespace com.weatherbot.apis
+
+import com.amazon.ask.types.builtins.AMAZON.Food
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import slotTypes.myColors
+
+type result {
+  Food fruitName
+  NUMBER price
+}
+
+type payloadgetFruitPriceEvent {
+  result result
+}
+
+action result fruitNameAPI(Food fruitName)
+
+action resultthree colorFruitName(myColors colorName)
+
+type resultthree {
+  Food fruitName
+}

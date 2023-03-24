@@ -1,0 +1,91 @@
+{
+  "type": "APL-A",
+  "version": "0.1",
+  "mainTemplate": {
+    "parameters": [
+      "payload"
+    ],
+    "item": {
+      "type": "Selector",
+      "description": "Selects the speech response to render when device/locale is not supported",
+      "items": [
+        {
+          "when": "${payload.result.isDeviceSupported == 0}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Sorry, Alexa Prize is not available on this device.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.isLocaleSupported == 0}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Sorry, Alexa Prize is not available in your locale.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.isSocialBotAvailable == 0}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Right now the Alexa Prize socialbots are busy. Please try again soon and help the university students in their competition to advance conversational A I.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.isAlexaPrizeEnabled == 0}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Alexa Prize is currently disabled for this account. Please visit the skill store in the Alexa App to re-enable it.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.isTopicBanned == 1}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "I’d rather not talk about that, but there’s lots of other things to chat about. Do you still wanna chat?",
+          "description": "The topic that user wants to talk about is banned, ask if they still want to chat about something else"
+        },
+        {
+          "when": "${payload.result.isFalseWake == 1}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Would you like to chat with an Alexa Prize socialbot?",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.handoffPromptOverride == 'HandOffConversationForFilming'}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Welcome to the Finals of the Alexa Prize Socialbot Grand Challenge 3, a university competition to advance AI. I’ll get you a socialbot now.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.handoffPromptOverride == 'HandOffConversationForFinals'}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Welcome to the Alexa Prize Socialbot Grand Challenge 3: Grand Finale. Here’s one of the finalists.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.handoffPromptOverride == 'HandOffConversationForRepeatUser'}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Welcome to the Alexa Prize, a university competition to advance AI. It’s quarterfinals for these socialbots and your ratings help determine who makes it to the semifinals. I’ll get you a socialbot now. When you’re done, say stop, and I’ll ask you for your rating. Your conversation and feedback will be shared with the university to help the socialbots improve.",
+          "description": ""
+        },
+        {
+          "when": "${payload.result.handoffPromptOverride == 'CancelHandoff'}",
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Okay",
+          "description": ""
+        },
+        {
+          "type": "Speech",
+          "contentType": "text",
+          "content": "Welcome to the Alexa Prize, a university competition to advance AI. It’s quarterfinals for these socialbots and your ratings help determine who makes it to the semifinals. I’ll get you a socialbot now. When you’re done, say stop, and I’ll ask you for your rating. Your conversation and feedback will be shared with the university to help the socialbots improve.",
+          "description": "This is the current default handoff prompt"
+        }
+      ]
+    }
+  }
+}

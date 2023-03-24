@@ -1,0 +1,213 @@
+namespace com.alexaprize
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.Deny
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Offer
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Boolean
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.String
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import prompts.alexa_prize_preconditions_apla
+import slotTypes.TopicType
+
+type ConversationDetails {
+  optional TopicType Topic
+}
+
+letsChatEvent = utterances<ConversationDetails>(
+  [
+    "let's chat",
+    "i want to chat",
+    "chat",
+    "talk",
+    "let's chat about {Topic}",
+    "i want to talk about {Topic}",
+    "can we talk about {Topic}"
+  ]
+)
+
+affirmEvent = utterances(
+  [
+    "yes",
+    "yup",
+    "yeah",
+    "sure",
+    "alright"
+  ]
+)
+
+denyEvent = utterances(
+  [
+    "no",
+    "nope",
+    "not really",
+    "not",
+    "naah"
+  ]
+)
+
+type AlexaPrizePreconditions {
+  NUMBER isLocaleSupported
+  NUMBER isDeviceSupported
+  NUMBER isFalseWake
+  NUMBER isSocialBotAvailable
+  NUMBER isAlexaPrizeEnabled
+  NUMBER isTopicBanned
+  String handoffPromptOverride
+}
+
+type AlexaPrizePreconditionsPayload {
+  AlexaPrizePreconditions result
+}
+
+type HandoffResults {
+  String handoffPromptOverride
+}
+
+type HandoffResultsPayload {
+  HandoffResults result
+}
+
+action AlexaPrizePreconditions checkPreconditionsAndHandoff(TopicType Topic = nothing)
+
+action HandoffResults intentConfirmedHandoff()
+
+action HandoffResults intentDeniedHandoff()
+
+dialog Nothing AlexaPrizeDialog() {
+  sample {
+    preconditionsResult = checkPrecondition()
+    isHandoffPossible = (((preconditionsResult.isDeviceSupported == 1 && preconditionsResult.isLocaleSupported == 1) && preconditionsResult.isSocialBotAvailable == 1) && preconditionsResult.isAlexaPrizeEnabled == 1)
+    if (isHandoffPossible) {
+      isConfirmationNeeded = (preconditionsResult.isFalseWake == 1 || preconditionsResult.isTopicBanned == 1)
+      responses(
+        isConfirmationNeeded = isConfirmationNeeded,
+        preconditionsResult = preconditionsResult
+      )
+    } else {
+      response(
+        alexa_prize_preconditions_apla,
+        Notify {
+          actionName = checkPreconditionsAndHandoff,
+          success = false
+        },
+        nothing,
+        AlexaPrizePreconditionsPayload {
+          result = preconditionsResult
+        },
+        nothing
+      )
+    }
+  }
+}
+
+dialog AlexaPrizePreconditions checkPrecondition() {
+  sample {
+    chatRequest = expect(
+      Invoke,
+      letsChatEvent
+    )
+    checkPreconditionsAndHandoff(
+      chatRequest.Topic
+    )
+  }
+  sample {
+    expect(
+      Invoke,
+      letsChatEvent
+    )
+    preconditionsResult = checkPreconditionsAndHandoff()
+  }
+}
+
+dialog Nothing responses(Boolean isConfirmationNeeded, AlexaPrizePreconditions preconditionsResult) {
+  sample {
+    if (isConfirmationNeeded) {
+      handoffResult(
+        preconditionsResult = preconditionsResult
+      )
+    } else {
+      response(
+        alexa_prize_preconditions_apla,
+        Notify {
+          actionName = checkPreconditionsAndHandoff
+        },
+        nothing,
+        AlexaPrizePreconditionsPayload {
+          result = preconditionsResult
+        },
+        nothing
+      )
+    }
+  }
+}
+
+dialog Nothing handoffResult(AlexaPrizePreconditions preconditionsResult) {
+  sample {
+    response(
+      alexa_prize_preconditions_apla,
+      Notify {
+        actionName = checkPreconditionsAndHandoff
+      },
+      Offer {
+        actionName = intentConfirmedHandoff
+      },
+      AlexaPrizePreconditionsPayload {
+        result = preconditionsResult
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      affirmEvent
+    )
+    handoffResults = intentConfirmedHandoff()
+    response(
+      alexa_prize_preconditions_apla,
+      Notify {
+        actionName = intentConfirmedHandoff
+      },
+      nothing,
+      HandoffResultsPayload {
+        result = handoffResults
+      },
+      nothing
+    )
+  }
+  sample {
+    response(
+      alexa_prize_preconditions_apla,
+      Notify {
+        actionName = checkPreconditionsAndHandoff
+      },
+      Offer {
+        actionName = intentDeniedHandoff
+      },
+      AlexaPrizePreconditionsPayload {
+        result = preconditionsResult
+      },
+      nothing
+    )
+    expect(
+      Deny,
+      denyEvent
+    )
+    handoffResults = intentDeniedHandoff()
+    response(
+      alexa_prize_preconditions_apla,
+      Notify {
+        actionName = intentDeniedHandoff
+      },
+      nothing,
+      HandoffResultsPayload {
+        result = handoffResults
+      },
+      nothing
+    )
+  }
+}

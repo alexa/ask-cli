@@ -1,0 +1,89 @@
+namespace soaACDl
+
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Nothing
+import com.weatherbot.apis.colorFruitName
+import com.weatherbot.apis.resultthree
+import prompts.request_colorName_multiple_apla
+import prompts.success_colorFruitAPI_apla
+import slotTypes.myColors
+
+type payloadMultipleDialogEvent {
+  resultthree result
+}
+
+MultipleDialogEvent = utterances(
+  [
+    "i want to buy a fruit"
+  ]
+)
+
+affirmMultipleColorEvent = utterances(
+  [
+    "do it"
+  ]
+)
+
+type colorNameShell {
+  myColors colorName
+}
+
+type payloadsOAConfirmArgs {
+  myColors colorName
+}
+
+type colorEvent0 {
+  myColors colorName
+}
+
+informColorMultipleEvent = utterances<colorNameShell>(
+  [
+    "{colorName}",
+    "color is {colorName}",
+    "color {colorName}"
+  ]
+)
+
+dialog Nothing testMe() {
+  sample {
+    expect(
+      Invoke,
+      MultipleDialogEvent
+    )
+    response(
+      request_colorName_multiple_apla,
+      Request {
+        arguments = [
+          colorFruitName.arguments.colorName
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    colorEvent = expect(
+      Inform,
+      informColorMultipleEvent
+    )
+    resultEvent = colorFruitName(
+      colorEvent.colorName
+    )
+    response(
+      success_colorFruitAPI_apla,
+      Notify {
+        actionName = colorFruitName
+      },
+      nothing,
+      payloadMultipleDialogEvent {
+        result = resultEvent
+      },
+      nothing
+    )
+  }
+}

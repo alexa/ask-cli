@@ -1,0 +1,455 @@
+namespace com.weatherbot.utteracesets
+
+import com.amazon.alexa.ask.conversations.utterances
+import com.weatherbot.types.CityDateShell
+import com.weatherbot.types.askMenuQuestionRequestType
+import com.weatherbot.types.colorNameShell
+import com.weatherbot.types.customCityShell
+import com.weatherbot.types.customizePizzaReferenceSpecialRequestType
+import com.weatherbot.types.dateValue
+import com.weatherbot.types.destinationShell
+import com.weatherbot.types.dropToShell
+import com.weatherbot.types.foodNameShell
+import com.weatherbot.types.fruitNameShell
+import com.weatherbot.types.inform_menu_optionRequestType
+import com.weatherbot.types.inquireAboutFeedingSizeRequestType
+import com.weatherbot.types.nameShell
+import com.weatherbot.types.orderSpecificSizePizzaRequestType
+import com.weatherbot.types.pickUpFromShell
+import com.weatherbot.types.signShell
+import com.weatherbot.types.sourceShell
+import com.weatherbot.types.specifyCheeseRequestType
+import com.weatherbot.types.specifyCrustRequestType
+import com.weatherbot.types.specifyQtyRequestType
+import com.weatherbot.types.specifySizeAndToppingsRequestType
+import com.weatherbot.types.specifySizeRequestType
+import com.weatherbot.types.specifySpecialNameRequestType
+import com.weatherbot.types.specifyToppingsRequestType
+import com.weatherbot.types.specifyTwoToppingsRequestType
+
+values = [
+  "what is the weather",
+  "what's the weather",
+  "tell me the weather"
+]
+
+getWeatherEventNoArgs = utterances(
+  values
+)
+
+getWeatherEventArgs = utterances<CityDateShell>(
+  [
+    "tell me the weather in {cityName} {date}",
+    "how is the weather in {cityName} {date}"
+  ]
+)
+
+getWeatherEvent = utterances<CityDateShell>(
+  [
+    "What's the weather {date} in {cityName}",
+    "what is the weather {date}",
+    "How is the weather {date}",
+    "How is weather in {cityName} {date}",
+    "how is weather",
+    "can you please give me weather report for {date}"
+  ]
+)
+
+informCityEvent = utterances<customCityShell>(
+  [
+    "{cityName}",
+    "city is {cityName}",
+    "city name is {cityName}"
+  ]
+)
+
+informDateEvent = utterances<dateValue>(
+  [
+    "date is {date}",
+    "for {date}",
+    "{date}"
+  ]
+)
+
+affirmWeatherEvent = utterances(
+  [
+    "yes",
+    "yeah"
+  ]
+)
+
+delegateToSkill = utterances(
+  [
+    "get me to paradise",
+    "take me to paradise"
+  ]
+)
+
+getMarketPlaceEvent = utterances(
+  [
+    "take me to marketplace",
+    "take me to market place",
+    "take me to market",
+    "take me to shopping",
+    "what is in marketplace",
+    "what is in market place",
+    "what is in market"
+  ]
+)
+
+cookWithTwoIngredientsEvent = utterances(
+  [
+    "let us cook",
+    "start cooking",
+    "cook with two ingredients",
+    "cook two ingredients",
+    "switch to coltrane",
+    "hit coltrane",
+    "make coltrane DM"
+  ]
+)
+
+welcome = utterances(
+  [
+    "get me car"
+  ]
+)
+
+affirmMultipleColorEvent = utterances(
+  [
+    "do it"
+  ]
+)
+
+informMarketPlaceNameEvent = utterances<fruitNameShell>(
+  [
+    "{fruitName}",
+    "marketplace name is {fruitName}",
+    "marketplace is {fruitName}",
+    "market place is {fruitName}",
+    "market place name is {fruitName}"
+  ]
+)
+
+informfruitNameEvent = utterances<fruitNameShell>(
+  [
+    "{fruitName}",
+    "fruit name is {fruitName}",
+    "fruit is {fruitName}"
+  ]
+)
+
+MultipleDialogEvent = utterances(
+  [
+    "i want to buy a fruit"
+  ]
+)
+
+informColorMultipleEvent = utterances<colorNameShell>(
+  [
+    "{colorName}",
+    "color is {colorName}",
+    "color {colorName}"
+  ]
+)
+
+informFoodNameEvent = utterances<foodNameShell>(
+  [
+    "{foodName}",
+    "food is {foodName}",
+    "let us make {foodName}"
+  ]
+)
+
+affirmFruitAPIEvent = utterances(
+  [
+    "uh huh",
+    "yup"
+  ]
+)
+
+affirmCookAPIEvent = utterances(
+  [
+    "ok",
+    "that is ok",
+    "ok for sure"
+  ]
+)
+
+GiveMeTodaySpecialsEvent = utterances(
+  [
+    "give me today specials",
+    "what is special today"
+  ]
+)
+
+getFruitPriceEvent = utterances(
+  [
+    "what is the price of the fruit",
+    "what is the price of fruit"
+  ]
+)
+
+informsignEvent = utterances<signShell>(
+  [
+    "{sign}",
+    "sign is {sign}",
+    "sun sign is {sign}"
+  ]
+)
+
+informComplexNameEvent = utterances<nameShell>(
+  [
+    "{name}",
+    "name is {name}",
+    "i am {name}"
+  ]
+)
+
+affirmFavColorEvent = utterances(
+  [
+    "correct"
+  ]
+)
+
+bookFlightEvent = utterances(
+  [
+    "book a flight",
+    "book flight"
+  ]
+)
+
+informFromBookFlight = utterances<sourceShell>(
+  [
+    "from {source}",
+    "travel from {source}",
+    "source is {source}"
+  ]
+)
+
+informToBookFlight = utterances<destinationShell>(
+  [
+    "to {destination}",
+    "trave to {destination}",
+    "go to {destination}",
+    "destination to {destination}"
+  ]
+)
+
+affirmCabAPIEvent = utterances(
+  [
+    "sure do",
+    "sure please do",
+    "roger",
+    "indeed"
+  ]
+)
+
+informPickUpFromBookCab = utterances<pickUpFromShell>(
+  [
+    "{pickUpFrom}"
+  ]
+)
+
+informdropToBookCab = utterances<dropToShell>(
+  [
+    "{dropTo}"
+  ]
+)
+
+inform_menu_option = utterances<inform_menu_optionRequestType>(
+  [
+    "{option}"
+  ]
+)
+
+menuOptionsQuestion = utterances(
+  [
+    "what options can I change?",
+    "what kinds of options are there?"
+  ]
+)
+
+inquireAboutFeedingSizeNoArgs = utterances(
+  [
+    "how many people does that feed",
+    "Is that enough for two adults and two kids"
+  ]
+)
+
+specifySpecialName = utterances<specifySpecialNameRequestType>(
+  [
+    "{name}"
+  ]
+)
+
+askMenuQuestion = utterances<askMenuQuestionRequestType>(
+  [
+    "what are your {option}",
+    "what {option} can i get",
+    "what types of {option} do you have",
+    "What kind of {option} do you have"
+  ]
+)
+
+specifySizeAndToppings = utterances<specifySizeAndToppingsRequestType>(
+  [
+    "add a {size} {toppings} pizza to my order",
+    "order a {size} {toppings} pizza",
+    "I want a {size} {toppings} pizza"
+  ]
+)
+
+orderSpecificSizePizza = utterances<orderSpecificSizePizzaRequestType>(
+  [
+    "order a {size} pizza",
+    "I want a {size} pizza"
+  ]
+)
+
+DummyInvokeOrderCustomizedPizzaReferenceSpecial = utterances(
+  [
+    "dummy invoke needed when offer API is used in NotifySuccess request template + OfferAPI for OrderCustomizedPizzaReferenceSpecial"
+  ]
+)
+
+startCustomizeFlow = utterances(
+  [
+    "I want to customize a special"
+  ]
+)
+
+confirmCustomizedSpecial = utterances(
+  [
+    "sounds good",
+    "perfect",
+    "go ahead",
+    "sure",
+    "yeah",
+    "ok",
+    "yep"
+  ]
+)
+
+specifyQty = utterances<specifyQtyRequestType>(
+  [
+    "{qty} please",
+    "{qty}",
+    "give me {qty}",
+    "I will take {qty}",
+    "I want {qty}"
+  ]
+)
+
+customizePizzaReferenceSpecial = utterances<customizePizzaReferenceSpecialRequestType>(
+  [
+    "let's customize the {name}",
+    "I want to customize the {name}"
+  ]
+)
+
+specifyTwoToppings = utterances<specifyTwoToppingsRequestType>(
+  [
+    "no, make it {first_topping} and {second_topping}",
+    "no, {first_topping} and {second_topping}",
+    "actually make that {first_topping} and {second_topping}",
+    "change that to {first_topping} and {second_topping}",
+    "{first_topping} and {second_topping}",
+    "add {first_topping} and {second_topping}",
+    "I want {first_topping} and {second_topping}"
+  ]
+)
+
+Yes = utterances(
+  [
+    "Correct",
+    "Uh huh",
+    "Right",
+    "Yep",
+    "Yes"
+  ]
+)
+
+inquireAboutFeedingSize = utterances<inquireAboutFeedingSizeRequestType>(
+  [
+    "is a {size} enough for four adults",
+    "how many people can a {size} feed",
+    "how many people can {size}  pizza  feed?"
+  ]
+)
+
+tested = utterances(
+  [
+    "launch skill"
+  ]
+)
+
+startTwoToppingPizzaOrder = utterances(
+  [
+    "order a two topping pizza",
+    "I want a two topping pizza"
+  ]
+)
+
+specifyToppings = utterances<specifyToppingsRequestType>(
+  [
+    "{toppingsList}",
+    "I'd like {toppingsList}",
+    "give me {toppingsList}",
+    "we like {toppingsList}",
+    "The kids want {toppingsList}"
+  ]
+)
+
+startPizzaOrder = utterances(
+  [
+    "build my own pizza",
+    "I need my own custom pizza",
+    "Add one more order",
+    "I want another pizza",
+    "build another pizza",
+    "create another pizza",
+    "build a pizza",
+    "place an order for a pizza",
+    "add another pizza to my order",
+    "add another custom pizza to my order",
+    "create a custom pizza",
+    "start my pizza order",
+    "order me a custom pizza",
+    "order a pizza"
+  ]
+)
+
+specifySize = utterances<specifySizeRequestType>(
+  [
+    "change it to {size}",
+    "make that a {size}",
+    "change that to a {size} pizza",
+    "{size}",
+    "I need a {size} pizza"
+  ]
+)
+
+specifyCrust = utterances<specifyCrustRequestType>(
+  [
+    "{crust}",
+    "I need {crust}"
+  ]
+)
+
+specifyCheese = utterances<specifyCheeseRequestType>(
+  [
+    "{cheese}",
+    "I need {cheese}",
+    "Please add {cheese}"
+  ]
+)
+
+confirmPizzaOrder = utterances(
+  [
+    "yes",
+    "yup",
+    "go ahead",
+    "perfect"
+  ]
+)

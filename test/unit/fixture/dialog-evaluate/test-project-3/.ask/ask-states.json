@@ -1,0 +1,8 @@
+{
+  "askcliStatesVersion": "2020-03-31",
+  "profiles": {
+    "TEST_PROFILE": {
+      "skillId": "TEST_SKILL_ID"
+    }
+  }
+}

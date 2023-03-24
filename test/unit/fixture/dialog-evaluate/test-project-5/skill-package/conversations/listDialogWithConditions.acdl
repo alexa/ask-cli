@@ -1,0 +1,250 @@
+namespace listDialog
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmAction
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.size
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.List
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.Food
+import com.weatherbot.apis.colorFruitNameAAA
+import com.weatherbot.apis.fruitNameAPI
+import com.weatherbot.apis.numberOfVisits
+import com.weatherbot.types.result
+import com.weatherbot.utteracesets.GiveMeTodaySpecialsEvent
+import com.weatherbot.utteracesets.affirmCookAPIEvent
+import com.weatherbot.utteracesets.cookWithTwoIngredientsEvent
+import com.weatherbot.utteracesets.getFruitPriceEvent
+import com.weatherbot.utteracesets.getMarketPlaceEvent
+import com.weatherbot.utteracesets.informFoodNameEvent
+import com.weatherbot.utteracesets.informMarketPlaceNameEvent
+import com.weatherbot.utteracesets.informfruitNameEvent
+import prompts.SuccessGiveMeTodaySpecialsEvent_apla
+import prompts.confirm_main_addon_list_apla
+import prompts.requestArgs_request_fruitName_apla
+import prompts.request_listAddOns_apla
+import prompts.request_mainFoodName_apla
+import prompts.success_cookingAPI_apla
+import prompts.success_fruitPriceAPI_apla
+import slotTypes.Mix
+import slotTypes.orderStatus
+
+type addOnShell {
+  List<Mix> addOn
+}
+
+action orderStatus cookingAPI(Food foodName, List<Mix> addOn)
+
+action List<Mix> todaySpecials()
+
+informlistAddOnsEvent = utterances<addOnShell>(
+  [
+    "{addOn}",
+    "add {addOn}",
+    "mix {addOn}"
+  ]
+)
+
+type payloadStatuscookWithTwoIngredients {
+  orderStatus status
+}
+
+type payloadGiveMeTodaySpecials {
+  List<Mix> result
+}
+
+type payloadgetFruitPriceEvent {
+  result result
+}
+
+type payloadConfirmActionComplex {
+  optional Food foodName
+  List<Mix> addOn
+}
+
+type paylaodCompleFruit {
+  Food fruitName
+}
+
+type WrongpayloadGiveMeTodaySpecialsNew {
+  List<Mix> ListOfMix1
+  Mix Mix1
+}
+
+type payloadGiveMeTodaySpecialsNew {
+  List<Mix> ListOfMix1
+}
+
+type InteractionFoodName {
+  Food foodName
+}
+
+dialog Nothing complex() {
+  sample {
+    expect(
+      Invoke,
+      cookWithTwoIngredientsEvent
+    )
+    response(
+      request_listAddOns_apla,
+      Request {
+        arguments = [
+          cookingAPI.arguments.addOn
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    listAddOnsEvent = expect(
+      Inform,
+      informlistAddOnsEvent
+    )
+    response(
+      request_mainFoodName_apla,
+      Request {
+        arguments = [
+          cookingAPI.arguments.foodName
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    FoodNameEvent = expect(
+      Inform,
+      informFoodNameEvent
+    )
+    response(
+      confirm_main_addon_list_apla,
+      ConfirmAction {
+        actionName = cookingAPI
+      },
+      nothing,
+      payloadConfirmActionComplex {
+        foodName = FoodNameEvent.foodName,
+        addOn = listAddOnsEvent.addOn
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      affirmCookAPIEvent
+    )
+    resultOne = cookingAPI(
+      FoodNameEvent.foodName,
+      listAddOnsEvent.addOn
+    )
+    response(
+      success_cookingAPI_apla,
+      Notify {
+        actionName = cookingAPI
+      },
+      nothing,
+      payloadStatuscookWithTwoIngredients {
+        status = resultOne
+      },
+      nothing
+    )
+  }
+  sample {
+    expect(
+      Invoke,
+      GiveMeTodaySpecialsEvent
+    )
+    numberOfVisits()
+    resultOne = todaySpecials()
+    if (size(
+      resultOne
+    ) == 1) {
+      response(
+        SuccessGiveMeTodaySpecialsEvent_apla,
+        Notify {
+          actionName = todaySpecials
+        },
+        nothing,
+        payloadGiveMeTodaySpecials {
+          result = resultOne
+        },
+        nothing
+      )
+    }
+  }
+  sample {
+    expect(
+      Invoke,
+      getFruitPriceEvent
+    )
+    response(
+      requestArgs_request_fruitName_apla,
+      Request {
+        arguments = [
+          fruitNameAPI.arguments.fruitName
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    fruitNameEvent = expect(
+      Inform,
+      informfruitNameEvent
+    )
+    resultOne = fruitNameAPI(
+      nothing,
+      fruitNameEvent.fruitName
+    )
+    response(
+      success_fruitPriceAPI_apla,
+      Notify {
+        actionName = fruitNameAPI
+      },
+      nothing,
+      payloadgetFruitPriceEvent {
+        result = resultOne
+      },
+      nothing
+    )
+  }
+  sample {
+    expect(
+      Invoke,
+      getMarketPlaceEvent
+    )
+    response(
+      requestArgs_request_fruitName_apla,
+      Request {
+        arguments = [
+          colorFruitNameAAA.arguments.fruitName
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    MarketPlaceInformResponseEvent = expect(
+      Inform,
+      informMarketPlaceNameEvent
+    )
+    resultOne = colorFruitNameAAA(
+      MarketPlaceInformResponseEvent.fruitName
+    )
+    response(
+      success_fruitPriceAPI_apla,
+      Notify {
+        actionName = colorFruitNameAAA
+      },
+      nothing,
+      payloadgetFruitPriceEvent {
+        result = resultOne
+      },
+      nothing
+    )
+  }
+}

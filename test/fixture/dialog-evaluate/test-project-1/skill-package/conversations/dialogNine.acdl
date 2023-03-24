@@ -1,0 +1,38 @@
+namespace com.dialogNine
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import prompts.*
+import slotTypes.*
+
+// API Action
+
+action Nothing delegateToSkill()
+
+action fruitNameResultType fruitNameAPI(Food fruitName = nothing)
+
+// UtteraceSets 
+
+InvokeEvent = utterances(
+  samples = [
+    "switch to skill focus dialog manager"
+  ]
+)
+
+// type
+
+type fruitNameResultType {
+  Food fruitName
+  NUMBER price
+}
+
+dialog Nothing dialogNine() {
+
+  sample {
+    expect(act = Invoke, event = InvokeEvent)
+    delegateToSkill()
+    response(response = notused_apla, act = Notify {actionName = delegateToSkill}, nextAct = nothing)
+  }
+
+}

@@ -4,7 +4,8 @@
     "default": {
       "skillId": "amzn1.ask.skill.1234567890",
       "skillMetadata": {
-        "lastDeployHash": "hash=="
+        "lastDeployHash": "hash==",
+        "lastDeployType": "interaction-model"
       },
       "code": {
         "default": {

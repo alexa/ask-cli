@@ -1,0 +1,114 @@
+namespace com.numberbot
+
+import com.amazon.alexa.ask.conversations.APLA
+import com.amazon.alexa.ask.conversations.Action
+import com.amazon.alexa.ask.conversations.Bye
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Offer
+import com.amazon.alexa.ask.conversations.RequestArguments
+import com.amazon.alexa.ask.conversations.ensure
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.Number
+import com.amazon.alexa.schema.Thing
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import prompts.AlexaConversationsBye
+import prompts.numericfeedback_apla
+import prompts.rating_apla
+
+type NumPayload {
+  Number num
+}
+
+type RatingRequest {
+  NUMBER rating
+}
+
+InformRatingEvent = utterances<RatingRequest>(
+  samples = [
+    "my score is {rating}",
+    "that was a {rating} conversation",
+    "i rate you a {rating}",
+    "{rating}"
+  ]
+)
+
+getStart = utterances(
+  samples = [
+    "give me a number please"
+  ]
+)
+
+action Nothing saveRating(Number rating)
+
+action Number getNumber()
+
+dialog Nothing GetFeedback(APLA<Thing> feedback_prompt, Number num, Action notifyAction) {
+  sample {
+    response(
+      response = feedback_prompt,
+      act = Notify {
+        actionName = notifyAction,
+        success = true
+      },
+      nextAct = Offer {
+        actionName = saveRating,
+        arguments = [
+          saveRating.arguments.rating
+        ]
+      },
+      payload = NumPayload {
+        num = num
+      }
+    )
+    myRating = expect(
+      act = Invoke,
+      event = InformRatingEvent
+    )
+    ensure(
+      requestArgs = [
+        RequestArguments<Thing> {
+          arguments = [
+            saveRating.arguments.rating
+          ],
+          response = rating_apla
+        }
+      ]
+    )
+    saveRating(
+      rating = myRating.rating
+    )
+  }
+}
+
+dialog Number levelOne() {
+  sample {
+    expect(
+      act = Invoke,
+      event = getStart
+    )
+    num = getNumber()
+  }
+}
+
+dialog Nothing MainDialog() {
+  sample {
+    num = levelOne()
+    GetFeedback(
+      feedback_prompt = numericfeedback_apla,
+      num = num,
+      notifyAction = getNumber
+    )
+    response(
+      response = AlexaConversationsBye,
+      act = Notify {
+        actionName = saveRating,
+        success = true
+      },
+      nextAct = Bye {}
+    )
+  }
+}

@@ -1,0 +1,248 @@
+namespace com.weatherbot.types
+
+import com.amazon.alexa.schema.List
+import com.amazon.ask.types.builtins.AMAZON.Color
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import com.amazon.ask.types.builtins.AMAZON.Food
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import slotTypes.Mix
+import slotTypes.StringLiteral
+import slotTypes.cheese
+import slotTypes.city_name_one
+import slotTypes.city_name_two
+import slotTypes.complexNames
+import slotTypes.crust
+import slotTypes.customCity
+import slotTypes.option
+import slotTypes.orderStatus
+import slotTypes.pickUpFrom
+import slotTypes.signs
+import slotTypes.size
+import slotTypes.specialPizzaName
+import slotTypes.toppings
+
+type customCityShell {
+  customCity cityName
+}
+
+type signShell {
+  signs sign
+}
+
+type dateValue {
+  DATE date
+}
+
+type WeatherResult {
+  customCity cityName
+  NUMBER highTemp
+  NUMBER lowTemp
+  optional List<Mix> itemsToUse
+}
+
+type resultthree {
+  Food fruitName
+  Color colorName
+}
+
+type result {
+  Food fruitName
+  NUMBER price
+}
+
+type fruitNameShell {
+  Food fruitName
+}
+
+type foodNameShell {
+  Food foodName
+}
+
+type CityDateShell {
+  optional customCity cityName
+  optional DATE date
+}
+
+type nameShell {
+  complexNames name
+}
+
+type colorNameShell {
+  Color colorName
+}
+
+type result_one {
+  Color colorName
+  complexNames name
+  signs sign
+}
+
+type sourceShell {
+  city_name_one source
+}
+
+type destinationShell {
+  city_name_two destination
+}
+
+type pickUpFromShell {
+  pickUpFrom pickUpFrom
+}
+
+type dropToShell {
+  city_name_one dropTo
+}
+
+type bookedFlightResult {
+  city_name_two destination
+  city_name_one source
+  orderStatus orderStatus
+}
+
+type bookCabResult {
+  pickUpFrom pickUpFrom
+  city_name_one dropTo
+  orderStatus orderStatus
+}
+
+type ResponsePayload {
+  WeatherResult weatherResult
+}
+
+type payloadConfirmActionConditionComplex {
+  optional complexNames name
+  optional signs sign
+}
+
+type Response_Payload_one {
+  optional customCity cityName
+  optional DATE date
+}
+
+type inform_menu_optionRequestType {
+  option option
+}
+
+type specifySpecialNameRequestType {
+  specialPizzaName name
+}
+
+type askMenuQuestionRequestType {
+  option option
+}
+
+type specifySizeAndToppingsRequestType {
+  size size
+  List<toppings> toppings
+}
+
+type orderSpecificSizePizzaRequestType {
+  size size
+}
+
+type specifyQtyRequestType {
+  NUMBER qty
+}
+
+type customizePizzaReferenceSpecialRequestType {
+  specialPizzaName name
+}
+
+type specifyTwoToppingsRequestType {
+  toppings second_topping
+  toppings first_topping
+}
+
+type inquireAboutFeedingSizeRequestType {
+  size size
+}
+
+type specifyToppingsRequestType {
+  List<toppings> toppingsList
+}
+
+type specifySizeRequestType {
+  size size
+}
+
+type specifyCrustRequestType {
+  crust crust
+}
+
+type specifyCheeseRequestType {
+  cheese cheese
+}
+
+type pizza {
+  size size
+  List<toppings> toppingsList
+  crust crust
+  cheese cheese
+}
+
+type special {
+  pizza pizza
+  NUMBER cost
+  NUMBER qty
+  specialPizzaName name
+}
+
+type PAYLOAD_TYPE0 {
+  size size
+  StringLiteral prompt
+}
+
+type PAYLOAD_TYPE1 {
+  size size
+  List<toppings> toppingsList
+  crust crust
+  cheese cheese
+}
+
+type PAYLOAD_TYPE2 {
+  pizza pizza
+}
+
+type PAYLOAD_TYPE3 {
+  size size
+  List<toppings> toppingsList
+  crust crust
+  cheese cheese
+}
+
+type PAYLOAD_TYPE4 {
+  pizza pizza
+}
+
+type PAYLOAD_TYPE5 {
+  size size
+  StringLiteral prompt
+}
+
+type PAYLOAD_TYPE6 {
+  size size
+}
+
+type PAYLOAD_TYPE7 {
+  toppings second_topping
+  toppings first_topping
+}
+
+type PAYLOAD_TYPE88 {
+  toppings second_topping
+  toppings first_topping
+  crust crust
+  optional size size
+}
+
+type PAYLOAD_TYPE9 {
+  StringLiteral speech
+}
+
+type PAYLOAD_TYPE10 {
+  StringLiteral optionResponse
+}
+
+type PAYLOAD_TYPE11 {
+  StringLiteral optionResponse
+}

@@ -1,0 +1,71 @@
+namespace conditionsACDlFile
+
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.MultiModalResponse
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Offer
+import com.amazon.alexa.ask.conversations.ReqAlt
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.RequestArguments
+import com.amazon.alexa.ask.conversations.ensure
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.size
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.Thing
+import com.weatherbot.apis.favColorSign_Name
+import com.weatherbot.apis.getWeather
+import com.weatherbot.types.WeatherResult
+import com.weatherbot.types.result_one
+import com.weatherbot.utteracesets.getWeatherEventNoArgs
+import com.weatherbot.utteracesets.informCityEvent
+import com.weatherbot.utteracesets.informComplexNameEvent
+import com.weatherbot.utteracesets.informDateEvent
+import displays.request_city_apl_display
+import prompts.request_city_apla
+import prompts.request_date_apla
+import prompts.request_name_apla
+import prompts.success_favColorSign_Name_apla
+import prompts.weather_success_apla
+import slotTypes.*
+import prompts.*
+import displays.*
+import com.weatherbot.utteracesets.*
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.weatherbot.types.*
+
+type payload_one {
+  result_one result
+}
+
+type payload_one_two {
+  WeatherResult weatherResult
+}
+
+dialog Nothing conditionComplex() {
+  sample {
+    expect(act = Invoke,event = getWeatherEventNoArgs)
+    request_city_multimodal = MultiModalResponse<Thing> {apla = request_city_apla,apl = request_city_apl_display
+    }
+    request_date_multimodal = MultiModalResponse<Thing> {apla = request_date_apla,apl = request_city_apl_display
+    }
+    response(response = request_city_multimodal,act = Request {  arguments = [    getWeather.arguments.cityName  ]})
+    cityEvent = expect(act = Inform,event = informCityEvent)
+    response(response = request_date_multimodal,act = Request {  arguments = [    getWeather.arguments.date  ]})
+    dateEvent = expect(act = Inform,event = informDateEvent)
+    weatherResult = getWeather(cityName = cityEvent.cityName,date = dateEvent.date)
+    if (((weatherResult.highTemp < 3 && weatherResult.lowTemp > 0) && com.amazon.alexa.ask.conversations.size(list = weatherResult.itemsToUse) > 1)) 
+    {response(  response = weather_success_apla,  act = Notify {actionName = getWeather  },  
+      nextAct = Offer { actionName = favColorSign_Name,    arguments = [      favColorSign_Name.arguments.name    ]  })
+      ensure(  requestArgs = [    RequestArguments<Thing> {   arguments = [        favColorSign_Name.arguments.name      ],      response = request_name_apla    }  ])
+      ComplexNameEvent = expect(  act = Inform,  event = informComplexNameEvent)
+      resultOne_one = favColorSign_Name(  name = ComplexNameEvent.name)
+      response(  response = success_favColorSign_Name_apla,  act = Notify { actionName = favColorSign_Name  },  
+        payload = payload_one { result = resultOne_one  })
+    } else {
+      response(  response = weather_success_apla,  act = Notify { actionName = getWeather,success = false  },  nextAct = ReqAlt { arguments = [      getWeather.arguments.cityName    ]  },  payload = payload_one_two { weatherResult = weatherResult  })cityEvent_new = expect(  act = Inform,  event = informCityEvent)weatherResult_two = getWeather(  cityName = cityEvent_new.cityName,  date = dateEvent.date)successAPLWithAPLsa_nw = MultiModalResponse<Thing> {  apla = weather_success_apla}response(  response = successAPLWithAPLsa_nw,  act = Notify { actionName = getWeather  },  payload = payload_one_two { weatherResult = weatherResult_two  })
+    }
+  }
+}

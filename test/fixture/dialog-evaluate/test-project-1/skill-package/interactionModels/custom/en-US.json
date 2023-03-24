@@ -1,0 +1,180 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "test skill",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "GetWeatherIntent",
+          "samples": ["what is the weather", "how is the weather", "tell me the weather"]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "flower city"
+              }
+            },
+            {
+              "name": {
+                "value": "temple city"
+              }
+            },
+            {
+              "name": {
+                "value": "ramapuram"
+              }
+            },
+            {
+              "name": {
+                "value": "guindy"
+              }
+            },
+            {
+              "name": {
+                "value": "porur"
+              }
+            }
+          ],
+          "name": "myCustomCities"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "almonds"
+              }
+            },
+            {
+              "name": {
+                "value": "bread"
+              }
+            },
+            {
+              "name": {
+                "value": "egg"
+              }
+            },
+            {
+              "name": {
+                "value": "sauce"
+              }
+            },
+            {
+              "name": {
+                "value": "jam"
+              }
+            },
+            {
+              "name": {
+                "value": "cheese"
+              }
+            }
+          ],
+          "name": "Mix"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "failure"
+              }
+            },
+            {
+              "name": {
+                "value": "failed"
+              }
+            },
+            {
+              "name": {
+                "value": "success"
+              }
+            }
+          ],
+          "name": "orderStatus"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "blue"
+              }
+            },
+            {
+              "name": {
+                "value": "red"
+              }
+            },
+            {
+              "name": {
+                "value": "rocket"
+              }
+            }
+          ],
+          "name": "myColors"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "satheesh"
+              }
+            },
+            {
+              "name": {
+                "value": "raman"
+              }
+            },
+            {
+              "name": {
+                "value": "yadhu"
+              }
+            }
+          ],
+          "name": "complexNames"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "cancer"
+              }
+            },
+            {
+              "name": {
+                "value": "scorpio"
+              }
+            },
+            {
+              "name": {
+                "value": "scorpion"
+              }
+            }
+          ],
+          "name": "signs"
+        }
+      ]
+    }
+  }
+}

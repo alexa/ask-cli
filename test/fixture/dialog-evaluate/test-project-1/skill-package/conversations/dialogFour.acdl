@@ -1,0 +1,84 @@
+namespace com.dialogFour
+
+import com.amazon.alexa.ask.conversations.*
+import com.amazon.alexa.schema.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import prompts.*
+import slotTypes.*
+
+// API Action
+
+action fruitNameResultType fruitNameAPI(Food fruitName)
+
+action fruitNameResultType colorFruitNameAAA(Food fruitName)
+
+// UtteraceSets 
+
+InvokeEventOne = utterances(
+  samples = [
+    "what is the price of the fruit"
+  ]
+)
+
+InvokeEventTwo = utterances(
+  samples = [
+    "take me to market place"
+  ]
+)
+
+informfruitNameEvent = utterances<fruitNameType>(
+  samples = [
+    "{fruitName}",
+    "fruit name is {fruitName}",
+    "fruit is {fruitName}"
+  ]
+)
+
+informMarketPlaceNameEvent = utterances<fruitNameType>(
+  samples = [
+    "{fruitName}",
+    "marketplace name is {fruitName}",
+    "marketplace is {fruitName}",
+    "market place is {fruitName}",
+    "market place name is {fruitName}"
+  ]
+)
+
+// Type
+
+type fruitNameType {
+  Food fruitName
+}
+
+type fruitNameResultType {
+  Food fruitName
+  NUMBER price
+}
+
+type responsePayloadType {
+  fruitNameResultType fruitNameResult
+}
+
+dialog Nothing dialogFour() {
+
+  sample {
+    expect(act = Invoke, event = InvokeEventOne)
+    response(response = request_fruitName_apla, 
+      act = Request { arguments = [fruitNameAPI.arguments.fruitName]})
+    fruitNameEvent = expect(act = Inform, event = informfruitNameEvent)
+    apiResponse = fruitNameAPI(fruitName = fruitNameEvent.fruitName)
+    response(response = success_fruitNameAPI_apla, act = Notify {actionName = fruitNameAPI}, 
+      payload = responsePayloadType {fruitNameResult = apiResponse})
+  }
+
+  sample {
+    expect(act = Invoke,event = InvokeEventTwo)
+    response(response = request_fruitName_apla, 
+      act = Request {arguments = [colorFruitNameAAA.arguments.fruitName]})
+    MarketPlaceInformResponseEvent = expect(act = Inform,event = informMarketPlaceNameEvent)
+    apiResponse = colorFruitNameAAA(fruitName = MarketPlaceInformResponseEvent.fruitName)
+    response(response = success_fruitNameAPI_apla, act = Notify {  actionName = colorFruitNameAAA}, 
+      payload = responsePayloadType { fruitNameResult = apiResponse})
+  }
+
+}

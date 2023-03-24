@@ -1,0 +1,196 @@
+namespace pizzaAcdl
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmAction
+import com.amazon.alexa.ask.conversations.ConfirmArgs
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.MultiModalResponse
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.RequestArguments
+import com.amazon.alexa.ask.conversations.ensure
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.schema.Nothing
+import com.amazon.alexa.schema.Thing
+import com.weatherbot.apis.OrderTwoToppingPizza
+import com.weatherbot.types.PAYLOAD_TYPE6
+import com.weatherbot.types.PAYLOAD_TYPE7
+import com.weatherbot.types.PAYLOAD_TYPE88
+import com.weatherbot.types.PAYLOAD_TYPE9
+import com.weatherbot.utteracesets.Yes
+import com.weatherbot.utteracesets.specifyCrust
+import com.weatherbot.utteracesets.specifySize
+import com.weatherbot.utteracesets.specifyTwoToppings
+import com.weatherbot.utteracesets.startTwoToppingPizzaOrder
+import prompts.askForCrustPrompts
+import prompts.askForSizePrompts
+import prompts.askForToppingOnePrompt
+import prompts.askForToppingTwoPrompt
+import prompts.askForTwoToppingsPrompts
+import prompts.confirmSizePrompt
+import prompts.confirmTwoToppingOrderPromptcopy
+import prompts.confirmTwoToppingsPrompt
+import prompts.twoToppingOrderSuccessPrompt
+
+dialog Nothing orderTwoToppingPizza() {
+  sample {
+    expect(
+      Invoke,
+      startTwoToppingPizzaOrder
+    )
+    ensure(
+      RequestArguments<Thing> {
+          arguments = [
+            OrderTwoToppingPizza.arguments.first_topping
+          ],
+          response = MultiModalResponse<Thing> {
+            apla = askForToppingOnePrompt
+          }
+        }
+    )
+    ensure(
+      RequestArguments<Thing> {
+          arguments = [
+            OrderTwoToppingPizza.arguments.second_topping
+          ],
+          response = MultiModalResponse<Thing> {
+            apla = askForToppingTwoPrompt
+          }
+        }
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = askForSizePrompts
+      },
+      Request {
+        arguments = [
+          OrderTwoToppingPizza.arguments.size
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    specifySizeRequest = expect(
+      Inform,
+      specifySize
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = confirmSizePrompt
+      },
+      ConfirmArgs {
+        arguments = [
+          OrderTwoToppingPizza.arguments.size
+        ]
+      },
+      nothing,
+      PAYLOAD_TYPE6 {
+        size = specifySizeRequest.size
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      Yes
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = askForCrustPrompts
+      },
+      Request {
+        arguments = [
+          OrderTwoToppingPizza.arguments.crust
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    specifyCrustRequest = expect(
+      Inform,
+      specifyCrust
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = askForTwoToppingsPrompts
+      },
+      Request {
+        arguments = [
+          OrderTwoToppingPizza.arguments.first_topping,
+          OrderTwoToppingPizza.arguments.second_topping
+        ]
+      },
+      nothing,
+      nothing,
+      nothing
+    )
+    specifyTwoToppingsRequest = expect(
+      Inform,
+      specifyTwoToppings
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = confirmTwoToppingsPrompt
+      },
+      ConfirmArgs {
+        arguments = [
+          OrderTwoToppingPizza.arguments.first_topping,
+          OrderTwoToppingPizza.arguments.second_topping
+        ]
+      },
+      nothing,
+      PAYLOAD_TYPE7 {
+        second_topping = specifyTwoToppingsRequest.second_topping,
+        first_topping = specifyTwoToppingsRequest.first_topping
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      Yes
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = confirmTwoToppingOrderPromptcopy
+      },
+      ConfirmAction {
+        actionName = OrderTwoToppingPizza
+      },
+      nothing,
+      PAYLOAD_TYPE88 {
+        size = specifySizeRequest.size,
+        second_topping = specifyTwoToppingsRequest.second_topping,
+        first_topping = specifyTwoToppingsRequest.first_topping,
+        crust = specifyCrustRequest.crust
+      },
+      nothing
+    )
+    expect(
+      Affirm,
+      Yes
+    )
+    stringLiteral1 = OrderTwoToppingPizza(
+      specifyTwoToppingsRequest.second_topping,
+      specifyTwoToppingsRequest.first_topping,
+      specifyCrustRequest.crust,
+      specifySizeRequest.size
+    )
+    response(
+      MultiModalResponse<Thing> {
+        apla = twoToppingOrderSuccessPrompt
+      },
+      Notify {
+        success = true,
+        actionName = OrderTwoToppingPizza
+      },
+      nothing,
+      PAYLOAD_TYPE9 {
+        speech = stringLiteral1
+      },
+      nothing
+    )
+  }
+}

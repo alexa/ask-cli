@@ -9,13 +9,14 @@ Below are typical steps to follow if you want to contribute:
 git clone git@github.com:<your-account>/ask-cli.git
 ```
 3. Run `npm install` at the root of the repo
-4. Run `npm test` to verify that the tests are passing
-5. Make your code change(s)
-3. Run `npm test` to verify that the tests are still passing. If you added a new functionality, add tests to ensure that we have adequate test coverage.
+4. Run `npm run build` to compile the Typescript part of the source code and tests
+5. Run `npm test` to verify that the tests are passing
+6. Make your code change(s)
+7. Run `npm test` to verify that the tests are still passing. If you added a new functionality, add tests to ensure that we have adequate test coverage.
 You can check test coverage by running `npm run test:report` 
-4. Commit your work. Your commit message should follow [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/). We have a pre commit hook to validate the commit message.
-5. Send us a pull request, answering any default questions in the pull request interface. The pull request should be going to `develop` branch.
-6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
+8. Commit your work. Your commit message should follow [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/). We have a pre commit hook to validate the commit message.
+9. Send us a pull request, answering any default questions in the pull request interface. The pull request should be going to `develop` branch.
+10. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
 
 ## Branch Organization

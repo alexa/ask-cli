@@ -1,0 +1,15 @@
+namespace apis
+
+import com.amazon.alexa.schema.Nothing
+import com.amazon.ask.types.builtins.AMAZON.DATE
+import com.amazon.ask.types.builtins.AMAZON.NUMBER
+import slotTypes.complexNames
+import slotTypes.signs
+import types.complexResult
+import types.result_one
+
+action Nothing secondEarthAPI()
+
+action result_one favColorSign_Name(complexNames name, signs sign = nothing)
+
+action complexResult getEmployeeDetails(complexNames name1, NUMBER emplyee1id, DATE a_dateOfBirth = nothing)

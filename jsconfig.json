@@ -1,13 +1,6 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@src/*": ["./lib/*"],
-            "@test/*": ["./test/*"]
-        }
-    },
-    "include": [
-        "lib",
-        "test"
-    ],
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["lib", "test"]
 }

@@ -4,15 +4,11 @@
     "version": "1.0",
     "title": "LWA"
   },
-  "produces": [
-    "application/json"
-  ],
+  "produces": ["application/json"],
   "paths": {
     "/auth/O2/token": {
       "post": {
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
+        "consumes": ["application/x-www-form-urlencoded"],
         "parameters": [
           {
             "in": "body",
@@ -43,11 +39,7 @@
   "definitions": {
     "TokenForm": {
       "type": "object",
-      "required": [
-        "grant_type",
-        "client_secret",
-        "client_id"
-      ],
+      "required": ["grant_type", "client_secret", "client_id"],
       "properties": {
         "grant_type": {
           "type": "string"

@@ -1,0 +1,123 @@
+namespace soaACDl
+
+import com.amazon.alexa.ask.conversations.Inform
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+import com.amazon.alexa.ask.conversations.received
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import com.amazon.alexa.schema.Nothing
+import com.weatherbot.apis.colorFruitName
+import com.weatherbot.apis.resultthree
+import prompts.request_colorName_multiple_apla
+import prompts.success_colorFruitAPI_apla
+import slotTypes.myColors
+
+type payloadMultipleDialogEvent {
+  resultthree result
+}
+
+MultipleDialogEvent = utterances(
+  samples = [
+    "i want to buy a fruit"
+  ]
+)
+
+informColorMultipleEvent = utterances<colorNameShell>(
+  samples = [
+    "{colorName}",
+    "color is {colorName}",
+    "color {colorName}"
+  ]
+)
+
+affirmMultipleColorEvent = utterances(
+  samples = [
+    "do it"
+  ]
+)
+
+type colorNameShell {
+  myColors colorName
+}
+
+type payloadsOAConfirmArgs {
+  myColors colorName
+}
+
+type colorEvent0 {
+  myColors colorName
+}
+
+interaction {
+  actual {
+    result1 = received<types.colorEvent0>(
+      act = Inform,
+      utterance = "{armadillo|colorName}"
+    )
+    resultEvent11 = colorFruitName(
+      colorName = result1.colorName
+    )
+    response(
+      response = success_colorFruitAPI_apla,
+      act = Notify {
+        actionName = colorFruitName
+      },
+      payload = payloadMultipleDialogEvent {
+        result = resultEvent11
+      }
+    )
+  } expected {
+    result1 = received<types.colorEvent0>(
+      act = Inform,
+      utterance = "{armadillo|colorName}"
+    )
+    resultEvent11 = colorFruitName(
+      colorName = result1.colorName
+    )
+    response(
+      response = success_colorFruitAPI_apla,
+      act = Notify {
+        actionName = colorFruitName
+      },
+      payload = payloadMultipleDialogEvent {
+        result = resultEvent11
+      }
+    )
+  }
+}
+
+dialog Nothing sOA() {
+  sample {
+    expect(
+      act = Invoke,
+      event = MultipleDialogEvent
+    )
+    response(
+      response = request_colorName_multiple_apla,
+      act = Request {
+        arguments = [
+          colorFruitName.arguments.colorName
+        ]
+      }
+    )
+    colorEvent = expect(
+      act = Inform,
+      event = informColorMultipleEvent
+    )
+    resultEvent = colorFruitName(
+      colorName = colorEvent.colorName
+    )
+    response(
+      response = success_colorFruitAPI_apla,
+      act = Notify {
+        actionName = colorFruitName
+      },
+      payload = payloadMultipleDialogEvent {
+        result = resultEvent
+      }
+    )
+  }
+}

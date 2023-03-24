@@ -1,0 +1,132 @@
+namespace soaACDl
+
+import com.amazon.alexa.ask.conversations.Affirm
+import com.amazon.alexa.ask.conversations.ConfirmArgs
+import com.amazon.alexa.ask.conversations.ConfirmAction
+import com.weatherbot.apis.*
+import com.amazon.alexa.ask.conversations.Invoke
+import com.amazon.alexa.ask.conversations.Notify
+import com.amazon.alexa.ask.conversations.Request
+import com.amazon.alexa.ask.conversations.expect
+//import com.amazon.alexa.ask.conversations.received
+import com.amazon.alexa.ask.conversations.response
+import com.amazon.alexa.ask.conversations.utterances
+import types.*
+import com.amazon.alexa.schema.String
+
+import com.weatherbot.apis.colorFruitName
+import com.weatherbot.apis.fruitNameAPI
+import com.weatherbot.apis.result
+import prompts.confirm_color_for_fruit_apla
+import prompts.request_colorName_multiple_apla
+import prompts.success_fruitPriceAPI_apla
+import prompts.request_city_apla
+import slotTypes.*
+import prompts.*
+import displays.*
+import com.amazon.ask.types.builtins.AMAZON.*
+import com.amazon.alexa.schema.*
+import com.amazon.alexa.ask.conversations.*
+
+
+
+type payloadMultipleDialogEvent {
+  resultthree result
+}
+
+@locale(Locale.en_US)
+MultipleDialogEvent_enUS = utterances(
+  samples = [
+    "i want to buy a fruit"
+  ]
+)
+TRYTHI = MultipleDialogEvent_enUS
+
+@locale(Locale.de_DE, Locale.es_US)
+MultipleDialogEvent_deDE = utterances(
+  samples = [
+    "ich möchte eine frucht kaufen"
+  ]
+)
+
+MultipleDialogEvent_temp = variations(TRYTHI)
+
+MultipleDialogEvent = variations(MultipleDialogEvent_temp, MultipleDialogEvent_deDE)
+
+@locale(Locale.en_US)
+informColorMultipleEvent_enUS = utterances<colorNameShell>(
+  samples = [
+    "{colorName}",
+    "color is {colorName}",
+    "color {colorName}"
+  ]
+)
+@locale(Locale.de_DE)
+informColorMultipleEvent_deDE = utterances<colorNameShell>(
+  samples = [
+    "{colorName}",
+    "farbe ist {colorName}",
+    "farbe {colorName}"
+  ]
+)
+
+
+informColorMultipleEvent = variations(informColorMultipleEvent_enUS, informColorMultipleEvent_deDE)
+
+affirmMultipleColorEvent = utterances(
+  samples = [
+    "do it"
+  ]
+)
+
+
+type colorNameShell {
+  myColors colorName
+}
+
+
+type payloadsOAConfirmArgs {
+  myColors colorName
+}
+
+
+
+
+/*
+
+informColorMultipleEvent = utterances<colorNameShell>(
+  samples = [
+    "{colorName}",
+    "color is {colorName}",
+    "color {colorName}"
+  ]
+)
+
+dialog Nothing stagingAreaOne() {
+  sample {
+    expect(act = Invoke,event = MultipleDialogEvent)
+    response(response = request_colorName_multiple_apla,act = Request {arguments = [colorFruitName.arguments.colorName]})
+  }
+}
+
+
+*/
+
+//com.amazon.alexa.ask.conversations.response(response = request_colorName_multiple_apla, act = com.amazon.alexa.ask.conversations.Request {arguments = [colorFruitName.arguments.colorName]})
+
+@locale(Locale.de_DE, Locale.en_US) 
+dialog Nothing sOA() {
+  //@locale(Locale.en_US)
+  sample {
+    expect(act = Invoke,event = MultipleDialogEvent)
+    response(response = request_colorName_multiple_apla,act = Request {arguments = [colorFruitName.arguments.colorName]})
+    
+    colorEvent = expect(act = Inform,event = informColorMultipleEvent)
+    
+    resultEvent = colorFruitName(colorName = colorEvent.colorName)
+    response( response = success_colorFruitAPI_apla, act = Notify { actionName = colorFruitName}, 
+      payload = payloadMultipleDialogEvent {result = resultEvent}
+    )
+  }
+
+}
