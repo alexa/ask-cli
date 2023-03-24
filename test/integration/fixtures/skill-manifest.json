@@ -15,7 +15,7 @@
     },
     "hosting":{
        "alexaHosted":{
-          "runtime":"NODE_12_X"
+          "runtime":"NODE_16_X"
        }
     }
  }
