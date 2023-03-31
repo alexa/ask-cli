@@ -23,6 +23,12 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "skip-validation": {
+    "name": "skip-validation",
+    "description": "Force the ASK CLI to generate ASKIR without validation",
+    "alias": null,
+    "stringInput": "NONE"
+  },
   "target": {
     "name": "target",
     "description": "Specify which skill project resource to deploy.\n[ENUM]: skill-metadata,skill-infrastructure",
@@ -49,7 +55,13 @@
     "name": "skill-id",
     "description": "Skill id",
     "alias": "s",
-    "stringInput": "REQUIRED"
+    "stringInput": "REQUIRED",
+    "rule": [
+      {
+        "type": "REGEX",
+        "regex": "^amzn\\d\\.ask\\.skill\\.\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"
+      }
+    ]
   },
   "replay": {
     "name": "replay",
@@ -59,8 +71,13 @@
   },
   "save-skill-io": {
     "name": "save-skill-io",
-    "description": "Specify an output file to write simulation invocation requests and responses.",
+    "description": "Specify an output file to write simulation invocation requests and responses",
     "stringInput": "REQUIRED"
+  },
+  "verbose": {
+    "name": "verbose",
+    "description": "(beta) Display explanation for the request and response while simulating skills",
+    "stringInput": "NONE"
   },
   "hosted-skill-id": {
     "name": "hosted-skill-id",
@@ -73,26 +90,35 @@
     "description": "Skill stage",
     "alias": "g",
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["development", "live", "certification"]
-    }]
+    "rule": [
+      {
+        "type": "ENUM",
+        "values": ["development", "live", "certification"]
+      }
+    ]
   },
   "locale": {
     "name": "locale",
     "description": "Locale value for the resource",
     "alias": "l",
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "REGEX",
-      "regex": "^[a-z]{2}-[A-Z]{2}$"
-    }]
+    "rule": [
+      {
+        "type": "REGEX",
+        "regex": "^[a-z]{2}-[A-Z]{2}$"
+      }
+    ]
   },
   "templateUrl": {
     "name": "template-url",
     "description": "Url for the template to be used with",
     "alias": null,
-    "stringInput": "REQUIRED"
+    "stringInput": "REQUIRED",
+    "rule": [
+      {
+        "type": "URL"
+      }
+    ]
   },
   "templateBranch": {
     "name": "template-branch",
@@ -105,18 +131,22 @@
     "description": "Path to the target file input",
     "alias": "f",
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "FILE_PATH"
-    }]
+    "rule": [
+      {
+        "type": "FILE_PATH"
+      }
+    ]
   },
   "max-results": {
     "name": "max-results",
     "description": "Max results returned by the request",
     "alias": null,
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "INTEGER"
-    }]
+    "rule": [
+      {
+        "type": "INTEGER"
+      }
+    ]
   },
   "next-token": {
     "name": "next-token",
@@ -178,9 +208,11 @@
     "name": "debug-port",
     "description": "Port at which the debug process will run.",
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "INTEGER"
-    }]
+    "rule": [
+      {
+        "type": "INTEGER"
+      }
+    ]
   },
   "wait-for-attach": {
     "name": "wait-for-attach",
@@ -191,10 +223,12 @@
     "name": "region",
     "description": "Sets the run region for the session. Accepted values are - [EU, FE, NA]. Defaults to NA. To know more about which region is right for you refer - https://developer.amazon.com/en-US/docs/alexa/ask-toolkit/vs-code-testing-simulator.html#prepare",
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["NA", "FE", "EU"]
-    }]
+    "rule": [
+      {
+        "type": "ENUM",
+        "values": ["NA", "FE", "EU"]
+      }
+    ]
   },
   "watch": {
     "name": "watch",

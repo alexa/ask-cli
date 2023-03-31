@@ -1,62 +1,64 @@
 {
-    "stageV2": {
-        "name": "stage"
-    },
-    "skill stage": {
-        "name": "stage"
-    },
-    "skill locale": {
-        "name": "locale"
-    },
-    "vendorId": {
-        "skip": true
-    },
-    "version": {
-        "name": "vers"
-    },
-    "createSkillRequest": {
-        "skipUnwrap": true,
-        "name": "manifest"
-    },
-    "updateSkillRequest": {
-        "skipUnwrap": true,
-        "name": "manifest"
-    },
-    "TestersRequest": {
-        "customParameters": [{
-            "name": "testersEmails",
-            "description": "List of email address of beta testers.",
-            "required": true,
-            "isArray": true
-        }]
-    },
-    "createInSkillProductRequest": {
-        "skipUnwrap": true
-    },
-    "updateInSkillProductRequest": {
-        "skipUnwrap": true,
-        "name": "inSkillProduct"
-    },
-    "CreateSubscriberRequest": {
-        "skipUnwrap": true
-    },
-    "UpdateSubscriberRequest": {
-        "skipUnwrap": true
-    },
-    "accountLinkingRequest": {
-        "skipUnwrap": true
-    },
-    "interactionModel": {
-        "skipUnwrap": true
-    },
-    "slotType": {
-        "skipUnwrap": true
-    },
-    "sslCertificatePayload": {
-        "skipUnwrap": true
-    },
-    "createJobDefinitionRequest": {
-        "skipUnwrap": true,
-        "name": "jobDefinition"
-    }
+  "stageV2": {
+    "name": "stage"
+  },
+  "skill stage": {
+    "name": "stage"
+  },
+  "skill locale": {
+    "name": "locale"
+  },
+  "vendorId": {
+    "skip": true
+  },
+  "version": {
+    "name": "vers"
+  },
+  "createSkillRequest": {
+    "skipUnwrap": true,
+    "name": "manifest"
+  },
+  "updateSkillRequest": {
+    "skipUnwrap": true,
+    "name": "manifest"
+  },
+  "TestersRequest": {
+    "customParameters": [
+      {
+        "name": "testersEmails",
+        "description": "List of email address of beta testers.",
+        "required": true,
+        "isArray": true
+      }
+    ]
+  },
+  "createInSkillProductRequest": {
+    "skipUnwrap": true
+  },
+  "updateInSkillProductRequest": {
+    "skipUnwrap": true,
+    "name": "inSkillProduct"
+  },
+  "CreateSubscriberRequest": {
+    "skipUnwrap": true
+  },
+  "UpdateSubscriberRequest": {
+    "skipUnwrap": true
+  },
+  "accountLinkingRequest": {
+    "skipUnwrap": true
+  },
+  "interactionModel": {
+    "skipUnwrap": true
+  },
+  "slotType": {
+    "skipUnwrap": true
+  },
+  "sslCertificatePayload": {
+    "skipUnwrap": true
+  },
+  "createJobDefinitionRequest": {
+    "skipUnwrap": true,
+    "name": "jobDefinition"
+  }
 }

@@ -51,7 +51,7 @@ const cleanUp = async () => {
             console.error(r.reason);
         });
     }
-    
     console.log('done');
 };
+
 cleanUp();

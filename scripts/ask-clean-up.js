@@ -1,17 +1,25 @@
 /* eslint-disable no-await-in-loop */
-require('module-alias/register');
 const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
-const AppConfig = require('@src/model/app-config');
-const AuthorizationController = require('@src/controllers/authorization-controller');
-const CONSTANTS = require('@src/utils/constants');
-const DynamicConfig = require('@src/utils/dynamic-config');
+const AppConfig = require('../lib/model/app-config');
+const AuthorizationController = require('../lib/controllers/authorization-controller');
+const CONSTANTS = require('../lib/utils/constants');
+const DynamicConfig = require('../lib/utils/dynamic-config');
+const profileHelper = require("../lib/utils/profile-helper");
 
 new AppConfig();
 
 const authorizationController = new AuthorizationController({
     auth_client_type: 'LWA'
 });
-const profile = CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
+const profile = _findEnvProfile() || process.env.ASK_DEFAULT_PROFILE || "default";;
+
+function _findEnvProfile() {
+    if (profileHelper.isEnvProfile()) {
+      // Only when user set every required parameter in ENV, we will treat profile as ENV
+      return CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
+    }
+    return null;
+  }
 
 const refreshTokenConfig = {
     clientId: authorizationController.oauthClient.config.clientId,
@@ -33,7 +41,8 @@ const cleanUp = async () => {
     let nextToken;
     const skills = [];
     do {
-        const res = await client.listSkillsForVendorV1(process.env.ASK_VENDOR_ID, nextToken);
+        vendorId = profileHelper.resolveVendorId(profile);
+        const res = await client.listSkillsForVendorV1(vendorId, nextToken);
         skills.push(...res.skills);
 
         nextToken = res.nextToken;

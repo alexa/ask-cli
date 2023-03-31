@@ -9,3 +9,13 @@ docs
 jsconfig.json
 scripts
 test
+package-lock.json
+build
+*.tgz
+lib
+bin
+!dist/**
+dist/test
+.husky
+.prettierrc
+.prettierignore

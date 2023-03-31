@@ -1,21 +1,19 @@
 {
-    "manifest":{
-       "publishingInformation":{
-          "locales":{
-             "en-US":{
-                "name":"integration test"
-             }
-          }
-       },
-       "apis":{
-          "custom":{
-
-          }
-       }
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "integration test"
+        }
+      }
     },
-    "hosting":{
-       "alexaHosted":{
-          "runtime":"NODE_16_X"
-       }
+    "apis": {
+      "custom": {}
     }
- }
+  },
+  "hosting": {
+    "alexaHosted": {
+      "runtime": "NODE_16_X"
+    }
+  }
+}

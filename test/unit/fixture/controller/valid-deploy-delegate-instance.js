@@ -1,4 +1,4 @@
 module.exports = {
-    bootstrap: () => 'bootstrap',
-    invoke: () => 'invoke'
+  bootstrap: () => "bootstrap",
+  invoke: () => "invoke",
 };

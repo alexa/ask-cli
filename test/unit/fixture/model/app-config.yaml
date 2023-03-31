@@ -17,5 +17,5 @@ profiles:
       refresh_token: Atzr|n
       token_type: bearer
       expires_in: 3600
-      expires_at: '2018-09-11T18:12:18.843Z'
+      expires_at: "2018-09-11T18:12:18.843Z"
     vendor_id: wn

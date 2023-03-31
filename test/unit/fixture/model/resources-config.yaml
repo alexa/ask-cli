@@ -1,20 +1,20 @@
-askcliResourcesobjectVersion: '1.0'
+askcliResourcesobjectVersion: "1.0"
 profiles:
   default:
     skillId: amzn1.ask.skill.5555555-4444-3333-2222-1111111111
     skillMetadata:
       src: "./skillPackage"
-      lastDeployHash: ''
+      lastDeployHash: ""
     code:
       default:
         src: "./awsStack/lambda-NA/src"
-        lastDeployHash: ''
+        lastDeployHash: ""
       NA:
         src: "./awsStack/lambda-NA/src"
-        lastDeployHash: ''
+        lastDeployHash: ""
       EU:
         src: "./awsStack/lambda-EU/src"
-        lastDeployHash: ''
+        lastDeployHash: ""
     skillInfrastructure:
       type: "@ask-cli/cfn-deployer"
       userConfig:
@@ -30,20 +30,20 @@ profiles:
             template: "./awsStacks/skill-infra.yaml"
       deployState:
         default:
-          stackId: ''
+          stackId: ""
           s3:
-            bucket: ''
+            bucket: ""
             key: endpoint/code
-            objectVersion: ''
+            objectVersion: ""
         NA:
-          stackId: ''
+          stackId: ""
           s3:
-            bucket: ''
+            bucket: ""
             key: endpoint/code
-            objectVersion: ''
+            objectVersion: ""
         EU:
-          stackId: ''
+          stackId: ""
           s3:
-            bucket: ''
+            bucket: ""
             key: endpoint/code
-            objectVersion: ''
+            objectVersion: ""

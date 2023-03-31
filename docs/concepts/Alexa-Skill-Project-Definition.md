@@ -31,7 +31,7 @@ Below shows the example how CLI tracks user's config and the deployment states, 
 ### ask-resources.json (this file is up to configure!)
 ```jsonc
 {
-  "profiles": {                             
+  "profiles": {
     "{profileName}": {                      // profile name-specific config
 
       "skillMetadata": {                    // Alexa skill metadata to deploy
