@@ -1,4 +1,0 @@
-namespace testOne
-import com.amazon.ask.types.builtins.AMAZON.*
-
-action asdasss asdas(Color asd, Food test = nothing )

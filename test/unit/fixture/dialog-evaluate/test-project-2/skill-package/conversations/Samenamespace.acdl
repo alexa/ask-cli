@@ -1,7 +1,0 @@
-namespace com.weatherbot.apis
-
-import com.amazon.ask.types.builtins.AMAZON.DATE
-import com.weatherbot.types.WeatherResult
-import slotTypes.customCity
-
-action WeatherResult getWeather(customCity cityName, DATE date)

@@ -1,8 +1,0 @@
-{
-  "askcliStatesVersion": "2020-03-31",
-  "profiles": {
-    "mft-test": {
-      "skillId": "amzn1.ask.skill.a3588a9b-d645-4a23-9e1a-90c984de0b83"
-    }
-  }
-}
