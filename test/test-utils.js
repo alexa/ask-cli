@@ -42,6 +42,7 @@ const run = (cmd, args, options = {}) => {
   const env = {...process.env, ...options.env};
 
   fs.ensureDirSync(cwd);
+  fs.ensureFileSync(cmd);
 
   const childProcess = spawn(cmd, args, {cwd, env, stdio: [null, null, null, null]});
 

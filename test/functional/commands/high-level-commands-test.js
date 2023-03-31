@@ -1,5 +1,6 @@
 const {expect} = require("chai");
 const parallel = require("mocha.parallel");
+const path = require("path");
 const {
   run,
   KeySymbol,
@@ -10,14 +11,14 @@ const {
 } = require("../../test-utils");
 
 parallel("high level commands test", () => {
-  let cmd;
+  let askCmd;
 
   before(() => {
     resetTempDirectory();
   });
 
   beforeEach(() => {
-    cmd = "ask";
+    askCmd = path.join(process.cwd(), "/dist/bin/ask.js");
   });
 
   it("| should init new skill", async () => {
@@ -39,7 +40,7 @@ parallel("high level commands test", () => {
       {match: "? Does this look correct?"},
     ];
 
-    const result = await run(cmd, args, {inputs, cwd});
+    const result = await run(askCmd, args, {inputs, cwd});
 
     expect(result).include("succeeded");
   });
@@ -51,29 +52,29 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     let inputs = [
-      {match: "? Choose the programming language"},
+      {match: "? Choose a modeling stack for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill"},
-      {match: "? Choose the default locale for your skill"},
       {match: "? Choose the default region for your skill"},
       {match: "? Please type in your skill name"},
       {match: "? Please type in your folder name", input: folderName},
     ];
 
-    let result = await run(cmd, args, {inputs});
+    let result = await run(askCmd, args, {inputs});
 
     expect(result).include("Hosted skill provisioning finished");
 
     // deploy
     let cwd = getPathInTempDirectory(folderName);
-    cmd = "git";
+    const gitCmd = "git";
     args = ["add", "."];
-    await run(cmd, args, {cwd});
+    await run(gitCmd, args, {cwd});
 
     args = ["commit", "-m", '"test"'];
-    await run(cmd, args, {cwd});
+    await run(gitCmd, args, {cwd});
 
     args = ["push"];
-    result = await run(cmd, args, {cwd});
+    result = await run(gitCmd, args, {cwd});
 
     expect(result).include("After the code pushed, please check the deployment status");
 
@@ -81,11 +82,10 @@ parallel("high level commands test", () => {
 
     folderName = "cloned-hosted-skill";
     cwd = getPathInTempDirectory(folderName);
-    cmd = "ask";
     args = ["init", "--hosted-skill-id", skillId];
     inputs = [{match: "? Please type in your folder name", input: folderName}];
 
-    result = await run(cmd, args, {inputs, cwd});
+    result = await run(askCmd, args, {inputs, cwd});
 
     expect(result).include("successfully initialized");
   });
@@ -96,14 +96,15 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose the programming language"},
+      {match: "? Choose a modeling stack for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: KeySymbol.DOWN},
       {match: "? Choose a template to start with"},
       {match: "? Please type in your skill name"},
       {match: "? Please type in your folder name", input: folderName},
     ];
 
-    let result = await run(cmd, args, {inputs});
+    let result = await run(askCmd, args, {inputs});
 
     expect(result).include('Project initialized with deploy delegate "@ask-cli/cfn-deployer" successfully');
 
@@ -111,7 +112,7 @@ parallel("high level commands test", () => {
     const cwd = getPathInTempDirectory(folderName);
     args = ["deploy"];
 
-    result = await run(cmd, args, {cwd});
+    result = await run(askCmd, args, {cwd});
 
     expect(result).include("Skill infrastructures deployed successfully through @ask-cli/cfn-deployer");
   });
@@ -122,14 +123,15 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose the programming language"},
+      {match: "? Choose a modeling stack for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Choose a template to start with"},
       {match: "? Please type in your skill name", input: folderName},
       {match: "? Please type in your folder name", input: folderName},
     ];
 
-    let result = await run(cmd, args, {inputs});
+    let result = await run(askCmd, args, {inputs});
 
     expect(result).include('Project initialized with deploy delegate "@ask-cli/lambda-deployer" successfully');
 
@@ -137,7 +139,7 @@ parallel("high level commands test", () => {
     const cwd = getPathInTempDirectory(folderName);
     args = ["deploy"];
 
-    result = await run(cmd, args, {cwd});
+    result = await run(askCmd, args, {cwd});
 
     expect(result).include("Skill infrastructures deployed successfully through @ask-cli/lambda-deployer");
   });
@@ -148,13 +150,14 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose the programming language"},
+      {match: "? Choose a modeling stack for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Choose a template to start with", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Please type in your skill name", input: folderName},
       {match: "? Please type in your folder name", input: folderName},
     ];
-    let result = await run(cmd, args, {inputs});
+    let result = await run(askCmd, args, {inputs});
     expect(result).include('Project initialized with deploy delegate "@ask-cli/lambda-deployer" successfully');
   });
 });

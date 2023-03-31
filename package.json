@@ -34,7 +34,7 @@
     "test:report": "nyc npm run test",
     "test:browser": "npm run test:report && open coverage/index.html",
     "integration-test": "mocha -t 180000 test/integration/run-test.js",
-    "functional-test": "mocha -t 600000 -u bdd --require ts-node/register test/functional/run-test.js -R spec 'test/functional/{,**/}!(*.d).{ts,js}'",
+    "functional-test": "npm run build && chmod +x ./dist/bin/ask.js && mocha -t 600000 -u bdd --require ts-node/register test/functional/run-test.js -R spec 'test/functional/{,**/}!(*.d).{ts,js}'",
     "functional-test:clean-up": "node scripts/aws-clean-up.js; node scripts/ask-clean-up.js",
     "format": "prettier --write .",
     "pre-release": "standard-version",
