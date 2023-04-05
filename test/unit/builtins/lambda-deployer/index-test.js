@@ -250,10 +250,10 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
         alexaRegion: TEST_ALEXA_REGION_NA,
         deployState: {
           [TEST_ALEXA_REGION_DEFAULT]: {
-            property: "1"
+            property: "1",
           },
           [TEST_ALEXA_REGION_NA]: {
-            property: "2"
+            property: "2",
           },
         },
         deployRegions: {
@@ -275,7 +275,6 @@ with output Lambda ARN: ${LAMBDA_ARN}.`;
       // call
       lambdaDeployer.invoke(REPORTER, TEST_OPTIONS_WITH_MULTI_REGIONS, (err, res) => {
         // verify
-        console.log(res);
         expect(res.isAllStepSuccess).equal(true);
         expect(res.isCodeDeployed).equal(true);
         expect(res.isDeploySkipped).equal(undefined);
