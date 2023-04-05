@@ -1,16 +1,25 @@
-const aws = require("aws-sdk");
 const {expect} = require("chai");
 const fs = require("fs");
 const path = require("path");
 const sinon = require("sinon");
 
 const helper = require("../../../../lib/builtins/deploy-delegates/lambda-deployer/helper");
-const IAMClient = require("../../../../lib/clients/aws-client/iam-client");
-const LambdaClient = require("../../../../lib/clients/aws-client/lambda-client");
+const IAMClient = require("../../../../lib/clients/aws-client/iam-client").default;
+const LambdaClient = require("../../../../lib/clients/aws-client/lambda-client").default;
 const Manifest = require("../../../../lib/model/manifest");
 const ResourcesConfig = require("../../../../lib/model/resources-config");
+const CONSTANTS = require("../../../../lib/utils/constants");
 
 describe("Builtins test - lambda-deployer helper.js test", () => {
+  const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(
+    process.cwd(),
+    "test",
+    "unit",
+    "fixture",
+    "model",
+    "regular-proj",
+    "ask-resources.json",
+  );
   const FIXTURE_MANIFEST_FILE_PATH = path.join(process.cwd(), "test", "unit", "fixture", "model", "manifest.json");
   const TEST_PROFILE = "default"; // test file uses 'default' profile
   const TEST_IGNORE_HASH = false;
@@ -22,16 +31,11 @@ describe("Builtins test - lambda-deployer helper.js test", () => {
   const TEST_SKILL_ID = "skill_id";
   const TEST_IAM_ROLE_ARN = "iam_role_arn";
   const TEST_LAMBDA_ARN = "iam_lambda_arn";
-  const TEST_NO_SUCH_ENTITY_ERROR = {
-    code: "NoSuchEntity",
-  };
   const REPORTER = {
     updateStatus: () => {},
   };
   const TEST_ROLE_DATA = {
-    Role: {
-      Arn: TEST_IAM_ROLE_ARN,
-    },
+    Arn: TEST_IAM_ROLE_ARN,
   };
 
   describe("# test class method: loadLambdaInformation", () => {
@@ -106,8 +110,8 @@ describe("Builtins test - lambda-deployer helper.js test", () => {
 
     it("| an existing lambda arn found in deployState, getFunction request fails, expect an error return", (done) => {
       // setup
-      const TEST_GET_FUNCTION_ERROR = "get_function_error";
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, TEST_GET_FUNCTION_ERROR);
+      const TEST_GET_FUNCTION_ERROR = new Error("get_function_error");
+      sinon.stub(LambdaClient.prototype, "getFunction").rejects(TEST_GET_FUNCTION_ERROR);
       // call
       helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
         // verify
@@ -129,7 +133,7 @@ describe("Builtins test - lambda-deployer helper.js test", () => {
         };
         const TEST_IAM_ROLE_ERROR = `The IAM role for Lambda ARN (${TEST_LAMBDA_ARN}) should be "${TEST_REMOTE_IAM_ROLE}", \
 but found "${TEST_LOCAL_IAM_ROLE}". Please solve this IAM role mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_REMOTE_DEPLOY_STATE);
         // call
         helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
           // verify
@@ -153,7 +157,7 @@ but found "${TEST_LOCAL_IAM_ROLE}". Please solve this IAM role mismatch and re-d
         const TEST_REVISION_ID_ERROR = `The current revisionId (The revision ID for Lambda ARN (${TEST_LAMBDA_ARN}) should be \
 ${TEST_REMOTE_REVISION_ID}, but found ${TEST_LOCAL_REVISION_ID}. \
 Please solve this revision mismatch and re-deploy again. To ignore this error run "ask deploy --ignore-hash".`;
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_REMOTE_DEPLOY_STATE);
         // call
         helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err) => {
           // verify
@@ -174,7 +178,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
             RevisionId: TEST_REMOTE_REVISION_ID,
           },
         };
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_REMOTE_DEPLOY_STATE);
         // call
         helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE_IGNORE_HASH, (err, data) => {
           // verify
@@ -192,7 +196,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
           RevisionId: TEST_LOCAL_REVISION_ID,
         },
       };
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_REMOTE_DEPLOY_STATE);
       // call
       helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_LAMBDA_STATE, (err, data) => {
         // verify
@@ -204,8 +208,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| using Lambda arn from sourceLambda, getFunction return error, expect error called back", (done) => {
       // setup
-      const GET_FUNC_ERR = "get func err";
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, GET_FUNC_ERR);
+      const GET_FUNC_ERR = new Error("get func err");
+      sinon.stub(LambdaClient.prototype, "getFunction").rejects(GET_FUNC_ERR);
       // call
       helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_SOURCELAMBDA, (err, data) => {
         // verify
@@ -223,7 +227,7 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
           RevisionId: TEST_REMOTE_REVISION_ID,
         },
       };
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_REMOTE_DEPLOY_STATE);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_REMOTE_DEPLOY_STATE);
       // call
       helper.loadLambdaInformation(REPORTER, TEST_LOAD_LAMBDA_OPTION_WITH_SOURCELAMBDA, (err, data) => {
         // verify
@@ -259,33 +263,41 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
       sinon.restore();
     });
 
-    it("| an existing IAM role found, get IAM Role fails, expect an error return", (done) => {
+    it("| an existing IAM role found, get IAM Role bad request error, expect an error return", (done) => {
       // setup
-      const TEST_ERROR = "getRole error message";
-      sinon.stub(IAMClient.prototype, "getIAMRole").callsArgWith(1, TEST_ERROR);
+      const TEST_IAM_ERROR = {
+        $metadata: {
+          httpStatusCode: 400,
+        },
+      };
+      sinon.stub(IAMClient.prototype, "getIAMRole").rejects(TEST_IAM_ERROR);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err) => {
         // verify
-        expect(err).equal(`Failed to retrieve IAM role (${TEST_IAM_ROLE_ARN}) for Lambda. ${TEST_ERROR}`);
+        expect(err).equal(`Failed to retrieve IAM role (${TEST_IAM_ROLE_ARN}) for Lambda. ${TEST_IAM_ERROR}`);
         done();
       });
     });
 
-    it('| an existing IAM role found, get IAM Role throw "NoSuchEntity" error, expect an error return', (done) => {
+    it("| an existing IAM role found, get IAM Role not found error, expect an error return", (done) => {
       // setup
-      const TEST_GET_ROLE_ERROR = `The IAM role is not found. Please check if your IAM role from region ${TEST_ALEXA_REGION} is valid.`;
-      sinon.stub(IAMClient.prototype, "getIAMRole").callsArgWith(1, TEST_NO_SUCH_ENTITY_ERROR);
+      const TEST_IAM_ERROR = {
+        $metadata: {
+          httpStatusCode: 404,
+        },
+      };
+      sinon.stub(IAMClient.prototype, "getIAMRole").rejects(TEST_IAM_ERROR);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err) => {
         // verify
-        expect(err).equal(TEST_GET_ROLE_ERROR);
+        expect(err).equal(`The IAM role is not found. Please check if your IAM role from region ${TEST_ALEXA_REGION} is valid.`);
         done();
       });
     });
 
     it("| an existing IAM role found, get IAM Role passes, expect correct data return", (done) => {
       // setup
-      sinon.stub(IAMClient.prototype, "getIAMRole").callsArgWith(1, null, TEST_ROLE_DATA);
+      sinon.stub(IAMClient.prototype, "getIAMRole").resolves(TEST_ROLE_DATA);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG, (err, res) => {
         // verify
@@ -296,8 +308,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| no IAM role found, create IAM role fails, expect an error return", (done) => {
       // setup
-      const TEST_CREATE_ROLE_ERROR = "createIAMRole error message";
-      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").callsArgWith(1, TEST_CREATE_ROLE_ERROR);
+      const TEST_CREATE_ROLE_ERROR = new Error("createIAMRole error message");
+      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").rejects(TEST_CREATE_ROLE_ERROR);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err) => {
         // verify
@@ -308,9 +320,9 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| no IAM role found, create IAM role passes, attach role policy fails, expect an error return", (done) => {
       // setup
-      const TEST_POLICY_ERROR = "attachRolePolicy error message";
-      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").callsArgWith(1, null, TEST_ROLE_DATA);
-      sinon.stub(IAMClient.prototype, "attachBasicLambdaRolePolicy").callsArgWith(1, TEST_POLICY_ERROR);
+      const TEST_POLICY_ERROR = new Error("attachRolePolicy error message");
+      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").resolves(TEST_ROLE_DATA);
+      sinon.stub(IAMClient.prototype, "attachBasicLambdaRolePolicy").rejects(TEST_POLICY_ERROR);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err) => {
         // verify
@@ -321,8 +333,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| no IAM role found, create IAM role and attach role policy passes, expect a IAM role arn return.", (done) => {
       // setup
-      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").callsArgWith(1, null, TEST_ROLE_DATA);
-      sinon.stub(IAMClient.prototype, "attachBasicLambdaRolePolicy").callsArgWith(1, null, TEST_IAM_ROLE_ARN);
+      sinon.stub(IAMClient.prototype, "createBasicLambdaRole").resolves(TEST_ROLE_DATA);
+      sinon.stub(IAMClient.prototype, "attachBasicLambdaRolePolicy").resolves(TEST_IAM_ROLE_ARN);
       // call
       helper.deployIAMRole(REPORTER, TEST_IAM_CONFIG_NO_ROLE, (err, res) => {
         // verify
@@ -390,20 +402,21 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
     };
 
     beforeEach(() => {
+      new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
       new Manifest(FIXTURE_MANIFEST_FILE_PATH);
     });
 
     afterEach(() => {
+      ResourcesConfig.dispose();
       Manifest.dispose();
       sinon.restore();
     });
 
     it("| no Lambda found, create Lambda function fails, expect an error return.", (done) => {
       // setup
-      const TEST_CREATE_FUNCTION_ERROR = "createLambdaFunction error";
+      const TEST_CREATE_FUNCTION_ERROR = new Error("createLambdaFunction error");
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, TEST_CREATE_FUNCTION_ERROR);
+      sinon.stub(LambdaClient.prototype, "createLambdaFunction").rejects(TEST_CREATE_FUNCTION_ERROR);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
         // verify
@@ -417,16 +430,15 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         " add Alexa Permission fails, expect an error return.",
       (done) => {
         // setup
-        const RETRY_MESSAGE = "The role defined for the function cannot be assumed by Lambda.";
-        const TEST_CREATE_FUNCTION_ERROR = {message: RETRY_MESSAGE};
-        const TEST_ADD_PERMISSION_ERROR = "addAlexaPermissionByDomain error";
+        const TEST_CREATE_FUNCTION_ERROR = new Error(CONSTANTS.LAMBDA.ERROR_MESSAGE.ROLE_NOT_ASSUMED);
+        const TEST_ADD_PERMISSION_ERROR = new Error("addAlexaPermissionByDomain error");
         sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-        sinon.stub(aws, "Lambda");
         const stubTestFunc = sinon.stub(LambdaClient.prototype, "createLambdaFunction");
-        stubTestFunc.onCall(0).callsArgWith(4, TEST_CREATE_FUNCTION_ERROR);
-        stubTestFunc.onCall(1).callsArgWith(4, null, TEST_CREATE_DATA);
-        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+        stubTestFunc.onCall(0).rejects(TEST_CREATE_FUNCTION_ERROR);
+        stubTestFunc.onCall(1).resolves(TEST_CREATE_DATA);
+        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").rejects(TEST_ADD_PERMISSION_ERROR);
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
+        sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
         // call
         helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
           // verify
@@ -434,16 +446,15 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
           done();
         });
       },
-    ).timeout(10000);
+    );
 
     it("| no Lambda found, create Lambda function passes but not in active state, expect an error return.", (done) => {
       // setup
       const TEST_GET_STATE_DATA = {Configuration: {State: "Inactive"}};
       const TEST_GET_STATE_ERROR = `Function [${TEST_FUNCTION_ARN}] state is Inactive.`;
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, null, TEST_CREATE_DATA);
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_STATE_DATA);
+      sinon.stub(LambdaClient.prototype, "createLambdaFunction").resolves(TEST_CREATE_DATA);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_STATE_DATA);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
         // verify
@@ -454,12 +465,11 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| no Lambda found, create Lambda function passes, add Alexa Permission fails, expect an error return.", (done) => {
       // setup
-      const TEST_ADD_PERMISSION_ERROR = "addAlexaPermissionByDomain error";
+      const TEST_ADD_PERMISSION_ERROR = new Error("addAlexaPermissionByDomain error");
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, null, TEST_CREATE_DATA);
-      sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").callsArgWith(3, TEST_ADD_PERMISSION_ERROR);
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+      sinon.stub(LambdaClient.prototype, "createLambdaFunction").resolves(TEST_CREATE_DATA);
+      sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").rejects(TEST_ADD_PERMISSION_ERROR);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
         // verify
@@ -473,14 +483,13 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         " expect an error return.",
       (done) => {
         // setup
-        const TEST_REVISION_ID_ERROR = "getFunctionRevisionId error";
+        const TEST_REVISION_ID_ERROR = new Error("getFunctionRevisionId error");
         sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-        sinon.stub(aws, "Lambda");
-        sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, null, TEST_CREATE_DATA);
-        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").callsArgWith(3, null);
+        sinon.stub(LambdaClient.prototype, "createLambdaFunction").resolves(TEST_CREATE_DATA);
+        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").resolves();
         const stubTestFunc = sinon.stub(LambdaClient.prototype, "getFunction");
-        stubTestFunc.onCall(0).callsArgWith(1, null, TEST_GET_DATA);
-        stubTestFunc.onCall(1).callsArgWith(1, TEST_REVISION_ID_ERROR);
+        stubTestFunc.onCall(0).resolves(TEST_GET_DATA);
+        stubTestFunc.onCall(1).rejects(TEST_REVISION_ID_ERROR);
 
         // call
         helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err) => {
@@ -497,14 +506,14 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
       (done) => {
         // setup
         sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-        sinon.stub(aws, "Lambda");
-        sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, null, TEST_CREATE_DATA);
-        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").callsArgWith(3, null);
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+        sinon.stub(LambdaClient.prototype, "createLambdaFunction").resolves(TEST_CREATE_DATA);
+        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").resolves();
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
 
         // call
         helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
           // verify
+          expect(err).to.be.null;
           expect(res).deep.equal({
             isAllStepSuccess: true,
             isCodeDeployed: true,
@@ -525,15 +534,15 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
       (done) => {
         // setup
         sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-        sinon.stub(aws, "Lambda");
         sinon.stub(ResourcesConfig.prototype, "getTargetEndpoints").returns([]);
-        sinon.stub(LambdaClient.prototype, "createLambdaFunction").callsArgWith(4, null, TEST_CREATE_DATA);
-        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").callsArgWith(3, null);
-        sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+        sinon.stub(LambdaClient.prototype, "createLambdaFunction").resolves(TEST_CREATE_DATA);
+        sinon.stub(LambdaClient.prototype, "addAlexaPermissionByDomain").resolves();
+        sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
 
         // call
         helper.deployLambdaFunction(REPORTER, TEST_CREATE_OPTIONS, (err, res) => {
           // verify
+          expect(err).to.be.null;
           expect(res).deep.equal({
             isAllStepSuccess: true,
             isCodeDeployed: true,
@@ -550,10 +559,9 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| an existing Lambda found, update function code fails, expect an error return.", (done) => {
       // setup
-      const TEST_UPDATE_CODE_ERROR = "updateFunctionCode error";
+      const TEST_UPDATE_CODE_ERROR = new Error("updateFunctionCode error");
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "updateFunctionCode").callsArgWith(3, TEST_UPDATE_CODE_ERROR);
+      sinon.stub(LambdaClient.prototype, "updateFunctionCode").rejects(TEST_UPDATE_CODE_ERROR);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err) => {
         // verify
@@ -567,9 +575,8 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
       const TEST_GET_UPDATE_STATUS_DATA = {Configuration: {State: "Active", LastUpdateStatus: "Failed"}};
       const TEST_GET_UPDATE_STATUS_ERROR = `Function [${TEST_FUNCTION_ARN}] last update status is Failed.`;
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "updateFunctionCode").callsArgWith(3, null, {RevisionId: TEST_REVISION_ID});
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_UPDATE_STATUS_DATA);
+      sinon.stub(LambdaClient.prototype, "updateFunctionCode").resolves({RevisionId: TEST_REVISION_ID});
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_UPDATE_STATUS_DATA);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
         // verify
@@ -580,16 +587,15 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
 
     it("| an existing Lambda found, update function code passes, update function configuration fails, expect an error return.", (done) => {
       // setup
-      const TEST_UPDATE_CONFIG_ERROR = "updateFunctionConfiguration error";
+      const TEST_UPDATE_CONFIG_ERROR = new Error("updateFunctionConfiguration error");
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "updateFunctionCode").callsArgWith(3, null, {RevisionId: TEST_REVISION_ID});
-      sinon.stub(LambdaClient.prototype, "updateFunctionConfiguration").callsArgWith(3, TEST_UPDATE_CONFIG_ERROR);
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+      sinon.stub(LambdaClient.prototype, "updateFunctionCode").resolves({RevisionId: TEST_REVISION_ID});
+      sinon.stub(LambdaClient.prototype, "updateFunctionConfiguration").rejects(TEST_UPDATE_CONFIG_ERROR);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, res) => {
         // verify
-        expect(err).equal(null);
+        expect(err).to.be.null;
         expect(res).deep.equal({
           isAllStepSuccess: false,
           isCodeDeployed: true,
@@ -612,13 +618,13 @@ Please solve this revision mismatch and re-deploy again. To ignore this error ru
         RevisionId: TEST_REVISION_ID,
       };
       sinon.stub(fs, "readFileSync").withArgs(TEST_ZIP_FILE_PATH).returns(TEST_ZIP_FILE);
-      sinon.stub(aws, "Lambda");
-      sinon.stub(LambdaClient.prototype, "updateFunctionCode").callsArgWith(3, null, {RevisionId: TEST_REVISION_ID});
-      sinon.stub(LambdaClient.prototype, "updateFunctionConfiguration").callsArgWith(3, null, TEST_UPDATE_CONFIG_DATA);
-      sinon.stub(LambdaClient.prototype, "getFunction").callsArgWith(1, null, TEST_GET_DATA);
+      sinon.stub(LambdaClient.prototype, "updateFunctionCode").resolves({RevisionId: TEST_REVISION_ID});
+      sinon.stub(LambdaClient.prototype, "updateFunctionConfiguration").resolves(TEST_UPDATE_CONFIG_DATA);
+      sinon.stub(LambdaClient.prototype, "getFunction").resolves(TEST_GET_DATA);
       // call
       helper.deployLambdaFunction(REPORTER, TEST_UPDATE_OPTIONS, (err, data) => {
         // verify
+        expect(err).to.be.null;
         expect(data).deep.equal({
           isAllStepSuccess: true,
           isCodeDeployed: true,

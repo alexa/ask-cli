@@ -1,7 +1,6 @@
 import {AbstractCommand} from "../../../abstract-command";
 import Messenger from "../../../../view/messenger";
 import SmapiClient, {ISmapiClient} from "../../../../clients/smapi-client";
-import S3Client from "../../../../clients/aws-client/s3-client";
 import optionModel from "../../../option-model.json";
 import profileHelper from "../../../../utils/profile-helper";
 import helper from "./helper";
@@ -73,7 +72,7 @@ async function _multiPartUploadCatalog(catalogId: string, filePath: string, smap
         }
 
         Messenger.getInstance().info(`Upload (upload-id: ${uploadId}) created successfully. Upload starts...`);
-        S3Client.multipartsUploadToPresignedUrls(
+        helper._multipartsUploadToPresignedUrls(
           uploadPartsMap,
           filePath,
           totalSize,

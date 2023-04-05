@@ -22,9 +22,7 @@ describe("Builtins test - cfn-deployer index test", () => {
   const endpointUri = "some endpoint uri";
   const userDefinedParamKey = "someKey";
   const userDefinedParamValue = "someValue";
-  let waitForStackDeployStub;
-  let getAWSProfileStub;
-  let deployStackStub;
+  let deployStackStub, getAWSProfileStub;
 
   describe("bootstrap", () => {
     const bootstrapOptions = {
@@ -63,9 +61,7 @@ describe("Builtins test - cfn-deployer index test", () => {
   });
 
   describe("deploy", () => {
-    let deployOptions;
-    let expectedOutput;
-    let expectedErrorOutput;
+    let deployOptions, expectedOutput, expectedErrorOutput;
 
     beforeEach(() => {
       expectedOutput = {
@@ -122,15 +118,12 @@ describe("Builtins test - cfn-deployer index test", () => {
       };
       getAWSProfileStub = sinon.stub(awsUtil, "getAWSProfile").returns("some profile");
       sinon.stub(Helper.prototype, "getSkillCredentials").resolves({clientId: "id", clientSecret: "secret"});
-      sinon.stub(Helper.prototype, "createS3BucketIfNotExists").resolves();
-      sinon.stub(Helper.prototype, "enableS3BucketVersioningIfNotEnabled").resolves();
       sinon.stub(Helper.prototype, "uploadToS3").resolves({VersionId: s3VersionId});
-      deployStackStub = sinon.stub(Helper.prototype, "deployStack").resolves({StackId: stackId});
-      waitForStackDeployStub = sinon.stub(Helper.prototype, "waitForStackDeploy");
+      deployStackStub = sinon.stub(Helper.prototype, "deployStack");
     });
 
     it("should deploy", (done) => {
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
 
       Deployer.invoke({}, deployOptions, (err, result) => {
         expect(err).eql(null);
@@ -141,7 +134,7 @@ describe("Builtins test - cfn-deployer index test", () => {
 
     it("should deploy with skill credentials", (done) => {
       sinon.stub(fs, "readFileSync").withArgs(templatePath, "utf-8").returns("SkillClientId SkillClientSecret");
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
 
       Deployer.invoke({}, deployOptions, (err, result) => {
         expect(err).eql(null);
@@ -151,7 +144,7 @@ describe("Builtins test - cfn-deployer index test", () => {
     });
 
     it("should deploy without initial state", (done) => {
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
       deployOptions.deployState = undefined;
 
       Deployer.invoke({}, deployOptions, (err, result) => {
@@ -162,7 +155,7 @@ describe("Builtins test - cfn-deployer index test", () => {
     });
 
     it("should always deploy with CAPABILITY_IAM capabilities", (done) => {
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
       deployOptions.userConfig.cfn.capabilities = undefined;
 
       Deployer.invoke({}, deployOptions, (err, result) => {
@@ -174,7 +167,7 @@ describe("Builtins test - cfn-deployer index test", () => {
     });
 
     it("should deploy without user defined cf parameters", (done) => {
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
       delete deployOptions.userConfig.cfn.parameters;
 
       Deployer.invoke({}, deployOptions, (err, result) => {
@@ -187,7 +180,7 @@ describe("Builtins test - cfn-deployer index test", () => {
 
     it("should invoke deploy and catch deploy error", (done) => {
       const errorMessage = "some error";
-      waitForStackDeployStub.rejects(new CliCFNDeployerError(errorMessage));
+      deployStackStub.rejects(new CliCFNDeployerError(errorMessage));
 
       Deployer.invoke({}, deployOptions, (err, result) => {
         expectedErrorOutput.isCodeDeployed = true;
@@ -221,7 +214,7 @@ describe("Builtins test - cfn-deployer index test", () => {
     it("should not skip deploy when region is not primary deploy region but has different deploy state", (done) => {
       const deployRegion = "default";
       const currentRegion = "NA";
-      waitForStackDeployStub.resolves({endpointUri, stackInfo: {Outputs: []}});
+      deployStackStub.resolves({stackId, stackInfo: {Outputs: []}, endpointUri});
       deployOptions.alexaRegion = currentRegion;
       deployOptions.deployRegions[currentRegion] = deployOptions.deployRegions[deployRegion];
       deployOptions.deployState[currentRegion] = {...deployOptions.deployState[deployRegion], stackId: "different stack id"};
