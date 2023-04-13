@@ -21,13 +21,8 @@ export type NewSkillDeployerTypeInfo = {
   NAME: string;
   DESCRIPTION: string;
 };
-export type NewSkillModelingStackTypes = "Interaction Model" | "Alexa Conversations";
-export const MODELING_STACK_IM: NewSkillModelingStackTypes = "Interaction Model";
-export const MODELING_STACK_IM_DESCRIPTION: string =
-  "The Interaction Model stack enables you to define the user interactions with a combination of utterances, intents, and slots.";
-export const MODELING_STACK_AC: NewSkillModelingStackTypes = "Alexa Conversations";
-export const MODELING_STACK_AC_DESCRIPTION: string =
-  "Alexa Conversations (AC) uses deep learning to manage the dialog flow. User utterances, APL, and APLA documents train the skill model to create natural, human-like Alexa voice experiences.";
+export const MODELING_STACK_IM = "im";
+export const MODELING_STACK_AC = "ac";
 export type NewSkillTemplateInfo = {
   templateUrl?: string;
   templateName?: string;
@@ -42,7 +37,6 @@ export type NewSkillUserInput = {
   templateInfo?: NewSkillTemplateInfo;
   skillName?: string;
   projectFolderName?: string;
-  modelingStack?: NewSkillModelingStackTypes;
 };
 
 export default class NewCommand extends AbstractCommand {
@@ -59,7 +53,7 @@ export default class NewCommand extends AbstractCommand {
   }
 
   optionalOptions() {
-    return ["templateUrl", "templateBranch", "profile", "debug"];
+    return ["templateUrl", "templateBranch", "profile", "debug", "ac"];
   }
 
   async handle(cmd: Record<string, any>): Promise<void> {

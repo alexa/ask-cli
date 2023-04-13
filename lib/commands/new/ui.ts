@@ -7,11 +7,7 @@ import {callbackError, uiCallback} from "../../model/callback";
 import {isNonBlankString} from "../../utils/string-utils";
 import {
   NewSkillDeployerTypeInfo,
-  MODELING_STACK_IM,
-  MODELING_STACK_AC,
   NewSkillCodeLanguage,
-  MODELING_STACK_IM_DESCRIPTION,
-  MODELING_STACK_AC_DESCRIPTION,
 } from ".";
 import {SampleTemplate} from "../../model/sample-template";
 
@@ -199,37 +195,6 @@ export function getDeploymentType(deployType: NewSkillDeployerTypeInfo[], callba
     .then((answer) => {
       const selectedDeployDelegate = find(propEq("OPTION_NAME", answer.deployDelegate))(deployType);
       callback(null, view(lensPath(["NAME"]), selectedDeployDelegate));
-    })
-    .catch((error) => {
-      callback(error);
-    });
-}
-
-/**
- * Prompts the user to select the modeling stack type they want the samples to use
- * i.e. Interaction Model vs Alexa Conversations
- *
- * @param {uiCallback} callback function that will be called with the resulting value or error
- */
-export function getModelingStackType(callback: uiCallback): void {
-  const modelingStackChoices = [
-    `${MODELING_STACK_IM}\n  ${gray(MODELING_STACK_IM_DESCRIPTION)}`,
-    `${MODELING_STACK_AC}\n  ${gray(MODELING_STACK_AC_DESCRIPTION)}`,
-  ];
-  inquirer
-    .prompt([
-      {
-        message: "Choose a modeling stack for your skill: ",
-        type: "list",
-        name: "modelingStack",
-        choices: modelingStackChoices,
-        default: MODELING_STACK_IM,
-        pageSize: 5,
-        filter: (input) => input.replace(/\n.*/g, ""),
-      },
-    ])
-    .then((answer) => {
-      callback(null, answer.modelingStack);
     })
     .catch((error) => {
       callback(error);
