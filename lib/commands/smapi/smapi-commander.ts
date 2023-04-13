@@ -190,7 +190,7 @@ export const makeSmapiCommander = () => {
   );
 
   program.on("command:*", () => {
-    console.error(`Command not recognized. Please run "${program.name}" to check the user instructions.`);
+    console.error(`Command not recognized. Please run "ask smapi" to check the user instructions.`);
     process.exit(1);
   });
 
