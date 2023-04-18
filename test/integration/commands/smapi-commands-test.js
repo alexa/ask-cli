@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const { ModelIntrospector } = require("ask-smapi-sdk");
-const parallel = require("mocha.parallel");
 const path = require("path");
 
 const { CliCustomizationProcessor } = require("../../../lib/commands/smapi/cli-customization-processor");
@@ -13,9 +12,7 @@ const interactionModel = require("../../integration/fixtures/interaction-model.j
 const annotationSet = require("../../integration/fixtures/annotation-set.json");
 const jobDefinition = require("../../integration/fixtures/job-definition.json");
 const experimentMetricConfigurationModel = require('../../integration/fixtures/experiment-metric-configuration.json');
-
-parallel.limit(8);
-
+const { after, before } = require("mocha");
 const processor = new CliCustomizationProcessor();
 const modelIntrospector = new ModelIntrospector();
 const untestedCommands = new Set([...modelIntrospector.getOperations().keys()].map(processor.processOperationName));
@@ -30,7 +27,7 @@ const addCoveredCommand = (args) => {
   untestedCommands.delete(smapiCmd);
 };
 
-parallel('smapi command test', () => {
+describe('smapi command test', () => {
     const askCmd = path.join(process.cwd(), "/dist/bin/ask.js");
     const subCmd = 'smapi';
     let mockSmapiServer;
@@ -690,6 +687,7 @@ parallel('smapi command test', () => {
   });
 
   it("| should get interaction model catalog update status", async () => {
+    console.log("here");
     const args = [subCmd, "get-interaction-model-catalog-update-status", "-c", catalogId, "--update-request-id", updateRequestId];
     addCoveredCommand(args);
     const result = await run(askCmd, args, options);
@@ -1510,8 +1508,12 @@ parallel('smapi command test', () => {
   });
 
   after(() => {
+    console.log("killing smapi server mock");
     mockSmapiServer.kill();
+    console.log("killing lwa server mock");
     mockLwaServer.kill();
+    console.log("checking expects");
     expect(Array.from(untestedCommands), 'should not have untested commands').eql([]);
+    console.log("all done");
   });
 });

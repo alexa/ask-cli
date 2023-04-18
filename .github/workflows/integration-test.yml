@@ -13,12 +13,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node: [16]
+        node: [16, 18]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node }}
