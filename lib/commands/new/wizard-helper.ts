@@ -13,8 +13,8 @@ import {
   NewSkillRegion,
   NewSkillTemplateInfo,
   NewSkillUserInput,
-  NewSkillModelingStackTypes,
   MODELING_STACK_IM,
+  MODELING_STACK_AC,
   CODE_LANGUAGE_NODEJS,
   CODE_LANGUAGE_PYTHON,
   CODE_LANGUAGE_JAVA,
@@ -48,8 +48,7 @@ export async function collectUserCreationProjectInfo(
     const sampleTemplateFilter: SampleTemplatesFilter = new SampleTemplatesFilter(sampleTemplates);
 
     // MODELING STACK TYPE
-    await promptForModelingStackType().then((modelingStack) => (userInput.modelingStack = modelingStack));
-    sampleTemplateFilter.filter("stack", convertUserInputToFilterValue(userInput.modelingStack || MODELING_STACK_IM));
+    sampleTemplateFilter.filter("stack", cmd.ac ? MODELING_STACK_AC : MODELING_STACK_IM);
 
     // CODE LANGUAGE
     // ignore when template url supplied
@@ -141,18 +140,6 @@ function promptForDeployerType(samples: SampleTemplate[]): Promise<NewSkillDeplo
     );
 
     ui.getDeploymentType(Array.from(remainingDeployerTypes), (error, deploymentType) => (error ? reject(error) : resolve(deploymentType)));
-  });
-}
-
-/**
- * A Promise that fetches and returns the NewSkillModelingStackTypes the user wants the samples to use.
- * i.e. interaction-model vs alexa-conversations
- *
- * @returns {Promise<NewSkillModelingStackTypes>} a Promise that will provide a Modeling Stack
- */
-function promptForModelingStackType(): Promise<NewSkillModelingStackTypes> {
-  return new Promise((resolve, reject) => {
-    ui.getModelingStackType((error, modelingStack) => (error ? reject(error) : resolve(modelingStack)));
   });
 }
 
