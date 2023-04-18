@@ -1,6 +1,6 @@
-const {expect} = require("chai");
-const JavaRunFlow = require("../../../../../lib/commands/run/run-flow/java-run");
-const CONSTANTS = require("../../../../../lib/utils/constants");
+import { expect } from "chai";
+import { JavaRunFlow } from "../../../../../lib/commands/run/run-flow/java-run";
+import { RUN, ALEXA } from "../../../../../lib/utils/constants";
 
 describe("Java run flow test", () => {
   const skillInvocationInfo = {
@@ -11,10 +11,10 @@ describe("Java run flow test", () => {
     const runFlow = new JavaRunFlow({
       skillInvocationInfo,
       waitForAttach: false,
-      debugPort: CONSTANTS.RUN.DEFAULT_DEBUG_PORT,
+      debugPort: RUN.DEFAULT_DEBUG_PORT,
       token: "fooToken",
       skillId: "fooSkill",
-      runRegion: CONSTANTS.ALEXA.REGION.NA,
+      runRegion: ALEXA.REGION.NA,
       watch: false,
     });
     const nodemonConfig = runFlow.getExecConfig();
@@ -31,10 +31,10 @@ describe("Java run flow test", () => {
     const runFlow = new JavaRunFlow({
       skillInvocationInfo,
       waitForAttach: true,
-      debugPort: CONSTANTS.RUN.DEFAULT_DEBUG_PORT,
+      debugPort: RUN.DEFAULT_DEBUG_PORT,
       token: "fooToken",
       skillId: "fooSkill",
-      runRegion: CONSTANTS.ALEXA.REGION.NA,
+      runRegion: ALEXA.REGION.NA,
       watch: true,
     });
     const nodemonConfig = runFlow.getExecConfig();
