@@ -117,7 +117,7 @@
     "mocha-chai-jest-snapshot": "^1.1.3",
     "mocha.parallel": "^0.15.6",
     "npm-bundle": "3.0.3",
-    "npm-check-updates": "^12.5.8",
+    "npm-check-updates": "^16.10.8",
     "nyc": "^15.1.0",
     "postman-collection": "4.1.3",
     "prettier": "^2.6.2",
