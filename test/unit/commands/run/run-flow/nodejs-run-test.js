@@ -1,9 +1,9 @@
-const {expect} = require("chai");
-const path = require("path");
-const fs = require("fs");
-const sinon = require("sinon");
-const NodejsRunFlow = require("../../../../../lib/commands/run/run-flow/nodejs-run");
-const CONSTANTS = require("../../../../../lib/utils/constants");
+import { expect } from "chai";
+import { join } from "path";
+import fs from "fs";
+import { restore, stub } from "sinon";
+import { NodejsRunFlow } from "../../../../../lib/commands/run/run-flow/nodejs-run";
+import { RUN, ALEXA } from "../../../../../lib/utils/constants";
 
 describe("Node run flow test", () => {
   const skillInvocationInfo = {
@@ -12,22 +12,22 @@ describe("Node run flow test", () => {
     skillFileName: "fooFileName",
   };
   afterEach(() => {
-    sinon.restore();
+    restore();
   });
   it("| validate nodemon config, run mode", () => {
-    sinon.stub(fs, "existsSync").returns(true);
+    stub(fs, "existsSync").returns(true);
     const runFlow = new NodejsRunFlow({
       skillInvocationInfo,
       waitForAttach: false,
-      debugPort: CONSTANTS.RUN.DEFAULT_DEBUG_PORT,
+      debugPort: RUN.DEFAULT_DEBUG_PORT,
       token: "fooToken",
       skillId: "fooSkill",
-      runRegion: CONSTANTS.ALEXA.REGION.NA,
+      runRegion: ALEXA.REGION.NA,
       watch: false,
     });
     const nodemonConfig = runFlow.getExecConfig();
     expect(nodemonConfig.execMap).eq(undefined);
-    expect(nodemonConfig.script).eq(path.join(process.cwd(), "fooFolder", CONSTANTS.RUN.NODE.SCRIPT_LOCATION));
+    expect(nodemonConfig.script).eq(join(process.cwd(), "fooFolder", RUN.NODE.SCRIPT_LOCATION));
     expect(nodemonConfig.args).to.deep.equal([
       "--accessToken",
       '"fooToken"',
@@ -36,28 +36,28 @@ describe("Node run flow test", () => {
       "--handlerName",
       "fooHandler",
       "--skillEntryFile",
-      path.join(process.cwd(), "fooFolder", "fooFileName.js"),
+      join(process.cwd(), "fooFolder", "fooFileName.js"),
       "--region",
-      CONSTANTS.ALEXA.REGION.NA,
+      ALEXA.REGION.NA,
     ]);
     expect(nodemonConfig.watch).eq(false);
   });
   it("| validate nodemon config, debug mode, watch enabled", () => {
-    sinon.stub(fs, "existsSync").returns(true);
+    stub(fs, "existsSync").returns(true);
     const runFlow = new NodejsRunFlow({
       skillInvocationInfo,
       waitForAttach: true,
-      debugPort: CONSTANTS.RUN.DEFAULT_DEBUG_PORT,
+      debugPort: RUN.DEFAULT_DEBUG_PORT,
       token: "fooToken",
       skillId: "fooSkill",
-      runRegion: CONSTANTS.ALEXA.REGION.NA,
+      runRegion: ALEXA.REGION.NA,
       watch: true,
     });
     const nodemonConfig = runFlow.getExecConfig();
     expect(nodemonConfig.execMap).to.deep.equal({
-      js: `node --inspect-brk=${CONSTANTS.RUN.DEFAULT_DEBUG_PORT}`,
+      js: `node --inspect-brk=${RUN.DEFAULT_DEBUG_PORT}`,
     });
-    expect(nodemonConfig.script).eq(path.join(process.cwd(), "fooFolder", CONSTANTS.RUN.NODE.SCRIPT_LOCATION));
+    expect(nodemonConfig.script).eq(join(process.cwd(), "fooFolder", RUN.NODE.SCRIPT_LOCATION));
     expect(nodemonConfig.args).to.deep.equal([
       "--accessToken",
       '"fooToken"',
@@ -66,22 +66,22 @@ describe("Node run flow test", () => {
       "--handlerName",
       "fooHandler",
       "--skillEntryFile",
-      path.join(process.cwd(), "fooFolder", "fooFileName.js"),
+      join(process.cwd(), "fooFolder", "fooFileName.js"),
       "--region",
-      CONSTANTS.ALEXA.REGION.NA,
+      ALEXA.REGION.NA,
     ]);
     expect(nodemonConfig.watch).eq("fooFolder");
   });
   it("| ask-sdk-local-debug has not been installed", () => {
-    sinon.stub(fs, "existsSync").returns(false);
+    stub(fs, "existsSync").returns(false);
     try {
       new NodejsRunFlow({
         skillInvocationInfo,
         waitForAttach: true,
-        debugPort: CONSTANTS.RUN.DEFAULT_DEBUG_PORT,
+        debugPort: RUN.DEFAULT_DEBUG_PORT,
         token: "fooToken",
         skillId: "fooSkill",
-        runRegion: CONSTANTS.ALEXA.REGION.NA,
+        runRegion: ALEXA.REGION.NA,
         watch: true,
       });
     } catch (err) {

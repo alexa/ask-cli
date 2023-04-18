@@ -8,7 +8,7 @@ import Messenger from "../../../../lib/view/messenger";
 import ResourcesConfig from "../../../../lib/model/resources-config";
 import profileHelper from "../../../../lib/utils/profile-helper";
 import CONSTANTS from "../../../../lib/utils/constants";
-import helper from "../../../../lib/commands/run/helper";
+import * as helper from "../../../../lib/commands/run/helper";
 import SmapiClient from "../../../../lib/clients/smapi-client";
 import {OptionModel} from "../../../../lib/commands/option-validator";
 

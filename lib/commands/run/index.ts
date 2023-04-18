@@ -10,7 +10,7 @@ import jsonView from "../../view/json-view";
 import stringUtils from "../../utils/string-utils";
 import Messenger from "../../view/messenger";
 import CliError from "../../exceptions/cli-error";
-import helper from "./helper";
+import * as helper from "./helper";
 import {OptionModel} from "../option-validator";
 
 export default class RunCommand extends AbstractCommand {
@@ -72,7 +72,7 @@ export default class RunCommand extends AbstractCommand {
       if (cmd.waitForAttach) {
         Messenger.getInstance().info(`\n*****Debugging session will wait until inspector is attached at port - ${debugPort}*****\n`);
       }
-      runFlowInstance.execCommand();
+      await runFlowInstance.execCommand();
     } catch (tokenErr) {
       Messenger.getInstance().error(tokenErr);
       throw tokenErr;
