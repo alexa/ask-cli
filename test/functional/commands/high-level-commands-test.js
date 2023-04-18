@@ -52,7 +52,6 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     let inputs = [
-      {match: "? Choose a modeling stack for your skill"},
       {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill"},
       {match: "? Choose the default region for your skill"},
@@ -96,7 +95,6 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose a modeling stack for your skill"},
       {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: KeySymbol.DOWN},
       {match: "? Choose a template to start with"},
@@ -123,7 +121,6 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose a modeling stack for your skill"},
       {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Choose a template to start with"},
@@ -150,7 +147,6 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose a modeling stack for your skill"},
       {match: "? Choose the programming language you will use to code your skill"},
       {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Choose a template to start with", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}${KeySymbol.DOWN}`},
