@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.29.2](https://github.com/alexa/ask-cli/compare/v2.29.1...v2.29.2) (2023-04-19)
+
+### Bug Fixes
+
+* [#455](https://github.com/alexa/ask-cli/issues/455) latest code was not waiting for nodemon ([393e36e](https://github.com/alexa/ask-cli/commit/393e36e8a9f93568befeffdeaf73edc0a3bba63f))
+* correct faulty error message for `ask smapi` command ([fb2d0d7](https://github.com/alexa/ask-cli/commit/fb2d0d782e61bf8e7dda1ca5e2283892f33c5a8e))
+* update aws sdk to v3 ([fd96a52](https://github.com/alexa/ask-cli/commit/fd96a52acd459f99b58c4483888c9713aba81815))
+
+
 ## [2.28.0](https://github.com/alexa/ask-cli/compare/v2.27.0...v2.28.0) (2022-08-15)
 
 
