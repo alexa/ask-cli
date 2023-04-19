@@ -687,7 +687,6 @@ describe('smapi command test', () => {
   });
 
   it("| should get interaction model catalog update status", async () => {
-    console.log("here");
     const args = [subCmd, "get-interaction-model-catalog-update-status", "-c", catalogId, "--update-request-id", updateRequestId];
     addCoveredCommand(args);
     const result = await run(askCmd, args, options);
@@ -1508,12 +1507,8 @@ describe('smapi command test', () => {
   });
 
   after(() => {
-    console.log("killing smapi server mock");
     mockSmapiServer.kill();
-    console.log("killing lwa server mock");
     mockLwaServer.kill();
-    console.log("checking expects");
     expect(Array.from(untestedCommands), 'should not have untested commands').eql([]);
-    console.log("all done");
   });
 });
