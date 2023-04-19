@@ -11,6 +11,7 @@ import {
   getTargetTemplateName,
   confirmUsingUnofficialTemplate,
   getDeploymentType,
+  getModelingStackType,
 } from "../../../../lib/commands/new/ui";
 import {SampleTemplate} from "../../../../lib/model/sample-template";
 import { CODE_LANGUAGE_JAVA, CODE_LANGUAGE_NODEJS, CODE_LANGUAGE_PYTHON } from "../../../../lib/commands/new";
@@ -423,6 +424,50 @@ describe("Commands new - UI test", () => {
           choices: TEST_DEPLOYMENT_CHOICES_WITH_SEP,
         });
         expect(inquirerPrompt.args[0][0][0].filter("a \n \n b")).equal("a ");
+        expect(err?.message).equal(TEST_ERROR);
+        expect(response).equal(undefined);
+        done();
+      });
+    });
+  });
+
+  describe("| getModelingStackType", () => {
+    let inquirerPrompt: SinonStub;
+
+    beforeEach(() => {
+      inquirerPrompt = sinon.stub(inquirer, "prompt");
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("| getModelingStackType selected by user is retrieved correctly", (done) => {
+      // setup
+      inquirerPrompt.resolves({modelingStack: "Alexa Conversations"});
+      // call
+      getModelingStackType((err, response) => {
+        // verify
+        validateInquirerConfig(inquirerPrompt.args[0][0][0], {
+          message: "Choose a modeling stack for your skill: ",
+          type: "list",
+        });
+        expect(err).equal(null);
+        expect(response).equal("Alexa Conversations");
+        done();
+      });
+    });
+
+    it("| getModelingStackType inquirer throws exception", (done) => {
+      // setup
+      inquirerPrompt.rejects(new Error(TEST_ERROR));
+      // call
+      getModelingStackType((err, response) => {
+        // verify
+        validateInquirerConfig(inquirerPrompt.args[0][0][0], {
+          message: "Choose a modeling stack for your skill: ",
+          type: "list",
+        });
         expect(err?.message).equal(TEST_ERROR);
         expect(response).equal(undefined);
         done();

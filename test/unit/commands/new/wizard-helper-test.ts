@@ -7,6 +7,7 @@ import urlUtils from "../../../../lib/utils/url-utils";
 import * as wizardHelper from "../../../../lib/commands/new/wizard-helper";
 import Messenger from "../../../../lib/view/messenger";
 import {TEST_SAMPLE_1_IM_HOSTED_NODE, TEST_SAMPLE_2_AC_CFN_PYTHON} from "./template-helper-test";
+import { MODELING_STACK_IM } from "../../../../lib/commands/new";
 
 describe("Commands new test - wizard helper test", () => {
   const TEST_ERROR = "TEST_ERROR";
@@ -37,6 +38,7 @@ describe("Commands new test - wizard helper test", () => {
   let getSkillDefaultRegionStub: SinonStub;
   let getSkillLocaleStub: SinonStub;
   let getInstanceStub: SinonStub;
+  let getModelingStackTypeStub: SinonStub;
   let getSampleTemplatesFromS3Stub: SinonStub;
 
   beforeEach(() => {
@@ -61,6 +63,8 @@ describe("Commands new test - wizard helper test", () => {
     getSkillLocaleStub = sinon.stub(ui, "getSkillLocale");
     getSkillLocaleStub.yields(null, "en-US");
     getSkillLocaleStub.yields(null, "us-east-1");
+    getModelingStackTypeStub = sinon.stub(ui, "getModelingStackType");
+    getModelingStackTypeStub.callsArgWith(0, null, MODELING_STACK_IM);
     getSampleTemplatesFromS3Stub = sinon.stub(templateHelper, "getSampleTemplatesFromS3");
     getSampleTemplatesFromS3Stub.resolves(TEST_TEMPLATE_SAMPLES);
   });
