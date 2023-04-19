@@ -6,6 +6,8 @@ import {
   CODE_LANGUAGE_JAVA,
   CODE_LANGUAGE_NODEJS,
   CODE_LANGUAGE_PYTHON,
+  MODELING_STACK_AC,
+  MODELING_STACK_IM,
 } from "../../../../lib/commands/new";
 import {getSampleTemplatesFromS3, convertUserInputToFilterValue} from "../../../../lib/commands/new/template-helper";
 import {SampleTemplate} from "../../../../lib/model/sample-template";
@@ -121,6 +123,8 @@ describe("Commands new test - template helper test", () => {
 
   describe("convertUserInputToFilterValue", () => {
     it("should convert values to correct mapping", () => {
+      expect(convertUserInputToFilterValue(MODELING_STACK_IM)).to.equal("im");
+      expect(convertUserInputToFilterValue(MODELING_STACK_AC)).to.equal("ac");
       expect(convertUserInputToFilterValue(CODE_LANGUAGE_NODEJS)).to.equal("node");
       expect(convertUserInputToFilterValue(CODE_LANGUAGE_PYTHON)).to.equal("python");
       expect(convertUserInputToFilterValue(CODE_LANGUAGE_JAVA)).to.equal("java");
@@ -131,9 +135,9 @@ describe("Commands new test - template helper test", () => {
     });
 
     it("should be case insensitive", () => {
-      expect(convertUserInputToFilterValue(CODE_LANGUAGE_NODEJS)).to.equal("node");
-      expect(convertUserInputToFilterValue(CODE_LANGUAGE_NODEJS.toLowerCase())).to.equal("node");
-      expect(convertUserInputToFilterValue(CODE_LANGUAGE_NODEJS.toUpperCase())).to.equal("node");
+      expect(convertUserInputToFilterValue(MODELING_STACK_IM)).to.equal("im");
+      expect(convertUserInputToFilterValue(MODELING_STACK_IM.toLowerCase())).to.equal("im");
+      expect(convertUserInputToFilterValue(MODELING_STACK_IM.toUpperCase())).to.equal("im");
     });
 
     it("should fail fast and throw and error if not identified", (done) => {

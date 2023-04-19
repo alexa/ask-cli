@@ -2,7 +2,7 @@ import httpClient from "../../clients/http-client";
 import R from "ramda";
 import {TEMPLATES, HTTP_REQUEST, DEPLOYER_TYPE} from "../../utils/constants";
 import {SampleTemplate, SampleTemplateFilterValues} from "../../model/sample-template";
-import {CODE_LANGUAGE_JAVA, CODE_LANGUAGE_NODEJS, CODE_LANGUAGE_PYTHON} from ".";
+import {CODE_LANGUAGE_JAVA, CODE_LANGUAGE_NODEJS, CODE_LANGUAGE_PYTHON, MODELING_STACK_AC, MODELING_STACK_IM} from ".";
 
 export function getSampleTemplatesFromS3(doDebug: boolean): Promise<SampleTemplate[]> {
   return new Promise<SampleTemplate[]>((resolve, reject) => {
@@ -24,6 +24,10 @@ export function getSampleTemplatesFromS3(doDebug: boolean): Promise<SampleTempla
 
 export function convertUserInputToFilterValue(inputValue: string): SampleTemplateFilterValues {
   switch (inputValue.toLowerCase()) {
+    case MODELING_STACK_IM.toLowerCase():
+      return "im";
+    case MODELING_STACK_AC.toLowerCase():
+      return "ac";
     case CODE_LANGUAGE_NODEJS.toLowerCase():
       return "node";
     case CODE_LANGUAGE_PYTHON.toLowerCase():

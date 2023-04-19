@@ -234,10 +234,5 @@
     "name": "watch",
     "description": "Uses nodemon to monitor changes and automatically restart the run session.",
     "stringInput": "NONE"
-  },
-  "ac": {
-    "name": "ac",
-    "description": "Displays Alexa skill templates that use the Alexa Conversations modeling stack.",
-    "stringInput": "NONE"
   }
 }
