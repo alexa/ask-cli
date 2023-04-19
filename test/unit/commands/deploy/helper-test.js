@@ -1,5 +1,6 @@
 const {expect} = require("chai");
 const sinon = require("sinon");
+const path = require("path");
 
 const helper = require("../../../../lib/commands/deploy/helper");
 const SkillMetadataController = require("../../../../lib/controllers/skill-metadata-controller");
@@ -13,6 +14,15 @@ const Messenger = require("../../../../lib/view/messenger");
 const SpinnerView = require("../../../../lib/view/spinner-view");
 
 describe("Commands deploy test - helper test", () => {
+  const FIXTURE_RESOURCES_CONFIG_FILE_PATH = path.join(
+    process.cwd(),
+    "test",
+    "unit",
+    "fixture",
+    "model",
+    "regular-proj",
+    "ask-resources.json",
+  );
   const TEST_PROFILE = "default";
   const TEST_IGNORE_HASH = false;
   const TEST_VENDOR_ID = "vendor";
@@ -20,7 +30,12 @@ describe("Commands deploy test - helper test", () => {
   const TEST_OPTIONS = {profile: TEST_PROFILE, doDebug: TEST_DO_DEBUG, ignoreHash: TEST_IGNORE_HASH};
 
   describe("# test helper method - confirmProfile", () => {
+    beforeEach(() => {
+      new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
+    });
+
     afterEach(() => {
+      ResourcesConfig.dispose();
       sinon.restore();
     });
 

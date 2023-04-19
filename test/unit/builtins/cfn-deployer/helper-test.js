@@ -1,13 +1,12 @@
-const aws = require("aws-sdk");
 const {expect} = require("chai");
 const fs = require("fs");
 const sinon = require("sinon");
+const proxyquire = require("proxyquire");
 
 const CliCFNDeployerError = require("../../../../lib/exceptions/cli-cfn-deployer-error");
-const Helper = require("../../../../lib/builtins/deploy-delegates/cfn-deployer/helper");
 
 describe("Builtins test - cfn-deployer helper test", () => {
-  const profile = 'default';
+  const profile = "default";
   const doDebug = false;
   const awsProfile = "test";
   const awsRegion = "test-region";
@@ -19,221 +18,229 @@ describe("Builtins test - cfn-deployer helper test", () => {
   const endpointUri = "some-endpoint";
   const parameters = [{ParameterKey: "SkillId", ParameterValue: "some id"}];
   const capabilities = [];
-  let helper;
-  let reporter;
-  let updateStatusStub;
-  let headBucketStub;
-  let createBucketStub;
-  let waitForStub;
-  let getBucketVersioningStub;
-  let putBucketVersioningStub;
-  let putObjectStub;
-  let describeStacksStub;
-  let updateStackStub;
-  let createStackStub;
-  let describeStackEventsStub;
+  let sleepStub, updateStatusStub, reporter, helper;
 
   beforeEach(() => {
-    createBucketStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-    headBucketStub = sinon.stub();
-    waitForStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-    getBucketVersioningStub = sinon.stub();
-    putBucketVersioningStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-    putObjectStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-
-    sinon.stub(aws, "S3").returns({
-      headBucket: headBucketStub,
-      createBucket: createBucketStub,
-      waitFor: waitForStub,
-      getBucketVersioning: getBucketVersioningStub,
-      putBucketVersioning: putBucketVersioningStub,
-      putObject: putObjectStub,
-    });
-
-    describeStacksStub = sinon.stub();
-    updateStackStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-    createStackStub = sinon.stub().returns({promise: sinon.stub().resolves()});
-    describeStackEventsStub = sinon.stub();
-
-    sinon.stub(aws, "CloudFormation").returns({
-      describeStacks: describeStacksStub,
-      updateStack: updateStackStub,
-      createStack: createStackStub,
-      describeStackEvents: describeStackEventsStub,
-    });
+    sleepStub = sinon.stub();
     updateStatusStub = sinon.stub();
-
     reporter = {
       updateStatus: updateStatusStub,
     };
-
+    const Helper = proxyquire("../../../../lib/builtins/deploy-delegates/cfn-deployer/helper", {
+      util: {
+        promisify: sinon.stub().withArgs(setTimeout).returns(sleepStub),
+      },
+    });
     helper = new Helper(profile, doDebug, awsProfile, awsRegion, reporter);
-    sinon.stub(helper, "sleep").resolves();
   });
-
-  it("should not create s3 bucket when the bucket already exists", async () => {
-    headBucketStub.returns({promise: sinon.stub().resolves()});
-
-    await helper.createS3BucketIfNotExists(bucketName);
-
-    expect(headBucketStub.callCount).eq(1);
-    expect(createBucketStub.callCount).eq(0);
-  });
-
-  it("should create s3 bucket when the bucket does not exist in us-east-1", async () => {
-    headBucketStub.returns({promise: sinon.stub().rejects()});
-
-    helper = new Helper(profile, doDebug, awsProfile, 'us-east-1', reporter);
-    await helper.createS3BucketIfNotExists(bucketName);
-
-    expect(headBucketStub.callCount).eq(1);
-    expect(createBucketStub.callCount).eq(1);
-    expect(createBucketStub.args[0][0].Bucket).eq(bucketName);
-    expect(waitForStub.callCount).eq(1);
-  });
-
-  it("should create s3 bucket when the bucket does not exist in non us-east-1", async () => {
-    headBucketStub.returns({promise: sinon.stub().rejects()});
-
-    await helper.createS3BucketIfNotExists(bucketName);
-
-    expect(headBucketStub.callCount).eq(1);
-    expect(createBucketStub.callCount).eq(1);
-    expect(createBucketStub.args[0][0].Bucket).eq(bucketName);
-    expect(createBucketStub.args[0][0].CreateBucketConfiguration.LocationConstraint).eq(awsRegion);
-    expect(waitForStub.callCount).eq(1);
-  });
-
-  it("should not enable s3 bucket versioning when the versioning already enabled", async () => {
-    getBucketVersioningStub.returns({promise: sinon.stub().resolves(versioningConfiguration)});
-
-    await helper.enableS3BucketVersioningIfNotEnabled(bucketName);
-
-    expect(putBucketVersioningStub.callCount).eq(0);
-  });
-
-  it("should enable s3 bucket versioning when the versioning is not enabled", async () => {
-    getBucketVersioningStub.returns({promise: sinon.stub().resolves({})});
-
-    await helper.enableS3BucketVersioningIfNotEnabled(bucketName);
-
-    expect(putBucketVersioningStub.callCount).eq(1);
-    expect(putBucketVersioningStub.args[0][0]).eql({Bucket: bucketName, VersioningConfiguration: versioningConfiguration});
-  });
-
-  it("should upload to s3", async () => {
-    const objectBody = "some body";
-    sinon.stub(fs, "readFileSync").returns(objectBody);
-    const bucketKey = "someKey";
-    const filePath = "some-path";
-
-    await helper.uploadToS3(bucketName, bucketKey, filePath);
-
-    expect(putObjectStub.callCount).eq(1);
-    expect(putObjectStub.args[0][0]).eql({Bucket: bucketName, Key: bucketKey, Body: objectBody});
-    expect(updateStatusStub.callCount).eq(1);
-    expect(updateStatusStub.args[0][0]).eq(`Uploading code artifact to s3://${bucketName}/${bucketKey}`);
-  });
-
-  it("should create new cloud formation stack when stack does not exist", async () => {
-    describeStacksStub.returns({promise: sinon.stub().rejects({})});
-
-    await helper.deployStack(stackId, stackName, templateBody, parameters, capabilities);
-
-    expect(updateStatusStub.args[0][0]).contains("No stack exists or stack has been deleted. Creating cloudformation stack");
-    expect(createStackStub.callCount).eq(1);
-    expect(createStackStub.args[0][0]).eql({StackName: stackName, Capabilities: [], TemplateBody: templateBody, Parameters: parameters});
-  });
-
-  it("should create new cloud formation stack when stack id is undefined", async () => {
-    await helper.deployStack(undefined, stackName, templateBody, parameters, capabilities);
-
-    expect(updateStatusStub.args[0][0]).contains("No stack exists or stack has been deleted. Creating cloudformation stack");
-    expect(createStackStub.callCount).eq(1);
-    expect(createStackStub.args[0][0]).eql({StackName: stackName, Capabilities: [], TemplateBody: templateBody, Parameters: parameters});
-  });
-
-  it("should update cloud formation stack when stack exists", async () => {
-    describeStacksStub.returns({promise: sinon.stub().resolves({Stacks: [{StackStatus: "CREATE_COMPLETE"}]})});
-
-    await helper.deployStack(stackId, stackName, templateBody, parameters, capabilities);
-
-    expect(updateStatusStub.args[0][0]).contains(`Updating stack (${stackId})...`);
-    expect(updateStackStub.callCount).eq(1);
-    expect(updateStackStub.args[0][0]).eql({StackName: stackId, Capabilities: [], TemplateBody: templateBody, Parameters: parameters});
-  });
-
-  it("should wait for cloud formation stack deploy and return endpoint uri", async () => {
-    const stackInfo1 = {StackStatus: "CREATE_IN_PROGRESS", StackStatusReason: "User initiated"};
-    const stackInfo2 = {StackStatus: "CREATE_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
-
-    describeStacksStub.onCall(0).returns({promise: sinon.stub().resolves({Stacks: [stackInfo1]})});
-    describeStacksStub.onCall(1).returns({promise: sinon.stub().resolves({Stacks: [stackInfo2]})});
-
-    const response = await helper.waitForStackDeploy(stackId);
-
-    expect(response).eql({stackInfo: stackInfo2, endpointUri});
-    expect(updateStatusStub.args[0][0]).eq(
-      `Current stack status: ${stackInfo1.StackStatus}... Status reason: ${stackInfo1.StackStatusReason}.`,
-    );
-    expect(updateStatusStub.args[1][0]).eq(`Current stack status: ${stackInfo2.StackStatus}... `);
-  });
-
-  it("should wait for cloud formation stack deploy and throw a deploy error", async () => {
-    const stackInfo = {StackStatus: "ROLLBACK_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
-    describeStacksStub.returns({promise: sinon.stub().resolves({Stacks: [stackInfo]})});
-
-    const failureReason = "some failure reason";
-    const stackEvent = {
-      ResourceStatus: "CREATE_FAILED",
-      LogicalResourceId: "some resource id",
-      ResourceType: "some resource type",
-      ResourceStatusReason: failureReason,
-    };
-    describeStackEventsStub.returns({
-      promise: sinon.stub().resolves({StackEvents: [{ResourceStatus: "reason 1"}, stackEvent, {ResourceStatus: "reason 2"}]}),
-    });
-
-    return helper.waitForStackDeploy(stackId).catch((err) => {
-      expect(err).instanceOf(CliCFNDeployerError);
-      expect(err.message).includes(failureReason);
-    });
-  });
-
-  it("should wait for cloud formation stack deploy and throw a default error", async () => {
-    const stackInfo = {StackStatus: "ROLLBACK_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
-    describeStacksStub.returns({promise: sinon.stub().resolves({Stacks: [stackInfo]})});
-
-    describeStackEventsStub.returns({
-      promise: sinon.stub().resolves({StackEvents: [{ResourceStatus: "reason 1"}, {ResourceStatus: "reason 2"}]}),
-    });
-
-    return helper.waitForStackDeploy(stackId).catch((err) => {
-      expect(err).instanceOf(CliCFNDeployerError);
-      expect(err.message).includes("We could not find details for deploy error");
-    });
-  });
-
-  it("should get skill credentials successful", async () => {
-    const credentials = {clientId: "id", clientSecret: "secret"};
-    const response = { body: { skillMessagingCredentials: credentials } };
-    sinon.stub(helper.smapiClient.skill, "getSkillCredentials").yields(null, response);
-
-    const result = await helper.getSkillCredentials("skill-id");
-
-    expect(result).eql(credentials);
-});
-
-it("should get skill credentials failure", async () => {
-    const error = "some failure reason";
-    sinon.stub(helper.smapiClient.skill, "getSkillCredentials").yields(error);
-
-    return helper.getSkillCredentials("skill-id").catch(err => {
-      expect(err).eql(error);
-    });
-});
 
   afterEach(() => {
     sinon.restore();
+  });
+
+  describe("# function uploadToS3 tests", () => {
+    const bucketKey = "someKey";
+    const filePath = "some-path";
+    const objectBody = "some body";
+    let bucketExitsStub, createBucketStub, waitForBucketStub, getBucketVersioningStub, enableBucketVersioningStub, putObjectStub;
+
+    beforeEach(() => {
+      bucketExitsStub = sinon.stub(helper.s3Client, "bucketExits");
+      createBucketStub = sinon.stub(helper.s3Client, "createBucket");
+      waitForBucketStub = sinon.stub(helper.s3Client, "waitForBucketExists");
+      getBucketVersioningStub = sinon.stub(helper.s3Client, "getBucketVersioning");
+      enableBucketVersioningStub = sinon.stub(helper.s3Client, "enableBucketVersioning");
+      putObjectStub = sinon.stub(helper.s3Client, "putObject");
+      sinon.stub(fs, "readFileSync").returns(objectBody);
+    });
+
+    it("should upload file but not create s3 bucket or enable versioning when the bucket already exists and versioning already enabled", async () => {
+      // setup
+      bucketExitsStub.resolves(true);
+      getBucketVersioningStub.resolves(versioningConfiguration);
+      // call
+      await helper.uploadToS3(bucketName, bucketKey, filePath);
+      // verify
+      expect(bucketExitsStub.args[0][0]).eq(bucketName);
+      expect(createBucketStub.called).to.be.false;
+      expect(waitForBucketStub.called).to.be.false;
+      expect(getBucketVersioningStub.args[0][0]).eq(bucketName);
+      expect(enableBucketVersioningStub.called).to.be.false;
+      expect(putObjectStub.args[0]).deep.equal([bucketName, bucketKey, objectBody]);
+    });
+
+    it("should enable versioning and upload file but not create s3 bucket when the bucket already exists and versioning not enabled", async () => {
+      // setup
+      bucketExitsStub.resolves(true);
+      getBucketVersioningStub.resolves({});
+      // call
+      await helper.uploadToS3(bucketName, bucketKey, filePath);
+      // verify
+      expect(bucketExitsStub.args[0][0]).eq(bucketName);
+      expect(createBucketStub.called).to.be.false;
+      expect(waitForBucketStub.called).to.be.false;
+      expect(getBucketVersioningStub.args[0][0]).eq(bucketName);
+      expect(enableBucketVersioningStub.args[0][0]).eq(bucketName);
+      expect(putObjectStub.args[0]).deep.equal([bucketName, bucketKey, objectBody]);
+    });
+
+    it("should create s3 bucket, enable versioning and upload file when the bucket does not exist", async () => {
+      // setup
+      bucketExitsStub.resolves(false);
+      getBucketVersioningStub.resolves({});
+      // call
+      await helper.uploadToS3(bucketName, bucketKey, filePath);
+      // verify
+      expect(bucketExitsStub.args[0][0]).eq(bucketName);
+      expect(createBucketStub.args[0][0]).eq(bucketName);
+      expect(createBucketStub.args[0][1]).eq(awsRegion);
+      expect(waitForBucketStub.args[0][0]).eq(bucketName);
+      expect(getBucketVersioningStub.args[0][0]).eq(bucketName);
+      expect(enableBucketVersioningStub.args[0][0]).eq(bucketName);
+      expect(putObjectStub.args[0]).deep.equal([bucketName, bucketKey, objectBody]);
+    });
+  });
+
+  describe("# function deployStack tests", () => {
+    let stackExistsStub, createStackStub, updateStackStub, getStackStub, getStackEventsStub;
+
+    beforeEach(() => {
+      stackExistsStub = sinon.stub(helper.cloudformationClient, "stackExists");
+      createStackStub = sinon.stub(helper.cloudformationClient, "createStack");
+      updateStackStub = sinon.stub(helper.cloudformationClient, "updateStack");
+      getStackStub = sinon.stub(helper.cloudformationClient, "getStack");
+      getStackEventsStub = sinon.stub(helper.cloudformationClient, "getStackEvents");
+    });
+
+    it("should create new cloud formation stack when stack does not exist and return endpoint uri", async () => {
+      // setup
+      stackExistsStub.resolves(false);
+      createStackStub.resolves(stackId);
+      const stackInfo1 = {StackStatus: "CREATE_IN_PROGRESS", StackStatusReason: "User initiated"};
+      const stackInfo2 = {StackStatus: "CREATE_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
+      getStackStub.onCall(0).resolves(stackInfo1);
+      getStackStub.onCall(1).resolves(stackInfo2);
+      // call
+      const res = await helper.deployStack(undefined, stackName, templateBody, parameters, capabilities);
+      // verify
+      expect(res).deep.equal({stackId, stackInfo: stackInfo2, endpointUri});
+      expect(stackExistsStub.args[0][0]).equal(undefined);
+      expect(createStackStub.args[0]).deep.equal([stackName, templateBody, parameters, capabilities]);
+      expect(updateStackStub.called).to.be.false;
+      expect(getStackStub.callCount).equal(2);
+      expect(getStackEventsStub.callCount).equal(0);
+      expect(sleepStub.callCount).equal(1);
+      expect(updateStatusStub.args).deep.equals([
+        [`No stack exists or stack has been deleted. Creating cloudformation stack "${stackName}"...`],
+        [`Current stack status: ${stackInfo1.StackStatus}... Status reason: ${stackInfo1.StackStatusReason}.`],
+        [`Current stack status: ${stackInfo2.StackStatus}... `],
+      ]);
+    });
+
+    it("should update cloud formation stack when stack exists and return endpoint uri", async () => {
+      // setup
+      stackExistsStub.resolves(true);
+      updateStackStub.resolves(stackId);
+      const stackInfo1 = {StackStatus: "UPDATE_IN_PROGRESS", StackStatusReason: "User initiated"};
+      const stackInfo2 = {StackStatus: "UPDATE_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
+      getStackStub.onCall(0).resolves(stackInfo1);
+      getStackStub.onCall(1).resolves(stackInfo2);
+      // call
+      const res = await helper.deployStack(stackId, stackName, templateBody, parameters, capabilities);
+      // verify
+      expect(res).deep.equal({stackId, stackInfo: stackInfo2, endpointUri});
+      expect(stackExistsStub.args[0][0]).equal(stackId);
+      expect(createStackStub.called).to.be.false;
+      expect(updateStackStub.args[0]).deep.equal([stackId, templateBody, parameters, capabilities]);
+      expect(getStackStub.callCount).equal(2);
+      expect(getStackEventsStub.callCount).equal(0);
+      expect(sleepStub.callCount).equal(1);
+      expect(updateStatusStub.args).deep.equals([
+        [`Updating stack (${stackId})...`],
+        [`Current stack status: ${stackInfo1.StackStatus}... Status reason: ${stackInfo1.StackStatusReason}.`],
+        [`Current stack status: ${stackInfo2.StackStatus}... `],
+      ]);
+    });
+
+    it("should fail to create new cloud formation stack and throw a specific deploy error", (done) => {
+      // setup
+      stackExistsStub.resolves(false);
+      createStackStub.resolves(stackId);
+      const stackInfo = {StackStatus: "ROLLBACK_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
+      getStackStub.resolves(stackInfo);
+      const stackEvent = {
+        ResourceStatus: "CREATE_FAILED",
+        LogicalResourceId: "some resource id",
+        ResourceType: "some resource type",
+        ResourceStatusReason: "some failure reason",
+      };
+      getStackEventsStub.resolves([{ResourceStatus: "reason 1"}, stackEvent, {ResourceStatus: "reason 2"}]);
+      // call
+      helper.deployStack(stackId, stackName, templateBody, parameters, capabilities).catch((err) => {
+        // verify
+        expect(err).instanceOf(CliCFNDeployerError);
+        expect(err.message).includes(stackEvent.ResourceStatusReason);
+        expect(createStackStub.args[0]).deep.equal([stackName, templateBody, parameters, capabilities]);
+        expect(updateStackStub.called).to.be.false;
+        expect(getStackStub.callCount).equal(1);
+        expect(getStackEventsStub.callCount).equal(1);
+        expect(sleepStub.callCount).equal(0);
+        expect(updateStatusStub.args).deep.equals([
+          [`No stack exists or stack has been deleted. Creating cloudformation stack "${stackName}"...`],
+          [`Current stack status: ${stackInfo.StackStatus}... `],
+        ]);
+        done();
+      });
+    });
+
+    it("should fail to update cloud formation stack and throw a generic deploy error", (done) => {
+      // setup
+      stackExistsStub.resolves(true);
+      updateStackStub.resolves(stackId);
+      const stackInfo = {StackStatus: "UPDATE_ROLLBACK_COMPLETE", Outputs: [{OutputKey: "SkillEndpoint", OutputValue: endpointUri}]};
+      getStackStub.resolves(stackInfo);
+      getStackEventsStub.resolves([{ResourceStatus: "reason 1"}, {ResourceStatus: "reason 2"}]);
+      // call
+      helper.deployStack(stackId, stackName, templateBody, parameters, capabilities).catch((err) => {
+        // verify
+        expect(err).instanceOf(CliCFNDeployerError);
+        expect(err.message).includes("We could not find details for deploy error");
+        expect(createStackStub.called).to.be.false;
+        expect(updateStackStub.args[0]).deep.equal([stackId, templateBody, parameters, capabilities]);
+        expect(getStackStub.callCount).equal(1);
+        expect(getStackEventsStub.callCount).equal(1);
+        expect(sleepStub.callCount).equal(0);
+        expect(updateStatusStub.args).deep.equals([
+          [`Updating stack (${stackId})...`],
+          [`Current stack status: ${stackInfo.StackStatus}... `],
+        ]);
+        done();
+      });
+    });
+  });
+
+  describe("# function getSkillCredentials tests", () => {
+    it("should get skill credentials successful", async () => {
+      // setup
+      const credentials = {clientId: "id", clientSecret: "secret"};
+      const response = {body: {skillMessagingCredentials: credentials}};
+      sinon.stub(helper.smapiClient.skill, "getSkillCredentials").yields(null, response);
+      // call
+      const result = await helper.getSkillCredentials("skill-id");
+      // verify
+      expect(result).equal(credentials);
+    });
+
+    it("should get skill credentials failure", (done) => {
+      // setup
+      const error = "some failure reason";
+      sinon.stub(helper.smapiClient.skill, "getSkillCredentials").yields(error);
+      // call
+      helper.getSkillCredentials("skill-id").catch((err) => {
+        // verify
+        expect(err).equal(error);
+        done();
+      });
+    });
   });
 });
