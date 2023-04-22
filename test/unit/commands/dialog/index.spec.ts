@@ -6,10 +6,9 @@ import AuthorizationController from "../../../../lib/controllers/authorization-c
 import {DialogCommand} from "../../../../lib/commands/dialog";
 import DialogReplayFile from "../../../../lib/model/dialog-replay-file";
 import * as helper from "../../../../lib/commands/dialog/helper";
-import httpClient from "../../../../lib/clients/http-client";
+import * as httpClient from "../../../../lib/clients/http-client";
 import {InteractiveMode} from "../../../../lib/commands/dialog/interactive-mode";
 import ResourcesConfig from "../../../../lib/model/resources-config";
-import jsonView from "../../../../lib/view/json-view";
 import CONSTANTS from "../../../../lib/utils/constants";
 import profileHelper from "../../../../lib/utils/profile-helper";
 import stringUtils from "../../../../lib/utils/string-utils";
@@ -36,9 +35,11 @@ describe("Commands Dialog test - command class test", () => {
 
   let errorStub: sinon.SinonStub;
   let infoStub: sinon.SinonStub;
+  let httpClientStub: sinon.SinonStub;
   beforeEach(() => {
     errorStub = sinon.stub();
     infoStub = sinon.stub();
+    httpClientStub = sinon.stub(httpClient, "request");
     sinon.stub(Messenger, "getInstance").returns({
       error: errorStub,
       info: infoStub,
@@ -151,7 +152,7 @@ describe("Commands Dialog test - command class test", () => {
           replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH,
         };
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         // call
         await expect(instance._getDialogConfig(TEST_CMD_WITH_VALUES)).rejectedWith("Replay file must contain skillId");
       });
@@ -165,7 +166,7 @@ describe("Commands Dialog test - command class test", () => {
         const validateDialogArgsStub = sinon.stub(helper, "validateDialogArgs").resolves();
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
         sinon.stub(InteractiveMode.prototype, "start").resolves();
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         // call
         await instance.handle(TEST_CMD_WITH_VALUES);
         expect(validateDialogArgsStub).calledOnceWith(sinon.match({
@@ -181,7 +182,7 @@ describe("Commands Dialog test - command class test", () => {
           replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH,
         };
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         const stringUtilsStub = sinon.stub(stringUtils, "isNonBlankString");
         stringUtilsStub.onCall(0).returns(true);
         stringUtilsStub.onCall(1).returns(false);
@@ -196,7 +197,7 @@ describe("Commands Dialog test - command class test", () => {
           replay: INVALID_DIALOG_REPLAY_FILE_JSON_PATH,
         };
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         const stringUtilsStub = sinon.stub(stringUtils, "isNonBlankString");
         stringUtilsStub.onCall(0).returns(true);
         stringUtilsStub.onCall(1).returns(true);
@@ -211,7 +212,7 @@ describe("Commands Dialog test - command class test", () => {
           replay: DIALOG_REPLAY_FILE_JSON_PATH,
         };
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         // call
         await expect(instance._getDialogConfig(TEST_CMD_WITH_VALUES)).eventually.fulfilled.deep.include({
           debug: undefined,
@@ -245,7 +246,7 @@ describe("Commands Dialog test - command class test", () => {
         };
         const smapiError = "error";
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(smapiError);
+        httpClientStub.yields(smapiError);
         // call
         await expect(instance._getDialogConfig(TEST_CMD_WITH_VALUES)).rejectedWith(smapiError);
       });
@@ -257,14 +258,28 @@ describe("Commands Dialog test - command class test", () => {
           replay: DIALOG_REPLAY_FILE_JSON_PATH,
         };
         const smapiError = "error";
+        const mockedResponse = {
+          statusCode: 400,
+          headers: [],
+          body: {
+              message: smapiError
+          }
+        };
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 400, body: {message: smapiError}});
+        httpClientStub.yields(mockedResponse);
         // call
-        await expect(instance._getDialogConfig(TEST_CMD_WITH_VALUES)).rejectedWith(jsonView.toString({message: smapiError}));
+        await instance._getDialogConfig(TEST_CMD_WITH_VALUES).catch((error) => {
+          expect(error).to.deep.equal(mockedResponse);
+        });
       });
     });
 
     describe("# test with default (interactive) option", () => {
+
+      afterEach(() => {
+        delete process.env.ASK_DEFAULT_DEVICE_LOCALE;
+      });
+
       it("| no resources config file found", async () => {
         // setup
         const TEST_CMD_WITH_VALUES = {};
@@ -297,7 +312,7 @@ describe("Commands Dialog test - command class test", () => {
         // setup
         const TEST_CMD_WITH_VALUES = {};
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         const pathJoinStub = sinon.stub(path, "join");
         pathJoinStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(VALID_RESOURCES_CONFIG_JSON_PATH);
         pathJoinStub.withArgs("./skillPackage", CONSTANTS.FILE_PATH.SKILL_PACKAGE.MANIFEST).returns(VALID_MANIFEST_JSON_PATH);
@@ -320,7 +335,7 @@ describe("Commands Dialog test - command class test", () => {
         const [expectedLocale] = Object.keys(manifest.publishingInformation?.locales || {});
         const TEST_CMD_WITH_VALUES = {};
         sinon.stub(profileHelper, "runtimeProfile").returns(TEST_PROFILE);
-        sinon.stub(httpClient, "request").yields(null, {statusCode: 200, body: {manifest}});
+        httpClientStub.yields(null, {statusCode: 200, body: {manifest}});
         const pathJoinStub = sinon.stub(path, "join");
         pathJoinStub.withArgs(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG).returns(VALID_RESOURCES_CONFIG_JSON_PATH);
         pathJoinStub.callThrough();
@@ -338,32 +353,16 @@ describe("Commands Dialog test - command class test", () => {
 
         expect(infoStub).calledOnceWith(`Defaulting locale to the first value from the skill manifest: ${expectedLocale}`);
       });
-
-      afterEach(() => {
-        sinon.restore();
-        delete process.env.ASK_DEFAULT_DEVICE_LOCALE;
-      });
     });
 
-    afterEach(() => {
-      sinon.restore();
-    });
   });
 
   describe("# test _validateUserInputs", () => {
-    let instance: DialogCommand;
-
-    beforeEach(() => {
-      instance = new DialogCommand(new SmapiClientLateBound(), optionModel as OptionModel);
-    });
-
     it("| all valid inputs", () => {
       // setup
       const userInputs = [" open hello world ", "help"];
-
       // call
-      const validatedInputs = instance._validateUserInputs(userInputs);
-
+      const validatedInputs = new DialogCommand(new SmapiClientLateBound(), optionModel as OptionModel)._validateUserInputs(userInputs);
       // verify
       expect(validatedInputs).deep.equal(["open hello world", "help"]);
     });

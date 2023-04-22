@@ -2,7 +2,7 @@ import {commander} from "../../../../lib/commands/util/util-commander";
 import UpdateProjectCommand from "../../../../lib/commands/util/upgrade-project";
 import sinon from "sinon";
 import Messenger from "../../../../lib/view/messenger";
-import httpClient from "../../../../lib/clients/http-client";
+import * as httpClient from "../../../../lib/clients/http-client";
 
 /**
  * Simple test which loads the util commander while running tests.

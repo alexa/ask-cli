@@ -2,7 +2,6 @@ import {commander} from "../../../../lib/commands/skill/skill-commander";
 import AddlocalesCommand from "../../../../lib/commands/skill/add-locales";
 import sinon from "sinon";
 import Messenger from "../../../../lib/view/messenger";
-import httpClient from "../../../../lib/clients/http-client";
 
 /**
  * Simple test which loads the skill commander while running tests.
@@ -22,11 +21,11 @@ describe("Skill Commander Test", () => {
       dispose: sinon.stub(),
     });
     sinon.stub(process, "exit");
-    sinon.stub(httpClient, "request").yields({statusCode: 200});
   });
 
   it("loads and runs a command", async () => {
     sinon.stub(AddlocalesCommand.prototype, "handle").resolves();
+    sinon.stub(AddlocalesCommand.prototype, "_remindsIfNewVersion").resolves();
     await commander.parseAsync(["something", "something", "add-locales"]);
   });
 

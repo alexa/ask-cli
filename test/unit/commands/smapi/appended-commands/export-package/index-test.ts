@@ -5,7 +5,7 @@ import AuthorizationController from "../../../../../../lib/controllers/authoriza
 import CONSTANTS from "../../../../../../lib/utils/constants";
 import ExportPackageCommand from "../../../../../../lib/commands/smapi/appended-commands/export-package";
 import helper from "../../../../../../lib/commands/smapi/appended-commands/export-package/helper";
-import httpClient from "../../../../../../lib/clients/http-client";
+import * as httpClient from "../../../../../../lib/clients/http-client";
 import jsonView from "../../../../../../lib/view/json-view";
 import Messenger from "../../../../../../lib/view/messenger";
 import optionModel from "../../../../../../lib/commands/option-model.json";
@@ -79,13 +79,13 @@ describe("Commands export-package test - command class test", () => {
         sinon.stub(fs, "existsSync").returns(true);
         // call
         await expect(instance.handle(TEST_CMD)).rejectedWith(
-          `A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} fold already exists in the current working directory.`,
+          `A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} folder already exists in the current working directory.`,
         );
 
         // verify
         expect(errorStub).calledOnceWith(
           sinon.match({
-            message: `A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} ` + "fold already exists in the current working directory.",
+            message: `A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} ` + "folder already exists in the current working directory.",
           }),
         );
         expect(infoStub).not.called;
@@ -119,9 +119,9 @@ describe("Commands export-package test - command class test", () => {
       it("| export skill package response with status code >= 300, expect throw error", async () => {
         // setup
         sinon.stub(fs, "existsSync").returns(false);
-        sinon.stub(httpClient, "request").callsArgWith(3, null, EXPORT_ERROR); // stub smapi request
+        sinon.stub(httpClient, "request").callsArgWith(3, EXPORT_ERROR, null); // stub smapi request
         // call
-        await expect(instance.handle(TEST_CMD)).rejectedWith(jsonView.toString({error: TEST_ERROR_MESSAGE}));
+        await expect(instance.handle(TEST_CMD)).rejectedWith(jsonView.toString(EXPORT_ERROR));
 
         // verify
         expect(infoStub).not.called;

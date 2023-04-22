@@ -1,5 +1,4 @@
-import httpClient from "../../clients/http-client";
-import R from "ramda";
+import * as httpClient from "../../clients/http-client";
 import {TEMPLATES, HTTP_REQUEST, DEPLOYER_TYPE} from "../../utils/constants";
 import {SampleTemplate, SampleTemplateFilterValues} from "../../model/sample-template";
 import {CODE_LANGUAGE_JAVA, CODE_LANGUAGE_NODEJS, CODE_LANGUAGE_PYTHON, MODELING_STACK_AC, MODELING_STACK_IM} from ".";
@@ -10,14 +9,14 @@ export function getSampleTemplatesFromS3(doDebug: boolean): Promise<SampleTempla
       url: TEMPLATES.TEMPLATE_S3_SOURCE_URL,
       method: HTTP_REQUEST.VERB.GET,
     };
-    httpClient.request(params, "TEMPLATE_S3_SOURCE_URL", doDebug, (error: Error | null, response: any) => {
-      if (error || !response.statusCode || response.statusCode !== 200) {
+    httpClient.request(params, "TEMPLATE_S3_SOURCE_URL", doDebug, (error: any | null, response: any) => {
+      if (error || (error?.statusCode && error?.statusCode !== 200)) {
         const msg = doDebug
           ? "Failed to retrieve the skill sample templates."
           : "Failed to retrieve the skill sample templates. Please run again with --debug to see the details.";
         return reject(new Error(msg));
       }
-      resolve(R.view(R.lensPath(["templates"]), JSON.parse(response?.body)));
+      resolve(response?.body?.templates);
     });
   });
 }

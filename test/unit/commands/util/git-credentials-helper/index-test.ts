@@ -3,8 +3,7 @@ import path from "path";
 import sinon from "sinon";
 import AuthorizationController from "../../../../../lib/controllers/authorization-controller";
 import GitCredentialsHelperCommand from "../../../../../lib/commands/util/git-credentials-helper";
-import httpClient from "../../../../../lib/clients/http-client";
-import jsonView from "../../../../../lib/view/json-view";
+import * as httpClient from "../../../../../lib/clients/http-client";
 import Messenger from "../../../../../lib/view/messenger";
 import optionModel from "../../../../../lib/commands/option-model.json";
 import profileHelper from "../../../../../lib/utils/profile-helper";
@@ -150,13 +149,14 @@ describe("Commands git-credentials-helper test - command class test", () => {
           body: {
             error: TEST_ERROR_MESSAGE,
           },
+          headers: {},
         };
         sinon.stub(path, "join").returns(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
-        sinon.stub(httpClient, "request").callsArgWith(3, null, GET_STATUS_ERROR); // stub getGitCredentials request
+        sinon.stub(httpClient, "request").callsArgWith(3, GET_STATUS_ERROR); // stub getGitCredentials request
         // call
         await expect(instance.handle(TEST_CMD, undefined)).rejected;
         //verify
-        expect(errorStub).calledOnceWith(jsonView.toString({error: TEST_ERROR_MESSAGE}));
+        expect(errorStub).calledOnceWith(GET_STATUS_ERROR);
       });
 
       it("| get git credentials succeed, expect correct output", async () => {

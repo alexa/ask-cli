@@ -2,11 +2,11 @@ import fs from "fs";
 import path from "path";
 import {AbstractCommand} from "../../../abstract-command";
 import CONSTANTS from "../../../../utils/constants";
-import jsonView from "../../../../view/json-view";
+import  * as jsonView from "../../../../view/json-view";
 import Messenger from "../../../../view/messenger";
 import optionModel from "../../../option-model.json";
 import profileHelper from "../../../../utils/profile-helper";
-import SmapiClient, {isSmapiError} from "../../../../clients/smapi-client";
+import SmapiClient from "../../../../clients/smapi-client";
 import zipUtils from "../../../../utils/zip-utils";
 import helper from "./helper.js";
 import {OptionModel} from "../../../option-validator";
@@ -34,7 +34,7 @@ export default class ExportPackageCommand extends AbstractCommand {
       profile = profileHelper.runtimeProfile(cmd.profile);
       // 0.check if a skill-package file exists
       if (fs.existsSync(CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE)) {
-        throw new Error(`A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} fold already exists in the current working directory.`);
+        throw new Error(`A ${CONSTANTS.FILE_PATH.SKILL_PACKAGE.PACKAGE} folder already exists in the current working directory.`);
       }
     } catch (err) {
       Messenger.getInstance().error(err);
@@ -49,14 +49,10 @@ export default class ExportPackageCommand extends AbstractCommand {
     return new Promise((resolve, reject) => {
       smapiClient.skillPackage.exportPackage(cmd.skillId, cmd.stage, (exportErr: any, exportResponse: any) => {
         if (exportErr) {
-          Messenger.getInstance().error(exportErr);
-          return reject(exportErr);
+          Messenger.getInstance().error(jsonView.toString(exportErr));
+          return reject(new Error(jsonView.toString(exportErr)));
         }
-        if (isSmapiError(exportResponse)) {
-          const error = jsonView.toString(exportResponse.body);
-          Messenger.getInstance().error(error);
-          return reject(error);
-        }
+
         const exportId = path.basename(exportResponse?.headers?.location);
 
         // 2.poll for the skill package export status

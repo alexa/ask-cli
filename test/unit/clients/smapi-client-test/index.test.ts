@@ -2,7 +2,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 
 import {SmapiClientLateBound} from "../../../../lib/clients/smapi-client";
-import httpClient from "../../../../lib/clients/http-client";
+import * as httpClient from "../../../../lib/clients/http-client";
 import AuthorizationController from "../../../../lib/controllers/authorization-controller";
 import CONSTANTS from "../../../../lib/utils/constants";
 
@@ -208,7 +208,7 @@ describe("Clients test - smapi client test", () => {
     it("| input request options and the SMAPI returns error status code but without response object", (done) => {
       // setup
       tokenReadStub.callsArgWith(1, null, TEST_ACCESS_TOKEN.access_token);
-      httpRequestStub.callsArgWith(3, null, TEST_REQUEST_RESPONSE_ERROR_STATUS_CODE_WITHOUT_BODY);
+      httpRequestStub.callsArgWith(3, TEST_REQUEST_RESPONSE_ERROR_STATUS_CODE_WITHOUT_BODY, null);
       // call
       smapiClient._smapiRequest(
         {

@@ -27,7 +27,7 @@
       "distributionCountries": ["US"],
       "pricing": {
         "amazon.com": {
-          "releaseDate": "2099-04-13",
+          "releaseDate": "2099-04-13T00:00:00Z",
           "defaultPriceListing": {
             "price": 0.99,
             "currency": "USD"

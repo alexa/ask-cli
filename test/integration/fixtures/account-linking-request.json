@@ -1,6 +1,6 @@
 {
   "accountLinkingRequest": {
-    "skipOnEnablement": "true",
+    "skipOnEnablement": true,
     "type": "AUTH_CODE",
     "authorizationUrl": "https://www.example.com/auth_url",
     "domains": ["example.com"],

@@ -65,12 +65,12 @@ describe("Commands add-locales - helper test", () => {
     const TEST_TEMPLATE_BODY = {body: "template"};
     const TEST_TEMPLATE_MAP = {
       statusCode: 200,
-      body: JSON.stringify({
+      body: {
         INTERACTION_MODEL_BY_LANGUAGE: {
           es: "TEST_ES_URL",
           en: "TEST_EN_URL",
         },
-      }),
+      },
     };
     new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
     new Manifest(FIXTURE_MANIFEST_FILE_PATH);
@@ -96,7 +96,7 @@ describe("Commands add-locales - helper test", () => {
       httpClient.request.onFirstCall().callsArgWith(3, TEST_ERROR);
       // call
       helper.addLocales(["en-US"], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-        expect(err).equal("Failed to retrieve the template list.\nError: error");
+        expect(err).equal("Failed to retrieve the interaction model map template list.\nError: \"error\"");
         expect(result).equal(undefined);
         done();
       });
@@ -104,11 +104,10 @@ describe("Commands add-locales - helper test", () => {
 
     it("| fail to get the template map with statusCode not correct", (done) => {
       // setup
-      httpClient.request.onFirstCall().callsArgWith(3, undefined, {statusCode: 401});
+      httpClient.request.onFirstCall().callsArgWith(3, {statusCode: 401});
       // call
       helper.addLocales(["en-US"], TEST_PROFILE, TEST_DEBUG, (err, result) => {
-        expect(err).equal(`Failed to retrieve the template list, please see the details from the error response.
-${JSON.stringify({statusCode: 401}, null, 2)}`);
+        expect(err).equal(`Failed to retrieve the interaction model map template list.\nError: ${JSON.stringify({statusCode: 401}, null, 2)}`);
         expect(result).equal(undefined);
         done();
       });
@@ -160,7 +159,7 @@ ${JSON.stringify({statusCode: 401}, null, 2)}`);
       httpClient.request.onFirstCall().callsArgWith(3, undefined, TEST_TEMPLATE_MAP);
       SkillMetadataController.prototype.getInteractionModelLocales.returns({"es-US": TEST_MODEL_PATH});
       fs.existsSync.returns(false);
-      httpClient.request.onSecondCall().callsArgWith(3, null, {statusCode: 401});
+      httpClient.request.onSecondCall().callsArgWith(3, {statusCode: 401}, null);
       // call
       helper.addLocales(["en-US"], TEST_PROFILE, TEST_DEBUG, (err, result) => {
         expect(err).equal(`Failed to retrieve the template list, please see the details from the error response.
