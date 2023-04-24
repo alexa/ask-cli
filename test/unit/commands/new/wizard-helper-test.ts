@@ -7,10 +7,13 @@ import urlUtils from "../../../../lib/utils/url-utils";
 import * as wizardHelper from "../../../../lib/commands/new/wizard-helper";
 import Messenger from "../../../../lib/view/messenger";
 import {TEST_SAMPLE_1_IM_HOSTED_NODE, TEST_SAMPLE_2_AC_CFN_PYTHON} from "./template-helper-test";
+import { SampleTemplatesFilter } from "../../../../lib/model/sample-template";
 
 describe("Commands new test - wizard helper test", () => {
   const TEST_ERROR = "TEST_ERROR";
-  const TEST_OPTIONS = {};
+  const TEST_OPTIONS = {
+    ac: undefined
+  };
   const TEST_LANGUAGE_RESPONSE = "NodeJS";
   const TEST_DEPLOYMENT_TYPE = "@ask-cli/cfn-deployer";
   const TEST_HOSTED_DEPLOYMENT = "@ask-cli/hosted-skill-deployer";
@@ -263,6 +266,41 @@ describe("Commands new test - wizard helper test", () => {
         done();
       });
     });
+
+    it("| collectUserCreationProjectInfo called with 'ac' cmd option should filter templates to 'ac'", (done) => {
+      // setup
+      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
+      getDeploymentTypeStub.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
+      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
+      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
+      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+      sinon.stub(TEST_OPTIONS, "ac").value(true);
+      const filterStub = sinon.spy(SampleTemplatesFilter.prototype, "filter");
+      // call
+      wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, () => {
+        // verify
+        expect(filterStub.calledWith("stack", "ac")).to.be.true;
+        done();
+      });
+    });
+
+    it("| collectUserCreationProjectInfo called without 'ac' cmd option should filter templates to 'im'", (done) => {
+      // setup
+      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
+      getDeploymentTypeStub.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
+      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
+      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
+      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+      sinon.stub(TEST_OPTIONS, "ac").value(undefined);
+      const filterStub = sinon.spy(SampleTemplatesFilter.prototype, "filter");
+      // call
+      wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, () => {
+        // verify
+        expect(filterStub.calledWith("stack", "im")).to.be.true;
+        done();
+      });
+    });
+
 
     it("| collectUserCreationProjectInfo succeed, expect userInput return", (done) => {
       // setup
