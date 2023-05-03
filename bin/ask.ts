@@ -25,7 +25,7 @@ import {createCommand as uninstallCommand} from "../lib/commands/uninstall";
 );
 
 commander
-  .description("AZAAN CHANGED THIS")
+  .description("Command Line Interface for Alexa Skill Kit")
   .command("smapi", "list of Alexa Skill Management API commands")
   .command("skill", "increase the productivity when managing skill metadata")
   .command("util", "tooling functions when using ask-cli to manage Alexa Skill")
