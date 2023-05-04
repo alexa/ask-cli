@@ -50,7 +50,7 @@ export default class InstallCommand extends AbstractCommand {
       throw err;
     }
 
-    let skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(profile);
+    const skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(profile);
     if (!stringUtils.isNonBlankString(skillPackageSrc)) {
       Messenger.getInstance().error("Skill package src is not found in ask-resources.json.");
       return;
@@ -69,7 +69,7 @@ export default class InstallCommand extends AbstractCommand {
       "skillComponents",
       componentName
     );
-    const configFilePath = path.join(componentDirPath, "README.md");
+    const configFilePath = path.join(componentDirPath, "config.jsonc");
 
     if (fs.existsSync(configFilePath)) {
       Messenger.getInstance().info(
@@ -106,7 +106,7 @@ export default class InstallCommand extends AbstractCommand {
           cwd,
           "node_modules",
           componentName,
-          "README.md"
+          "config.jsonc"
         );
 
         if (!fs.existsSync(componentDirPath)) {
@@ -115,10 +115,10 @@ export default class InstallCommand extends AbstractCommand {
 
         fs.copyFileSync(
           componentConfigPath,
-          path.join(componentDirPath, "README.md")
+          path.join(componentDirPath, "config.jsonc")
         );
 
-        spinner.terminate(TERMINATE_STYLE.SUCCEED, `${componentName} installed successfully! \n \u001b[1mPlease edit the README.md file copied at ${skillPackageSrc}/components/${componentName} to configure the component\n`);
+        spinner.terminate(TERMINATE_STYLE.SUCCEED, `${componentName} installed successfully! \n \u001b[1mPlease edit the config.jsonc file copied at ${skillPackageSrc}/components/${componentName} to configure the component. This step is necessary for the component to function properly within your Alexa skill.\n`);
       }
     });
   }

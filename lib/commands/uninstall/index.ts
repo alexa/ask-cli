@@ -50,7 +50,7 @@ export default class UninstallCommand extends AbstractCommand {
         throw err;
         }
 
-        let skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(profile);
+        const skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(profile);
         if (!stringUtils.isNonBlankString(skillPackageSrc)) {
         Messenger.getInstance().error("Skill package src is not found in ask-resources.json.");
         return;
@@ -69,7 +69,7 @@ export default class UninstallCommand extends AbstractCommand {
             "skillComponents",
             componentName
         );
-        const configFilePath = path.join(componentDirPath, "README.md");
+        const configFilePath = path.join(componentDirPath, "config.jsonc");
 
         if (!fs.existsSync(configFilePath)) {
             Messenger.getInstance().info(
