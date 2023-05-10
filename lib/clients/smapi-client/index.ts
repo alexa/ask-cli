@@ -162,17 +162,17 @@ export class SmapiClientLateBound {
         body: payload,
         json: !!payload,
       };
-      httpClient.request(requestOptions, apiName, configuration.doDebug, (reqErr: any, reqResponse: SmapiResponse<T>) => {
-        if (reqErr && reqErr.statusCode ) {
-          return _normalizeSmapiResponse<T>(reqErr, (normalizeErr, smapiResponse) => {
+      httpClient.request(requestOptions, apiName, configuration.doDebug, (requestError: any, requestResponse: SmapiResponse<T>) => {
+        if (requestError && requestError.statusCode ) {
+          return _normalizeSmapiResponse<T>(requestError, (normalizeErr, smapiResponse) => {
             return callback(normalizeErr || smapiResponse, smapiResponse || null);
           });
         }
-        if (reqErr) {
-          return callback(reqErr);
+        if (requestError) {
+          return callback(requestError.errorMessage || requestError);
         }
-        return _normalizeSmapiResponse<T>(reqResponse, (normalizeErr, smapiResponse) => {
-          return callback(normalizeErr, normalizeErr ? null : smapiResponse);
+        return _normalizeSmapiResponse<T>(requestResponse, (normalizeError, smapiResponse) => {
+          return callback(normalizeError, normalizeError ? null : smapiResponse);
         });
       });
     });

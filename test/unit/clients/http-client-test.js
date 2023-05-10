@@ -189,7 +189,7 @@ describe("Clients test - cli http request client", () => {
       // call
       httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`The request to ${VALID_OPTIONS.url} failed. Client Error: error`);
+        expect(err.errorMessage).equal(`The request to ${VALID_OPTIONS.url} failed. Client Error: error`);
         expect(response).deep.equal({});
         done();
       });
@@ -201,7 +201,7 @@ describe("Clients test - cli http request client", () => {
       // call
       httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`The request to ${VALID_OPERATION}, failed.\nPlease make sure "${VALID_OPTIONS.url}" is responding.`);
+        expect(err.errorMessage).equal(`The request to ${VALID_OPERATION}, failed.\nPlease make sure "${VALID_OPTIONS.url}" is responding.`);
         expect(response).equal(undefined);
         done();
       });
@@ -213,7 +213,7 @@ describe("Clients test - cli http request client", () => {
       // call
       httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`Failed to access the statusCode from the request to ${VALID_OPERATION}.`);
+        expect(err.errorMessage).equal(`Failed to access the statusCode from the request to ${VALID_OPERATION}.`);
         expect(response).equal(undefined);
         done();
       });
@@ -286,7 +286,7 @@ describe("Clients test - cli http request client", () => {
         expect(stubRequest.args[0][0].method).equal(HTTP_REQUEST.VERB.PUT);
         expect(stubRequest.args[0][0].data).equal(TEST_PAYLOAD);
         expect(res).deep.equal({});
-        expect(err).equal(`The request to ${TEST_UPLOAD_URL} failed. Client Error: uploadErr`);
+        expect(err.errorMessage).equal(`The request to ${TEST_UPLOAD_URL} failed. Client Error: uploadErr`);
         done();
       });
     });

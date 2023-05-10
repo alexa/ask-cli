@@ -50,16 +50,16 @@ export class SmapiApiClient implements ApiClient {
         body: data,
       };
 
-      httpClient.request(requestOptions, "SMAPI_API_CLIENT", this.doDebug, (reqErr: any, reqResponse: SmapiResponse<any>) => {
-        if (reqErr) {
-          return reject(new Error(reqErr));
+      httpClient.request(requestOptions, "SMAPI_API_CLIENT", this.doDebug, (requestError: any, requestResponse: SmapiResponse<any>) => {
+        if (requestError) {
+          return reject(new Error(requestError.errorMessage || requestError));
         }
-        const dataContent = reqResponse?.body || {};
+        const dataContent = requestResponse?.body || {};
 
         resolve({
-          statusCode: reqResponse?.statusCode!,
+          statusCode: requestResponse?.statusCode!,
           body: this.sanitizeDataContent(dataContent),
-          headers: reqResponse?.headers!,
+          headers: requestResponse?.headers!,
         });
       });
     });
