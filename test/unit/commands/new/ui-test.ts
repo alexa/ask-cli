@@ -36,8 +36,6 @@ function validateInquirerConfig(stub: any, expectedConfig: {
 describe("Commands new - UI test", () => {
   const TEST_SKILL_NAME = "skillName";
   const TEST_LOCALE = "en-US";
-  const TEST_REPO_NAME = "repo";
-  const TEST_URL = `https://${TEST_REPO_NAME}.git?data=1`;
   const TEST_ERROR = "error";
   const TEST_LANGUAGE = "language";
   const TEST_TEMPLATE_NAME = "templateName";
@@ -97,12 +95,12 @@ describe("Commands new - UI test", () => {
       // setup
       inquirerPrompt.rejects(new Error(TEST_ERROR));
       // call
-      getSkillName(TEST_URL, (err, response) => {
+      getSkillName((err, response) => {
         // verify
         validateInquirerConfig(inquirerPrompt.args[0][0][0], {
           message: "Please type in your skill name: ",
           type: "input",
-          defaultName: TEST_REPO_NAME,
+          defaultName: HOSTED_SKILL.DEFAULT_SKILL_NAME,
         });
         expect(err?.message).equal(TEST_ERROR);
         expect(response).equal(undefined);
@@ -114,7 +112,7 @@ describe("Commands new - UI test", () => {
       // setup
       inquirerPrompt.resolves({skillName: HOSTED_SKILL.DEFAULT_SKILL_NAME});
       // call
-      getSkillName(null, (err, response) => {
+      getSkillName((err, response) => {
         if (err) {
           console.log("unexpected failure in callback: err: " + err.message);
         }
@@ -134,7 +132,7 @@ describe("Commands new - UI test", () => {
       // setup
       inquirerPrompt.resolves({skillName: TEST_SKILL_NAME});
       // call
-      getSkillName(TEST_URL, (err, response) => {
+      getSkillName((err, response) => {
         if (err) {
           console.log("unexpected failure in callback: err: " + err.message);
         }
@@ -142,7 +140,7 @@ describe("Commands new - UI test", () => {
         validateInquirerConfig(inquirerPrompt.args[0][0][0], {
           message: "Please type in your skill name: ",
           type: "input",
-          defaultName: TEST_REPO_NAME,
+          defaultName: HOSTED_SKILL.DEFAULT_SKILL_NAME,
         });
         expect(err).equal(null);
         expect(response).equal(TEST_SKILL_NAME);
@@ -154,7 +152,7 @@ describe("Commands new - UI test", () => {
       // setup
       inquirerPrompt.resolves({skillName: TEST_SKILL_NAME});
       // call
-      getSkillName(TEST_URL, () => {
+      getSkillName(() => {
         // verify
         expect(inquirerPrompt.args[0][0][0].validate("    ")).equal("Skill name can't be empty.");
         done();
@@ -165,7 +163,7 @@ describe("Commands new - UI test", () => {
       // setup
       inquirerPrompt.resolves({skillName: TEST_SKILL_NAME});
       // call
-      getSkillName(TEST_URL, () => {
+      getSkillName(() => {
         // verify
         expect(inquirerPrompt.args[0][0][0].validate("input")).equal(true);
         done();
@@ -237,7 +235,7 @@ describe("Commands new - UI test", () => {
       getSkillDefaultRegion((err, response) => {
         // verify
         expect(err).equal(null);
-        expect(response).equal("US_EAST_1");
+        expect(response).equal("us-east-1");
         done();
       });
     });

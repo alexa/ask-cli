@@ -29,6 +29,7 @@ describe("Commands new test - helper test", () => {
   const TEST_TEMPLATE_URL = "value";
   const TEST_SKILL_FOLDER_NAME = "skillFolderName";
   const TEST_SKILL_NAME = "skillName";
+  const TEST_SKILL_REGION = "us-west-2";
   const TEST_USER_INPUT: {projectFolderName: string; templateInfo: {templateBranch?: string; templateUrl: string}} = {
     projectFolderName: "projectName",
     templateInfo: {
@@ -308,10 +309,11 @@ ${TEST_SKILLMETA_SRC}.`);
       // setup
       const fsExistsSyncStub = sinon.stub(fs, "removeSync");
       // call
-      helper.updateSkillProjectWithUserSettings(TEST_SKILL_NAME, TEST_SKILL_FOLDER_NAME, TEST_PROFILE);
+      helper.updateSkillProjectWithUserSettings(TEST_SKILL_NAME, TEST_SKILL_REGION, TEST_SKILL_FOLDER_NAME, TEST_PROFILE);
       // verify
       expect(Manifest.getInstance().getSkillName()).equal(TEST_SKILL_NAME);
       expect(ResourcesConfig.getInstance().getProfile(TEST_PROFILE)).not.equal(null);
+      expect(ResourcesConfig.getInstance().getSkillInfraUserConfig(TEST_PROFILE).awsRegion).equal(TEST_SKILL_REGION);
       expect(fsExistsSyncStub.args[0][0]).equal(path.join(TEST_SKILL_FOLDER_NAME, ".git"));
     });
   });

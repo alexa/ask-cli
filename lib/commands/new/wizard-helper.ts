@@ -50,12 +50,13 @@ export async function collectUserCreationProjectInfo(
     // MODELING STACK TYPE
     sampleTemplateFilter.filter("stack", cmd.ac ? MODELING_STACK_AC : MODELING_STACK_IM);
 
-    // CODE LANGUAGE
-    // ignore when template url supplied
-    if (!cmd.templateUrl) {
-      await promptForCodeLanguage(sampleTemplateFilter.getSampleTemplates()).then((language) => (userInput.language = language));
-      sampleTemplateFilter.filter("lang", convertUserInputToFilterValue(userInput.language || CODE_LANGUAGE_NODEJS));
-    }
+    // SKILL NAME
+    await promptForSkillName().then((skillName) => (userInput.skillName = skillName));
+
+    // PROJECT FOLDER NAME
+    await promptForProjectFolderName(userInput.skillName || "").then(
+      (projectFolderName) => (userInput.projectFolderName = projectFolderName),
+    );
 
     // DEPLOY TYPE
     await promptForDeployerType(sampleTemplateFilter.getSampleTemplates()).then(
@@ -63,27 +64,27 @@ export async function collectUserCreationProjectInfo(
     );
     sampleTemplateFilter.filter("deploy", convertUserInputToFilterValue(userInput.deploymentType || DEPLOYER_TYPE.CFN.NAME));
 
+    // AWS REGION
+    await promptForSkillRegion().then((region) => (userInput.region = region));
+
+    // CODE LANGUAGE
+    // ignore when template url supplied
+    if (!cmd.templateUrl) {
+      await promptForCodeLanguage(sampleTemplateFilter.getSampleTemplates()).then((language) => (userInput.language = language));
+      sampleTemplateFilter.filter("lang", convertUserInputToFilterValue(userInput.language || CODE_LANGUAGE_NODEJS));
+    }
+
+    // HOSTED SKILL LOCALE
     if (userInput.deploymentType === DEPLOYER_TYPE.HOSTED.NAME) {
-      // HOSTED SKILL LOCALE
       // FIX hard coding until backend for hosted skills supports locales
       userInput.locale = "en-US";
-
-      // HOSTED SKILL AWS REGION
-      await promptForSkillRegion().then((region) => (userInput.region = region));
     } else {
-      // NON HOSTED SKILL requires selecting a sample template from the list
       // TEMPLATE INFO
       await promptForTemplateInfo(cmd, sampleTemplateFilter.getSampleTemplates()).then(
         (templateInfo) => (userInput.templateInfo = templateInfo),
       );
     }
-    // SKILL NAME
-    await promptForSkillName(userInput.templateInfo?.templateUrl || null).then((skillName) => (userInput.skillName = skillName));
 
-    // PROJECT FOLDER NAME
-    await promptForProjectFolderName(userInput.skillName || "").then(
-      (projectFolderName) => (userInput.projectFolderName = projectFolderName),
-    );
   } catch (e) {
     callback(e as Error, undefined);
     return;
@@ -162,9 +163,9 @@ function promptForSkillRegion(): Promise<NewSkillRegion> {
  *
  * @param {string | null} templateUrl the template url to use for attempting to get a skillname instead of the default hello world
  */
-function promptForSkillName(templateUrl: string | null): Promise<string> {
+function promptForSkillName(): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    ui.getSkillName(templateUrl, (error, skillName) => (error ? reject(error) : resolve(skillName)));
+    ui.getSkillName((error, skillName) => (error ? reject(error) : resolve(skillName)));
   });
 }
 

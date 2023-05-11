@@ -53,13 +53,16 @@ export function loadSkillProjectModel(projectPath: string, profile: string): voi
  * @param {String} projectPath the project file path
  * @param {String} profile ask-cli profile
  */
-export function updateSkillProjectWithUserSettings(skillName: string, projectPath: string, profile: string): void {
+export function updateSkillProjectWithUserSettings(skillName: string, region: string | undefined, projectPath: string, profile: string): void {
   // update skill name
   Manifest.getInstance().setSkillName(skillName);
   // update ask-resources config with profile name
   const defaultProfileObject = ResourcesConfig.getInstance().getProfile("default");
   ResourcesConfig.getInstance().setProfile("default", undefined);
   ResourcesConfig.getInstance().setProfile(profile, defaultProfileObject);
+  const userConfig = ResourcesConfig.getInstance().getSkillInfraUserConfig(profile);
+  userConfig.awsRegion = region;
+  ResourcesConfig.getInstance().setSkillInfraUserConfig(profile, userConfig)
   // remove .git folder
   const hiddenGitFolder = path.join(projectPath, ".git");
   fs.removeSync(hiddenGitFolder);

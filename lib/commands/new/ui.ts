@@ -1,6 +1,5 @@
 import {find, propEq, view, lensPath} from "ramda";
 import {gray} from "chalk";
-import path from "path";
 import inquirer from "inquirer";
 import {HOSTED_SKILL} from "../../utils/constants";
 import {callbackError, uiCallback} from "../../model/callback";
@@ -17,14 +16,13 @@ import {SampleTemplate} from "../../model/sample-template";
  * @param {string} url A url of the skill sample repository, used to determine the default skill name
  * @param {uiCallback} callback function that will be called with the resulting value or error
  */
-export function getSkillName(url: string | null, callback: uiCallback): void {
-  const defaultName = url ? path.basename(url, path.extname(url)) : HOSTED_SKILL.DEFAULT_SKILL_NAME;
+export function getSkillName(callback: uiCallback): void {
   inquirer
     .prompt([
       {
         message: "Please type in your skill name: ",
         type: "input",
-        default: defaultName,
+        default: HOSTED_SKILL.DEFAULT_SKILL_NAME,
         name: "skillName",
         validate: (input) => {
           if (!isNonBlankString(input)) {
@@ -84,7 +82,7 @@ export function getSkillDefaultRegion(callback: uiCallback): void {
       },
     ])
     .then((answer) => {
-      callback(null, (HOSTED_SKILL.REGIONS as any)[answer.region]);
+      callback(null, answer.region);
     })
     .catch((error) => {
       callback(error);

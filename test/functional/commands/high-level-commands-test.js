@@ -52,11 +52,11 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     let inputs = [
-      {match: "? Choose the programming language you will use to code your skill"},
-      {match: "? Choose a method to host your skill"},
-      {match: "? Choose the default region for your skill"},
       {match: "? Please type in your skill name"},
       {match: "? Please type in your folder name", input: folderName},
+      {match: "? Choose a method to host your skill"},
+      {match: "? Choose the default region for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
     ];
 
     let result = await run(askCmd, args, {inputs});
@@ -95,11 +95,12 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose the programming language you will use to code your skill"},
-      {match: "? Choose a method to host your skill", input: KeySymbol.DOWN},
-      {match: "? Choose a template to start with"},
       {match: "? Please type in your skill name"},
       {match: "? Please type in your folder name", input: folderName},
+      {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}`},
+      {match: "? Choose the default region for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
+      {match: "? Choose a template to start with"},
     ];
 
     let result = await run(askCmd, args, {inputs});
@@ -121,11 +122,12 @@ parallel("high level commands test", () => {
     // new
     let args = ["new"];
     const inputs = [
-      {match: "? Choose the programming language you will use to code your skill"},
-      {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
-      {match: "? Choose a template to start with"},
       {match: "? Please type in your skill name", input: folderName},
       {match: "? Please type in your folder name", input: folderName},
+      {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
+      {match: "? Choose the default region for your skill", input: `${KeySymbol.DOWN}`},
+      {match: "? Choose the programming language you will use to code your skill"},
+      {match: "? Choose a template to start with"},
     ];
 
     let result = await run(askCmd, args, {inputs});
@@ -145,13 +147,14 @@ parallel("high level commands test", () => {
     const folderName = "ac-lambda-skill";
     deleteFolderInTempDirectory(folderName);
     // new
-    let args = ["new"];
+    let args = ["new", "--ac"];
     const inputs = [
-      {match: "? Choose the programming language you will use to code your skill"},
-      {match: "? Choose a method to host your skill", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}`},
-      {match: "? Choose a template to start with", input: `${KeySymbol.DOWN}${KeySymbol.DOWN}${KeySymbol.DOWN}`},
       {match: "? Please type in your skill name", input: folderName},
       {match: "? Please type in your folder name", input: folderName},
+      {match: "? Choose a method to host your skill"},
+      {match: "? Choose the default region for your skill"},
+      {match: "? Choose the programming language you will use to code your skill"},
+      {match: "? Choose a template to start with", input: `${KeySymbol.DOWN}`},
     ];
     let result = await run(askCmd, args, {inputs});
     expect(result).include('Project initialized with deploy delegate "@ask-cli/lambda-deployer" successfully');
