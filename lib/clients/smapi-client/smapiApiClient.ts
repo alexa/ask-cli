@@ -67,7 +67,7 @@ export class SmapiApiClient implements ApiClient {
 
   private convertUrlEncodedToJson(urlEncoded: string | undefined): {[key: string]: string}  {
     var result: {[key: string]: string} = {};
-    urlEncoded?.split('&').forEach(function(entry) {
+    urlEncoded?.split('&').forEach((entry) => {
       const keyValueSplit = entry.split('=');
       if (keyValueSplit && keyValueSplit.length > 1) {
         result[keyValueSplit[0]] = decodeURIComponent(keyValueSplit[1] || '');
