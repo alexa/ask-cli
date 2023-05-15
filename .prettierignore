@@ -5,3 +5,5 @@ node_modules
 docs
 scripts
 *.md
+coverage
+.nyc_output/

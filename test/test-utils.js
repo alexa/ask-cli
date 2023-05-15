@@ -101,7 +101,7 @@ const _startMockServer = async (port, swaggerSpecPath) => {
   return run("npm", args, options);
 };
 
-const startMockSmapiServer = () => _startMockServer(MockServerPort.SMAPI, "node_modules/ask-smapi-model/spec.json");
+const startMockSmapiServer = () => _startMockServer(MockServerPort.SMAPI, "test/integration/fixtures/smapi_spec.json");
 const startMockLwaServer = () => _startMockServer(MockServerPort.LWA, "test/integration/fixtures/lwa-swagger.json");
 
 module.exports = {

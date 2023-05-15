@@ -81,7 +81,7 @@ export class DialogCommand extends AbstractCommand {
 
     const manifestResult = await smapiClient.skill.manifest.getManifest(skillId, stage);
     if (isSmapiError(manifestResult)) {
-      throw jsonView.toString(manifestResult.body);
+      throw new Error(jsonView.toString(manifestResult.body));
     }
     const [firstLocaleFromManifest] = Object.keys(manifestResult.body.manifest?.publishingInformation?.locales || {});
     if (!locale && !process.env.ASK_DEFAULT_DEVICE_LOCALE && firstLocaleFromManifest) {

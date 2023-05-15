@@ -274,7 +274,7 @@ describe("Controller test - skill metadata controller test", () => {
       });
     });
 
-    it("| callback error when getSkillEnablement return error", (done) => {
+    it("| callback error when getSkillEnablement return error", async () => {
       // setup
       const responseBody = {
         Message: "somehow fails",
@@ -283,54 +283,52 @@ describe("Controller test - skill metadata controller test", () => {
         statusCode: 300,
         body: responseBody,
       };
-      sinon.stub(httpClient, "request").callsArgWith(3, null, response); // stub smapi request
-      skillMetaController.enableSkill((err, res) => {
+      sinon.stub(httpClient, "request").callsArgWith(3, response); // stub smapi request
+      await skillMetaController.enableSkill((err, res) => {
         // verify
         expect(err).equal(jsonView.toString(responseBody));
         expect(res).equal(undefined);
-        done();
       });
     });
 
-    it("| when skill already enabled, can callback skip enablement message", (done) => {
+    it("| when skill already enabled, can callback skip enablement message", async () => {
       // setup
       const response = {
         statusCode: 200,
       };
       sinon.stub(httpClient, "request").callsArgWith(3, null, response); // stub smapi request
       sinon.stub(Messenger.getInstance(), "info");
-      skillMetaController.enableSkill((err, res) => {
+      await skillMetaController.enableSkill((err, res) => {
         // verify
         expect(err).equal(undefined);
         expect(res).equal(undefined);
-        expect(Messenger.getInstance().info.args[0][0]).equal("Skill is already enabled, skipping the enable process.\n");
-        done();
+        expect(Messenger.getInstance().info.args[0][0]).equal("The skill is already enabled, skipping skill enablement.\n");
       });
     });
 
-    it("| when skill is not enabled, can callback error when enable skill fail", (done) => {
+    it("| when skill is not enabled, can callback error when enable skill fail", async () => {
       // setup
       const getEnablementResponse = {
         statusCode: 404,
         body: {},
       };
-      sinon.stub(httpClient, "request").withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, null, getEnablementResponse); // stub smapi request
+      const httpClientRequestStub = sinon.stub(httpClient, "request");
+      httpClientRequestStub.withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, getEnablementResponse); // stub smapi request
+      httpClientRequestStub.withArgs(sinon.match.any, "enable-skill").callsArgWith(3, "enableSkillError"); // stub smapi request
 
-      httpClient.request.withArgs(sinon.match.any, "enable-skill").callsArgWith(3, "enableSkillError"); // stub smapi request
-
-      skillMetaController.enableSkill((err, res) => {
+      await skillMetaController.enableSkill((err, res) => {
         // verify
         expect(err).equal("enableSkillError");
         expect(res).equal(undefined);
-        done();
       });
     });
 
-    it("| when skill is not enabled, can callback error when statusCode >= 300", (done) => {
+    it("| when skill is not enabled, can callback error when statusCode >= 300", async () => {
       // setup
       const getEnablementResponse = {
         statusCode: 404,
         body: {},
+        Message: "not found",
       };
       const enableSkillResponseBody = {
         Message: "somehow fail",
@@ -338,20 +336,20 @@ describe("Controller test - skill metadata controller test", () => {
       const enableSkillResponse = {
         statusCode: 300,
         body: enableSkillResponseBody,
+        Message: enableSkillResponseBody.Message,
       };
-      sinon.stub(httpClient, "request").withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, null, getEnablementResponse); // stub smapi request
+      const httpClientRequestStub = sinon.stub(httpClient, "request");
+      httpClientRequestStub.withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, getEnablementResponse); // stub smapi request
+      httpClientRequestStub.withArgs(sinon.match.any, "enable-skill").callsArgWith(3, enableSkillResponse); // stub smapi request
 
-      httpClient.request.withArgs(sinon.match.any, "enable-skill").callsArgWith(3, null, enableSkillResponse); // stub smapi request
-
-      skillMetaController.enableSkill((err, res) => {
+      await skillMetaController.enableSkill((err, res) => {
         // verify
         expect(err).equal(jsonView.toString(enableSkillResponseBody));
         expect(res).equal(undefined);
-        done();
       });
     });
 
-    it("| when skill is not enabled, can callback success enable skill message", (done) => {
+    it("| when skill is not enabled, can callback success enable skill message", async () => {
       // setup
       const getEnablementResponse = {
         statusCode: 404,
@@ -361,16 +359,15 @@ describe("Controller test - skill metadata controller test", () => {
         statusCode: 200,
       };
       sinon.stub(Messenger.getInstance(), "info");
-      sinon.stub(httpClient, "request").withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, null, getEnablementResponse); // stub smapi request
+      sinon.stub(httpClient, "request").withArgs(sinon.match.any, "get-skill-enablement").callsArgWith(3, getEnablementResponse, null);
 
       httpClient.request.withArgs(sinon.match.any, "enable-skill").callsArgWith(3, null, enableSkillResponse); // stub smapi request
 
-      skillMetaController.enableSkill((err, res) => {
+      await skillMetaController.enableSkill((err, res) => {
         // verify
         expect(err).equal(undefined);
         expect(res).equal(undefined);
-        expect(Messenger.getInstance().info.args[0][0]).equal("Skill is enabled successfully.\n");
-        done();
+        expect(Messenger.getInstance().info.args[0][0]).equal("The skill has been enabled.\n");
       });
     });
   });

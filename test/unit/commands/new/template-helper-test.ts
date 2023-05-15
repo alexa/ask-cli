@@ -1,7 +1,7 @@
 import {expect, assert} from "chai";
 import {beforeEach} from "mocha";
 import sinon from "sinon";
-import httpClient from "../../../../lib/clients/http-client";
+import * as httpClient from "../../../../lib/clients/http-client";
 import {
   CODE_LANGUAGE_JAVA,
   CODE_LANGUAGE_NODEJS,
@@ -50,7 +50,7 @@ export const TEST_SAMPLE_IM_LAMBDA_JAVA: SampleTemplate = {
   url: "https://github.com/alexa/bar.git",
   desc: TEST_SAMPLE_DESCRIPTION_2,
 };
-const TEST_TEMPLATES = JSON.stringify({templates: [TEST_SAMPLE_1_IM_HOSTED_NODE, TEST_SAMPLE_2_AC_CFN_PYTHON]});
+const TEST_TEMPLATES = {templates: [TEST_SAMPLE_1_IM_HOSTED_NODE, TEST_SAMPLE_2_AC_CFN_PYTHON]};
 
 describe("Commands new test - template helper test", () => {
   describe("getSampleTemplatesFromS3", () => {
@@ -88,7 +88,7 @@ describe("Commands new test - template helper test", () => {
     });
 
     it("| returns simplified error when debug is enabled and http request fails", async () => {
-      httpRequestStub.callsArgWith(3, null, TEST_HTTP_RESPONSE_400_ERROR);
+      httpRequestStub.callsArgWith(3, TEST_HTTP_RESPONSE_400_ERROR, null);
       doDebug = true;
 
       await getSampleTemplatesFromS3(doDebug)
@@ -99,7 +99,7 @@ describe("Commands new test - template helper test", () => {
     });
 
     it("| returns longer error message explaining to enable debug if debug is not enabled and http request fails", async () => {
-      httpRequestStub.callsArgWith(3, null, TEST_HTTP_RESPONSE_400_ERROR);
+      httpRequestStub.callsArgWith(3,  TEST_HTTP_RESPONSE_400_ERROR, null);
       doDebug = false;
 
       await getSampleTemplatesFromS3(doDebug)

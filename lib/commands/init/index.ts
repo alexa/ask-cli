@@ -75,7 +75,7 @@ async function initAlexaHostedSkill(rootPath: string, cmd: Record<string, any>, 
               return reject(hooksErr);
             }
             Messenger.getInstance().info(`\n${skillName} successfully initialized.\n`);
-            resolve();
+            return resolve();
           });
         });
       });

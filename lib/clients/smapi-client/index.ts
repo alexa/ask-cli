@@ -1,7 +1,7 @@
 import querystring from "querystring";
 import AuthorizationController from "../../controllers/authorization-controller";
 import DynamicConfig from "../../utils/dynamic-config";
-import httpClient from "../http-client";
+import * as httpClient from "../http-client";
 
 import accountLinkingApi from "./resources/account-linking";
 import catalogApi from "./resources/catalog";
@@ -162,12 +162,17 @@ export class SmapiClientLateBound {
         body: payload,
         json: !!payload,
       };
-      httpClient.request(requestOptions, apiName, configuration.doDebug, (reqErr: any, reqResponse: SmapiResponse<T>) => {
-        if (reqErr) {
-          return callback(reqErr);
+      httpClient.request(requestOptions, apiName, configuration.doDebug, (requestError: any, requestResponse: SmapiResponse<T>) => {
+        if (requestError && requestError.statusCode ) {
+          return _normalizeSmapiResponse<T>(requestError, (normalizeErr, smapiResponse) => {
+            return callback(normalizeErr || smapiResponse, smapiResponse || null);
+          });
         }
-        _normalizeSmapiResponse<T>(reqResponse, (normalizeErr, smapiResponse) => {
-          callback(normalizeErr, normalizeErr ? null : smapiResponse);
+        if (requestError) {
+          return callback(requestError.errorMessage || requestError);
+        }
+        return _normalizeSmapiResponse<T>(requestResponse, (normalizeError, smapiResponse) => {
+          return callback(normalizeError, normalizeError ? null : smapiResponse);
         });
       });
     });
@@ -235,12 +240,14 @@ export interface SmapiResponseObject<T = Record<string, any>> {
   statusCode: number;
   body: T;
   headers: any[];
+  message?: string;
 }
 
 export interface SmapiResponseError<E = {}> {
   statusCode: number;
   body: E & {message: string};
   headers: any[];
+  message?: string;
 }
 
 export function isSmapiError<T, E>(response: SmapiResponse<T, E>): response is SmapiResponseError<E> {
@@ -264,6 +271,7 @@ function _normalizeSmapiResponse<T>(reqResponse: SmapiResponse<T>, callback: (er
     statusCode: reqResponse.statusCode,
     body: parsedResponseBody,
     headers: reqResponse.headers,
+    ...(reqResponse.message? {message: reqResponse.message} : {})
   });
 }
 

@@ -4,9 +4,8 @@ import AuthorizationController from "../../../../lib/controllers/authorization-c
 import InitCommand from "../../../../lib/commands/init";
 import helper from "../../../../lib/commands/init/helper";
 import HostedSkillController from "../../../../lib/controllers/hosted-skill-controller";
-import httpClient from "../../../../lib/clients/http-client";
+import * as httpClient from "../../../../lib/clients/http-client";
 import CliWarn from "../../../../lib/exceptions/cli-warn";
-import jsonView from "../../../../lib/view/json-view";
 import optionModel from "../../../../lib/commands/option-model.json";
 import Messenger from "../../../../lib/view/messenger";
 import profileHelper from "../../../../lib/utils/profile-helper";
@@ -356,15 +355,18 @@ describe("Commands init test - command class test", () => {
       // setup
       const GET_MANIFEST_ERROR = {
         statusCode: 403,
+        headers: undefined,
         body: {
-          error: TEST_ERROR,
+          error: TEST_ERROR.toString(), // jsonView.toString(TEST_ERROR),
         },
       };
-      sinon.stub(httpClient, "request").callsArgWith(3, null, GET_MANIFEST_ERROR); // stub getManifest request
+      sinon.stub(httpClient, "request").callsArgWith(3, GET_MANIFEST_ERROR); // stub getManifest request
       // call
-      await expect(instance.handle(TEST_CMD)).rejectedWith(jsonView.toString({error: TEST_ERROR}));
+      await instance.handle(TEST_CMD).catch((error) => {
+        expect(error).to.deep.equal(GET_MANIFEST_ERROR);
+      });
       // verify
-      expect(errorStub).calledOnceWith(jsonView.toString({error: TEST_ERROR}));
+      expect(errorStub.args[0][0]).to.deep.equal(GET_MANIFEST_ERROR);
     });
 
     it("| get skill manifest succeed without locales, expect error thrown", async () => {

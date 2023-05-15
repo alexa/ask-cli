@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import path from "path";
-import httpClient from "../../../lib/clients/http-client";
+import * as httpClient from "../../../lib/clients/http-client";
 import {AbstractCommand} from "../../../lib/commands/abstract-command";
 import AppConfig from "../../../lib/model/app-config";
 import CONSTANTS from "../../../lib/utils/constants";
@@ -18,7 +18,7 @@ describe("Command test - AbstractCommand class", () => {
   const TEST_PROFILE = "profile";
   const TEST_NPM_REGISTRY_DATA = (inputVersion: string) => {
     const result = {
-      body: JSON.stringify({version: inputVersion}),
+      body: {version: inputVersion},
     };
     return result;
   };
@@ -331,7 +331,7 @@ describe("Command test - AbstractCommand class", () => {
 
     it("| http client request error status code , should warn it out and pass the process", async () => {
       // setup
-      httpClientStub.yields(undefined, {statusCode: 400});
+      httpClientStub.callsArgWith(3, {statusCode: 400});
       // call
       await AbstractCommand.prototype._remindsIfNewVersion(TEST_DO_DEBUG_FALSE, undefined);
       // verify

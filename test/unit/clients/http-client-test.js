@@ -1,11 +1,11 @@
-const {expect} = require("chai");
-const sinon = require("sinon");
-const proxyquire = require("proxyquire");
+import axios from "axios";
+import {expect} from "chai";
+import {stub, replace, restore, spy} from "sinon";
 
-const httpClient = require("../../../lib/clients/http-client");
-const urlUtility = require("../../../lib/utils/url-utils");
-const logger = require("../../../lib/utils/logger-utility");
-const CONSTANTS = require("../../../lib/utils/constants");
+import * as httpClient from "../../../lib/clients/http-client";
+import urlUtility, {isValidUrl} from "../../../lib/utils/url-utils";
+import logger, {getInstance} from "../../../lib/utils/logger-utility";
+import {HTTP_REQUEST} from "../../../lib/utils/constants";
 
 describe("Clients test - cli http request client", () => {
   const VALID_OPTIONS = {url: "https://test.com"};
@@ -15,6 +15,50 @@ describe("Clients test - cli http request client", () => {
   const VALID_OPERATION = "valid-operation";
   const TEST_UPLOAD_URL = "https://upload.url.com";
   const TEST_PAYLOAD = "payload";
+  const TEST_REQUEST_BODY = {token: "someToken"};
+  const TEST_FAKE_REQUEST_ID = "FOO REQUEST #5";
+  const TEST_FAKE_RESPONSE_HEADERS = {"x-amzn-requestid": TEST_FAKE_REQUEST_ID};
+  const TEST_FAKE_REQUEST_HEADERS = {"H-key": "H-value"};
+  const TEST_DEFAULT_AXIOS_RESPONSE = {
+    status: 200,
+    statusText: "status message",
+    headers: TEST_FAKE_RESPONSE_HEADERS,
+    data: TEST_REQUEST_BODY,
+    config: {
+      method: "FAKE",
+      url: VALID_OPTIONS.url,
+      headers: TEST_FAKE_REQUEST_HEADERS,
+      data:TEST_REQUEST_BODY
+    }
+  };
+  let stubRequest;
+  let axiosPromiseResponse;
+  let debugStub;
+  let errorStub;
+  let warnStub;
+  let infoStub;
+
+  beforeEach(() => {
+    axiosPromiseResponse = stub();
+    stubRequest = replace(axios, "request", axiosPromiseResponse);
+    axiosPromiseResponse.resolves(TEST_DEFAULT_AXIOS_RESPONSE);
+
+    stub(logger, "getInstance");
+    debugStub = stub();
+    errorStub = stub();
+    warnStub = stub();
+    infoStub = stub();
+    getInstance.returns({
+      info: infoStub,
+      warn: warnStub,
+      error: errorStub,
+      debug: debugStub,
+    });
+  });
+
+  afterEach(() => {
+    restore();
+  });
 
   describe("# input parameter validation", () => {
     it("| input operation is not a string, expect fatal error", (done) => {
@@ -37,27 +81,30 @@ describe("Clients test - cli http request client", () => {
 
     it("| input operation url is not a valid url, expect fatal error", (done) => {
       // setup
-      sinon.stub(urlUtility, "isValidUrl");
-      urlUtility.isValidUrl.withArgs(INVALID_URL_OPTIONS).returns(false);
+      stub(urlUtility, "isValidUrl");
+      isValidUrl.withArgs(INVALID_URL_OPTIONS).returns(false);
       // call
       httpClient.request(INVALID_URL_OPTIONS, VALID_OPERATION, false, (err) => {
+        isValidUrl.restore();
+
         // verify
         expect(err).equal(`[Fatal]: Invalid URL:${INVALID_URL_OPTIONS.url}. CLI request must call with valid url.`);
-        urlUtility.isValidUrl.restore();
         done();
       });
     });
   });
 
   describe("# embedding user-agent", () => {
-    let stubRequest;
-    let proxyhttpClient;
     let initialDownstreamClient;
 
     before(() => {
-      initialDownstreamClient = process.env.ASK_DOWNSTREAM_CLIENT;
-      stubRequest = sinon.stub();
-      proxyhttpClient = proxyquire("../../../lib/clients/http-client", {request: stubRequest});
+      if (process.env.ASK_DOWNSTREAM_CLIENT) {
+        initialDownstreamClient = process.env.ASK_DOWNSTREAM_CLIENT;
+      }
+    });
+
+    afterEach(() => {
+      initialDownstreamClient ? (process.env.ASK_DOWNSTREAM_CLIENT = initialDownstreamClient) : delete process.env.ASK_DOWNSTREAM_CLIENT;
     });
 
     it("| no downstream client, expect CLI user agent", (done) => {
@@ -67,9 +114,8 @@ describe("Clients test - cli http request client", () => {
         headers: {},
       };
       process.env.ASK_DOWNSTREAM_CLIENT = "";
-      stubRequest.callsFake(() => {});
       // call
-      proxyhttpClient.request(VALID_OPTION_WITH_HEADERS, VALID_OPERATION, true, () => {});
+      httpClient.request(VALID_OPTION_WITH_HEADERS, VALID_OPERATION, true, () => {});
       // verify
       expect(stubRequest.args[0][0]).to.have.property("headers");
       expect(stubRequest.args[0][0].headers).to.have.property("User-Agent");
@@ -81,83 +127,81 @@ describe("Clients test - cli http request client", () => {
       // setup
       const TEST_DOWNSTREAM = "test_downstream";
       process.env.ASK_DOWNSTREAM_CLIENT = TEST_DOWNSTREAM;
-      stubRequest.callsFake(() => {});
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, () => {});
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, () => {});
       // verfiy
       expect(stubRequest.args[0][0]).to.have.property("headers");
       expect(stubRequest.args[0][0].headers).to.have.property("User-Agent");
       expect(stubRequest.args[0][0].headers["User-Agent"].startsWith(TEST_DOWNSTREAM)).equal(true);
       done();
     });
-
-    afterEach(() => {
-      stubRequest.reset();
-    });
-
-    after(() => {
-      process.env.ASK_DOWNSTREAM_CLIENT = initialDownstreamClient;
-    });
   });
 
   describe("# embedding proxyUrl", () => {
-    let stubRequest;
-    let proxyhttpClient;
     let initialProxyUrl;
 
-    beforeEach(() => {
-      initialProxyUrl = process.env.ASK_CLI_PROXY;
-      stubRequest = sinon.stub();
-      proxyhttpClient = proxyquire("../../../lib/clients/http-client", {request: stubRequest});
+    before(() => {
+      if (process.env.ASK_CLI_PROXY) {
+        initialProxyUrl = process.env.ASK_CLI_PROXY;
+      }
+    });
+
+    afterEach(() => {
+      initialProxyUrl ? (process.env.ASK_CLI_PROXY = initialProxyUrl) : delete process.env.ASK_CLI_PROXY;
     });
 
     it("| proxyUrl is added to request options", (done) => {
       // setup
-      process.env.ASK_CLI_PROXY = "proxyUrl";
-      stubRequest.callsFake(() => {});
+      process.env.ASK_CLI_PROXY = "ftp://u:p@proxy.url:5678";
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, true, () => {});
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, true, () => {});
+
       // verfiy
       expect(stubRequest.args[0][0]).to.have.property("proxy");
-      expect(stubRequest.args[0][0].proxy).equal("proxyUrl");
+      expect(stubRequest.args[0][0].proxy.protocol).equal("ftp");
+      expect(stubRequest.args[0][0].proxy.host).equal("proxy.url");
+      expect(stubRequest.args[0][0].proxy.port).equal("5678");
+      expect(stubRequest.args[0][0].proxy).to.have.property("auth");
+      expect(stubRequest.args[0][0].proxy.auth.username).equal("u");
+      expect(stubRequest.args[0][0].proxy.auth.password).equal("p");
+
       done();
-      // reset
     });
 
-    afterEach(() => {
-      stubRequest.reset();
-      process.env.ASK_DOWNSTREAM_CLIENT = initialProxyUrl;
+    it("| proxyUrl is added to request options", (done) => {
+      // setup
+      const invalidProxyUrl = "This should fail the url Validity check";
+      process.env.ASK_CLI_PROXY = invalidProxyUrl;
+      // call
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, true, (err, response) => {
+        // verify
+        expect(err).equal(`[Fatal]: Invalid Proxy setting URL: ${invalidProxyUrl}. Reset ASK_CLI_PROXY env variable with a valid proxy url.`);
+        expect(response).equal(undefined);
+        done();
+      });
     });
   });
 
   describe("# call request correctly", () => {
-    let stubRequest;
-    let proxyhttpClient;
-
-    before(() => {
-      stubRequest = sinon.stub();
-      proxyhttpClient = proxyquire("../../../lib/clients/http-client", {request: stubRequest});
-    });
-
     it("| request error occurs, expect error message", (done) => {
       // setup
-      stubRequest.callsArgWith(1, "error", null);
+      axiosPromiseResponse.rejects("error");
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nError response: error`);
-        expect(response).equal(undefined);
+        expect(err.errorMessage).equal(`The request to ${VALID_OPTIONS.url} failed. Client Error: error`);
+        expect(response).deep.equal({});
         done();
       });
     });
 
     it("| request with no error and no response, expect error", (done) => {
       // setup
-      stubRequest.callsArgWith(1, null, null);
+      axiosPromiseResponse.resolves(null);
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nPlease make sure "${VALID_OPTIONS.url}" is responding.`);
+        expect(err.errorMessage).equal(`The request to ${VALID_OPERATION}, failed.\nPlease make sure "${VALID_OPTIONS.url}" is responding.`);
         expect(response).equal(undefined);
         done();
       });
@@ -165,11 +209,11 @@ describe("Clients test - cli http request client", () => {
 
     it("| request with no error and no response statusCode, expect error", (done) => {
       // setup
-      stubRequest.callsArgWith(1, null, {body: "response"});
+      axiosPromiseResponse.resolves({data: "response"});
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
-        expect(err).equal(`Failed to access the statusCode from the request to ${VALID_OPERATION}.`);
+        expect(err.errorMessage).equal(`Failed to access the statusCode from the request to ${VALID_OPERATION}.`);
         expect(response).equal(undefined);
         done();
       });
@@ -177,9 +221,9 @@ describe("Clients test - cli http request client", () => {
 
     it("| request with success, expect no error and response", (done) => {
       // setup
-      stubRequest.callsArgWith(1, null, {statusCode: 200});
+      axiosPromiseResponse.resolves({status: 200});
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, false, (err, response) => {
         // verify
         expect(err).equal(null);
         expect(response).deep.equal({statusCode: 200});
@@ -191,82 +235,71 @@ describe("Clients test - cli http request client", () => {
       // setup
       const fakeResponse = {
         request: {
-          method: "method",
-          href: "href",
-          headers: "request headers",
-          body: "body",
+          method: TEST_DEFAULT_AXIOS_RESPONSE.config.method,
+          href: TEST_DEFAULT_AXIOS_RESPONSE.config.url,
+          headers: TEST_FAKE_REQUEST_HEADERS,
+          data: TEST_DEFAULT_AXIOS_RESPONSE.config.data,
         },
-        headers: "response headers",
-        statusCode: "status code",
-        statusMessage: "status message",
-        body: "body",
+        headers: TEST_FAKE_RESPONSE_HEADERS,
+        status: 200,
+        statusText: "status message",
+        data: "body",
+        config: TEST_DEFAULT_AXIOS_RESPONSE.config
       };
-      stubRequest.callsArgWith(1, null, fakeResponse);
-      sinon.stub(logger, "getInstance");
-      const debugStub = sinon.spy();
-      logger.getInstance.returns({
-        debug: debugStub,
-      });
+      axiosPromiseResponse.resolves(fakeResponse);
       // call
-      proxyhttpClient.request(VALID_OPTIONS, VALID_OPERATION, true, () => {
+      httpClient.request(VALID_OPTIONS, VALID_OPERATION, true, () => {
         // verify
         const expectedDebugContent = {
           activity: VALID_OPERATION,
           error: null,
-          "request-id": null,
+          "request-id": TEST_FAKE_REQUEST_ID,
           request: {
-            method: "method",
-            url: "href",
-            headers: "request headers",
-            body: "body",
+            method: fakeResponse.request.method,
+            url: fakeResponse.request.href,
+            headers: TEST_FAKE_REQUEST_HEADERS,
+            body: TEST_DEFAULT_AXIOS_RESPONSE.config.data,
           },
           response: {
-            statusCode: "status code",
-            statusMessage: "status message",
-            headers: "response headers",
+            statusCode: 200,
+            statusMessage: fakeResponse.statusText,
+            headers: fakeResponse.headers,
           },
-          body: "body",
+          body: fakeResponse.data,
         };
-        expect(logger.getInstance.called).equal(true);
+        expect(getInstance.called).equal(true);
         expect(debugStub.args[0][0]).deep.equal(expectedDebugContent);
-        logger.getInstance.restore();
+        getInstance.restore();
         done();
       });
     });
   });
 
   describe("# verify upload method", () => {
-    const stubRequest = sinon.stub();
-    const proxyhttpClient = proxyquire("../../../lib/clients/http-client", {request: stubRequest});
-
-    afterEach(() => {
-      sinon.restore();
-    });
-
     it("| upload but meet error, expect error callback", (done) => {
       // setup
-      stubRequest.callsArgWith(1, "uploadErr");
+      axiosPromiseResponse.rejects("uploadErr");
       // test
-      proxyhttpClient.putByUrl(TEST_UPLOAD_URL, TEST_PAYLOAD, VALID_OPERATION, false, (err, res) => {
+      httpClient.putByUrl(TEST_UPLOAD_URL, TEST_PAYLOAD, VALID_OPERATION, false, (err, res) => {
         // verify
         expect(stubRequest.args[0][0].url).equal(TEST_UPLOAD_URL);
-        expect(stubRequest.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.PUT);
-        expect(stubRequest.args[0][0].body).equal(TEST_PAYLOAD);
-        expect(res).equal(undefined);
-        expect(err).equal(`Failed to make request to ${VALID_OPERATION}.\nError response: uploadErr`);
+        expect(stubRequest.args[0][0].method).equal(HTTP_REQUEST.VERB.PUT);
+        expect(stubRequest.args[0][0].data).equal(TEST_PAYLOAD);
+        expect(res).deep.equal({});
+        expect(err.errorMessage).equal(`The request to ${TEST_UPLOAD_URL} failed. Client Error: uploadErr`);
         done();
       });
     });
 
     it("| upload successfully", (done) => {
       // setup
-      stubRequest.callsArgWith(1, null, {statusCode: 202});
+      axiosPromiseResponse.resolves({status: 202});
       // test
-      proxyhttpClient.putByUrl(TEST_UPLOAD_URL, TEST_PAYLOAD, VALID_OPERATION, false, (err, res) => {
+      httpClient.putByUrl(TEST_UPLOAD_URL, TEST_PAYLOAD, VALID_OPERATION, false, (err, res) => {
         // verify
         expect(stubRequest.args[0][0].url).equal(TEST_UPLOAD_URL);
-        expect(stubRequest.args[0][0].method).equal(CONSTANTS.HTTP_REQUEST.VERB.PUT);
-        expect(stubRequest.args[0][0].body).equal(TEST_PAYLOAD);
+        expect(stubRequest.args[0][0].method).equal(HTTP_REQUEST.VERB.PUT);
+        expect(stubRequest.args[0][0].data).equal(TEST_PAYLOAD);
         expect(err).equal(null);
         expect(res).deep.equal({statusCode: 202});
         done();

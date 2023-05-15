@@ -2,7 +2,7 @@ import {OptionModel, OptionModelEntry} from "./option-validator";
 
 import semver from "semver";
 
-import httpClient from "../clients/http-client";
+import * as httpClient from "../clients/http-client";
 import {validateRequiredOption, validateOptionString, validateOptionRules} from "./option-validator";
 import AppConfig from "../model/app-config";
 import CONSTANTS from "../utils/constants";
@@ -196,13 +196,13 @@ export abstract class AbstractCommand<T extends Record<string, any> = Record<str
         "GET_NPM_REGISTRY",
         doDebug,
         (err?: any, response?: any) => {
-          if (err || response.statusCode > 300) {
-            const error = err || `Http Status Code: ${response.statusCode}.`;
+          if (err) {
+            const error = err.statusCode ? `Http Status Code: ${err.statusCode}.`: err;
             Messenger.getInstance().error(
               `Failed to get the latest version for ${CONSTANTS.APPLICATION_NAME} from NPM registry.\n${error}\n`,
             );
           } else {
-            const latestVersion = JSON.parse(response.body).version;
+            const latestVersion = response.body?.version;
             if (packageJson.version !== latestVersion) {
               if (semver.major(packageJson.version) < semver.major(latestVersion)) {
                 Messenger.getInstance().warn(`\

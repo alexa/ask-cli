@@ -2,7 +2,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import AuthorizationController from "../../../../../../lib/controllers/authorization-controller";
 import SearchTaskCommand from "../../../../../../lib/commands/smapi/appended-commands/search-task";
-import httpClient from "../../../../../../lib/clients/http-client";
+import * as httpClient from "../../../../../../lib/clients/http-client";
 import jsonView from "../../../../../../lib/view/json-view";
 import Messenger from "../../../../../../lib/view/messenger";
 import optionModel from "../../../../../../lib/commands/option-model.json";
@@ -72,10 +72,10 @@ describe("Command search-task test ", () => {
   });
 
   it("| should display error thrown by smapi server", async () => {
-    const body = {message: "Bad request."};
-    sinon.stub(httpClient, "request").yields(null, {body, statusCode: 400});
+    const response = {message: "Bad request.", statusCode: 400, body: {}};
+    sinon.stub(httpClient, "request").callsArgWith(3, response);
 
-    await expect(instance.handle(cmdOptions)).eventually.rejected.include('"message": "Bad request."');
+    await expect(instance.handle(cmdOptions)).eventually.rejected.include(response);
   });
 
   afterEach(() => {

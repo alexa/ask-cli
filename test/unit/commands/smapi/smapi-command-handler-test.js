@@ -22,17 +22,13 @@ describe("Smapi test - smapiCommandHandler function", () => {
   const arrayValue = ["test", "test1", "test2"];
   const arrayValueStr = arrayValue.join(ARRAY_SPLIT_DELIMITER);
   const fakeResponse = {
-    body: {someProperty: "x"},
-    headers: [
-      {
-        key: "x",
-        value: "y",
-      },
-      {
-        key: "z",
-        value: "b",
-      },
-    ],
+    body: {
+      someProperty: "x"
+    },
+    headers: {
+      "x": "y",
+      "z": "b",
+    },
     statusCode: 200,
   };
 
@@ -62,7 +58,9 @@ describe("Smapi test - smapiCommandHandler function", () => {
       },
       _name: commandName,
     };
-    sinon.stub(AuthorizationController.prototype, "_getAuthClientInstance").returns({config: {}});
+    sinon
+      .stub(AuthorizationController.prototype, "_getAuthClientInstance")
+      .returns({config: {}, isValidToken: () => true, refreshToken: () => "testtoken"});
     sinon.stub(profileHelper, "runtimeProfile").returns("test");
     sinon.stub(AppConfig.prototype, "_validateFilePath");
     sinon.stub(AppConfig.prototype, "read");
@@ -209,15 +207,21 @@ describe("Smapi test - smapiCommandHandler function", () => {
 
 describe("Smapi test - parseSmapiResponse function", () => {
   let warnStub;
+
   beforeEach(() => {
     warnStub = sinon.stub();
     sinon.stub(Messenger, "getInstance").returns({
       warn: warnStub,
     });
   });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it("| should parse text/csv response", () => {
     const content = "foo bar\n foo";
-    const response = {headers: [{key: "content-type", value: "text/csv"}], body: content};
+    const response = {headers: {"content-type": "text/csv"}, body: content};
 
     const result = parseSmapiResponse(response);
 
@@ -226,15 +230,15 @@ describe("Smapi test - parseSmapiResponse function", () => {
 
   it("| should parse application/json response", () => {
     const content = {foo: "bar"};
-    const response = {headers: [{key: "content-type", value: "application/json"}], body: content};
+    const response = {headers: {"content-type": "application/json"}, body: content};
 
     const result = parseSmapiResponse(response);
 
-    expect(result).eql(jsonView.toString(content));
+    expect(result).deep.eql(JSON.stringify(content, null, 2));
   });
 
   it("| should return command executed successfully if not response body", () => {
-    const response = {headers: []};
+    const response = {headers: {}};
 
     const result = parseSmapiResponse(response);
 
@@ -246,7 +250,7 @@ describe("Smapi test - parseSmapiResponse function", () => {
     const resource = "someResource";
     const profile = "test";
     const url = `/v1/skills/${skillId}/status?resource=${resource}`;
-    const response = {headers: [{key: "location", value: url}], statusCode: 202};
+    const response = {headers: {"location": url}, statusCode: 202};
 
     parseSmapiResponse(response, profile);
     expect(warnStub.firstCall.lastArg).eql(
@@ -262,7 +266,7 @@ describe("Smapi test - parseSmapiResponse function", () => {
     sinon.stub(Map.prototype, "get").withArgs("vendorId").returns({skip: true}).withArgs("resource").returns("someCustomName");
 
     const url = `/v1/skills/${skillId}/status?resource=${resource}&vendorId=${vendorId}`;
-    const response = {headers: [{key: "location", value: url}], statusCode: 202};
+    const response = {headers: {"location": url}, statusCode: 202};
 
     parseSmapiResponse(response);
     expect(warnStub.firstCall.lastArg).eql(
@@ -273,13 +277,10 @@ describe("Smapi test - parseSmapiResponse function", () => {
 
   it("| should not show warning with status hint command when not able to find one", () => {
     const url = "/some-random-non-smapi-url";
-    const response = {headers: [{key: "location", value: url}], statusCode: 202};
+    const response = {headers: {"location": url}, statusCode: 202};
 
     parseSmapiResponse(response);
 
     expect(warnStub.firstCall.lastArg).eql("This is an asynchronous operation. Check the progress " + `using the following url: ${url}`);
-  });
-  afterEach(() => {
-    sinon.restore();
   });
 });

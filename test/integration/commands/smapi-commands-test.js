@@ -43,7 +43,7 @@ describe('smapi command test', () => {
     const productId = 'someProductId';
     const stage = 'development';
     const locale = 'en-US';
-    const location = 'US';
+    const location = 'https://some.url.com/location/us';
     const sourceLocale = 'en-US';
     const targetLocales = 'en-GB';
     const acceptLanguage = 'en-GB';
@@ -53,7 +53,7 @@ describe('smapi command test', () => {
     const subscriptionId = 'someSubscriptionId';
     const updateRequestId = 'someUpdateRequestId';
     const imJobId = 'someIMJobId';
-    const imJobStatus = 'imJobStatus';
+    const imJobStatus = 'ENALBED';
     const imExecutionId = 'imExecutionId';
     const version = '2.0.0';
     const targetVersion = '7';
@@ -67,7 +67,7 @@ describe('smapi command test', () => {
     const contentType = 'application/json';
     const annotationSetId = 'someAnnotationSetId';
     const experimentId = '1';
-    const treatmentId = '2';
+    const treatmentId = 'T1';
     const metricSnapShotId = '3';
     const experimentName = 'experimentName';
     const experimentDescription = 'experimentDescription';
@@ -510,7 +510,7 @@ describe('smapi command test', () => {
       "--name",
       "someName",
       "--events",
-      "AlexaDevelopmentEvent.ManifestUpdat",
+      "AlexaDevelopmentEvent.ManifestUpdate",
       "--subscriber-id",
       subscriberId,
     ];
@@ -535,7 +535,7 @@ describe('smapi command test', () => {
       "--name",
       "someName",
       "--events",
-      "AlexaDevelopmentEvent.ManifestUpdated,AlexaDevelopmentEvent.ManifestCreated",
+      "AlexaDevelopmentEvent.ManifestUpdate,AlexaDevelopmentEvent.SkillCertification",
     ];
     addCoveredCommand(args);
     const result = await run(askCmd, args, {...options, parse: false});
@@ -1000,7 +1000,7 @@ describe('smapi command test', () => {
   });
 
   it("| should invoke skill end point", async () => {
-    const args = [subCmd, "invoke-skill", "-s", skillId, "--endpoint-region", "someRegion", "--skill-request-body", JSON.stringify({})];
+    const args = [subCmd, "invoke-skill", "-s", skillId, "--endpoint-region", "NA", "--skill-request-body", JSON.stringify({})];
     addCoveredCommand(args);
     const result = await run(askCmd, args, options);
     expect(result).be.an("object");
@@ -1015,7 +1015,7 @@ describe('smapi command test', () => {
       "-g",
       stage,
       "--endpoint-region",
-      "someRegion",
+      "NA",
       "--skill-request-body",
       JSON.stringify({}),
     ];

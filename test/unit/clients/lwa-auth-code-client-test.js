@@ -194,6 +194,7 @@ describe("# Clients test - LWA OAuth2 client test", () => {
       lwaClient.refreshToken(VALID_ACCESS_TOKEN, (err, res) => {
         const expectedOptions = {
           url: `${new URL(tokenPath, tokenHost)}`,
+          headers: {"content-type": "application/json"},
           method: POST_REQUEST_METHOD,
           body: {
             grant_type: REFRESH_TOKEN_GRANT_TYPE,
