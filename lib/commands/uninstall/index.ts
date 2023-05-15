@@ -20,7 +20,7 @@ export default class UninstallCommand extends AbstractCommand {
     }
 
     description() {
-        return "uninstall alexa skill components from your alexa skill";
+        return "uninstall alexa skill components from your Alexa skill";
     }
 
     requiredOptions() {
@@ -34,30 +34,30 @@ export default class UninstallCommand extends AbstractCommand {
     async handle(cmd: Record<string, any>): Promise<void> {
         let profile: string;
         try {
-        profile = profileHelper.runtimeProfile(cmd.profile);
-        new ResourcesConfig(path.join(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
+            profile = profileHelper.runtimeProfile(cmd.profile);
+            new ResourcesConfig(path.join(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
 
         } catch (err) {
-        if (err instanceof CliWarn) {
-            Messenger.getInstance().warn(err.message);
-        } else if (err instanceof CliFileNotFoundError) {
-            Messenger.getInstance().warn(err.message);
-        } else if (err instanceof CliError) {
-            Messenger.getInstance().error(err.message);
-        } else {
-            Messenger.getInstance().error(err);
-        }
-        throw err;
+            if (err instanceof CliWarn) {
+                Messenger.getInstance().warn(err.message);
+            } else if (err instanceof CliFileNotFoundError) {
+                Messenger.getInstance().warn(err.message);
+            } else if (err instanceof CliError) {
+                Messenger.getInstance().error(err.message);
+            } else {
+                Messenger.getInstance().error(err);
+            }
+            throw err;
         }
 
         const skillPackageSrc = ResourcesConfig.getInstance().getSkillMetaSrc(profile);
         if (!stringUtils.isNonBlankString(skillPackageSrc)) {
-        Messenger.getInstance().error("Skill package src is not found in ask-resources.json.");
-        return;
+            Messenger.getInstance().error(`The skill package source directory was not found in the ask-resources.json file under the profile ${cmd.profile}.`);
+            return;
         }
         if (!fs.existsSync(skillPackageSrc)) {
-        Messenger.getInstance().error(`File ${skillPackageSrc} does not exist.`);
-        return;
+            Messenger.getInstance().error(`The skillMetadata src file ${skillPackageSrc} does not exist.`);
+            return;
         }
 
         const componentName = cmd.componentName;
@@ -96,6 +96,10 @@ export default class UninstallCommand extends AbstractCommand {
                 `An error occurred while uninstalling component ${componentName}: ${err.message}`
             );
         });
+
+        uninstallCommand.stderr.on("data", (data) => {
+            spinner.update(data.toString());
+          });
 
         uninstallCommand.on("exit", (code) => {
             if (code === 0) {

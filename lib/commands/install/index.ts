@@ -20,7 +20,7 @@ export default class InstallCommand extends AbstractCommand {
   }
 
   description() {
-    return "install alexa skill components in your alexa skill";
+    return "install alexa skill components in your Alexa skill";
   }
 
   requiredOptions() {
@@ -56,7 +56,7 @@ export default class InstallCommand extends AbstractCommand {
       return;
     }
     if (!fs.existsSync(skillPackageSrc)) {
-      Messenger.getInstance().error(`File ${skillPackageSrc} does not exist.`);
+      Messenger.getInstance().error(`Directory ${skillPackageSrc} does not exist.`);
       return;
     }
 
@@ -92,6 +92,10 @@ export default class InstallCommand extends AbstractCommand {
       throw new CliError(
         `An error occurred while installing component ${componentName}: ${err.message}`
       );
+    });
+
+    installCommand.stderr.on("data", (data) => {
+      spinner.update(data.toString());
     });
 
     installCommand.on("exit", (code) => {
