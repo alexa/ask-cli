@@ -16,8 +16,11 @@ import {createCommand as newCommand} from "../lib/commands/new";
 import {createCommand as initCommand} from "../lib/commands/init";
 import {createCommand as dialogCommand} from "../lib/commands/dialog";
 import {createCommand as runCommand} from "../lib/commands/run";
+import {createCommand as installCommand} from "../lib/commands/install";
+import {createCommand as uninstallCommand} from "../lib/commands/uninstall";
 
-[configureCommand, deployCommand, newCommand, initCommand, dialogCommand, runCommand].forEach(
+
+[configureCommand, deployCommand, newCommand, initCommand, dialogCommand, runCommand, installCommand, uninstallCommand].forEach(
   (command) => command(commander),
 );
 
@@ -44,6 +47,8 @@ const ALLOWED_ASK_ARGV_2 = [
   "-h",
   "--help",
   "run",
+  "install",
+  "uninstall"
 ];
 if (process.argv[2] && ALLOWED_ASK_ARGV_2.indexOf(process.argv[2]) === -1) {
   console.log('Command not recognized. Please run "ask" to check the user instructions.');

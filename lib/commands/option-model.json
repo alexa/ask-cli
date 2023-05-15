@@ -11,6 +11,12 @@
     "alias": null,
     "stringInput": "NONE"
   },
+  "component-name": {
+    "name": "component-name",
+    "description": "Name of the component to be installed.",
+    "alias": null,
+    "stringInput": "REQUIRED"
+  },
   "full-response": {
     "name": "full-response",
     "description": "Returns body, headers and status code of the response as one object.",
