@@ -66,6 +66,13 @@ describe("Commands new test - wizard helper test", () => {
     getSkillLocaleStub.yields(null, "us-east-1");
     getSampleTemplatesFromS3Stub = sinon.stub(templateHelper, "getSampleTemplatesFromS3");
     getSampleTemplatesFromS3Stub.resolves(TEST_TEMPLATE_SAMPLES);
+
+    // create UI stub default responses
+    getSkillNameStub.callsArgWith(0, null, TEST_SKILL_NAME);
+    getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
+    getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
+    getSkillDefaultRegionStub.yields(null, TEST_REGION);
+    selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE)
   });
 
   afterEach(() => {
@@ -74,7 +81,6 @@ describe("Commands new test - wizard helper test", () => {
   describe("# test wizard helper method - collectUserCreationProjectInfo", () => {
     it("| user input selectSkillCodeLanguage fails, expect throw error", (done) => {
       // setup
-      selectSkillCodeLanguageStub.yields(null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.yields(null, TEST_HOSTED_DEPLOYMENT);
       selectSkillCodeLanguageStub.callsArgWith(1, TEST_ERROR);
       // call
@@ -87,7 +93,6 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| user input getDeploymentType fails, expect throw error", (done) => {
       // setup
-      selectSkillCodeLanguageStub.yields(null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.callsArgWith(1, TEST_ERROR);
       // call
       wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
@@ -100,7 +105,6 @@ describe("Commands new test - wizard helper test", () => {
     it.skip("| user input getSkillLocale fails, expect throw error", (done) => {
       // skipped because locale is hard coded until backend for hosted skills supports locales
       // setup
-      selectSkillCodeLanguageStub.yields(null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.yields(null, TEST_HOSTED_DEPLOYMENT);
       getSkillLocaleStub.yields(TEST_ERROR);
       // call
@@ -113,7 +117,6 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| user input getSkillDefaultRegion fails, expect throw error", (done) => {
       // setup
-      selectSkillCodeLanguageStub.yields(null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.yields(null, TEST_HOSTED_DEPLOYMENT);
       getSkillDefaultRegionStub.yields(TEST_ERROR);
       // call
@@ -124,11 +127,9 @@ describe("Commands new test - wizard helper test", () => {
       });
     });
 
-    it("| custom template should not valid url, expect throw error", (done) => {
+    it("| custom template with invalid url, expect throw error", (done) => {
       // setup
       const TEST_GIT_ERROR = `The provided template url ${TEST_TEMPLATE_URL} is not a valid url.`;
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-      getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
       isValidUrlStub.returns(false);
       // call
       wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS_WITH_TEMPLATE, (err) => {
@@ -140,8 +141,6 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| user input confirmUsingUnofficialTemplate fails, expect throw error", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-      getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
       isValidUrlStub.returns(true);
       isUrlOfficialTemplateStub.returns(false);
       confirmUsingUnofficialTemplateStub.callsArgWith(0, TEST_ERROR);
@@ -157,8 +156,6 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| users do not confirm using unofficial template, return without templateInfo, expect return directly", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-      getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
       isValidUrlStub.returns(true);
       isUrlOfficialTemplateStub.returns(false);
       confirmUsingUnofficialTemplateStub.callsArgWith(0, null, false);
@@ -182,8 +179,6 @@ describe("Commands new test - wizard helper test", () => {
     //             };
     //             const TEST_HTTP_ERROR = `Failed to retrieve the template list, please see the details from the error response.
     // ${JSON.stringify(TEST_HTTP_RESPONSE, null, 2)}`;
-    //             selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-    //             getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
     //             httpClient.request.callsArgWith(3, null, TEST_HTTP_RESPONSE);
     //             // call
     //             wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
@@ -199,8 +194,6 @@ describe("Commands new test - wizard helper test", () => {
     //         statusCode: 200,
     //         body: TEST_TEMPLATE_MAP_STRING
     //     };
-    //     selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-    //     getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
     //     httpClient.request.callsArgWith(3, null, TEST_HTTP_RESPONSE);
     //     getTargetTemplateNameStub.callsArgWith(1, TEST_ERROR);
     //     // call
@@ -217,10 +210,8 @@ describe("Commands new test - wizard helper test", () => {
     //         statusCode: 200,
     //         body: JSON.stringify(TEST_TEMPLATE_MAP)
     //     };
-    //     selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
     //     getDeploymentTypeStub.callsArgWith(1, null);
     //     httpClient.request.callsArgWith(3, null, TEST_HTTP_RESPONSE);
-    //     getTargetTemplateNameStub.callsArgWith(1, null, TEST_TEMPLATE_NAME);
     //     getSkillNameStub.callsArgWith(1, TEST_ERROR);
     //     // call
     //     wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err) => {
@@ -232,12 +223,10 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| user input getProjectFolderName fails, expect throw error", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-      getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
       isValidUrlStub.returns(true);
       isUrlOfficialTemplateStub.returns(true);
-      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
       getProjectFolderNameStub.callsArgWith(1, TEST_ERROR);
+
       // call
       wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS_WITH_TEMPLATE, (err) => {
         // verify
@@ -248,11 +237,8 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| collectUserCreationProjectInfo Hosted selections should not prompt for template sample selection", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
-      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
-      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
-      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+
       // call
       wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err, res) => {
         // verify
@@ -269,11 +255,8 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| collectUserCreationProjectInfo called with 'ac' cmd option should filter templates to 'ac'", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
-      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
-      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
-      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+
       sinon.stub(TEST_OPTIONS, "ac").value(true);
       const filterStub = sinon.spy(SampleTemplatesFilter.prototype, "filter");
       // call
@@ -286,11 +269,8 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| collectUserCreationProjectInfo called without 'ac' cmd option should filter templates to 'im'", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
       getDeploymentTypeStub.callsArgWith(1, null, TEST_HOSTED_DEPLOYMENT);
-      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
-      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
-      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+
       sinon.stub(TEST_OPTIONS, "ac").value(undefined);
       const filterStub = sinon.spy(SampleTemplatesFilter.prototype, "filter");
       // call
@@ -304,11 +284,7 @@ describe("Commands new test - wizard helper test", () => {
 
     it("| collectUserCreationProjectInfo succeed, expect userInput return", (done) => {
       // setup
-      selectSkillCodeLanguageStub.callsArgWith(1, null, TEST_LANGUAGE_RESPONSE);
-      getDeploymentTypeStub.callsArgWith(1, null, TEST_DEPLOYMENT_TYPE);
-      getSkillNameStub.callsArgWith(1, null, TEST_SKILL_NAME);
-      getProjectFolderNameStub.callsArgWith(1, null, TEST_FOLDER_NAME);
-      getSkillDefaultRegionStub.yields(null, TEST_REGION);
+
       getTargetTemplateNameStub.yields(null, TEST_SAMPLE_1_IM_HOSTED_NODE);
       // call
       wizardHelper.collectUserCreationProjectInfo(TEST_OPTIONS, (err, res) => {

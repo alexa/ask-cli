@@ -82,7 +82,7 @@ export function createHostedSkill(
       vendorId,
       manifest,
       runtime: userInput.language,
-      region: userInput.region,
+      region: (HOSTED_SKILL.REGIONS as any)[userInput.region!],
     };
     const listenSpinner = new SpinnerView();
     listenSpinner.start("Creating your Alexa hosted skill. It will take about a minute.");

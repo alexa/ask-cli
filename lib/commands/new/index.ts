@@ -137,7 +137,7 @@ function createNonHostedSkill(cmd: Record<string, any>, profile: string, doDebug
         // 2.load involving M(Model) component (ResourcesConfig & Manifest) from the downloaded skill project with 'default' profile
         helper.loadSkillProjectModel(projectFolderPath, "default");
         // 3.remove git record and update skill name
-        helper.updateSkillProjectWithUserSettings(userInput.skillName!, projectFolderPath, profile);
+        helper.updateSkillProjectWithUserSettings(userInput.skillName!, userInput.region, projectFolderPath, profile);
       } catch (projErr) {
         return reject(projErr);
       }
