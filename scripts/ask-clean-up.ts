@@ -49,8 +49,9 @@ const cleanUp = async () => {
 
     // not using promise all to avoid throttling
     for (const skillId of skillIds) {
+        console.log(`Deleting skillid: ${skillId}`);
         await client.deleteSkillV1(skillId);
-        console.log(`removed skill with id ${skillId}`);
+        console.log(`  > removed skillid: ${skillId}`);
         await new Promise(r => setTimeout(r, 1000));
     }
     console.log(`removed # skill(s) ${skillIds.length}`);
