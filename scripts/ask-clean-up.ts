@@ -1,34 +1,31 @@
 /* eslint-disable no-await-in-loop */
-const { CustomSmapiClientBuilder } = require('ask-smapi-sdk');
-const AppConfig = require('../lib/model/app-config');
-const AuthorizationController = require('../lib/controllers/authorization-controller');
-const CONSTANTS = require('../lib/utils/constants');
-const DynamicConfig = require('../lib/utils/dynamic-config');
-const profileHelper = require("../lib/utils/profile-helper");
+import { CustomSmapiClientBuilder } from 'ask-smapi-sdk';
+import { PLACEHOLDER } from '../dist/lib/utils/constants';
+import { isEnvProfile, resolveVendorId } from "../dist/lib/utils/profile-helper";
 
-new AppConfig();
-
-const authorizationController = new AuthorizationController({
+const appConfig = new (require('../lib/model/app-config'))();
+const authorizationController = new (require('../dist/lib/controllers/authorization-controller'))({
     auth_client_type: 'LWA'
 });
+const dynamicConfig = require('../dist/lib/utils/dynamic-config');
 const profile = _findEnvProfile() || process.env.ASK_DEFAULT_PROFILE || "default";;
 
 function _findEnvProfile() {
-    if (profileHelper.isEnvProfile()) {
+    if (isEnvProfile()) {
       // Only when user set every required parameter in ENV, we will treat profile as ENV
-      return CONSTANTS.PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
+      return PLACEHOLDER.ENVIRONMENT_VAR.PROFILE_NAME;
     }
     return null;
   }
 
 const refreshTokenConfig = {
-    clientId: authorizationController.oauthClient.config.clientId,
-    clientSecret: authorizationController.oauthClient.config.clientConfirmation,
-    refreshToken: AppConfig.getInstance().getToken(profile).refresh_token
+    clientId: authorizationController.oauthClient?.config.clientId,
+    clientSecret: authorizationController.oauthClient?.config.clientConfirmation,
+    refreshToken: appConfig.getToken(profile).refresh_token
 };
 
-const authEndpoint = DynamicConfig.lwaTokenHost;
-const smapiEndpoint = DynamicConfig.smapiBaseUrl;
+const authEndpoint = dynamicConfig.lwaTokenHost;
+const smapiEndpoint = dynamicConfig.smapiBaseUrl;
 
 const cleanUp = async () => {
     console.log('cleaning ask resources');
@@ -39,11 +36,11 @@ const cleanUp = async () => {
         .client();
 
     let nextToken;
-    const skills = [];
+    const skills: any = [];
     do {
-        vendorId = profileHelper.resolveVendorId(profile);
+        const vendorId = resolveVendorId(profile);
         const res = await client.listSkillsForVendorV1(vendorId, nextToken);
-        skills.push(...res.skills);
+        Array.prototype.push.apply(skills, res.skills);
 
         nextToken = res.nextToken;
     } while (nextToken);
@@ -52,8 +49,9 @@ const cleanUp = async () => {
 
     // not using promise all to avoid throttling
     for (const skillId of skillIds) {
+        console.log(`Deleting skillid: ${skillId}`);
         await client.deleteSkillV1(skillId);
-        console.log(`removed skill with id ${skillId}`);
+        console.log(`  > removed skillid: ${skillId}`);
         await new Promise(r => setTimeout(r, 1000));
     }
     console.log(`removed # skill(s) ${skillIds.length}`);
