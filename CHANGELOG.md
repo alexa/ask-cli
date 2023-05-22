@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.30.0](https://github.com/alexa/ask-cli/compare/v2.29.1...v2.30.0) (2023-05-22)
+
+
+### Features
+
+* add proxy support for smapi commands [#434](https://github.com/alexa/ask-cli/issues/434) ([fd20898](https://github.com/alexa/ask-cli/commit/fd20898d6d87cf30ce4dc3e7a78434aac531929b))
+
 ### [2.29.2](https://github.com/alexa/ask-cli/compare/v2.29.1...v2.29.2) (2023-04-19)
 
 ### Bug Fixes
