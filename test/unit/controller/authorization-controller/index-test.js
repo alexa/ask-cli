@@ -14,6 +14,7 @@ const CONSTANTS = require("../../../../lib/utils/constants");
 const LocalHostServer = require("../../../../lib/utils/local-host-server");
 const Messenger = require("../../../../lib/view/messenger");
 const SpinnerView = require("../../../../lib/view/spinner-view");
+const ui = require("../../../../lib/controllers/authorization-controller/ui");
 
 describe("Controller test - Authorization controller test", () => {
   const DEFAULT_CLIENT_ID = CONSTANTS.LWA.CLI_INTERNAL_ONLY_LWA_CLIENT.CLIENT_ID;
@@ -456,40 +457,58 @@ describe("Controller test - Authorization controller test", () => {
       });
     });
 
-    it("| local server returns valid authCode", (done) => {
-      // setup
-      sinon.stub(LocalHostServer.prototype, "listen");
-      sinon.stub(LocalHostServer.prototype, "registerEvent");
-      const requestDestroyStub = sinon.stub();
-      const request = {
-        url: "/cb?code",
-        socket: {
-          destroy: requestDestroyStub,
-        },
-      };
-      const endStub = sinon.stub();
-      const response = {
-        on: sinon.stub().callsArgWith(1),
-        end: endStub,
-      };
-      sinon.stub(SpinnerView.prototype, "terminate");
-      const requestQuery = {
-        query: {
-          code: TEST_AUTH_CODE,
-        },
-      };
-      sinon.stub(url, "parse").returns(requestQuery);
-      sinon.stub(LocalHostServer.prototype, "destroy");
-      sinon.stub(LocalHostServer.prototype, "create").callsArgWith(0, request, response);
+    describe("local server ", () => {
+      let endStub;
+      beforeEach(() => {
+        sinon.stub(LocalHostServer.prototype, "listen");
+        sinon.stub(LocalHostServer.prototype, "registerEvent");
+        const requestDestroyStub = sinon.stub();
+        const request = {
+          url: "/cb?code",
+          socket: {
+            destroy: requestDestroyStub,
+          },
+        };
+        endStub = sinon.stub();
+        const response = {
+          on: sinon.stub().callsArgWith(1),
+          end: endStub,
+        };
+        sinon.stub(SpinnerView.prototype, "terminate");
+        const requestQuery = {
+          query: {
+            code: TEST_AUTH_CODE,
+          },
+        };
+        sinon.stub(url, "parse").returns(requestQuery);
+        sinon.stub(LocalHostServer.prototype, "destroy");
+        sinon.stub(LocalHostServer.prototype, "create").callsArgWith(0, request, response);
+      });
 
-      // call
-      authorizationController._listenResponseFromLWA(TEST_PORT, (err, authCode) => {
-        // verify
-        expect(endStub.callCount).eq(1);
-        expect(endStub.args[0][0]).eq(messages.ASK_SIGN_IN_SUCCESS_MESSAGE);
-        expect(err).eq(null);
-        expect(authCode).eq(TEST_AUTH_CODE);
-        done();
+      it("| returns valid authCode", (done) => {
+        sinon.stub(ui, "confirmAllowSignIn").callsArgWith(0, null, true);
+        // call
+        authorizationController._listenResponseFromLWA(TEST_PORT, (err, authCode) => {
+          // verify
+          expect(endStub.callCount).eq(1);
+          expect(endStub.args[0][0]).eq(messages.ASK_SIGN_IN_SUCCESS_MESSAGE);
+          expect(err).eq(null);
+          expect(authCode).eq(TEST_AUTH_CODE);
+          done();
+        });
+      });
+
+      it("| returns error for unconfirmed browser sign in", (done) => {
+        sinon.stub(ui, "confirmAllowSignIn").callsArgWith(0, null, false);
+        // call
+        authorizationController._listenResponseFromLWA(TEST_PORT, (err, authCode) => {
+          // verify
+          expect(endStub.callCount).eq(1);
+          expect(endStub.args[0][0]).eq(messages.ASK_SIGN_IN_SUCCESS_MESSAGE);
+          expect(err).eq(messages.STOP_UNCONFIRMED_BROWSER_SIGNIN);
+          expect(authCode).eq(undefined);
+          done();
+        });
       });
     });
   });
