@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.2](https://github.com/alexa/ask-cli/compare/v2.30.1...v2.30.2) (2023-06-22)
+
+
+### Bug Fixes
+
+* prevent errors to be displayed as [Error]: [object Object] ([767e104](https://github.com/alexa/ask-cli/commit/767e10481fb7230c6748f784c6d5e6a483508950))
+
 ## [2.30.0](https://github.com/alexa/ask-cli/compare/v2.29.1...v2.30.0) (2023-05-22)
 
 
