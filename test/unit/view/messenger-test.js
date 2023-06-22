@@ -4,9 +4,16 @@ const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
 const Messenger = require("../../../lib/view/messenger");
+const jsonView = require("../../../lib/view/json-view");
 
 describe("View test - messenger file test", () => {
   const TEST_MESSAGE = "TEST_MESSAGE";
+  const TEST_STACK = "TEST_STACK";
+  const TEST_ERROR_WITH_STACK = {
+    message: TEST_MESSAGE,
+    stack: TEST_STACK,
+    foo: 2,
+  }
   const TEST_TIME = "TEST_TIME";
   const TEST_ERROR_OBJ = new Error("TEST_ERROR");
 
@@ -145,6 +152,24 @@ describe("View test - messenger file test", () => {
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
       expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${TEST_MESSAGE}}`);
+    });
+
+    it("| error function correctly push error objects to buffer and display", () => {
+      const stub = sinon.stub(console, "error");
+      const expectedError = jsonView.toString(TEST_ERROR_WITH_STACK);
+      const expectedItem = {
+        time: TEST_TIME,
+        operation: "ERROR",
+        level: 50,
+        msg: expectedError,
+      };
+
+      // call
+      Messenger.getInstance().error(TEST_ERROR_WITH_STACK);
+
+      // verify
+      expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
+      expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${expectedError}}`);
     });
 
     it("| fatal function correctly push message to buffer and display", () => {
