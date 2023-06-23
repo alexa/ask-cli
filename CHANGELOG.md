@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.3](https://github.com/alexa/ask-cli/compare/v2.30.2...v2.30.3) (2023-06-23)
+
+
+### Bug Fixes
+
+* updating axios to resolve issue [#480](https://github.com/alexa/ask-cli/issues/480) ([5502acf](https://github.com/alexa/ask-cli/commit/5502acf546f46a81b4d7a2fe41100edd40fa8d9a))
+
 ### [2.30.2](https://github.com/alexa/ask-cli/compare/v2.30.1...v2.30.2) (2023-06-22)
 
 
