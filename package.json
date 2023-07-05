@@ -1,6 +1,6 @@
 {
   "name": "ask-cli",
-  "version": "2.30.3",
+  "version": "2.30.4",
   "description": "Alexa Skills Kit (ASK) Command Line Interfaces",
   "bin": {
     "ask": "dist/bin/ask.js"

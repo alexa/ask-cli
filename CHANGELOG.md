@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+
+### [2.30.4](https://github.com/alexa/ask-cli/compare/v2.30.3...v2.30.4) (2023-06-23)
+
+
+### Bug Fixes
+
+* fix: Local Credential Hijacking fix (part 2) [#475](https://github.com/alexa/ask-cli/pull/475) ([e096f42](https://github.com/alexa/ask-cli/pull/482/commits/e096f425edcd79e0233113d03961da388e9e695a))
+
 ### [2.30.3](https://github.com/alexa/ask-cli/compare/v2.30.2...v2.30.3) (2023-06-23)
 
 
