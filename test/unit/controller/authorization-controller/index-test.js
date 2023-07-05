@@ -422,6 +422,7 @@ describe("Controller test - Authorization controller test", () => {
       // setup
       sinon.stub(LocalHostServer.prototype, "listen");
       sinon.stub(LocalHostServer.prototype, "registerEvent");
+      const informReceivedErrorStub = sinon.stub(ui, "informReceivedError").callsArgWith(0, null, "Ok");
       const requestDestroyStub = sinon.stub();
       const request = {
         url: "/cb?error",
@@ -447,12 +448,13 @@ describe("Controller test - Authorization controller test", () => {
       // call
       authorizationController._listenResponseFromLWA(TEST_PORT, (err) => {
         // verify
-        const EXPECTED_ERR_MESSAGE = `Error: ${requestQuery.query.error}\nReason: ${requestQuery.query.error_description}`;
+        const EXPECTED_ERR_MESSAGE = `Error: ${requestQuery.query.error}\nReason: ${requestQuery.query.error_description}`.split("\n").join(". ");
         expect(spinnerTerminateStub.callCount).eq(1);
         expect(serverDestroyStub.callCount).eq(1);
         expect(endStub.callCount).eq(1);
         expect(endStub.args[0][0].includes(EXPECTED_ERR_MESSAGE)).equal(true);
         expect(err).eq(EXPECTED_ERR_MESSAGE);
+        expect(informReceivedErrorStub.called).to.be.true;
         done();
       });
     });
