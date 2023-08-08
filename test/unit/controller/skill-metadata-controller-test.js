@@ -1586,7 +1586,7 @@ describe("Controller test - skill metadata controller test", () => {
     it("| update manifest callback with error when poll skill status fails", (done) => {
       // setup
       sinon.stub(httpClient, "request").callsArgWith(3, null, {});
-      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(2, "TEST_ERROR");
+      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(1, "TEST_ERROR");
 
       // call
       skillMetaController.updateSkillManifest((err, res) => {
@@ -1608,7 +1608,7 @@ describe("Controller test - skill metadata controller test", () => {
         },
       };
 
-      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(2, undefined, pollResponse);
+      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(1, undefined, pollResponse);
       sinon.stub(httpClient, "request").callsArgWith(3, null, {});
 
       // call
@@ -1631,7 +1631,7 @@ describe("Controller test - skill metadata controller test", () => {
         },
       };
 
-      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(2, undefined, pollResponse);
+      sinon.stub(SkillMetadataController.prototype, "_pollSkillManifestStatus").callsArgWith(1, undefined, pollResponse);
       sinon.stub(httpClient, "request").callsArgWith(3, null, {});
 
       // call

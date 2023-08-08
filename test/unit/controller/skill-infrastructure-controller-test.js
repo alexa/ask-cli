@@ -763,40 +763,60 @@ describe("Controller test - skill infrastructure controller test", () => {
 
   describe("# test class method: _ensureSkillManifestGotUpdated", () => {
     const skillInfraController = new SkillInfrastructureController(TEST_CONFIGURATION);
+    let deploySkillPackageStub, updateSkillManifestStub;
 
     beforeEach(() => {
-      new ResourcesConfig(FIXTURE_RESOURCES_CONFIG_FILE_PATH);
       new Manifest(FIXTURE_MANIFEST_FILE_PATH);
-      sinon.stub(fs, "writeFileSync");
+      deploySkillPackageStub = sinon.stub(SkillMetadataController.prototype, "deploySkillPackage").yields();
+      updateSkillManifestStub = sinon.stub(SkillMetadataController.prototype, "updateSkillManifest").yields();
     });
 
     afterEach(() => {
-      ResourcesConfig.dispose();
       Manifest.dispose();
       sinon.restore();
     });
 
-    it("| update skill manifest fails, expect error called back", (done) => {
+    it("| resolve vendor id fails, expect error called back", (done) => {
       // setup
-      sinon.stub(profileHelper, "resolveVendorId");
-      sinon.stub(SkillMetadataController.prototype, "updateSkillManifest").yields("error");
+      const TEST_ERROR = new Error("error");
+      sinon.stub(profileHelper, "resolveVendorId").throws(TEST_ERROR);
       // call
       skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
         // verify
         expect(res).equal(undefined);
-        expect(err).equal("error");
+        expect(err).equal(TEST_ERROR);
+        expect(deploySkillPackageStub.calledOnce).equal(false);
+        expect(updateSkillManifestStub.calledOnce).equal(false);
         done();
       });
     });
 
-    it("| update skill manifest succeeds, expect call back with no error", (done) => {
+    it("| skill manifest has no icon file uri, expect updateSkillManifest to be called with no error", (done) => {
+      // setup
       sinon.stub(profileHelper, "resolveVendorId");
-      sinon.stub(SkillMetadataController.prototype, "updateSkillManifest").yields();
+      sinon.stub(Manifest.prototype, "hasIconFileUri").returns(false);
       // call
       skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
         // verify
         expect(res).equal(undefined);
         expect(err).equal(undefined);
+        expect(deploySkillPackageStub.calledOnce).equal(false);
+        expect(updateSkillManifestStub.calledOnce).equal(true);
+        done();
+      });
+    });
+
+    it("| skill manifest has icon file uri, expect deploySkillPackage to be called with no error", (done) => {
+      // setup
+      sinon.stub(profileHelper, "resolveVendorId");
+      sinon.stub(Manifest.prototype, "hasIconFileUri").returns(true);
+      // call
+      skillInfraController._ensureSkillManifestGotUpdated((err, res) => {
+        // verify
+        expect(res).equal(undefined);
+        expect(err).equal(undefined);
+        expect(deploySkillPackageStub.calledOnce).equal(true);
+        expect(updateSkillManifestStub.calledOnce).equal(false);
         done();
       });
     });
