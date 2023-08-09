@@ -1104,6 +1104,7 @@ describe("Controller test - skill metadata controller test", () => {
 
     it("| poll status retries with getImportStatus warnings, expects warnings logged once", (done) => {
       // setup
+      sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
       requestStub
         .onCall(0)
         .callsArgWith(3, null, smapiImportStatusResponseWithWarningsInProgress)
@@ -1373,6 +1374,7 @@ describe("Controller test - skill metadata controller test", () => {
 
       it("| poll import status with multiple retries, expect callback with correct response", (done) => {
         // setup
+        sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
         requestStub
           .onCall(0)
           .callsArgWith(3, null, smapiImportStatusResponseInProgress)
@@ -1424,6 +1426,7 @@ describe("Controller test - skill metadata controller test", () => {
 
       it("| poll import status with getSkillStatus build failures", (done) => {
         // setup
+        sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
         requestStub
           .onCall(0)
           .callsArgWith(3, null, smapiImportStatusResponseInProgress)
@@ -1445,6 +1448,7 @@ describe("Controller test - skill metadata controller test", () => {
 
       it("| poll status smapi calls return success, expect GetSkillStatus calls", (done) => {
         // setup
+        sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
         requestStub
           .onCall(0)
           .callsArgWith(3, null, smapiImportStatusResponseInProgress)
@@ -1465,6 +1469,7 @@ describe("Controller test - skill metadata controller test", () => {
 
       it("| poll status smapi calls return empty SkillID, expect no GetSkillStatus calls", (done) => {
         // setup
+        sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
         requestStub
           .onCall(0)
           .callsArgWith(3, null, smapiImportStatusResponse200EmptySkillID)
