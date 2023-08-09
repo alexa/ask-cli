@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.5](https://github.com/alexa/ask-cli/compare/v2.30.4...v2.30.5) (2023-08-09)
+
+
+### Bug Fixes
+
+* deploy skill package when icon uri path relative to its asset files ([#487](https://github.com/alexa/ask-cli/issues/487)) ([4b6ac2f](https://github.com/alexa/ask-cli/commit/4b6ac2ff8cd8b6511bdcf42938f05518ecf31361))
+* display warning object message correctly ([#488](https://github.com/alexa/ask-cli/issues/488)) ([abbdc57](https://github.com/alexa/ask-cli/commit/abbdc574df25757990d2101d931cc6d063f64af2))
+* skill-id option for legacy skills not supported ([#489](https://github.com/alexa/ask-cli/issues/489)) ([3a71908](https://github.com/alexa/ask-cli/commit/3a719081e613f5a03d119b2cd8e32f35df15825e))
 
 ### [2.30.4](https://github.com/alexa/ask-cli/compare/v2.30.3...v2.30.4) (2023-06-23)
 
