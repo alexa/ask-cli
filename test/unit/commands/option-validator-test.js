@@ -111,13 +111,14 @@ describe("Command test - Option validator test", () => {
 
       const skillOptions = {
         optionValid: "amzn1.ask.skill.1234abcd-12ab-abcd-1234-123456789012",
+        optionValidLegacy: "amzn1.echo-sdk-ams.app.1234abcd-12ab-abcd-1234-123456789012",
         optionInvalid: "amzn1.ask.skill",
       };
 
       const skillRegex = [
         {
           type: "REGEX",
-          regex: "^amzn\\d\\.ask\\.skill\\.\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$",
+          regex: "^amzn\\d((\\.ask\\.skill)|(\\.echo-sdk-ams\\.app))\\.\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$",
         },
       ];
 
@@ -128,6 +129,10 @@ describe("Command test - Option validator test", () => {
 
       expect(() => {
         optionValidator.validateOptionRules(skillOptions, "optionValid", skillRegex);
+      }).not.throw();
+
+      expect(() => {
+        optionValidator.validateOptionRules(skillOptions, "optionValidLegacy", skillRegex);
       }).not.throw();
 
       // invalid regex expectations
