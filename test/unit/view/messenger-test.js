@@ -8,14 +8,9 @@ const jsonView = require("../../../lib/view/json-view");
 
 describe("View test - messenger file test", () => {
   const TEST_MESSAGE = "TEST_MESSAGE";
-  const TEST_STACK = "TEST_STACK";
-  const TEST_ERROR_WITH_STACK = {
-    message: TEST_MESSAGE,
-    stack: TEST_STACK,
-    foo: 2,
-  }
+  const TEST_OBJECT = { foo: 1, bar: 2 };
+  const TEST_ERROR = new Error("TEST_ERROR");
   const TEST_TIME = "TEST_TIME";
-  const TEST_ERROR_OBJ = new Error("TEST_ERROR");
 
   describe("# inspect correctness for constructor, getInstance and dispose", () => {
     beforeEach(() => {
@@ -137,9 +132,9 @@ describe("View test - messenger file test", () => {
       expect(stub.args[0][0]).equal(chalk`{bold.yellow [Warn]: ${TEST_MESSAGE}}`);
     });
 
-    it("| warn function correctly push error objects to buffer and display", () => {
+    it("| warn function correctly push stringify object to buffer and display", () => {
       const stub = sinon.stub(console, "warn");
-      const expectedMessage = jsonView.toString(TEST_ERROR_WITH_STACK);
+      const expectedMessage = jsonView.toString(TEST_OBJECT);
       const expectedItem = {
         time: TEST_TIME,
         operation: "WARN",
@@ -148,7 +143,7 @@ describe("View test - messenger file test", () => {
       };
 
       // call
-      Messenger.getInstance().warn(TEST_ERROR_WITH_STACK);
+      Messenger.getInstance().warn(TEST_OBJECT);
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
@@ -157,7 +152,7 @@ describe("View test - messenger file test", () => {
 
     it("| warn function correctly push error message to buffer and display", () => {
       const stub = sinon.stub(console, "warn");
-      const expectedMessage = TEST_ERROR_OBJ.message;
+      const expectedMessage = TEST_ERROR.message;
       const expectedItem = {
         time: TEST_TIME,
         operation: "WARN",
@@ -166,7 +161,7 @@ describe("View test - messenger file test", () => {
       };
 
       // call
-      Messenger.getInstance().warn(TEST_ERROR_OBJ);
+      Messenger.getInstance().warn(TEST_ERROR);
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
@@ -190,9 +185,9 @@ describe("View test - messenger file test", () => {
       expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${TEST_MESSAGE}}`);
     });
 
-    it("| error function correctly push error objects to buffer and display", () => {
+    it("| error function correctly push stringify object to buffer and display", () => {
       const stub = sinon.stub(console, "error");
-      const expectedMessage = jsonView.toString(TEST_ERROR_WITH_STACK);
+      const expectedMessage = jsonView.toString(TEST_OBJECT);
       const expectedItem = {
         time: TEST_TIME,
         operation: "ERROR",
@@ -201,7 +196,7 @@ describe("View test - messenger file test", () => {
       };
 
       // call
-      Messenger.getInstance().error(TEST_ERROR_WITH_STACK);
+      Messenger.getInstance().error(TEST_OBJECT);
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
@@ -210,7 +205,7 @@ describe("View test - messenger file test", () => {
 
     it("| error function correctly push error message to buffer and display", () => {
       const stub = sinon.stub(console, "error");
-      const expectedMessage = TEST_ERROR_OBJ.message;
+      const expectedMessage = TEST_ERROR.message;
       const expectedItem = {
         time: TEST_TIME,
         operation: "ERROR",
@@ -219,7 +214,7 @@ describe("View test - messenger file test", () => {
       };
 
       // call
-      Messenger.getInstance().error(TEST_ERROR_OBJ);
+      Messenger.getInstance().error(TEST_ERROR);
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
@@ -245,7 +240,7 @@ describe("View test - messenger file test", () => {
 
     it("| fatal function correctly push error stack to buffer and display", () => {
       const stub = sinon.stub(console, "error");
-      const expectedMessage = TEST_ERROR_OBJ.stack.substring(7);
+      const expectedMessage = TEST_ERROR.stack.substring(7);
       const expectedItem = {
         time: TEST_TIME,
         operation: "FATAL",
@@ -254,7 +249,7 @@ describe("View test - messenger file test", () => {
       };
 
       // call
-      Messenger.getInstance().fatal(TEST_ERROR_OBJ);
+      Messenger.getInstance().fatal(TEST_ERROR);
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
