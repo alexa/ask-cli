@@ -211,5 +211,37 @@ describe("Model test - manifest file test", () => {
         Manifest.dispose();
       });
     });
+
+    describe("# verify function hasIconFileUri", () => {
+      it("| icon https uri, expect false", () => {
+        new Manifest(MANIFEST_FILE);
+        Manifest.getInstance().setPublishingLocales({
+          "en-US": {
+            name: "skillName",
+            summary: "one sentence description",
+            description: "skill description",
+            smallIconUri: "https://some.url.com/images/en-US_smallIcon.png",
+            largeIconUri: "https://some.url.com/images/en-US_largeIconUri.png",
+          },
+        });
+        expect(Manifest.getInstance().hasIconFileUri()).equal(false);
+        Manifest.dispose();
+      });
+
+      it("| icon file uri relative to skill package assets, expect true", () => {
+        new Manifest(MANIFEST_FILE);
+        Manifest.getInstance().setPublishingLocales({
+          "en-US": {
+            name: "skillName",
+            summary: "one sentence description",
+            description: "skill description",
+            smallIconUri: "file://assets/images/en-US_smallIcon.png",
+            largeIconUri: "file://assets/images/en-US_largeIconUri.png",
+          },
+        });
+        expect(Manifest.getInstance().hasIconFileUri()).equal(true);
+        Manifest.dispose();
+      });
+    });
   });
 });

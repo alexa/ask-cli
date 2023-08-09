@@ -392,6 +392,7 @@ describe("Controller test - hosted skill controller test", () => {
       const stubTestFunc = sinon.stub(httpClient, "request"); // stub getSkillStatus smapi request
       stubTestFunc.onCall(0).callsArgWith(3, null, TEST_STATUS_RESPONSE_0);
       stubTestFunc.onCall(1).callsArgWith(3, null, TEST_STATUS_RESPONSE_1);
+      sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
       // call
       hostedSkillController.checkSkillStatus(TEST_SKILL_ID, (err, res) => {
         expect(err).equal(null);

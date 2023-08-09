@@ -213,6 +213,7 @@ describe("Command: Configure - AWS profile setup helper test", () => {
       sinon.stub(ui, "addNewCredentials").callsArgWith(0, null, TEST_CREDENTIALS);
       sinon.stub(awsProfileHandler, "addProfile");
       sinon.stub(profileHelper, "setupProfile");
+      sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.OPEN_BROWSER_DELAY);
 
       // call
       proxyHelper.setupAwsProfile({askProfile: TEST_PROFILE, needBrowser: true}, (err, awsProfile) => {
