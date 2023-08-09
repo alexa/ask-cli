@@ -46,10 +46,12 @@
     "description": "run skill in the specified simulation mode (currently supports DEFAULT / NFI_ISOLATED_SIMULATION)",
     "alias": null,
     "stringInput": "REQUIRED",
-    "rule": [{
-      "type": "ENUM",
-      "values": ["DEFAULT", "NFI_ISOLATED_SIMULATION"]
-    }]
+    "rule": [
+      {
+        "type": "ENUM",
+        "values": ["DEFAULT", "NFI_ISOLATED_SIMULATION"]
+      }
+    ]
   },
   "skill-id": {
     "name": "skill-id",
@@ -59,7 +61,7 @@
     "rule": [
       {
         "type": "REGEX",
-        "regex": "^amzn\\d\\.ask\\.skill\\.\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"
+        "regex": "^amzn\\d((\\.ask\\.skill)|(\\.echo-sdk-ams\\.app))\\.\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}$"
       }
     ]
   },
