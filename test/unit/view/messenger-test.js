@@ -137,6 +137,42 @@ describe("View test - messenger file test", () => {
       expect(stub.args[0][0]).equal(chalk`{bold.yellow [Warn]: ${TEST_MESSAGE}}`);
     });
 
+    it("| warn function correctly push error objects to buffer and display", () => {
+      const stub = sinon.stub(console, "warn");
+      const expectedMessage = jsonView.toString(TEST_ERROR_WITH_STACK);
+      const expectedItem = {
+        time: TEST_TIME,
+        operation: "WARN",
+        level: 40,
+        msg: expectedMessage,
+      };
+
+      // call
+      Messenger.getInstance().warn(TEST_ERROR_WITH_STACK);
+
+      // verify
+      expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
+      expect(stub.args[0][0]).equal(chalk`{bold.yellow [Warn]: ${expectedMessage}}`);
+    });
+
+    it("| warn function correctly push error message to buffer and display", () => {
+      const stub = sinon.stub(console, "warn");
+      const expectedMessage = TEST_ERROR_OBJ.message;
+      const expectedItem = {
+        time: TEST_TIME,
+        operation: "WARN",
+        level: 40,
+        msg: expectedMessage,
+      };
+
+      // call
+      Messenger.getInstance().warn(TEST_ERROR_OBJ);
+
+      // verify
+      expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
+      expect(stub.args[0][0]).equal(chalk`{bold.yellow [Warn]: ${expectedMessage}}`);
+    });
+
     it("| error function correctly push message to buffer and display", () => {
       const stub = sinon.stub(console, "error");
       const expectedItem = {
@@ -156,12 +192,12 @@ describe("View test - messenger file test", () => {
 
     it("| error function correctly push error objects to buffer and display", () => {
       const stub = sinon.stub(console, "error");
-      const expectedError = jsonView.toString(TEST_ERROR_WITH_STACK);
+      const expectedMessage = jsonView.toString(TEST_ERROR_WITH_STACK);
       const expectedItem = {
         time: TEST_TIME,
         operation: "ERROR",
         level: 50,
-        msg: expectedError,
+        msg: expectedMessage,
       };
 
       // call
@@ -169,7 +205,25 @@ describe("View test - messenger file test", () => {
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
-      expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${expectedError}}`);
+      expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${expectedMessage}}`);
+    });
+
+    it("| error function correctly push error message to buffer and display", () => {
+      const stub = sinon.stub(console, "error");
+      const expectedMessage = TEST_ERROR_OBJ.message;
+      const expectedItem = {
+        time: TEST_TIME,
+        operation: "ERROR",
+        level: 50,
+        msg: expectedMessage,
+      };
+
+      // call
+      Messenger.getInstance().error(TEST_ERROR_OBJ);
+
+      // verify
+      expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
+      expect(stub.args[0][0]).equal(chalk`{bold.red [Error]: ${expectedMessage}}`);
     });
 
     it("| fatal function correctly push message to buffer and display", () => {
@@ -191,11 +245,12 @@ describe("View test - messenger file test", () => {
 
     it("| fatal function correctly push error stack to buffer and display", () => {
       const stub = sinon.stub(console, "error");
+      const expectedMessage = TEST_ERROR_OBJ.stack.substring(7);
       const expectedItem = {
         time: TEST_TIME,
         operation: "FATAL",
         level: 60,
-        msg: TEST_ERROR_OBJ.stack.substring(7),
+        msg: expectedMessage,
       };
 
       // call
@@ -203,7 +258,7 @@ describe("View test - messenger file test", () => {
 
       // verify
       expect(Messenger.getInstance()._buffer[0]).deep.equal(expectedItem);
-      expect(stub.args[0][0]).equal(chalk`{bold.rgb(128, 0, 0) [Fatal]: ${TEST_ERROR_OBJ.stack.substring(7)}}`);
+      expect(stub.args[0][0]).equal(chalk`{bold.rgb(128, 0, 0) [Fatal]: ${expectedMessage}}`);
     });
 
     it("| trace function correctly push message to buffer and write to file with complete message", () => {
@@ -229,7 +284,7 @@ describe("View test - messenger file test", () => {
           statusMessage: TEST_STATUS_MESSAGE,
           headers: TEST_HEADERS,
         },
-        error: "TEST_ERROR",
+        error: TEST_ERROR,
         "request-id": TEST_REQUEST_ID,
         body: TEST_BODY,
       };
