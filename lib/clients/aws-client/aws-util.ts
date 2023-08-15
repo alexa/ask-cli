@@ -1,4 +1,4 @@
-import {DEFAULT_PROFILE, parseKnownFiles} from "@aws-sdk/shared-ini-file-loader";
+import {DEFAULT_PROFILE, parseKnownFiles} from "@smithy/shared-ini-file-loader";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
