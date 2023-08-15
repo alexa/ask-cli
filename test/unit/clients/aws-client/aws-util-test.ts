@@ -14,7 +14,7 @@ describe("Clients test - aws util test", () => {
   beforeEach(() => {
     parseKnownFilesStub = sinon.stub();
     awsUtil = proxyquire("../../../../lib/clients/aws-client/aws-util", {
-      "@aws-sdk/shared-ini-file-loader": {
+      "@smithy/shared-ini-file-loader": {
         DEFAULT_PROFILE: TEST_AWS_DEFAULT_PROFILE,
         parseKnownFiles: parseKnownFilesStub,
       },
