@@ -22,7 +22,7 @@ describe("Builtins test - cfn-deployer index test", () => {
   const endpointUri = "some endpoint uri";
   const userDefinedParamKey = "someKey";
   const userDefinedParamValue = "someValue";
-  let deployStackStub, getAWSProfileStub;
+  let deployStackStub, getAWSProfileStub, uploadToS3Stub;
 
   describe("bootstrap", () => {
     const bootstrapOptions = {
@@ -118,7 +118,7 @@ describe("Builtins test - cfn-deployer index test", () => {
       };
       getAWSProfileStub = sinon.stub(awsUtil, "getAWSProfile").returns("some profile");
       sinon.stub(Helper.prototype, "getSkillCredentials").resolves({clientId: "id", clientSecret: "secret"});
-      sinon.stub(Helper.prototype, "uploadToS3").resolves({VersionId: s3VersionId});
+      uploadToS3Stub = sinon.stub(Helper.prototype, "uploadToS3").resolves({VersionId: s3VersionId});
       deployStackStub = sinon.stub(Helper.prototype, "deployStack");
     });
 
@@ -227,13 +227,26 @@ describe("Builtins test - cfn-deployer index test", () => {
       });
     });
 
+    it("should throw error when failed to upload to s3", (done) => {
+      const errorMessage = "some error";
+      uploadToS3Stub.rejects(new Error(errorMessage));
+
+      Deployer.invoke({}, deployOptions, (err, result) => {
+        expectedErrorOutput.resultMessage =
+          `The CloudFormation deploy failed for Alexa region "${alexaRegion}": Failed to upload code build to S3: ${errorMessage}`;
+        expect(err).eql(null);
+        expect(result).eql(expectedErrorOutput);
+        done();
+      });
+    });
+
     it("should throw error when reserved parameter is used", (done) => {
       deployOptions.userConfig.cfn.parameters.SkillId = "reserved parameter value";
 
       Deployer.invoke({}, deployOptions, (err, result) => {
         expectedErrorOutput.resultMessage =
           `The CloudFormation deploy failed for Alexa region "${alexaRegion}": ` +
-          'Cloud Formation parameter "SkillId" is reserved. Please use a different name.';
+          'CloudFormation parameter "SkillId" is reserved. Please use a different name.';
         expect(err).eql(null);
         expect(result).eql(expectedErrorOutput);
         done();
@@ -245,7 +258,7 @@ describe("Builtins test - cfn-deployer index test", () => {
 
       Deployer.invoke({}, deployOptions, (err, result) => {
         expectedErrorOutput.resultMessage =
-          `The CloudFormation deploy failed for Alexa region "${alexaRegion}": ` + "The template path in userConfig must be provided.";
+          `The CloudFormation deploy failed for Alexa region "${alexaRegion}": The template path in userConfig must be provided.`;
         expect(err).eql(null);
         expect(result).eql(expectedErrorOutput);
         done();
