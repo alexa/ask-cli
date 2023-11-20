@@ -5,7 +5,9 @@
       "skillId": "amzn1.ask.skill.1234567890",
       "skillMetadata": {
         "lastDeployHash": "hash==",
-        "lastDeployType": "interaction-model"
+        "lastDeployType": "interaction-model",
+        "lastImportId": "amzn1.ask-package.import.123abc",
+        "lastImportTimestamp": "2023-11-21T04:01:31.047Z"
       },
       "code": {
         "default": {
@@ -16,7 +18,8 @@
         },
         "NA": {
           "lastDeployHash": "hash=="
-        }
+        },
+        "lastDeployTimestamp": "2023-11-21T03:07:07.820Z"
       },
       "skillInfrastructure": {
         "@ask-cli/cfn-deployer": {
@@ -47,7 +50,8 @@
             }
           }
         }
-      }
+      },
+      "deploymentStatus": "COMPLETE"
     }
   }
 }

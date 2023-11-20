@@ -156,6 +156,18 @@ describe("Model test - resources config test", () => {
           oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].skillId,
         },
         {
+          field: "LastImportId",
+          params: [TEST_PROFILE],
+          newValue: "LastImportId new",
+          oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].skillMetadata.lastImportId,
+        },
+        {
+          field: "LastImportTimestamp",
+          params: [TEST_PROFILE],
+          newValue: "LastImportTimestamp new",
+          oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].skillMetadata.lastImportTimestamp,
+        },
+        {
           field: "SkillMetaSrc",
           params: [TEST_PROFILE],
           newValue: "new skillMetadata src",
@@ -166,6 +178,18 @@ describe("Model test - resources config test", () => {
           params: [TEST_PROFILE],
           newValue: "==hash",
           oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].skillMetadata.lastDeployHash,
+        },
+        {
+          field: "CodeLastDeployTimestamp",
+          params: [TEST_PROFILE],
+          newValue: "CodeLastDeployTimestamp new",
+          oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].code.lastDeployTimestamp,
+        },
+        {
+          field: "DeploymentStatus",
+          params: [TEST_PROFILE],
+          newValue: "deploymentStatus new",
+          oldValue: TEST_ASK_STATES.profiles[TEST_PROFILE].deploymentStatus,
         },
       ].forEach(({field, params, newValue, oldValue}) => {
         it(`| test get${field} function successfully`, () => {

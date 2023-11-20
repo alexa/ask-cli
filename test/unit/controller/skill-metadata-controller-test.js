@@ -377,6 +377,7 @@ describe("Controller test - skill metadata controller test", () => {
 
     beforeEach(() => {
       skillMetaController = new SkillMetadataController(TEST_CONFIGURATION);
+      sinon.stub(ResourcesConfig.prototype, "write").returns("");
     });
 
 
