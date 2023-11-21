@@ -18,7 +18,7 @@ export type SampleTemplateFilterValues = IM | AC | ALEXA_HOSTED | CLOUDFORMATION
  *     "stack": "ac",
  *     "deploy": "lambda",
  *     "lang": "node",
- *     "name": "Hello world",
+ *     "name": "hello world",
  *     "url": "https://github.com/alexa/skill-sample-nodejs-hello-world.git",
  *     "desc": "Alexa's hello world skill to send the greetings to the world!"
  * }

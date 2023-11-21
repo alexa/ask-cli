@@ -14,32 +14,27 @@ Using `ask new`, the Alexa hosted skill service will create a new AWS account, w
 
 **debug**: Optional. Show debug messages.
 
-
-
-## WORKFLOW:
+## WORKFLOW
 
 Users will be asked the following questions to create a new skill:
 
 * Prompts user for `programming language`
-	* Select programming language
-	* AHS supports Python3.7 and Node12.x
+  * Select programming language
+    * AHS supports Python3.7 and Node12.x
 * Prompts user for a method to host your skill's backend resources
-	* Select `Alexa-hosted skills`
+  * Select `Alexa-hosted skills`
 * Prompts user for `skill name`
- 	 * Leave empty to use the default skill name  `Hello World Skill`
+  * Leave empty to use the default skill name  `hosted hello world`
 * Prompts user for a `folder name` for the skill project
- 	 * Leave empty to use the default folder name  `HelloWorldSkill`
+  * Leave empty to use the default folder name  `HelloWorldSkill`
 
 The user is not prompted for a `skill template`. The [Hello World Skill](https://github.com/alexa/skill-sample-nodejs-hello-world) is the only option for now.
-
-
 
 # DOWNLOAD SKILL - INIT COMMAND
 
 `ask init --hosted-skill-id <hosted-skill-id>` -- download an existing Alexa-Hosted Skill to their local environment.
 
 This command initializes Alexa Hosted Skills by cloning the project from the hosted skill service, downloading the latest Alexa skill package, and provide a git-ready environment. Developers can then checkout, pull from, and push to a remote Git repository from their local machines.
-
 
 **STRUCTURE OF INIT COMMAND:**
 
@@ -53,15 +48,11 @@ This command initializes Alexa Hosted Skills by cloning the project from the hos
 
 **debug**: Optional. Show debug messages.
 
-
-
 ## GIT CREDENTIALS
 
 To access the CodeCommit repository, the Alexa hosted service uses git-credential along with ASK-CLI and SMAPI to automatically pass down temporary Git credentials.
 
 Using `ask util git-credentials-helper` in the skill root directory can retrieve the username and password of the Git credentials.
-
-
 
 # UPGRADE PROJECT - UPGRADE COMMANDS
 
@@ -78,22 +69,21 @@ Skills created with CLI 1.x will need to update their project structure in order
 
 **debug**: Optional. Show debug messages.
 
+## UPGRADE STEPS
 
-## UPGRADE STEPS:
 1. Using ask-cli 1.x, deploy your skill:
-	* `$ ask deploy`
+  * `$ ask deploy`
 2. Install ask-cli:
-	* `$ npm install -g ask-cli`
+  * `$ npm install -g ask-cli`
 3. Upgrade your skill project with ask-cli. From your project's root directory, run:
-	* `$ ask util upgrade-project`
+  * `$ ask util upgrade-project`
     * A hidden folder named ./legacy contains a copy of your v1 skill project.
     * The CLI v2 skill-package directory is downloaded to the working directory.
     * The CLI v2 ask-resources.json will be generated.
     * The dev branch is merged into the master branch. The dev branch is then removed.
 4. Commit upgrade changes:
-  * `$ git commit -m "upgrade project for CLI v2"`
 
-
+* `$ git commit -m "upgrade project for CLI v2"`
 
 # DEPLOY SKILL - GIT PUSH
 
@@ -101,25 +91,25 @@ Skills created with CLI 1.x will need to update their project structure in order
 Unlike in CLI v1, running `ask deploy` on hosted skills will no longer trigger skill deployment in CLI v2.
 Instead, `$ git push` sends the latest source code to Lambda.  It also deploys skill-package changes such as the interaction model, skill manifest and in-skill products.
 
-## DEPLOYMENT STEPS:
+## DEPLOYMENT STEPS
+
 * Push to deploy skill code and resources:
-	* `$ git push`
+  * `$ git push`
   * Pushing to `master` branch deploys "lambda" folder to user's `development` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
   * Pushing to `prod` branch deploys "lambda" folder to user's `live` stage AWS Lambda function, and deploys "skill-package" folder as skill's JSON files
-
 
 Note: dev branch is only used to be displayed in the web console. You only need to push to dev branch if you want to sync version that is displayed in the web console.
 
 When you receive the following warning: "The master branch of your skill is ahead of the dev version. To re-enable the code editor, you need to use the ASK CLI to merge the remote master branch to dev and push.", you need to use following steps to sync your master branch back to dev:
 
-```
+```shell
 git checkout dev
 git pull --rebase
 git merge master
 # fix any merge conflicts if you have
 git push --no-verify
 ```
-  
+
 ## DEVELOPMENT CONSOLE, BRANCHES AND STAGES
 
 * dev branch corresponds to the code you see in the web console editor.
@@ -129,5 +119,3 @@ git push --no-verify
 ## Git Pre-push Hook
 
 CLI v2 supports Alexa Hosted skill, a git-native service, to track deployment states using the pre-push hook. When $ git push executes, the pre-push hook prints the skill portal URL to allow users to track deployment states.
-
-

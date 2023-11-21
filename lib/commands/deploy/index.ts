@@ -38,6 +38,8 @@ export default class DeployCommand extends AbstractCommand {
     try {
       profile = profileHelper.runtimeProfile(cmd.profile);
       new ResourcesConfig(path.join(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
+      ResourcesConfig.getInstance().setDeploymentStatus(profile, "IN_PROGRESS");
+      ResourcesConfig.getInstance().write();
       Messenger.getInstance().info(`Deploy configuration loaded from ${CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG}`);
       helper.confirmProfile(profile);
       this._filterAlexaHostedSkill(profile);
@@ -80,7 +82,7 @@ export default class DeployCommand extends AbstractCommand {
 
             // Save the deployment type to ask states
             ResourcesConfig.getInstance().setSkillMetaLastDeployType(profile, deploymentType);
-
+            ResourcesConfig.getInstance().setDeploymentStatus(profile, "COMPLETE");
             // Write updates back to resources file
             ResourcesConfig.getInstance().write();
             Manifest.getInstance().write();
@@ -105,6 +107,9 @@ export default class DeployCommand extends AbstractCommand {
             });
           })
           .catch((err) => {
+            ResourcesConfig.getInstance().setDeploymentStatus(profile, "COMPLETE");
+            // Write updates back to resources file
+            ResourcesConfig.getInstance().write();
             Messenger.getInstance().error(err);
             return reject(err);
           });
