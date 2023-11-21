@@ -3,6 +3,5 @@ addReviewers: true
 addAssignees: author
 
 reviewers:
-  - doiron
   - tydonelson
-  - LucioMS
+  - CamdenFoucht
