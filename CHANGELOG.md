@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.6](https://github.com/alexa/ask-cli/compare/v2.30.5...v2.30.6) (2023-12-09)
+
+### Features
+
+* add ASK_FORCE_ENABLE to allow skipping domain validation during enablement ([487f8db](https://github.com/alexa/ask-cli/commit/487f8dbcdc9429d04b6fd475aa4a2a8430831f1f))
+
+### Bug Fixes
+
+* display message property for all error instance types ([a0d2f19](https://github.com/alexa/ask-cli/commit/a0d2f19faeee36523be701522585272cff2a2d6d))
+* use npm registry https url ([9e92ee5](https://github.com/alexa/ask-cli/commit/9e92ee5bf9aedcba1f683c1db877d0a9c1442cae))
+
 ### [2.30.5](https://github.com/alexa/ask-cli/compare/v2.30.4...v2.30.5) (2023-08-09)
 
 
