@@ -61,6 +61,7 @@ describe("Controller test - skill metadata controller test", () => {
   });
 
   afterEach(() => {
+    delete process.env.ASK_FORCE_ENABLE;
     ResourcesConfig.dispose();
     Manifest.dispose();
     sinon.restore();
@@ -261,6 +262,28 @@ describe("Controller test - skill metadata controller test", () => {
       const expectedErrMessage = 'Skill api domain "smartHome" cannot be enabled. Skipping the enable process.\n';
       // call
       expect(() => skillMetaController.validateDomain()).to.throw(CliWarn, expectedErrMessage);
+    });
+
+    it("| skips validation when ASK_FORCE_ENABLE is set", () => {
+      // setup
+      process.env.ASK_FORCE_ENABLE = 1;
+      Manifest.getInstance().setApis({
+        custom: {},
+        unknownApi: {},
+        smartHome: {},
+      });
+      const getApisSpy = sinon.spy(Manifest.prototype, "getApis");
+      const warnStub = sinon.stub();
+      sinon.stub(Messenger, "getInstance").returns({
+        warn: warnStub,
+      });
+      const expectedWarningMessage = "The ASK_FORCE_ENABLE environment variable is set. Skipping domain validation.\n"
+      // call
+      skillMetaController.validateDomain();
+      // verify
+      expect(getApisSpy.callCount).eq(0);
+      expect(warnStub.callCount).equal(1);
+      expect(warnStub.args[0][0]).equal(expectedWarningMessage);
     });
 
     it("| callback error when getSkillEnablement return error", (done) => {
