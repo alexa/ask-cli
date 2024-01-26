@@ -78,7 +78,7 @@ describe("Commands Run test - command class test", () => {
       sinon.stub(path, "join").returns(INVALID_RESOURCES_CONFIG_JSON_PATH);
       // call
       await expect(instance.handle(TEST_CMD_WITH_VALUES)).rejectedWith(
-        `Failed to obtain skill-id for the given profile - ${TEST_PROFILE}. Please deploy you skill project first.`,
+        `Failed to obtain skill-id for the given profile - ${TEST_PROFILE}. Please deploy your skill project first.`,
       );
     });
 
