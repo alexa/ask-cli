@@ -45,7 +45,7 @@ export default class RunCommand extends AbstractCommand {
       new ResourcesConfig(path.join(process.cwd(), CONSTANTS.FILE_PATH.ASK_RESOURCES_JSON_CONFIG));
       skillId = ResourcesConfig.getInstance().getSkillId(profile);
       if (!stringUtils.isNonBlankString(skillId)) {
-        throw new CliError(`Failed to obtain skill-id for the given profile - ${profile}` + ". Please deploy you skill project first.");
+        throw new CliError(`Failed to obtain skill-id for the given profile - ${profile}` + ". Please deploy your skill project first.");
       }
     } catch (error) {
       Messenger.getInstance().error(error);
