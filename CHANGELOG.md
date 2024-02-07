@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.30.7](https://github.com/alexa/ask-cli/compare/v2.30.6...v2.30.7) (2024-02-07)
+
+
+### Bug Fixes
+
+* grammatical error in deploy message ([#502](https://github.com/alexa/ask-cli/issues/502)) ([3067f13](https://github.com/alexa/ask-cli/commit/3067f13dabaf60b02c7a60ff07566520dfa1c339))
+* update hosted skills default python version to 3.8 ([#501](https://github.com/alexa/ask-cli/pull/501)) ([6b15c51](https://github.com/alexa/ask-cli/commit/6b15c518acbbdd2a50628b94b1e9709bfd8386c6))
+
 ### [2.30.6](https://github.com/alexa/ask-cli/compare/v2.30.5...v2.30.6) (2023-12-09)
 
 ### Features
