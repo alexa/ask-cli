@@ -401,6 +401,58 @@ describe("Controller test - hosted skill controller test", () => {
       });
     });
 
+    it("| polling to get skill status until one resource FAILED, expect error thrown ", (done) => {
+      // setup
+      const TEST_STATUS_RESPONSE_0 = {
+        statusCode: 200,
+        headers: {},
+        body: {
+          [CONSTANTS.HOSTED_SKILL.RESOURCES.MANIFEST]: {
+            lastUpdateRequest: {
+              status: "SUCCEEDED",
+            },
+          },
+        },
+      };
+      const TEST_STATUS_RESPONSE_1 = {
+        statusCode: 200,
+        headers: {},
+        body: {
+          [CONSTANTS.HOSTED_SKILL.RESOURCES.MANIFEST]: {
+            lastUpdateRequest: {
+              status: "SUCCEEDED",
+            },
+          },
+          [CONSTANTS.HOSTED_SKILL.RESOURCES.INTERACTION_MODEL]: {
+            [TEST_LOCALE]: {
+              lastUpdateRequest: {
+                status: "SUCCEEDED",
+              },
+            },
+          },
+          [CONSTANTS.HOSTED_SKILL.RESOURCES.PROVISIONING]: {
+            lastUpdateRequest: {
+              status: "FAILED",
+            },
+          },
+        },
+      };
+      const stubTestFunc = sinon.stub(httpClient, "request"); // stub getSkillStatus smapi request
+      stubTestFunc.onCall(0).callsArgWith(3, null, TEST_STATUS_RESPONSE_0);
+      stubTestFunc.onCall(1).callsArgWith(3, null, TEST_STATUS_RESPONSE_1);
+      sinon.useFakeTimers().tickAsync(CONSTANTS.CONFIGURATION.RETRY.MAX_RETRY_INTERVAL);
+      const callback = (err, res) => {
+        expect(err).equal(
+          "Check skill status failed for the following reason:\n" +
+            "Skill provisioning step failed.\nInfrastructure provision for the hosted skill failed. Please try again.",
+        );
+        expect(res).equal(undefined);
+        done();
+      };
+      // call
+      hostedSkillController.checkSkillStatus(TEST_SKILL_ID, callback);
+    });
+
     it("| polling to get skill status response is null, expect error thrown ", (done) => {
       // setup
       const TEST_RESPONSE = null;
