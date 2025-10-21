@@ -1,6 +1,9 @@
 name: 'Auto Assign'
 on: pull_request
 
+permissions:
+  pull-requests: write
+
 jobs:
   add-reviews:
     runs-on: ubuntu-latest
