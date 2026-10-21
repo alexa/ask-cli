@@ -25,6 +25,11 @@ export default class GenerateLwaTokensCommand extends AbstractCommand {
     return ["client-id", "client-confirmation", "scopes", "no-browser", "debug"];
   }
 
+  // The tokens come from the LWA client given in the options; no profile is read, so ~/.ask/cli_config is not needed.
+  override requiresAppConfig() {
+    return false;
+  }
+
   async handle(cmd: Record<string, any>): Promise<void> {
     const authConfig = {
       auth_client_type: "LWA",
