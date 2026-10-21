@@ -33,6 +33,14 @@ export abstract class AbstractCommand<T extends Record<string, any> = Record<str
 
   abstract handle(cmd: T, remaining: any[]): Promise<void>;
 
+  /**
+   * Whether the command reads the ASK CLI config file (~/.ask/cli_config).
+   * Commands that never use a profile override this to return false, so they also work before `ask configure` has run.
+   */
+  requiresAppConfig(): boolean {
+    return true;
+  }
+
   exit(statusCode: number) {
     Messenger.getInstance().dispose();
     process.exit(statusCode || 0);
@@ -78,9 +86,9 @@ export abstract class AbstractCommand<T extends Record<string, any> = Record<str
         /**
          * Since this code is ran for every command, we'll just be initiating appConfig here (no files created).
          * Only `ask configure` command should have the eligibility to create the ASK config file (which is handled
-         * in the configure workflow).
+         * in the configure workflow). Commands that do not read a profile skip it (see requiresAppConfig).
          */
-        if (commandInstance._name !== "configure") {
+        if (commandInstance._name !== "configure" && this.requiresAppConfig()) {
           new AppConfig();
         }
       } catch (err) {

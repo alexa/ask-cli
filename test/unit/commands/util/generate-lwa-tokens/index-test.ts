@@ -36,6 +36,7 @@ describe("Commands generate-lwa-tokens test - command class test", () => {
     expect(instance.description()).equal("generate Login with Amazon tokens from any LWA client");
     expect(instance.requiredOptions()).deep.equal([]);
     expect(instance.optionalOptions()).deep.equal(["client-id", "client-confirmation", "scopes", "no-browser", "debug"]);
+    expect(instance.requiresAppConfig()).equal(false);
   });
 
   describe("validate command handle", () => {

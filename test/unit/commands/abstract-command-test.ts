@@ -523,6 +523,49 @@ It is recommended to use the latest version. Please update using "npm upgrade -g
       expect(AppConfigReadStub).not.called;
     });
 
+    it("| should be null for commands that do not require the config file", async () => {
+      const handleStub = sinon.stub().resolves();
+
+      class NoConfigCommand extends AbstractCommand {
+        constructor(optionModel: OptionModel) {
+          super(optionModel);
+        }
+
+        name() {
+          return "no-config";
+        }
+
+        description() {
+          return "no config description";
+        }
+        requiredOptions(): string[] {
+          return [];
+        }
+        optionalOptions(): string[] {
+          return [];
+        }
+        override requiresAppConfig() {
+          return false;
+        }
+        handle(cmd: any): Promise<void> {
+          return handleStub(cmd);
+        }
+      }
+
+      const mockCommand = new NoConfigCommand(mockOptionModel);
+
+      mockCommand.createCommand()(commander);
+      await commander.parseAsync(["node", "mock", "no-config"]);
+
+      expect(handleStub).calledWithMatch(
+        sinon.match({
+          _name: "no-config",
+          _description: "no config description",
+        }),
+      );
+      expect(AppConfigReadStub).not.called;
+    });
+
     afterEach(() => {
       sinon.restore();
       AppConfig.dispose();
